@@ -1,0 +1,451 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="package-info.xsl" type="text/xsl"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	ATTENTION: If you are trying to install this manually, you should try
+	the package manager.  If it will not work for you, please take a look
+	at the following for information on this format:
+		http://mods.simplemachines.org/docs/manual-install.php
+
+================================================================================
+
+	This script can be used to make your package do many different things.
+	The following documentation should be available on the format of this
+	file and the things you can do with it:
+		http://mods.simplemachines.org/docs/package-info.php
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>ChenZhen:Arcade</id>
+	<name>SMF Arcade</name>
+	<version>2.54</version>
+	<type>modification</type>
+	<install for="2.0 - 2.0.98">
+		<readme parsebbc="true">arcadeinstall2/readme.txt</readme>
+
+		<!-- These files go into the Sources directory -->
+		<require-file name="Sources/Arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeAdmin.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeArena.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeList.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeMaintenance.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeGame.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeHooks.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeStats.php" destination="$sourcedir" />
+		<require-file name="Sources/Profile-Arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-custom.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-ibp.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-phpbb.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-silver.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-v1game.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-v2game.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-v3arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-Arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadeAdmin.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadeClass.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadeSkinA.php" destination="$sourcedir" />
+		<require-file name="Sources/ManageGames.php" destination="$sourcedir" />
+		<require-file name="Sources/SWFReader.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadeSkinB.php" destination="$sourcedir" />
+		<require-file name="Sources/Tar.php" destination="$sourcedir" />
+		<require-file name="Sources/TarClass.php" destination="$sourcedir" />
+		<require-file name="Sources/CreateZipFile.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadePopup-smf2.php" destination="$sourcedir" />
+		<require-file name="Sources/PEAR.php" destination="$sourcedir" />
+		<require-file name="Sources/PEAR5.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeReport.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeDownload.php" destination="$sourcedir" />
+
+		<!-- These files go into the Default Theme directory -->
+		<require-file name="Themes/default/Arcade.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeAdmin.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeArena.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeList.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeProfile.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeGame.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeStats.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeSkinB.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ManageGames.template.php" destination="$themedir" />
+		<require-file name="Themes/default/css/arcade.css" destination="$themedir/css" />
+		<require-file name="Themes/default/css/arcade-skin-b.css" destination="$themedir/css" />
+		<require-file name="Themes/default/ArcadeSkinA.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeSkinListA.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeGamePop.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeReports.template.php" destination="$themedir" />
+
+		<!-- These files go into the Core Theme directory -->
+		<require-file name="core/Jeza.template.php" destination="$boarddir/Themes/core" />
+		<require-file name="core/JezaList.template.php" destination="$boarddir/Themes/core" />
+
+		<!-- These files go into the Default Theme scripts directory -->
+		<require-file name="Themes/default/scripts/arcade.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/arcade-func.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/swfobject.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/arcade-skin-a.js" destination="$themedir/scripts" />
+
+		<!-- These images go into the Default Theme images directory -->
+		<require-file name="Themes/default/images/arcade_star.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arcade_star2.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arena_accept.png" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arena_decline.png" destination="$imagesdir" />
+		<require-file name="Themes/default/images/favorite.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/favorite2.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/gold.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/admin/feature_arcade.png" destination="$themedir/images/admin" />
+		<require-file name="Themes/default/images/arcade_edit.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/1.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/2.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/3.gif" destination="$imagesdir" />
+		<require-file name="arc_icons/game.gif" destination="$imagesdir/bbc" />
+		<require-dir error="skip" name="arc_icons" destination="$imagesdir" />
+
+		<!-- These files/folders go into the Main directory -->
+		<require-file name="arcade.php" destination="$boarddir" />
+		<require-file name="newscore.php" destination="$boarddir" />
+		<require-file name="avatars/noavatar.gif" destination="$boarddir/avatars" />
+		<require-file error="skip" name="index.php" destination="$boarddir/games_download" />
+		<require-file error="skip" name="index.php" destination="$boarddir/Games" />
+		<require-dir error="skip" name="gamedata" destination="$boarddir/arcade" />
+
+		<!-- Run Installer/upgrader -->
+		<code>arcadeinstall/Database.php</code>
+		<code>arcadeinstall/Subs-Install.php</code>
+		<code>arcadeinstall2/database.php</code>
+		<code>arcadeinstall2/CreatePDLcolumns.php</code>
+		<database>arcadeinstall/install_main.php</database>
+
+		<!-- These files go into the language directory -->
+		<require-file name="language/english/Arcade.english.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeAdmin.english.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english.php" destination="$languagedir" />
+		<require-file name="language/english/Arcade.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeAdmin.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeSkinA.english.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeSkinA.english-utf8.php" destination="$languagedir" />
+		<modification format="xml" type="file">language/english/english.xml</modification>
+
+		<!-- Edit SMF files -->
+		<modification format="xml" type="file">arcadeinstall2/main.xml</modification>
+	</install>
+		<install for="2.0.99 - 2.1.98">
+		<readme parsebbc="true">arcadeinstall2/readme.txt</readme>
+
+		<!-- These files go into the Sources directory -->
+		<require-file name="Sources/Arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeAdmin.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeArena.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeList.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeMaintenance.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeGame.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeHooks.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeStats.php" destination="$sourcedir" />
+		<require-file name="Sources/Profile-Arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-custom.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-ibp.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-phpbb.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-silver.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-v1game.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-v2game.php" destination="$sourcedir" />
+		<require-file name="Sources/Submit-v3arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-Arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadeAdmin.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadeClass.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadeSkinB.php" destination="$sourcedir" />
+		<require-file name="Sources/ManageGames.php" destination="$sourcedir" />
+		<require-file name="Sources/SWFReader.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadeSkinA.php" destination="$sourcedir" />
+		<require-file name="Sources/Tar.php" destination="$sourcedir" />
+		<require-file name="Sources/TarClass.php" destination="$sourcedir" />
+		<require-file name="Sources/CreateZipFile.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadePopup-smf2.php" destination="$sourcedir" />
+		<require-file name="Sources/PEAR.php" destination="$sourcedir" />
+		<require-file name="Sources/PEAR5.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeReport.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeDownload.php" destination="$sourcedir" />
+
+		<!-- These files go into the Default Theme directory -->
+		<require-file name="Themes/default/Arcade.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeAdmin.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeArena.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeList.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeProfile.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeGame.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeStats.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeSkinB.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ManageGames.template.php" destination="$themedir" />
+		<require-file name="Themes/default/css/arcade.css" destination="$themedir/css" />
+		<require-file name="Themes/default/css/arcade-skin-b.css" destination="$themedir/css" />
+		<require-file name="Themes/default/ArcadeSkinA.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeSkinListA.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeGamePop.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeReports.template.php" destination="$themedir" />
+
+		<!-- These files go into the Default Theme scripts directory -->
+		<require-file name="Themes/default/scripts/arcade.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/arcade-func.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/swfobject.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/arcade-skin-a.js" destination="$themedir/scripts" />
+
+		<!-- These images go into the Default Theme images directory -->
+		<require-file name="Themes/default/images/arcade_star.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arcade_star2.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arena_accept.png" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arena_decline.png" destination="$imagesdir" />
+		<require-file name="Themes/default/images/favorite.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/favorite2.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/gold.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/admin/feature_arcade.png" destination="$themedir/images/admin" />
+		<require-file name="Themes/default/images/1.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/2.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/3.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arcade_games.png" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arcade_edit.gif" destination="$imagesdir" />
+		<require-file name="arc_icons/game.gif" destination="$imagesdir/bbc" />
+		<require-file name="Themes/default/images/admin/arcade_maintenance.png" destination="$imagesdir/admin" />
+		<require-file name="Themes/default/images/admin/arcade_general.png" destination="$imagesdir/admin" />
+		<require-file name="Themes/default/images/admin/arcade_settings.png" destination="$imagesdir/admin" />
+		<require-file name="Themes/default/images/admin/arcade_categories.png" destination="$imagesdir/admin" />
+		<require-file name="Themes/default/images/admin/big/arcade_maintenance.png" destination="$imagesdir/admin/big" />
+		<require-file name="Themes/default/images/admin/big/arcade_general.png" destination="$imagesdir/admin/big" />
+		<require-file name="Themes/default/images/admin/big/arcade_settings.png" destination="$imagesdir/admin/big" />
+		<require-file name="Themes/default/images/admin/big/arcade_categories.png" destination="$imagesdir/admin/big" />
+		<require-file name="Themes/default/images/admin/big/index.php" destination="$imagesdir/admin/big" />
+		<require-dir  name="arc_icons" destination="$imagesdir" />
+
+		<!-- These files/folders go into the Main directory -->
+		<require-file name="arcade.php" destination="$boarddir" />
+		<require-file name="newscore.php" destination="$boarddir" />
+		<require-file name="avatars/noavatar.gif" destination="$boarddir/avatars" />
+		<require-file error="skip" name="index.php" destination="$boarddir/games_download" />
+		<require-file error="skip" name="index.php" destination="$boarddir/Games" />
+		<require-dir error="skip" name="gamedata" destination="$boarddir/arcade" />
+
+		<!-- Run Installer/upgrader -->
+		<code>arcadeinstall/Database.php</code>
+		<code>arcadeinstall/Subs-Install.php</code>
+		<code>arcadeinstall2/database.php</code>
+		<code>arcadeinstall2/CreatePDLcolumns.php</code>
+		<database>arcadeinstall/install_main.php</database>
+
+		<!-- These files go into the language directory -->
+		<require-file name="language/english/Arcade.english.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeAdmin.english.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english.php" destination="$languagedir" />
+		<require-file name="language/english/Arcade.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeAdmin.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeSkinA.english.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeSkinA.english-utf8.php" destination="$languagedir" />
+		<modification format="xml" type="file">language/english/english.xml</modification>
+
+		<!-- Edit SMF files -->
+		<modification format="xml" type="file">arcadeinstall2/main2-1.xml</modification>
+	</install>
+	<uninstall for="2.0 - 2.0.98">
+		<!-- Remove code modifications -->
+		<modification format="xml" type="file" reverse="true">arcadeinstall2/main.xml</modification>
+
+		<!-- Remove hooks -->
+		<code>arcadeinstall/remove_hooks.php</code>
+
+		<!-- Remove these files from the Sources directory -->
+		<remove-file name="$sourcedir/Arcade.php" />
+		<remove-file name="$sourcedir/ArcadeAdmin.php" />
+		<remove-file name="$sourcedir/ArcadeArena.php" />
+		<remove-file name="$sourcedir/ArcadeList.php" />
+		<remove-file name="$sourcedir/ArcadeMaintenance.php" />
+		<remove-file name="$sourcedir/ArcadeGame.php" />
+		<remove-file name="$sourcedir/ArcadeHooks.php" />
+		<remove-file name="$sourcedir/ArcadeStats.php" />
+		<remove-file name="$sourcedir/Profile-Arcade.php" />
+		<remove-file name="$sourcedir/Submit-custom.php" />
+		<remove-file name="$sourcedir/Submit-ibp.php" />
+		<remove-file name="$sourcedir/Submit-phpbb.php" />
+		<remove-file name="$sourcedir/Submit-silver.php" />
+		<remove-file name="$sourcedir/Submit-v1game.php" />
+		<remove-file name="$sourcedir/Submit-v2game.php" />
+		<remove-file name="$sourcedir/Submit-v3arcade.php" />
+		<remove-file name="$sourcedir/Subs-Arcade.php" />
+		<remove-file name="$sourcedir/Subs-ArcadeAdmin.php" />
+		<remove-file name="$sourcedir/Subs-ArcadeClass.php" />
+		<remove-file name="$sourcedir/Subs-ArcadeSkinA.php" />
+		<remove-file name="$sourcedir/ManageGames.php" />
+		<remove-file name="$sourcedir/SWFReader.php" />
+		<remove-file name="$sourcedir/Subs-ArcadeSkinB.php" />
+	    <remove-file name="$sourcedir/Tar.php" />
+	    <remove-file name="$sourcedir/TarClass.php" />
+		<remove-file name="$sourcedir/ArcadePopup-smf2.php" />
+		<remove-file name="$sourcedir/ArcadeReport.php" />
+		<remove-file name="$sourcedir/ArcadeDownload.php" />
+		<remove-file name="$sourcedir/CreateZipFile.php" />
+		<remove-file name="$sourcedir/PEAR.php" />
+		<remove-file name="$sourcedir/PEAR5.php" />
+
+		<!-- Remove these files from the Themes directory -->
+		<remove-file name="$themedir/Arcade.template.php" />
+		<remove-file name="$themedir/ArcadeAdmin.template.php" />
+		<remove-file name="$themedir/ArcadeArena.template.php" />
+		<remove-file name="$themedir/ArcadeList.template.php" />
+		<remove-file name="$themedir/ArcadeProfile.template.php" />
+		<remove-file name="$themedir/ArcadeGame.template.php" />
+		<remove-file name="$themedir/ArcadeStats.template.php" />
+		<remove-file name="$themedir/ArcadeSkinB.template.php" />
+		<remove-file name="$themedir/ManageGames.template.php" />
+		<remove-file name="$themedir/css/arcade.css" />
+		<remove-file name="$themedir/css/arcade-skin-b.css" />
+		<remove-file name="$themedir/scripts/arcade.js" />
+		<remove-file name="$themedir/scripts/arcade-func.js" />
+		<remove-file name="$themedir/scripts/swfobject.js" />
+		<remove-file name="$themedir/scripts/arcade-skin-a.js" />
+		<remove-file name="$themedir/ArcadeSkinA.template.php" />
+		<remove-file name="$themedir/ArcadeSkinListA.template.php" />
+		<remove-file name="$themedir/ArcadeGamePop.template.php" />
+		<remove-file name="$themedir/ArcadeReports.template.php" />
+		<remove-file name="$languagedir/Arcade.english.php" />
+		<remove-file name="$languagedir/ArcadeAdmin.english.php" />
+		<remove-file name="$languagedir/ArcadeEmail.english.php" />
+		<remove-file name="$languagedir/ArcadeSkinA.english.php" />
+		<remove-file name="$languagedir/Arcade.english-utf8.php" />
+		<remove-file name="$languagedir/ArcadeAdmin.english-utf8.php" />
+		<remove-file name="$languagedir/ArcadeEmail.english-utf8.php" />
+		<remove-file name="$languagedir/ArcadeSkinA.english-utf8.php" />
+
+		<!-- Remove these files from the images directory -->
+		<remove-file name="$imagesdir/arena_accept.png" />
+		<remove-file name="$imagesdir/arena_decline.png" />
+		<remove-file name="$imagesdir/favorite.gif" />
+		<remove-file name="$imagesdir/favorite2.gif" />
+		<remove-file name="$imagesdir/arcade_star.gif" />
+		<remove-file name="$imagesdir/arcade_star2.gif" />
+		<remove-file name="$imagesdir/gold.gif" />
+		<remove-file name="$imagesdir/arcade_edit.gif" />
+		<remove-file name="$imagesdir/admin/feature_arcade.png" />
+		<remove-file name="$imagesdir/1.gif" />
+		<remove-file name="$imagesdir/2.gif" />
+		<remove-file name="$imagesdir/3.gif" />
+		<remove-file name="$imagesdir/gold.gif" />
+		<remove-file name="$imagesdir/bbc/game.gif" />
+		<remove-file name="$imagesdir/arc_icons/arcade_popup_error.gif" />
+		<remove-file name="$imagesdir/arc_icons/arcade_popup_logo.png" />
+		<remove-file name="$imagesdir/arc_icons/dl_btn_popup.png" />
+		<remove-file name="$imagesdir/arc_icons/popup_play_btn.gif" />
+		<remove-file name="$imagesdir/arc_icons/popup_ie_bg.png" />
+		<remove-file name="$imagesdir/arc_icons/thearcade.png" />
+		<remove-file name="$imagesdir/arc_icons/game_popup_saver.swf" />
+		<remove-file name="$imagesdir/arc_icons/dl_btn.png" />
+
+		<!-- Remove these files from the main directroy -->
+		<remove-file name="$boarddir/arcade.php" />
+		<remove-file name="$boarddir/newscore.php" />
+		<remove-file name="$boarddir/avatars/noavatar.gif" />
+	</uninstall>
+	<uninstall for="2.0.99 - 2.1.98">
+		<!-- Remove code modifications -->
+		<modification format="xml" type="file" reverse="true">arcadeinstall2/main2-1.xml</modification>
+
+		<!-- Remove hooks -->
+		<code>arcadeinstall/remove_hooks.php</code>
+
+		<!-- Remove these files from the Sources directory -->
+		<remove-file name="$sourcedir/Arcade.php" />
+		<remove-file name="$sourcedir/ArcadeAdmin.php" />
+		<remove-file name="$sourcedir/ArcadeArena.php" />
+		<remove-file name="$sourcedir/ArcadeList.php" />
+		<remove-file name="$sourcedir/ArcadeMaintenance.php" />
+		<remove-file name="$sourcedir/ArcadeGame.php" />
+		<remove-file name="$sourcedir/ArcadeHooks.php" />
+		<remove-file name="$sourcedir/ArcadeStats.php" />
+		<remove-file name="$sourcedir/Profile-Arcade.php" />
+		<remove-file name="$sourcedir/Submit-custom.php" />
+		<remove-file name="$sourcedir/Submit-ibp.php" />
+		<remove-file name="$sourcedir/Submit-phpbb.php" />
+		<remove-file name="$sourcedir/Submit-silver.php" />
+		<remove-file name="$sourcedir/Submit-v1game.php" />
+		<remove-file name="$sourcedir/Submit-v2game.php" />
+		<remove-file name="$sourcedir/Submit-v3arcade.php" />
+		<remove-file name="$sourcedir/Subs-Arcade.php" />
+		<remove-file name="$sourcedir/Subs-ArcadeAdmin.php" />
+		<remove-file name="$sourcedir/Subs-ArcadeClass.php" />
+		<remove-file name="$sourcedir/Subs-ArcadeSkinB.php" />
+		<remove-file name="$sourcedir/ManageGames.php" />
+		<remove-file name="$sourcedir/SWFReader.php" />
+		<remove-file name="$sourcedir/Subs-ArcadeSkinA.php" />
+	    <remove-file name="$sourcedir/Tar.php" />
+	    <remove-file name="$sourcedir/TarClass.php" />
+		<remove-file name="$sourcedir/ArcadePopup-smf2.php" />
+		<remove-file name="$sourcedir/ArcadeReport.php" />
+		<remove-file name="$sourcedir/ArcadeDownload.php" />
+		<remove-file name="$sourcedir/CreateZipFile.php" />
+		<remove-file name="$sourcedir/PEAR.php" />
+		<remove-file name="$sourcedir/PEAR5.php" />
+
+		<!-- Remove these files from the Themes directory -->
+		<remove-file name="$themedir/Arcade.template.php" />
+		<remove-file name="$themedir/ArcadeAdmin.template.php" />
+		<remove-file name="$themedir/ArcadeArena.template.php" />
+		<remove-file name="$themedir/ArcadeList.template.php" />
+		<remove-file name="$themedir/ArcadeProfile.template.php" />
+		<remove-file name="$themedir/ArcadeGame.template.php" />
+		<remove-file name="$themedir/ArcadeStats.template.php" />
+		<remove-file name="$themedir/ArcadeSkinB.template.php" />
+		<remove-file name="$themedir/ManageGames.template.php" />
+		<remove-file name="$themedir/css/arcade.css" />
+		<remove-file name="$themedir/css/arcade-skin-b.css" />
+		<remove-file name="$themedir/scripts/arcade.js" />
+		<remove-file name="$themedir/scripts/arcade-func.js" />
+		<remove-file name="$themedir/scripts/swfobject.js" />
+		<remove-file name="$themedir/scripts/arcade-skin-a.js" />
+		<remove-file name="$themedir/ArcadeSkinA.template.php" />
+		<remove-file name="$themedir/ArcadeSkinListA.template.php" />
+		<remove-file name="$themedir/ArcadeGamePop.template.php" />
+		<remove-file name="$themedir/ArcadeReports.template.php" />
+		<remove-file name="$languagedir/Arcade.english.php" />
+		<remove-file name="$languagedir/ArcadeAdmin.english.php" />
+		<remove-file name="$languagedir/ArcadeEmail.english.php" />
+		<remove-file name="$languagedir/ArcadeSkinA.english.php" />
+		<remove-file name="$languagedir/Arcade.english-utf8.php" />
+		<remove-file name="$languagedir/ArcadeAdmin.english-utf8.php" />
+		<remove-file name="$languagedir/ArcadeEmail.english-utf8.php" />
+		<remove-file name="$languagedir/ArcadeSkinA.english-utf8.php" />
+
+		<!-- Remove these files from the images directory -->
+		<remove-file name="$imagesdir/arena_accept.png" />
+		<remove-file name="$imagesdir/arena_decline.png" />
+		<remove-file name="$imagesdir/favorite.gif" />
+		<remove-file name="$imagesdir/favorite2.gif" />
+		<remove-file name="$imagesdir/arcade_star.gif" />
+		<remove-file name="$imagesdir/arcade_star2.gif" />
+		<remove-file name="$imagesdir/gold.gif" />
+		<remove-file name="$imagesdir/admin/feature_arcade.png" />
+		<remove-file name="$imagesdir/1.gif" />
+		<remove-file name="$imagesdir/2.gif" />
+		<remove-file name="$imagesdir/3.gif" />
+		<remove-file name="$imagesdir/arcade_games.png" />
+		<remove-file name="$imagesdir/arcade_edit.gif" />
+		<remove-file name="$imagesdir/gold.gif" />
+		<remove-file name="$imagesdir/bbc/game.gif" />
+		<remove-file name="$imagesdir/arc_icons/arcade_popup_error.gif" />
+		<remove-file name="$imagesdir/arc_icons/arcade_popup_logo.png" />
+		<remove-file name="$imagesdir/arc_icons/dl_btn_popup.png" />
+		<remove-file name="$imagesdir/arc_icons/popup_play_btn.gif" />
+		<remove-file name="$imagesdir/arc_icons/popup_ie_bg.png" />
+		<remove-file name="$imagesdir/arc_icons/thearcade.png" />
+		<remove-file name="$imagesdir/arc_icons/game_popup_saver.swf" />
+		<remove-file name="$imagesdir/arc_icons/dl_btn.png" />
+		<remove-file name="$imagesdir/admin/big/arcade_maintenance.png" />
+		<remove-file name="$imagesdir/admin/big/arcade_general.png" />
+		<remove-file name="$imagesdir/admin/big/arcade_settings.png" />
+		<remove-file name="$imagesdir/admin/big/arcade_categories.png" />
+		<remove-file name="$imagesdir/admin/arcade_maintenance.png" />
+		<remove-file name="$imagesdir/admin/arcade_general.png" />
+		<remove-file name="$imagesdir/admin/arcade_settings.png" />
+		<remove-file name="$imagesdir/admin/arcade_categories.png" />
+
+		<!-- Remove these files from the main directroy -->
+		<remove-file name="$boarddir/arcade.php" />
+		<remove-file name="$boarddir/newscore.php" />
+		<remove-file name="$boarddir/avatars/noavatar.gif" />
+	</uninstall>
+</package-info>

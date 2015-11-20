@@ -1,0 +1,36 @@
+/*
+ * SMF Arcade
+ *
+ * @package SMF Arcade
+ * @version 2.5
+ * @license http://web-develop.ca/index.php?page=arcade_license_BSD2 BSD 2
+ */
+/* ************************************* */
+/* styles from E_Arcade.template         */
+/* ************************************* */
+.maintour
+{
+	width: 400px;
+	text-align: center;
+}
+.lefty
+{
+	text-align: right;
+	float: left;
+	width: 200px;
+}
+.righty
+{
+	text-align: left;
+	float: right;
+	width: 200px;
+}
+.left
+{
+	line-height: 26px;
+}
+.right
+{
+	line-height: 25px;
+	padding: 3px;
+}
