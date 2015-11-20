@@ -47,7 +47,10 @@ Please report bugs to the Official Support Thread
 
 This helps make this modification better!
 
-Copyright (c) 2004 - 2012, Niko Pahajoki ~ http://www.madjoki.com/
+Copyright (c) 2004 - 2012, Niko Pahajoki ~ http://www.madjoki.com
+
 Copyright (c) 2015, Chen Zhen ~ http://web-develop.ca/index.php?page=arcade_license_BSD2
+
 Current support provided by Chen Zhen @ http://web-develop.ca
+
 SMF Arcade License: http://web-develop.ca/index.php?page=arcade_license_BSD2
