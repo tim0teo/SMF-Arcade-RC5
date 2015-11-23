@@ -3,7 +3,7 @@ Changelog started February 25, 2007.
 
 SMF Arcade 2.5 RC4                                                    xx.11.2015
 ================================================================================
-October 2015
+November 2015
  + SMF 2.0.X branch support
  + SMF 2.1.X branch support
  + Added option to select E-Arcade skin
