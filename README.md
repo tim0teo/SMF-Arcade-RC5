@@ -25,6 +25,7 @@ Arena for users to challenge other users
 
 Games
 You can view this link for information regarding games for this arcade system: 
+
 GAME RESOURCE LIST: http://www.web-develop.ca/index.php?page=arcade_game_dl_sites
 
 Features:
