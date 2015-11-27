@@ -15,7 +15,6 @@ function doTables($tables, $columnRename = array())
 	global $smcFunc, $db_prefix, $db_type, $db_show_debug;
 
 	$log = array();
-	$table_name = $table['name'];
 
 	foreach ($tables as $table)
 	{
