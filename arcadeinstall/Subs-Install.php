@@ -15,17 +15,15 @@ function doTables($tables, $columnRename = array())
 	global $smcFunc, $db_prefix, $db_type, $db_show_debug;
 
 	$log = array();
-	$existingTables = $smcFunc['db_list_tables']();
+	$table_name = $table['name'];
 
 	foreach ($tables as $table)
 	{
 		$table_name = $table['name'];
 
-		$tableExists = in_array($db_prefix . $table_name, $existingTables);
-
 		// Create table
-		if (!$tableExists && empty($table['smf']))
-			$smcFunc['db_create_table']('{db_prefix}' . $table_name, $table['columns'], $table['indexes']);
+		if (!checkTableExistsArcade($table['name']) && empty($table['smf']))
+			$smcFunc['db_create_table']('{db_prefix}' . $table_name, $table['columns'], $table['indexes'], array(), 'ignore');
 		// Update table
 		else
 		{
@@ -41,7 +39,7 @@ function doTables($tables, $columnRename = array())
 						$old_name = $column['name'];
 						$column['name'] = $table['rename'][$column['name']];
 
-						$smcFunc['db_change_column']('{db_prefix}' . $table_name, $old_name, $column);
+						$smcFunc['db_change_column']('{db_prefix}' . $table_name, $old_name, $column, array(), 'ignore');
 					}
 				}
 			}
@@ -55,7 +53,7 @@ function doTables($tables, $columnRename = array())
 					{
 						$old_name = $column['name'];
 						$column['name'] = $columnRename[$column['name']];
-						$smcFunc['db_change_column']('{db_prefix}' . $table_name, $old_name, $column);
+						$smcFunc['db_change_column']('{db_prefix}' . $table_name, $old_name, $column, array(), 'ignore');
 					}
 				}
 			}
@@ -77,7 +75,7 @@ function doTables($tables, $columnRename = array())
 
 				// Add missing columns
 				if (!$exists)
-					$smcFunc['db_add_column']('{db_prefix}' . $table_name, $col);
+					$smcFunc['db_add_column']('{db_prefix}' . $table_name, $col, array(), 'update');
 			}
 
 			// Remove any unnecassary columns
@@ -97,7 +95,7 @@ function doTables($tables, $columnRename = array())
 				if (!$exists && isset($table['upgrade']['columns'][$col['name']]))
 				{
 					if ($table['upgrade']['columns'][$col['name']] == 'drop')
-						$smcFunc['db_remove_column']('{db_prefix}' . $table_name, $col['name']);
+						$smcFunc['db_remove_column']('{db_prefix}' . $table_name, $col['name'], array(), 'ignore');
 				}
 				elseif (!$exists && !empty($db_show_debug) && empty($table['smf']))
 					$log[] = sprintf('Table %s has non-required column %s', $table_name, $col['name']);
@@ -117,8 +115,8 @@ function doTables($tables, $columnRename = array())
 
 						if ($index['columns'] !== $index2['columns'])
 						{
-							$smcFunc['db_remove_index']('{db_prefix}' . $table_name, 'primary');
-							$smcFunc['db_add_index']('{db_prefix}' . $table_name, $index);
+							$smcFunc['db_remove_index']('{db_prefix}' . $table_name, 'primary', array(), 'ignore');
+							$smcFunc['db_add_index']('{db_prefix}' . $table_name, $index, array(), 'ignore');
 						}
 
 						break;
@@ -131,8 +129,8 @@ function doTables($tables, $columnRename = array())
 						// Need to be changed?
 						if ($index['type'] != $index2['type'] || $index['columns'] !== $index2['columns'])
 						{
-							$smcFunc['db_remove_index']('{db_prefix}' . $table_name, $index['name']);
-							$smcFunc['db_add_index']('{db_prefix}' . $table_name, $index);
+							$smcFunc['db_remove_index']('{db_prefix}' . $table_name, $index['name'], array(), 'ignore');
+							$smcFunc['db_add_index']('{db_prefix}' . $table_name, $index, array(), 'ignore');
 						}
 
 						break;
@@ -140,7 +138,7 @@ function doTables($tables, $columnRename = array())
 				}
 
 				if (!$exists)
-					$smcFunc['db_add_index']('{db_prefix}' . $table_name, $index);
+					$smcFunc['db_add_index']('{db_prefix}' . $table_name, $index, array(), 'ignore');
 			}
 
 			// Remove unnecassary indexes
@@ -165,9 +163,9 @@ function doTables($tables, $columnRename = array())
 						foreach ($table['upgrade']['indexes'] as $index2)
 						{
 							if ($index['type'] == 'primary' && $index2['type'] == 'primary' && $index['columns'] === $index2['columns'])
-								$smcFunc['db_remove_index']('{db_prefix}' . $table_name, 'primary');
+								$smcFunc['db_remove_index']('{db_prefix}' . $table_name, 'primary', array(), 'ignore');
 							elseif (isset($index['name']) && isset($index2['name']) && $index['name'] == $index2['name'] && $index['type'] == $index2['type'] && $index['columns'] === $index2['columns'])
-								$smcFunc['db_remove_index']('{db_prefix}' . $table_name, $index['name']);
+								$smcFunc['db_remove_index']('{db_prefix}' . $table_name, $index['name'], array(), 'ignore');
 							elseif (!empty($db_show_debug))
 								$log[] = $table_name . ' has Unneeded index ' . var_dump($index);
 						}
@@ -260,6 +258,19 @@ function updateAdminFeatures($item, $enabled = false)
 	updateSettings(array('admin_features' => implode(',', $admin_features)));
 
 	return true;
+}
+
+function checkTableExistsArcade($table)
+{
+	global $smcFunc;
+	list($check, $checkval) = array(false, false);
+	$check = $smcFunc['db_query']('', "SHOW TABLES LIKE '{db_prefix}$table'");
+	$checkval = $smcFunc['db_num_rows']($check);
+	$smcFunc['db_free_result']($check);
+	if ($checkval > 0)
+		return true;
+
+	return false;
 }
 
 ?>

@@ -32,22 +32,19 @@ $txt['arcade_member'] = 'Member';
 $txt['arcade_save'] = 'Save';
 $txt['arcade_edit_game'] = 'Edit Game';
 $txt['arcade_max_scores'] = 'You may have %d scores at same time';
+$txt['arcade'] = 'Arcade';
 
 // Information Center
 $txt['arcade_info_center'] = 'Arcade Information';
-
 $txt['arcade_game_highlights'] = 'Did you know?';
 $txt['arcade_game_with_longest_champion'] = '%s has been champion of %s for way too long?';
 $txt['arcade_game_most_played'] = 'Our most played game is %s, have you played it?';
 $txt['arcade_game_best_player'] = 'Did you know that %s has claimed way too many champions?';
 $txt['arcade_game_we_have_games'] = 'Total of %s games in the arcade';
 $txt['arcade_have_tried_these'] = 'Have you tried these?';
-
 $txt['arcade_game_of_day'] = 'Game of Day';
-
 $txt['arcade_latest_scores'] = 'Latest scores';
 $txt['arcade_latest_score_item'] = '%4$s scored %3$s on <a href="%1$s">%2$s</a>';
-
 $txt['arcade_users'] = 'Users In Arcade';
 
 // Game list
@@ -123,10 +120,8 @@ $txt['arcade_cancelMatch'] = 'Cancel';
 $txt['arcade_joinMatch'] = 'Join';
 $txt['arcade_leaveMatch'] = 'Leave';
 $txt['match_not_found'] = 'Match not found';
-
 $txt['arcade_rounds'] = 'Rounds';
 $txt['arcade_players'] = 'Players';
-
 $txt['arcade_accept'] = 'Accept';
 $txt['arcade_decline'] = 'Decline';
 
@@ -231,7 +226,7 @@ $txt['view_cat'] = 'View By Category';
 $txt['arcade_none_played'] = 'No games have been played';
 $txt['arcade_title'] = 'Arcade';
 
-/* Arcade - PDL Text Variables */
+// Arcade Advanced
 $modSettings['arcadeVersion'] = !empty($modSettings['arcadeVersion']) ? $modSettings['arcadeVersion'] : '2.5 RC4';
 $txt['arcade_download_gameplay'] = 'Download';
 $txt['pdl_play'] = '<img src="Themes/default/images/arc_icons/pdl_play.gif" alt="Play" title="Play Game" />';
@@ -273,4 +268,5 @@ $txt['pdl_down'] = '<br /><br /><br />';
 $txt['show_pdl_report'] = 'View Report';
 $txt['arcade_tour_tour'] = 'Tournament';
 $txt['arcade_administrator'] = 'Admin';
+
 ?>
