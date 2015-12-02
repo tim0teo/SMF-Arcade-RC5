@@ -318,13 +318,19 @@ function ArcadeList()
 	$modSettings['arcadeList'] = !empty($modSettings['arcadeList']) ? (int)$modSettings['arcadeList'] : 0;
 	if ($modSettings['arcadeList'] == 1)
 	{
-		loadTemplate('ArcadeList');
+		loadTemplate('ArcadeSkinListB');
+		$context['sub_template'] = 'arcade_list';
+		$context['page_title'] = $txt['arcade_game_list'];
+	}
+	elseif ($modSettings['arcadeList'] == 2)
+	{
+		loadTemplate('ArcadeSkinListA');
 		$context['sub_template'] = 'arcade_list';
 		$context['page_title'] = $txt['arcade_game_list'];
 	}
 	else
 	{
-		loadTemplate('ArcadeSkinListA');
+		loadTemplate('ArcadeList');
 		$context['sub_template'] = 'arcade_list';
 		$context['page_title'] = $txt['arcade_game_list'];
 	}

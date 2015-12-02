@@ -186,6 +186,8 @@ function ArcadeAdminSettings($return_config = false)
 	$context['post_url'] = $scripturl . '?action=admin;area=arcade;sa=settings;save';
 	$context['settings_title'] = $txt['arcade_admin_settings'];
 	$context['sub_template'] = 'show_settings';
+	$context['html_headers'] .= '
+	<script type="text/javascript">window.onload = function() {submitArcadeSkin();};</script>';
 
 	prepareDBSettingContext($config_vars);
 }

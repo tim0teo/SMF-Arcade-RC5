@@ -7,18 +7,16 @@
  */
 function empty()
 {
-
-    if ( document.search && document.search.name.value == '' )
+    if (document.search && document.search.name.value == '')
     {
-        alert('Nothing Entered To Search!')
+        alert('Nothing Entered To Search!');
         return false;
     }
-
-
 }
 
 function popup(path,w,h)
 {
 	arcadepopup=window.open(path,'name','height='+ h +',width='+ w +', left=200, top=200, resizable = 0');
-	if (window.focus) {arcadepopup.focus()}
+	if (window.focus)
+		arcadepopup.focus();
 }

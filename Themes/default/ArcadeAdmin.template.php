@@ -264,7 +264,6 @@ function template_arcade_admin_category_edit()
 function template_arcadeadmin_above()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings, $arcade_version;
-
 }
 
 function template_arcadeadmin_below()

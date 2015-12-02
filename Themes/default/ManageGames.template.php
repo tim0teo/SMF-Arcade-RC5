@@ -106,9 +106,9 @@ function template_manage_games_upload()
 		<div class="windowbg2">
 			<span class="topslice"><span></span></span>
 			<div style="padding: 0.5em;">
-				<input type="file" size="48" name="attachment[]" /><br />
-				<input type="file" size="48" name="attachment[]" /><br />
-				<input type="file" size="48" name="attachment[]" /><br />
+				<input accept="tar, zip, gz" type="file" size="48" name="attachment[]" /><br />
+				<input accept="tar, zip, gz" type="file" size="48" name="attachment[]" /><br />
+				<input accept="tar, zip, gz" type="file" size="48" name="attachment[]" /><br />
 	
 				<span class="smalltext">', $txt['post_max_size'], ' ', $context['post_max_size'], ' MB</span><br />
 				<input class="button_submit" type="submit" name="upload" value="', $txt['arcade_upload_button'], '" />

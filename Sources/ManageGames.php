@@ -22,6 +22,10 @@
 
 	void EditGame2()
 		- ???
+
+	void gzArcadeCompressFile
+		- ???
+
 */
 
 function ManageGames()
@@ -508,15 +512,17 @@ function ManageGamesUpload2()
 {
 	global $scripturl, $txt, $modSettings, $context, $sourcedir, $smcFunc;
 
+	require_once($sourcedir . '/Tar.php');
+
 	foreach ($_FILES['attachment']['tmp_name'] as $n => $dummy)
 	{
 		if ($_FILES['attachment']['name'][$n] == '')
 			continue;
-
-		$newname = strtolower(basename($_FILES['attachment']['name'][$n]));
+		$_FILES['attachment']['name'][$n] = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $_FILES['attachment']['name'][$n]);
+		$newname = trim(strtolower(basename($_FILES['attachment']['name'][$n])));
 		$target = $modSettings['gamesDirectory'];
 
-		if (substr($newname, -2) != 'gz' && substr($newname, -3) != 'tar' && substr($newname, -3) != 'zip')
+		if (substr($newname, -2) !== 'gz' && substr($newname, -3) !== 'tar' && substr($newname, -3) !== 'zip')
 			continue;
 
 		if ($target != $modSettings['gamesDirectory'])
@@ -528,8 +534,12 @@ function ManageGamesUpload2()
 				fatal_lang_error('arcade_not_writable', false, array($target));
 		}
 
-		if (!move_uploaded_file($_FILES['attachment']['tmp_name'][$n], $target . '/' . $newname))
+		if ((substr($newname, -3) === 'tar') && !move_uploaded_file($_FILES['attachment']['tmp_name'][$n], $target . '/' . $newname))
+			fatal_lang_error('arcade_upload_tar', false, $_FILES['attachment']['name'][$n]);
+		elseif (!move_uploaded_file($_FILES['attachment']['tmp_name'][$n], $target . '/' . $newname))
 			fatal_lang_error('arcade_upload_file', false);
+
+		@chmod($target . '/' . $newname, 0755);
 	}
 
 	redirectexit('action=admin;area=managegames;sa=install');

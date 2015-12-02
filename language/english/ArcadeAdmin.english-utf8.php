@@ -40,8 +40,9 @@ $txt['arcade_decimal'] = 'Set Decimal Places';
 
 $txt['skin_showcatchamps'] = 'Show Category Champs';
 $txt['arcade_decimal_recommend'] = '(recommend 3 max)';
-$txt['arcade_default'] = 'Default Skin';
-$txt['arcade_skin_a'] = 'Skin [A]';
+$txt['arcade_default'] = 'Classic';
+$txt['arcade_skin_a'] = 'Enterprise';
+$txt['arcade_skin_b'] = 'Defiant';
 $txt['arcadeSkin'] = 'Set Arcade Skin';
 $txt['skin_latest_scores'] = 'Set Latest Scores';
 $txt['skin_latest_champs'] = 'Set Latest Champs';
@@ -195,6 +196,7 @@ $txt['arcade_install_status'] = 'Status';
 $txt['arcade_install_success'] = 'Success';
 $txt['arcade_install_failed'] = 'Failed';
 
+$txt['arcade_directory_make_exists'] = 'Game folder already exists and contains files - installation aborted. Folder: %s';
 $txt['directory_make_failed'] = 'Failed to make directory: %s';
 $txt['file_move_failed'] = 'Failed to move file %s to %s';
 $txt['file_move_fail_message'] = 'Check file and directory permission and try again and/or move files manually';
@@ -247,7 +249,6 @@ $txt['arcadeDropCat'] = 'Enable Drop Down Categories';
 $txt['arcade_catWidth'] = 'Set Category Icon Width';
 $txt['arcade_catHeight'] = 'Set Category Icon Height';
 $txt['arcadeAdjustType'] = 'Auto Adjust Improper Save Types';
-$txt['arcade_skin_b'] = 'Skin [B]';
 $txt['arcade_download'] = 'Download';
 $txt['arcade_general_pdl_settings'] = 'Advanced';
 $txt['arcade_general_pdl_reports'] = 'Reports';
@@ -271,6 +272,7 @@ $txt['arcade_no_games_selected'] = 'No games selected!';
 $txt['arcade_not_writable'] = 'Directory %s is not writable and chmod didn\'t succeed. Please make it writable manually.';
 $txt['arcade_unable_to_move'] = 'Unable to move %s from %s to %s, please do it manually and reload!';
 $txt['arcade_upload_file'] = 'Uploading file failed!';
+$txt['arcade_upload_tar'] = 'php.ini settings for upload_max_filesize and/or post_max_size not enough: %s';
 
 $txt['unable_to_make'] = 'Unable to make directory "%s". Please do it manually!';
 $txt['unable_to_chmod'] = 'Directory "%s" is not writable and chmod failed, please use FTP client to make it writable';
@@ -278,4 +280,5 @@ $txt['unable_to_move'] = 'Unable to move directories from "%s" to "%s". Please d
 
 // Skin B
 $txt['arcadeTabs'] = 'Enable Toolbar Tabs';
+
 ?>

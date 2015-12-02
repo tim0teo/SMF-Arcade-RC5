@@ -210,17 +210,17 @@ function createGame($game)
 		return false;
 
 
-	/* Post message with game info if enabled */
+	// Post message with game info if enabled
 	$modSettings['arcadeEnablePosting'] = !empty($modSettings['arcadeEnablePosting']) ? $modSettings['arcadeEnablePosting'] : false;
 	if ((($modSettings['arcadeEnablePosting']) == true) && (($modSettings['gamesBoard']) == true))
 	{
 		$gameid = $id_game;
 		postArcadeGames($game, $gameid);
 	}
-	/* end post message */
+
 	unset($game['internal_name'], $game['name'], $game['submit_system'], $game['game_file'], $game['game_directory']);
 
-	// Update does rest
+	// Update does the rest...
 	updateGame($id_game, $game);
 
 	logAction('arcade_install_game', array('game' => $id_game));
@@ -577,47 +577,74 @@ function unpackGames($games, $move_games = false)
 
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
-		$from = $modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/' . $row['game_file'];
+		$from = $modSettings['gamesDirectory'] . '/' . (!empty($row['game_directory']) ? $row['game_directory'] . '/' : '') . $row['game_file'];
 		$target = substr($row['game_file'], 0, strpos($row['game_file'], '.'));
 		$targetb = $target;
 
 		$i = 1;
-		while (file_exists($modSettings['gamesDirectory'] . '/' . $target))
-			$target = $targetb . '_' . $i++;
+		if (@file_exists($modSettings['gamesDirectory'] . '/' . $target))
+		{
+			// if the directory is empty we can still use it otherwise abort the installation
+			$dir_iterator = new RecursiveDirectoryIterator($modSettings['gamesDirectory'] . '/' . $target);
+			$iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::CHILD_FIRST);
+			$dirFiles = array();
 
-		//$target .= '/';
+			foreach ($iterator as $file)
+				if (substr($file, -1) !== '.' && substr($file, -2) != '..')
+					$dirFiles[] = $file;
 
-		if (substr($row['game_file'] , -3) == 'zip'){
+			if (count($dirFiles) > 0)
+				fatal_lang_error('arcade_directory_make_exists', false, $target);
+		}
+		
+		if (substr($row['game_file'] , -3) == '.gz')
+		{
+			$buffer_size = 4096; // read 4kb at a time
+			$output = substr($row['game_file'], 0, -3);
 
-		$files = read_tgz_file($from, $modSettings['gamesDirectory'] . '/' . $target);
+			$file = gzopen($modSettings['gamesDirectory'] . '/' . $row['game_file'], 'rb');
+			$out_file = fopen($modSettings['gamesDirectory'] . '/' . $output, 'wb');
 
-		$data = gameCacheInsertGames(getAvailableGames($target, 'unpack'), true);
+			while(!gzeof($file))
+				@fwrite($out_file, gzread($file, $buffer_size));
 
+			fclose($out_file);
+			gzclose($file);
+			if (!@file_exists($modSettings['gamesDirectory'] . '/' . $output))
+				fatal_lang_error('arcade_file_non_read', false);
+
+			@unlink($modSettings['gamesDirectory'] . $row['game_file']);
+			$row['game_file'] = $output;
 		}
 
-		if(substr( $row['game_file'] , -3) == 'tar'){
+		if (substr($row['game_file'] , -3) == 'zip')
+		{
+			$files = arcadeUnzip($modSettings['gamesDirectory'] . '/' . $row['game_file'], $modSettings['gamesDirectory'] . '/' . $target . '/', true, false);
+			$data = gameCacheInsertGames(getAvailableGames($target, 'unpack'), true);
+		}
+
+		if(substr($row['game_file'] , -3) == 'tar')
+		{
 			require_once($sourcedir . '/Tar.php');
-			$path = $modSettings['gamesDirectory'].'/';
-			$tar = new Archive_Tar($path.$row['game_file']);
+			$path = $modSettings['gamesDirectory'] . '/';
+			$tar = new Archive_Tar($path . $row['game_file']);
 			$data = $tar->listContent();
 
-		  if ($data === false){
-		  fatal_lang_error('arcade_file_non_read', false);
-			}else{
-		  $name = preg_replace( "/^(game)_(.+?)\.(\S+)$/", "\\2",  $row['game_file']);
-		      $name = trim($name);
+			if ($data == false)
+				fatal_lang_error('arcade_file_non_read', false);
+			else
+			{
+				$name = preg_replace( "/^(game)_(.+?)\.(\S+)$/", "\\2",  $row['game_file']);
+				$name = trim($name);
+				$folder = $modSettings['gamesDirectory'] . '/' . $name;
 
-		  $folder = $modSettings['gamesDirectory'].'/'.$name;
+				if(!file_exists($folder))
+					@mkdir($folder, 0755);
 
-			if(!is_dir($folder))
-		  mkdir($folder, 0755);
-
-		  $tar = new Archive_Tar($path.$row['game_file']);
-		  $tar->extract($folder);
+				$tar = new Archive_Tar($path . $row['game_file']);
+				$tar->extract($folder);
 			}
-
-			}
-
+		}
 
 		if (unlink($from))
 			$smcFunc['db_query']('', '
@@ -767,21 +794,23 @@ function readGameInfo($file)
 }
 
 
-function check_empty_folder ( $folder )
+function check_empty_folder ($folder)
 {
 	if(is_dir($folder))
-{
-	$files = array ();
-	if ( $handle = opendir ( $folder ) ) {
-		while ( false !== ( $file = readdir ( $handle ) ) ) {
-			if ( $file != "." && $file != ".." ) {
-				$files [] = $file;
+	{
+		$files = array();
+		if ($handle = opendir($folder))
+		{
+			while (false !== ($file = readdir($handle)))
+			{
+				if ($file != "." && $file != "..")
+					$files [] = $file;
 			}
+			closedir ($handle);
 		}
-		closedir ( $handle );
-}
 	}
-	return ( count ( $files ) > 0 ) ? FALSE : TRUE;
+
+	return (count($files) > 0) ? FALSE : TRUE;
 }
 
 function getGameName($internal_name)
@@ -1326,12 +1355,15 @@ function copyArcadeDirectory($source, $destination)
 	{
 		if (@!is_dir($destination))
 			@mkdir($destination);
+
 		$directory = @dir($source);
 		while (FALSE !== ($readdirectory = $directory->read()))
 		{
 			if ($readdirectory == '.' || $readdirectory == '..')
-			{continue;}
+				continue;
+
 			$PathDir = $source . '/' . $readdirectory;
+
 			if (@is_dir($PathDir))
 			{
 				copyArcadeDirectory($PathDir, $destination . '/' . $readdirectory);
@@ -1353,26 +1385,36 @@ function copyArcadeDirectory($source, $destination)
 function deleteArcadeArchives($directory)
 {
 	global $boardurl, $boarddir;
-	if(substr($directory,-1) == "/") {$directory = substr($directory,0,-1);}
-	if (!@file_exists($directory) || !@is_dir($directory)) {return false;}
-	elseif (!@is_readable($directory)) {return false;}
+	if(substr($directory,-1) == "/")
+		$directory = substr($directory,0,-1);
+
+	if (!@file_exists($directory) || !@is_dir($directory))
+		return false;
+	elseif (!@is_readable($directory))
+		return false;
+
 	$directoryHandle = opendir($directory);
 	while ($contents = @readdir($directoryHandle))
+	{
+		if($contents != '.' && $contents != '..')
 		{
-			if($contents != '.' && $contents != '..')
-				{
-					$path = $directory . "/" . $contents;
-					if (@is_dir($path))
-						{deleteArcadeArchives($path);}
-					@unlink($path);
+			$path = $directory . "/" . $contents;
+			if (@is_dir($path))
+				deleteArcadeArchives($path);
 
-				}
+			@unlink($path);
+
 		}
+	}
 
 	@closedir($directoryHandle);
-	if (@is_dir($directory)) {@rmdir($directory);}
-	elseif (@file_exists($directory)) {@unlink($directory);}
-	else {return false;}
+	if (@is_dir($directory))
+		@rmdir($directory);
+	elseif (@file_exists($directory))
+		@unlink($directory);
+	else
+		return false;
+
 	return true;
 }
 
@@ -1427,4 +1469,70 @@ function return_bytes($val)
 
     return $val;
 }
+
+// unpack zipped game archives
+function arcadeUnzip($src_file, $dest_dir=false, $create_zip_name_dir=true, $overwrite=true)
+{
+	if ($zip = zip_open($src_file))
+	{
+		if ($zip)
+		{
+			$splitter = ($create_zip_name_dir === true) ? '.' : '/';
+			if ($dest_dir === false)
+				$dest_dir = substr($src_file, 0, strrpos($src_file, $splitter)) . '/';
+
+			arcadeCreateDirs($dest_dir);
+
+			while ($zip_entry = zip_read($zip))
+			{
+				$pos_last_slash = strrpos(zip_entry_name($zip_entry), '/');
+				if ($pos_last_slash !== false)
+					arcadeCreateDirs($dest_dir . substr(zip_entry_name($zip_entry), 0, $pos_last_slash+1));
+
+				if (zip_entry_open($zip,$zip_entry, 'r'))
+				{
+					$file_name = $dest_dir . zip_entry_name($zip_entry);
+					$dir_name = dirname($file_name);
+
+						if ($overwrite === true || ($overwrite === false && !is_file($file_name)))
+						{
+							$fstream = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+							@file_put_contents($file_name, $fstream);
+							@chmod($file_name, 0755);
+						}
+
+					zip_entry_close($zip_entry);
+				}
+			}
+
+			zip_close($zip);
+		}
+	}
+	else
+		return false;
+
+  return true;
+}
+
+// create necessary recursive directories
+function arcadeCreateDirs($path)
+{
+	if (!is_dir($path))
+	{
+		$directory_path = "";
+		$directories = explode("/", $path);
+		array_pop($directories);
+
+		foreach($directories as $directory)
+		{
+			$directory_path .= $directory . '/';
+			if (!is_dir($directory_path))
+			{
+				@mkdir($directory_path);
+				@chmod($directory_path, 0755);
+			}
+		}
+	}
+}
+
 ?>

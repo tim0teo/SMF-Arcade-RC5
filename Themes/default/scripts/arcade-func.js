@@ -111,3 +111,10 @@ function readArcadeCookie(name)
 
 	return "";
 }
+
+function submitArcadeSkin()
+{
+	document.getElementById("arcadeSkin").onchange = function() {
+		document.forms["admin_form_wrapper"].submit();
+	};
+}

@@ -1,9 +1,9 @@
 Changes go downward, months go upward.  Please scroll to the bottom for a legend.
 Changelog started February 25, 2007.
 
-SMF Arcade 2.5 RC4                                                    xx.11.2015
+SMF Arcade 2.5 RC4                                                    xx.12.2015
 ================================================================================
-November 2015
+December 2015
  + SMF 2.0.X branch support
  + SMF 2.1.X branch support
  + Added option to select E-Arcade skin
@@ -12,6 +12,7 @@ November 2015
  + Added option to view/hide information center
  + Default list now uses horizontal button navigation
  + Added additional list display options
+ + Added unique unzip & gz sub-routines
  ! Removed PDL custom template
  ! File permission issue for some host configuration fixed
  ! Updated license & its hyperlinks
