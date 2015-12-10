@@ -87,6 +87,7 @@ function ArcadeAdminSettings($return_config = false)
 			array('text', 'gamesUrl'),
 			array('text', 'gamesDirectory'),
 			array('check', 'arcadeGamecacheUpdate'),
+			array('check', 'arcadeUploadSystem'),
 		'',
 			array('int', 'arcadeCommentLen', 'subtext' => $txt['arcadeCommentLen_subtext']),
 		'',

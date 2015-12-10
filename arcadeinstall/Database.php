@@ -25,11 +25,12 @@ if (!defined('SMF'))
 		- ???
 */
 
-global $addSettings, $tables, $permissions, $columnRename, $boarddir, $boardurl, $smcFunc;
+global $addSettings, $tables, $permissions, $columnRename, $boarddir, $boardurl, $smcFunc, $modSettings;
 
 $arcade_version = '2.5';
 $arcade_lang_version = '2.5';
 $arcade_server = 'http://service.smfarcade.info/arcade';
+$htmlUpload = !isset($modSettings['arcadeUploadSystem']) ? 1 : 0;
 
 // Settings array
 $addSettings = array(
@@ -53,6 +54,7 @@ $addSettings = array(
 	'arcadeEnableRatings' => array(1, false),
 	'arcadeShowInfoCenter' => array(1, false),
 	'arcadeCommentLen' => array(75, false),
+	'arcadeUploadSystem' => array($htmlUpload, false),
 );
 
 // Permissions array

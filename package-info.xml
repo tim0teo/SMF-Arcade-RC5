@@ -68,6 +68,7 @@
 		<require-file name="Themes/default/ArcadeSkinB.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ManageGames.template.php" destination="$themedir" />
 		<require-file name="Themes/default/css/arcade.css" destination="$themedir/css" />
+		<require-file name="Themes/default/css/arcade-upload.css" destination="$themedir/css" />
 		<require-file name="Themes/default/css/arcade-skin-b.css" destination="$themedir/css" />
 		<require-file name="Themes/default/ArcadeSkinA.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeSkinListA.template.php" destination="$themedir" />
@@ -83,6 +84,7 @@
 		<require-file name="Themes/default/scripts/arcade-func.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/swfobject.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/arcade-skin-a.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/arcade-uploader-html5.js" destination="$themedir/scripts" />
 
 		<!-- These images go into the Default Theme images directory -->
 		<require-file name="Themes/default/images/arcade_star.gif" destination="$imagesdir" />
@@ -106,7 +108,7 @@
 		<require-file name="avatars/noavatar.gif" destination="$boarddir/avatars" />
 		<require-file error="skip" name="index.php" destination="$boarddir/games_download" />
 		<require-file error="skip" name="index.php" destination="$boarddir/Games" />
-		<require-dir error="skip" name="gamedata" destination="$boarddir/arcade" />
+		<require-dir error="skip" name="arcade" destination="$boarddir" />
 
 		<!-- Run Installer/upgrader -->
 		<code>arcadeinstall/Database.php</code>
@@ -176,6 +178,7 @@
 		<require-file name="Themes/default/ArcadeSkinB.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ManageGames.template.php" destination="$themedir" />
 		<require-file name="Themes/default/css/arcade.css" destination="$themedir/css" />
+		<require-file name="Themes/default/css/arcade-upload.css" destination="$themedir/css" />
 		<require-file name="Themes/default/css/arcade-skin-b.css" destination="$themedir/css" />
 		<require-file name="Themes/default/ArcadeSkinA.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeSkinListA.template.php" destination="$themedir" />
@@ -187,6 +190,7 @@
 		<require-file name="Themes/default/scripts/arcade-func.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/swfobject.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/arcade-skin-a.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/arcade-uploader-html5.js" destination="$themedir/scripts" />
 
 		<!-- These images go into the Default Theme images directory -->
 		<require-file name="Themes/default/images/arcade_star.gif" destination="$imagesdir" />
@@ -220,7 +224,7 @@
 		<require-file name="avatars/noavatar.gif" destination="$boarddir/avatars" />
 		<require-file error="skip" name="index.php" destination="$boarddir/games_download" />
 		<require-file error="skip" name="index.php" destination="$boarddir/Games" />
-		<require-dir error="skip" name="gamedata" destination="$boarddir/arcade" />
+		<require-dir error="skip" name="arcade" destination="$boarddir" />
 
 		<!-- Run Installer/upgrader -->
 		<code>arcadeinstall/Database.php</code>
@@ -294,11 +298,13 @@
 		<remove-file name="$themedir/ArcadeSkinB.template.php" />
 		<remove-file name="$themedir/ManageGames.template.php" />
 		<remove-file name="$themedir/css/arcade.css" />
+		<remove-file name="$themedir/css/arcade-upload.css" />
 		<remove-file name="$themedir/css/arcade-skin-b.css" />
 		<remove-file name="$themedir/scripts/arcade.js" />
 		<remove-file name="$themedir/scripts/arcade-func.js" />
 		<remove-file name="$themedir/scripts/swfobject.js" />
 		<remove-file name="$themedir/scripts/arcade-skin-a.js" />
+		<remove-file name="$themedir/scripts/arcade-uploader-html5.js" />
 		<remove-file name="$themedir/ArcadeSkinA.template.php" />
 		<remove-file name="$themedir/ArcadeSkinListA.template.php" />
 		<remove-file name="$themedir/ArcadeGamePop.template.php" />
@@ -392,11 +398,13 @@
 		<remove-file name="$themedir/ArcadeSkinB.template.php" />
 		<remove-file name="$themedir/ManageGames.template.php" />
 		<remove-file name="$themedir/css/arcade.css" />
+		<remove-file name="$themedir/css/upload-arcade.css" />
 		<remove-file name="$themedir/css/arcade-skin-b.css" />
 		<remove-file name="$themedir/scripts/arcade.js" />
 		<remove-file name="$themedir/scripts/arcade-func.js" />
 		<remove-file name="$themedir/scripts/swfobject.js" />
 		<remove-file name="$themedir/scripts/arcade-skin-a.js" />
+		<remove-file name="$themedir/scripts/arcade-uploader-html5.js" />
 		<remove-file name="$themedir/ArcadeSkinA.template.php" />
 		<remove-file name="$themedir/ArcadeSkinListA.template.php" />
 		<remove-file name="$themedir/ArcadeGamePop.template.php" />

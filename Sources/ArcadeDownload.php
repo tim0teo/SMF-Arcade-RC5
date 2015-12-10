@@ -280,7 +280,7 @@ function ArcadeDownload()
 	$directoryToZip1= $main.'/'.$gamedirectory;
 	$directoryToZip2='arcade/gamedata/'.$gamefile_name;
 	$outputDir= '';
-	$zipName= $gamefile_name.'.zip';
+	$zipName= 'game_' . $gamefile_name.'.zip';
 	if (file_exists('Sources/CreateZipFile.php'))
 	{
 		include_once("Sources/CreateZipFile.php");

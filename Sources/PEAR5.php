@@ -41,3 +41,5 @@ class PEAR5
 	return $properties[$class][$var];
     }
 }
+
+?>

@@ -30,10 +30,12 @@
 
 function ManageGames()
 {
-	global $scripturl, $txt, $context, $sourcedir, $smcFunc, $modSettings;
+	global $scripturl, $txt, $context, $sourcedir, $smcFunc, $modSettings, $settings, $smfVersion;
 
 	require_once($sourcedir . '/Arcade.php');
 	require_once($sourcedir . '/Subs-ArcadeAdmin.php');
+	$context['html_headers'] .= '
+	<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/arcade_upload.css?rc4" />';
 
 	// Templates
 	loadTemplate('ManageGames');
@@ -93,6 +95,7 @@ function ManageGames()
 	$context[$context['admin_menu_name']]['tab_data']['title'] = $txt['arcade_manage_games'];
 	$context[$context['admin_menu_name']]['tab_data']['description'] = $txt['arcade_manage_games_desc'];
 
+	$smfVersion = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 	$subActions[$_REQUEST['sa']][0]();
 }
 
@@ -254,7 +257,12 @@ function ManageGamesList()
 
 function ManageGamesInstall()
 {
-	global $scripturl, $txt, $db_prefix, $modSettings, $context, $sourcedir, $smcFunc;
+	global $scripturl, $txt, $db_prefix, $modSettings, $context, $sourcedir, $smcFunc, $smfVersion;
+
+	isAllowedTo('arcade_admin');
+
+	if ($smfVersion === 'v2.1')
+		createToken('admin', 'post');
 
 	$context['sub_template'] = 'manage_games_list';
 
@@ -308,7 +316,7 @@ function ManageGamesInstall()
 			),
 		),
 		'form' => array(
-			'href' => $scripturl . '?action=admin;area=managegames;sa=install2',
+			'href' => $scripturl . '?action=admin;area=managegames;sa=install2;sesc=' . $context['session_id'],
 			'include_sort' => true,
 			'include_start' => true,
 			'hidden_fields' => array(
@@ -317,12 +325,26 @@ function ManageGamesInstall()
 		'additional_rows' => array(
 			array(
 				'position' => 'below_table_data',
+				'value' => '<input onclick="return arcadeDelClick()" id="quick_del" class="button_submit" type="submit" name="delete_submit" value="' . $txt['quickmod_delete_selected'] . '" />',
+				'class' => 'titlebg',
+				'style' => 'float: left;',
+			),
+			array(
+				'position' => 'below_table_data',
 				'value' => '<input class="button_submit" type="submit" name="install_submit" value="' . $txt['quickmod_install_selected'] . '" />',
 				'class' => 'titlebg',
-				'style' => 'text-align: right;',
+				'style' => 'float: right;',
 			),
 		),
 	);
+
+	$context['html_headers'] .= '
+	<script type="text/javascript">
+		function arcadeDelClick(val) {
+			var myConf = confirm("' . $txt['arcade_are_you_sure_delete'] . '");
+			return myConf;
+		}
+	</script>';
 
 	// Create the list.
 	require_once($sourcedir . '/Subs-List.php');
@@ -331,9 +353,13 @@ function ManageGamesInstall()
 
 function ManageGamesInstall2()
 {
-	global $smcFunc;
+	global $smcFunc, $context, $smfVersion, $modSettings;
 
-	checkSession('request');
+	isAllowedTo('arcade_admin');
+	checkSession('post');
+
+	if ($smfVersion === 'v2.1')
+		validateToken('admin', 'post', false);
 
 	if (!isset($_REQUEST['file']))
 		fatal_lang_error('arcade_no_games_selected', false);
@@ -350,47 +376,92 @@ function ManageGamesInstall2()
 	if (count($games) == 0)
 		fatal_lang_error('arcade_no_games_selected', false);
 
-	$request = $smcFunc['db_query']('', '
-		SELECT id_file, file_type, status
-		FROM {db_prefix}arcade_files
-		WHERE id_file IN ({array_int:games})
-			AND status = 10',
-		array(
-			'games' => $games,
-		)
-	);
-
-	$unpack = array();
-	$install = array();
-
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	if (isset($_REQUEST['install_submit']))
 	{
-		// Needs uncompression?
-		if ($row['file_type'] !== 'game')
-			$unpack[] = $row['id_file'];
-		else
-			$install[] = $row['id_file'];
+		$request = $smcFunc['db_query']('', '
+			SELECT id_file, file_type, status
+			FROM {db_prefix}arcade_files
+			WHERE id_file IN ({array_int:games})
+				AND status = 10',
+			array(
+				'games' => $games,
+			)
+		);
+
+		$unpack = array();
+		$install = array();
+
+		while ($row = $smcFunc['db_fetch_assoc']($request))
+		{
+			// Needs uncompression?
+			if ($row['file_type'] !== 'game')
+				$unpack[] = $row['id_file'];
+			else
+				$install[] = $row['id_file'];
+		}
+		$smcFunc['db_free_result']($request);
+
+		// Unpack games first
+		if (!empty($unpack))
+			unpackGames($unpack);
+
+		if (!empty($install))
+		{
+			$_SESSION['qaction'] = 'install';
+			$_SESSION['qaction_data'] = installGames($install);
+		}
+
+		redirectexit('action=admin;area=managegames;sa=install;done;sesc=' . $context['session_id']);
 	}
-	$smcFunc['db_free_result']($request);
-
-	// Unpack games first
-	if (!empty($unpack))
-		unpackGames($unpack);
-
-	if (!empty($install))
+	else
 	{
-		$_SESSION['qaction'] = 'install';
-		$_SESSION['qaction_data'] = installGames($install);
-	}
+		$location = rtrim($modSettings['gamesDirectory'], '/');
+		list($id_games, $id_files) = array(array(), array());
 
-	redirectexit('action=admin;area=managegames;sa=install;done');
+		foreach ($games as $game)
+			$id_files[] = $game;
+
+		if (!empty($id_files))
+		{
+			$request = $smcFunc['db_query']('', '
+				SELECT id_file, id_game, game_file, game_directory, status
+				FROM {db_prefix}arcade_files
+				WHERE id_file IN({array_int:games})
+					AND status = 10',
+				array(
+					'games' => $id_files
+				)
+			);
+
+			while ($row = $smcFunc['db_fetch_assoc']($request))
+			{
+				$id_games[] = !empty($row['id_game']) ? (int)$row['id_game'] : 0;
+
+				if (!empty($row['game_directory']))
+					deleteArcadeArchives($location . '/' . rtrim($row['game_directory'], '/'));
+
+				if((!empty($row['game_file'])) && file_exists($location . '/' . $row['game_file']))
+					unlink($location . '/' . $row['game_file']);
+			}
+
+			$smcFunc['db_free_result']($request);
+
+			if (!empty($id_games))
+				uninstallGames($id_games, true);
+		}
+
+		redirectexit('action=admin;area=managegames;sa=install;sesc=' . $context['session_id']);
+	}
 }
 
 function ManageGamesUninstall()
 {
-	global $smcFunc, $context, $txt, $scripturl;
+	global $smcFunc, $context, $txt, $scripturl, $smfVersion;
 
-	checkSession('request');
+	isAllowedTo('arcade_admin');
+
+	if ($smfVersion === 'v2.1')
+		createToken('admin', 'post');
 
 	if (!isset($_REQUEST['game']))
 		fatal_lang_error('arcade_no_games_selected', false);
@@ -431,7 +502,7 @@ function ManageGamesUninstall()
 		);
 	$smcFunc['db_free_result']($request);
 
-	$context['confirm_url'] = $scripturl . '?action=admin;area=managegames;sa=uninstall2';
+	$context['confirm_url'] = $scripturl . '?action=admin;area=managegames;sa=uninstall2;sesc=' . $context['session_id'];
 	$context['confirm_title'] = $txt['arcade_uninstall_games'];
 	$context['confirm_text'] = $txt['arcade_following_games_uninstall'];
 	$context['confirm_button'] = $txt['arcade_uninstall_games'];
@@ -442,9 +513,13 @@ function ManageGamesUninstall()
 
 function ManageGamesUninstall2()
 {
-	global $smcFunc, $context;
+	global $smcFunc, $context, $smfVersion;
 
+	isAllowedTo('arcade_admin');
 	checkSession('request');
+
+	if ($smfVersion === 'v2.1')
+		validateToken('admin', 'post', false);
 
 	if (!isset($_REQUEST['game']))
 		fatal_lang_error('arcade_no_games_selected', false);
@@ -492,17 +567,55 @@ function ManageGamesUninstall2()
 	$_SESSION['qaction'] = 'uninstall';
 	$_SESSION['qaction_data'] = uninstallGames($id_game, isset($_REQUEST['remove_files']));
 
-	redirectexit('action=admin;area=managegames;sa=main;done');
+	redirectexit('action=admin;area=managegames;sa=main;done;sesc=' . $context['session_id']);
 }
 
 function ManageGamesUpload()
 {
-	global $scripturl, $txt, $modSettings, $context, $sourcedir, $smcFunc;
+	global $scripturl, $txt, $modSettings, $context, $sourcedir, $smcFunc, $settings, $user_settings, $cookiename, $user_info, $smfVersion;
+
+	isAllowedTo('arcade_admin');
+
+	if ($smfVersion === 'v2.1')
+		createToken('admin', 'post');
+
+	// this is done so we are not logged-out whilst using the container
+	if (!empty($modSettings['arcadeUploadSystem']))
+	{
+		$_SESSION['login_' . $cookiename][2] = time() + 3600;
+		setLoginCookie(60 * $modSettings['cookieTime'], $user_settings['id_member'], hash_salt($user_settings['passwd'], $user_settings['password_salt']));
+		$update = array('member_ip' => $user_info['ip'], 'member_ip2' => $_SERVER['BAN_CHECK_IP'], 'passwd_flood' => '');
+		$user_info['is_guest'] = false;
+		$user_settings['additional_groups'] = explode(',', $user_settings['additional_groups']);
+		$user_info['is_admin'] = $user_settings['id_group'] == 1 || in_array(1, $user_settings['additional_groups']);
+		$update['last_login'] = time();
+		updateMemberData($user_info['id'], $update);
+	}
 
 	if (!is_writable($modSettings['gamesDirectory']) && !chmod($modSettings['gamesDirectory'], 0755))
 		fatal_lang_error('arcade_not_writable', false, array($modSettings['gamesDirectory']));
 
 	$context['post_max_size'] = return_bytes(ini_get('post_max_size')) / 1048576;
+
+	// css & js implementation
+	if (!empty($modSettings['arcadeUploadSystem']))
+		$context['html_headers'] .= '
+	<link href="' . $settings['default_theme_url'] . '/css/arcade-upload.css?rc4" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-uploader-html5.js?rc4"></script>
+	<script type="text/javascript">
+		// common variables for arcade upload
+		var uploadScript = "' . $scripturl . '?action=admin;area=managegames;sa=upload2";
+		var uploadError1 = "' . $txt['arcade_supported_filetypes'] . '";
+		var uploadMessage1 = "' . $txt['arcade_upload_msg1'] . '";
+		var uploadMessage2 = "' . $txt['arcade_upload_msg2'] . '";
+		var iBytesUploaded = 0;
+		var iBytesTotal = 0;
+		var iPreviousBytesLoaded = 0;
+		var iMaxFilesize = ' . (return_bytes(ini_get('post_max_size'))) . ';
+		var oTimer = 0;
+		var sResultFileSize = "";
+	</script>';
 
 	// Template
 	$context['sub_template'] = 'manage_games_upload';
@@ -510,47 +623,100 @@ function ManageGamesUpload()
 
 function ManageGamesUpload2()
 {
-	global $scripturl, $txt, $modSettings, $context, $sourcedir, $smcFunc;
+	global $txt, $modSettings, $context, $cookiename, $smfVersion;
 
-	require_once($sourcedir . '/Tar.php');
+	$postVar = !empty($_FILES['attachment']) ? $_FILES['attachment'] : (!empty($_FILES['Filedata']) ? $_FILES['Filedata'] : array());
+	list($fileExists, $newname) = array(0, '');
 
-	foreach ($_FILES['attachment']['tmp_name'] as $n => $dummy)
+	isAllowedTo('arcade_admin');
+	checkSession('post');
+
+	if ($smfVersion === 'v2.1')
+		validateToken('admin', 'post', false);
+
+	if (empty($postVar) && empty($modSettings['arcadeUploadSystem']))
+		redirectexit('action=admin;area=managegames;sa=install');
+	elseif (empty($postVar))
+		die($txt['arcade_upload_nofile']);
+
+	foreach ($postVar['tmp_name'] as $n => $dummy)
 	{
-		if ($_FILES['attachment']['name'][$n] == '')
+		if ($postVar['name'][$n] == '')
 			continue;
-		$_FILES['attachment']['name'][$n] = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $_FILES['attachment']['name'][$n]);
-		$newname = trim(strtolower(basename($_FILES['attachment']['name'][$n])));
+
+		$postVar['name'][$n] = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $postVar['name'][$n]);
+		$newname = trim(strtolower(basename($postVar['name'][$n])));
 		$target = $modSettings['gamesDirectory'];
+		$tmp_name = $postVar['tmp_name'][$n];
 
 		if (substr($newname, -2) !== 'gz' && substr($newname, -3) !== 'tar' && substr($newname, -3) !== 'zip')
 			continue;
 
 		if ($target != $modSettings['gamesDirectory'])
 		{
-			if (!file_exists($target) && !mkdir($target, 0755))
+			if (!file_exists($target) && !mkdir($target, 0755) && empty($modSettings['arcadeUploadSystem']))
 				fatal_lang_error('arcade_not_writable', false, array($target));
+			elseif (!file_exists($target) && !mkdir($target, 0755))
+				die($txt['arcade_not_writable'] . ' ~ ' . $target);
 
-			if (!is_writable($target) && !chmod($target, 0755))
+			if (!is_writable($target) && !chmod($target, 0755) && empty($modSettings['arcadeUploadSystem']))
 				fatal_lang_error('arcade_not_writable', false, array($target));
+			elseif (!is_writable($target) && !chmod($target, 0755))
+				die($txt['arcade_not_writable'] . ' ~ ' . $target);
 		}
 
-		if ((substr($newname, -3) === 'tar') && !move_uploaded_file($_FILES['attachment']['tmp_name'][$n], $target . '/' . $newname))
-			fatal_lang_error('arcade_upload_tar', false, $_FILES['attachment']['name'][$n]);
-		elseif (!move_uploaded_file($_FILES['attachment']['tmp_name'][$n], $target . '/' . $newname))
-			fatal_lang_error('arcade_upload_file', false);
+		if (!file_exists($target . '/' . $newname))
+		{
+			$fileExists = 0;
+			$com = fopen($target . '/' . $newname, "ab");
+			$in = fopen($tmp_name, "rb");
+			if ($in)
+			{
+				// pause on every MB
+				while ($buff = fread($in, 1048576))
+				{
+					fwrite($com, $buff);
+					sleep(2);
+				}
+				fclose($in);
+			}
+			fclose($com);
 
-		@chmod($target . '/' . $newname, 0755);
+			//move_uploaded_file($postVar['tmp_name'][$n], $target . '/' . $newname);
+
+			if (!file_exists($target . '/' . $newname) && empty($modSettings['arcadeUploadSystem']))
+				fatal_lang_error('arcade_upload_file', false);
+			elseif (!file_exists($target . '/' . $newname))
+				die($txt['arcade_upload_file']);
+
+			@chmod($target . '/' . $newname, 0755);
+		}
+		else
+			$fileExists = 1;
 	}
 
-	redirectexit('action=admin;area=managegames;sa=install');
+	if (empty($modSettings['arcadeUploadSystem']))
+		redirectexit('action=admin;area=managegames;sa=install');
+	elseif (!empty($newname) && empty($fileExists))
+		die(sprintf($txt['arcade_upload_complete'] ,$newname));
+	elseif (!empty($fileExists))
+		die(sprintf($txt['arcade_upload_exists'], $newname));
+	else
+		die($txt['arcade_upload_nofile']);
+
 }
 
 function EditGame()
 {
-	global $scripturl, $txt, $db_prefix, $modSettings, $context, $sourcedir, $smcFunc, $boarddir;
+	global $scripturl, $txt, $db_prefix, $modSettings, $context, $sourcedir, $smcFunc, $boarddir, $smfVersion;
 
 	$context['game_permissions'] = $modSettings['arcadePermissionMode'] > 2;
 	$context['edit_page'] = !isset($_REQUEST['advanced']) ? 'basic' : 'advanced';
+
+	isAllowedTo('arcade_admin');
+
+	if ($smfVersion === 'v2.1')
+		createToken('admin', 'post');
 
 	// Load game data unless it has been loaded by EditGame2
 	if (!isset($context['game']))
@@ -645,10 +811,15 @@ function EditGame()
 
 function EditGame2()
 {
-	global $scripturl, $txt, $db_prefix, $modSettings, $context, $sourcedir, $smcFunc, $boarddir;
+	global $scripturl, $txt, $db_prefix, $modSettings, $context, $sourcedir, $smcFunc, $boarddir, $smfVersion;
 
 	$context['game_permissions'] = $modSettings['arcadePermissionMode'] > 2;
 	$context['edit_page'] = !isset($_REQUEST['advanced']) ? 'basic' : 'advanced';
+
+	isAllowedTo('arcade_admin');
+
+	if ($smfVersion === 'v2.1')
+		validateToken('admin', 'post', false);
 
 	if (!isset($context['game']))
 	{
@@ -854,6 +1025,12 @@ function ExportGameInfo()
 );
 
 	obExit(false);
+}
+
+function arcadeBytesToSize1024($bytes, $precision = 2)
+{
+    $unit = array('B','KB','MB');
+    return @round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision).' '.$unit[$i];
 }
 
 ?>

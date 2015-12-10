@@ -13,6 +13,8 @@ December 2015
  + Default list now uses horizontal button navigation
  + Added additional list display options
  + Added unique unzip & gz sub-routines
+ + Option to delete files within the game install list
+ + Added HTML5 Upload sub-routine
  ! Removed PDL custom template
  ! File permission issue for some host configuration fixed
  ! Updated license & its hyperlinks
@@ -22,6 +24,7 @@ December 2015
  ! Sanitized code including the removal of Heredoc syntax from the Jeza template
  ! Fixed "new" category
  ! Fixed behavior of sorting options
+ ! Download sub-routine compresses entire game folder if it exists else default game files within Game directory
 
 SMF Arcade 2.5 RC3                                                    xx.03.2015
 ================================================================================

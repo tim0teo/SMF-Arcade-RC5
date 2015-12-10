@@ -1819,4 +1819,5 @@ class Archive_Tar extends PEAR
     // }}}
 
 }
+
 ?>

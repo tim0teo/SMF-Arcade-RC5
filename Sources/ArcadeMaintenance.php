@@ -427,7 +427,8 @@ function ArcadeMaintenanceCategory()
 	);
 
 	$context['maintenance_finished'] = false;
-
+	$modSettings['arcadeDefaultCategory'] = !empty($modSettings['arcadeDefaultCategory']) ? (int)$modSettings['arcadeDefaultCategory'] : 0;
+	
 	if ((isset($_REQUEST['cat_default'])) && $modSettings['arcadeDefaultCategory'] != (int)$_REQUEST['cat_default'])
 	{
 		checkSession('request');

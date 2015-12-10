@@ -116,6 +116,7 @@ $txt['arcade_missing_files'] = 'Main file missing';
 // Quick Actions
 $txt['quickmod_change_category'] = 'Change Category of Selected';
 $txt['quickmod_install_selected'] = 'Install Selected';
+$txt['quickmod_delete_selected'] = 'Delete Selected';
 $txt['quickmod_uninstall_selected'] = 'Uninstall Selected';
 
 $txt['arcade_install_complete'] = 'Install Complete';
@@ -127,7 +128,15 @@ $txt['arcade_uninstall_following_games'] = 'Following games were uninstalled';
 $txt['arcade_upload'] = 'Upload';
 $txt['post_max_size'] = 'Maximium Total Filesize:';
 $txt['arcade_upload_button'] = 'Upload';
-$txt['arcade_supported_filetypes'] = 'Supported filetypes: zip';
+$txt['arcade_supported_filetypes'] = 'Supported filetypes: zip | tar | gz';
+$txt['arcade_upload_error'] = 'An error occurred while uploading the file';
+$txt['arcade_upload_abort'] = 'The upload has been canceled by the user or the browser dropped the connection';
+$txt['arcade_upload_warnsize'] = 'File exceeds php upload limits. Adjust ~ upload_max_filesize & post_max_size ~ in your php ini file';
+$txt['arcade_upload_msg1'] = 'Upload task completed ~ %s';
+$txt['arcade_upload_msg2'] = 'Unable to compute';
+$txt['arcade_upload_nofile'] = 'No file selected';
+$txt['arcade_upload_complete'] = 'Upload Complete ~ %s';
+$txt['arcade_upload_exists'] = 'File Exists ~ %s';
 
 // Maintenance
 $txt['arcade_maintenance_desc'] = 'Here you can perform maintenace actions on Arcade features.';
@@ -191,6 +200,7 @@ To add more games goto list and click install on game you want to install.<br />
 To edit game settings click name of game, when you are done press "Install Games" to complete process.';
 $txt['install_move_files'] = 'Move each game to its own directory';
 $txt['arcade_submit_system'] = 'Submit System';
+$txt['arcadeUploadSystem'] = 'Use HTML5 Upload Script';
 
 $txt['arcade_install_status'] = 'Status';
 $txt['arcade_install_success'] = 'Success';
@@ -204,6 +214,7 @@ $txt['arcade_try_again'] = 'Try Again';
 
 $txt['arcade_move_games'] = 'Move each game to its own directory';
 $txt['arcade_are_you_sure_install'] = 'Are you sure you want to install these games?';
+$txt['arcade_are_you_sure_delete'] = 'Are you sure you want to delete these files?';
 
 // Game uninstall
 $txt['arcade_uninstall_games'] = 'Uninstall Games';
@@ -280,4 +291,5 @@ $txt['unable_to_move'] = 'Unable to move directories from "%s" to "%s". Please d
 
 // Skin B
 $txt['arcadeTabs'] = 'Enable Toolbar Tabs';
+
 ?>

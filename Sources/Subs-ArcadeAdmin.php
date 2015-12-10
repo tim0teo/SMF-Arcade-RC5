@@ -596,7 +596,7 @@ function unpackGames($games, $move_games = false)
 			if (count($dirFiles) > 0)
 				fatal_lang_error('arcade_directory_make_exists', false, $target);
 		}
-		
+
 		if (substr($row['game_file'] , -3) == '.gz')
 		{
 			$buffer_size = 4096; // read 4kb at a time
@@ -706,6 +706,7 @@ function uninstallGames($games, $delete_files = false)
 		);
 	}
 
+	$smcFunc['db_free_result']($request);
 	return $status;
 }
 

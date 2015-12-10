@@ -33,7 +33,10 @@ function template_manage_games_list()
 					</ul>
 				</div>
 			</div>
-		</div><br />';
+		</div><br />
+		<form id="upload_form" action="', $scripturl, '?action=admin;area=managegames;sesc=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
+			<input type="hidden" name="sesc" value="', $context['session_id'], '" />
+		</form>';
 	}
 
 	template_show_list('games_list');
@@ -44,7 +47,7 @@ function template_manage_games_uninstall_confirm()
 	global $context, $txt, $scripturl, $settings;
 
 	echo '
-	<form action="', $context['confirm_url'], ';confirm" method="post">
+	<form action="', $context['confirm_url'], ';confirm;sesc=', $context['session_id'], '" method="post">
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 
 		<div class="tborder">
@@ -94,24 +97,61 @@ function template_manage_games_uninstall_confirm()
 
 function template_manage_games_upload()
 {
-	global $scripturl, $context, $txt;
-
+	global $scripturl, $context, $txt, $boardurl, $boarddir, $modSettings, $settings;
+	// "' . rtrim($modSettings['gamesUrl'], '/') . '/"
 	echo '
-	<form action="', $scripturl, '?action=admin;area=managegames;sa=upload2" method="post" accept-charset="', $context['character_set'], '" enctype="multipart/form-data">
-		<div class="cat_bar">
+	<link href="' . $settings['default_theme_url'] . '/css/arcade-upload.css?rc4" rel="stylesheet" type="text/css" />
+	<form id="upload_form" action="', $scripturl, '?action=admin;area=managegames;sa=upload2" method="post" accept-charset="', $context['character_set'], '" enctype="multipart/form-data">
+		<div class="cat_bar uptitle">
 			<h3 class="catbg">
 				', $txt['arcade_upload'], '
 			</h3>
 		</div>
-		<div class="windowbg2">
+		<div class="windowbg2 upcontainer">
 			<span class="topslice"><span></span></span>
-			<div style="padding: 0.5em;">
+			<div style="padding: 0.5em;" id="arcade_container">', (empty($modSettings['arcadeUploadSystem']) ?	'
 				<input accept=".tar, .zip, .gz" type="file" size="48" name="attachment[]" /><br />
 				<input accept=".tar, .zip, .gz" type="file" size="48" name="attachment[]" /><br />
 				<input accept=".tar, .zip, .gz" type="file" size="48" name="attachment[]" /><br />
+				<span class="smalltext">' . $txt['post_max_size'] . ' ' . $context['post_max_size'] . ' MB</span><br />
+				<input class="button_submit" type="submit" name="upload" value="' . $txt['arcade_upload_button'] . '" />' : '
+				<div class="upload_form_cont">
+                    <div>
+                        <div>
+							<label for="upload_file">Please select game file(s)</label>
+						</div>
+                        <div>
+							<input class="arcade_upload" accept=".tar, .zip, .gz" type="file" name="Filedata[]" id="upload_file" onchange="fileSelected();" multiple />
+						</div>
+                    </div>
+                    <div>
+                        <input class="arcade_upload_button" type="button" value="Upload" onclick="startUploading(uploadScript)" />
+                    </div>
+                    <div id="fileinfo">
+                        <div id="filename"></div>
+                        <div id="filesize"></div>
+                        <div id="filetype"></div>
+                        <div id="filedim"></div>
+                    </div>
+                    <div id="error">' . $txt['arcade_supported_filetypes'] . '</div>
+                    <div id="error2">' . $txt['arcade_upload_error'] . '</div>
+                    <div id="abort">' . $txt['arcade_upload_abort'] . '</div>
+                    <div id="warnsize">' . $txt['arcade_upload_warnsize'] . '</div>
+                    <div id="progress_info">
+                        <div id="progress"></div>
+                        <div id="progress_percent">&nbsp;</div>
+                        <div class="clear_both"></div>
+                        <div>
+                            <div id="speed">&nbsp;</div>
+                            <div id="remaining">&nbsp;</div>
+                            <div id="b_transfered">&nbsp;</div>
+                            <div class="clear_both"></div>
+                        </div>
+                        <div id="upload_response"></div>
+                    </div>
+				</div>');
 
-				<span class="smalltext">', $txt['post_max_size'], ' ', $context['post_max_size'], ' MB</span><br />
-				<input class="button_submit" type="submit" name="upload" value="', $txt['arcade_upload_button'], '" />
+	echo '
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>
@@ -124,9 +164,9 @@ function template_edit_game_above()
 	global $scripturl, $context, $txt;
 
 	echo '
-	<form action="', $scripturl, '?action=admin;area=managegames;sa=edit2" method="post">
+	<form action="', $scripturl, '?action=admin;area=managegames;sa=edit2;sesc=', $context['session_id'], '" method="post">
 		<input type="hidden" name="game" value="', $context['game']['id'], '" />
-		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+		<input type="hidden" name="sesc" value="', $context['session_id'], '" />
 		<input type="hidden" name="edit_page" value="', $context['edit_page'], '" />
 
 		<div class="cat_bar">

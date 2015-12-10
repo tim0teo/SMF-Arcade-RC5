@@ -145,6 +145,7 @@ function Arcade_menu_buttons(&$menu_buttons)
 	if (!$context['allow_admin'])
 		$context['allow_admin'] = allowedTo('arcade_admin');
 
+	loadLanguage('Arcade');
 	$context['allow_arcade'] = allowedTo('arcade_view') && !empty($modSettings['arcadeEnabled']);
 
 	arcade_array_insert($menu_buttons, 'search',

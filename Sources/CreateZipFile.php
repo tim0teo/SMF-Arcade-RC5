@@ -317,29 +317,70 @@ class CreateZipFile {
 
 		}
 	}
-public function zipDirectory4($gamefile_name, $outputDir, $gamedirectory) {
-		global $modSettings, $boardurl;
-		if (empty($modSettings['gamesUrl']))
-			{$main = 'Games';}
-		else
-			{$main = preg_replace('~'.$boardurl.'/~', '', $modSettings['gamesUrl']);}
-		$gamepack = array($gamefile_name . '.php', $gamefile_name . '.swf', $gamefile_name . '.gif', $gamefile_name . '1.gif', $gamefile_name . '2.gif', 'size.txt', 'license.txt', '__metadata__.JSON');
-		$filezipped = false;
-		$this->addDirectory($outputDir);
-		foreach ($gamepack as $file)
-                {
-					$fileToZip=  $main.'/' . $gamedirectory . '/' . $file;
-                    if (file_exists($fileToZip))
-						{
-							$outputDir = $file;
-							$fileContents=file_get_contents($fileToZip);
-							$omit2 = $main.'/'.$gamedirectory.'/';
-							$fileToZip = preg_replace('~'.$omit2.'~', '', $fileToZip);
-							$this->addFile($fileContents, $file);
-						}
-				}
+
+	public function zipAddDir($path)
+	{
+		$this->addEmptyDir($path);
+		$nodes = glob($path . '/*');
+		foreach ($nodes as $node)
+		{
+			if (is_dir($node))
+				$this->zipAddDir($node);
+			elseif (is_file($node))
+				$this->addFile($node);
+		}
 	}
 
+	public function zipDirectory4($gamefile_name, $outputDir, $gamedirectory)
+	{
+		global $modSettings, $boardurl;
+
+		if (empty($modSettings['gamesUrl']))
+			$main = 'Games';
+		else
+			$main = preg_replace('~' . $boardurl . '/~', '', $modSettings['gamesUrl']);
+
+		$gamepack = array($gamefile_name . '.php', $gamefile_name . '.swf', $gamefile_name . '.gif', $gamefile_name . '1.gif', $gamefile_name . '2.gif', 'size.txt', 'license.txt', '__metadata__.JSON');
+		$gameFolder = rtrim($modSettings['gamesDirectory'], '/');
+		$filezipped = false;
+		$this->addDirectory($outputDir);
+
+		// for a game installed without its own directory...
+		if ($gamedirectory === $main || !$gamedirectory)
+		{
+			foreach ($gamepack as $file)
+			{
+				$fileToZip = $gameFolder . '/' . $file;
+				if (file_exists($fileToZip))
+				{
+					$outputDir = $file;
+					$fileContents = file_get_contents($fileToZip);
+					$omit2 = $gameFolder . '/';
+					$fileToZip = preg_replace('~' . $omit2 . '~', '', $fileToZip);
+					$this->addFile($fileContents, $file);
+				}
+			}
+		}
+		else
+		{
+			$gameFolder = $gameFolder . '/' . $gamedirectory;
+			$gamepack = glob($gameFolder . "*");
+			foreach ($gamepack as $file)
+			{
+				$fileToZip = $gameFolder . '/' . $file;
+				if (file_exists($fileToZip) && strpos($file, '.') !== false)
+				{
+					$outputDir = $file;
+					$fileContents = file_get_contents($fileToZip);
+					$omit2 = $gameFolder . '/' . $gamedirectory . '/';
+					$fileToZip = preg_replace('~' . $omit2 . '~', '', $fileToZip);
+					$this->addFile($fileContents, $file);
+				}
+				elseif (file_exists($fileToZip) && strpos($file, '.') === false)
+					zipAddDir($file);
+			}
+		}
+	}
 }
 
 ?>
