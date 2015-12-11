@@ -578,12 +578,19 @@ function ManageGamesUpload()
 
 	if ($smfVersion === 'v2.1')
 		createToken('admin', 'post');
+	else
+		require_once($sourcedir . '/Subs-Auth.php');
 
 	// this is done so we are not logged-out whilst using the container
 	if (!empty($modSettings['arcadeUploadSystem']))
 	{
 		$_SESSION['login_' . $cookiename][2] = time() + 3600;
-		setLoginCookie(60 * $modSettings['cookieTime'], $user_settings['id_member'], hash_salt($user_settings['passwd'], $user_settings['password_salt']));
+
+		if ($smfVersion === 'v2.1')
+			setLoginCookie(60 * $modSettings['cookieTime'], $user_settings['id_member'], hash_salt($user_settings['passwd'], $user_settings['password_salt']));
+		else
+			setLoginCookie(60 * $modSettings['cookieTime'], $user_info['id'], sha1($user_settings['passwd'] . $user_settings['password_salt']));
+
 		$update = array('member_ip' => $user_info['ip'], 'member_ip2' => $_SERVER['BAN_CHECK_IP'], 'passwd_flood' => '');
 		$user_info['is_guest'] = false;
 		$user_settings['additional_groups'] = explode(',', $user_settings['additional_groups']);
