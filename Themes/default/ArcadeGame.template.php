@@ -337,6 +337,9 @@ function template_arcade_game_highscore()
 
 	foreach ($context['arcade']['scores'] as $score)
 	{
+		if (empty($score['time']))
+			continue;
+
 		$div_con = addslashes(sprintf($txt['arcade_when'], $score['time'], duration_format($score['duration'])));
 
 		echo '
