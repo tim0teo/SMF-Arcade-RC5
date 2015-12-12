@@ -825,6 +825,8 @@ function EditGame2()
 
 	isAllowedTo('arcade_admin');
 
+	checkSession('request');
+
 	if ($smfVersion === 'v2.1')
 		validateToken('admin', 'post', false);
 
@@ -912,7 +914,7 @@ function EditGame2()
 	$gameOptions = array();
 	$errors = array();
 
-	if (checkSession('post', '', false) !== '')
+	if (checkSession('request', '', false) !== '')
 		$errors['session'] = 'session_timeout';
 
 	// Basic
@@ -976,7 +978,7 @@ function EditGame2()
 
 	updateGame($context['game']['id'], $gameOptions, true);
 
-	redirectexit('action=admin;area=managegames');
+	redirectexit('action=admin;area=managegames;' . $context['session_var'] . '=' . $context['session_id']);
 }
 
 function ExportGameInfo()
