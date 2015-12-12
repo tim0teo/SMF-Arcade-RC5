@@ -584,12 +584,18 @@ function ManageGamesUpload()
 	// this is done so we are not logged-out whilst using the container
 	if (!empty($modSettings['arcadeUploadSystem']))
 	{
-		$_SESSION['login_' . $cookiename][2] = time() + 3600;
-
 		if ($smfVersion === 'v2.1')
+		{
+			$_SESSION['login_' . $cookiename][2] = time() + 3600;
 			setLoginCookie(60 * $modSettings['cookieTime'], $user_settings['id_member'], hash_salt($user_settings['passwd'], $user_settings['password_salt']));
+		}
 		else
+		{
+			$cookie_state = (empty($modSettings['localCookies']) ? 0 : 1) | (empty($modSettings['globalCookies']) ? 0 : 2);
+			$data = serialize(array($user_info['id'], sha1($user_settings['passwd'] . $user_settings['password_salt']), time() + (60 * $modSettings['cookieTime']), $cookie_state));
+			$_SESSION['login_' . $cookiename] = $data;
 			setLoginCookie(60 * $modSettings['cookieTime'], $user_info['id'], sha1($user_settings['passwd'] . $user_settings['password_salt']));
+		}
 
 		$update = array('member_ip' => $user_info['ip'], 'member_ip2' => $_SERVER['BAN_CHECK_IP'], 'passwd_flood' => '');
 		$user_info['is_guest'] = false;
