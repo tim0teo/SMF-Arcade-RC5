@@ -564,6 +564,7 @@ function unpackGames($games, $move_games = false)
 		fatal_lang_error('arcade_not_writable', false, array($modSettings['gamesDirectory']));
 
 	require_once($sourcedir . '/Subs-Package.php');
+	$smfVersion = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 
 	$request = $smcFunc['db_query']('', '
 		SELECT f.id_file, f.game_file, f.game_directory
