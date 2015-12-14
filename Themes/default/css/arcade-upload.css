@@ -8,10 +8,13 @@
 /* ************************************* */
 /* styles from ManageGames.template      */
 /* ************************************* */
+div .upload_padding {
+	padding-top: 10px;
+}
 .upcontainer {
 	position: relative;
 	top: -9px;
-	margin-top: 0;	
+	margin-top: 0;
 }
 .upload_form_cont {
     background: -moz-linear-gradient(#ffffff, #f2f2f2);
@@ -26,8 +29,8 @@
     overflow:hidden;
 	position: relative;
 }
-#upload_form {    
-    padding:20px;    
+#upload_form {
+    padding:20px;
 }
 #preview {
     background-color:#fff;
@@ -70,6 +73,26 @@ input .arcade_upload {
     background: linear-gradient(#ffffff, #dfdfdf);
 }
 .arcade_upload_button:hover {
+    background: -moz-linear-gradient(#eeeeee, #afafaf);
+    background: -ms-linear-gradient(#eeeeee, #afafaf);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #afafaf));
+    background: -webkit-linear-gradient(#eeeeee, #afafaf);
+    background: -o-linear-gradient(#eeeeee, #afafaf);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#afafaf');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#afafaf')";
+    background: linear-gradient(#eeeeee, #afafaf);
+}
+.arcade_install_button input {
+    background: -moz-linear-gradient(#ffffff, #dfdfdf);
+    background: -ms-linear-gradient(#ffffff, #dfdfdf);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #dfdfdf));
+    background: -webkit-linear-gradient(#ffffff, #dfdfdf);
+    background: -o-linear-gradient(#ffffff, #dfdfdf);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dfdfdf');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dfdfdf')";
+    background: linear-gradient(#ffffff, #dfdfdf);
+}
+.arcade_install_button:hover input {
     background: -moz-linear-gradient(#eeeeee, #afafaf);
     background: -ms-linear-gradient(#eeeeee, #afafaf);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #afafaf));

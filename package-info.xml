@@ -398,7 +398,7 @@
 		<remove-file name="$themedir/ArcadeSkinB.template.php" />
 		<remove-file name="$themedir/ManageGames.template.php" />
 		<remove-file name="$themedir/css/arcade.css" />
-		<remove-file name="$themedir/css/upload-arcade.css" />
+		<remove-file name="$themedir/css/arcade-upload.css" />
 		<remove-file name="$themedir/css/arcade-skin-b.css" />
 		<remove-file name="$themedir/scripts/arcade.js" />
 		<remove-file name="$themedir/scripts/arcade-func.js" />

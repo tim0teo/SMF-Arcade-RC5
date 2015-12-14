@@ -257,7 +257,7 @@ function ManageGamesList()
 
 function ManageGamesInstall()
 {
-	global $scripturl, $txt, $db_prefix, $modSettings, $context, $sourcedir, $smcFunc, $smfVersion;
+	global $scripturl, $txt, $db_prefix, $modSettings, $context, $sourcedir, $smcFunc, $settings, $smfVersion;
 
 	isAllowedTo('arcade_admin');
 
@@ -325,15 +325,15 @@ function ManageGamesInstall()
 		'additional_rows' => array(
 			array(
 				'position' => 'below_table_data',
-				'value' => '<input onclick="return arcadeDelClick()" id="quick_del" class="button_submit" type="submit" name="delete_submit" value="' . $txt['quickmod_delete_selected'] . '" />',
-				'class' => 'titlebg',
-				'style' => 'float: left;',
+				'value' => '<input onclick="return arcadeDelClick()" id="quick_del" type="submit" name="delete_submit" value="' . $txt['quickmod_delete_selected'] . '" />',
+				'class' => 'arcade_install_button',
+				'style' => 'display: inline;float: left;',
 			),
 			array(
 				'position' => 'below_table_data',
-				'value' => '<input class="button_submit" type="submit" name="install_submit" value="' . $txt['quickmod_install_selected'] . '" />',
-				'class' => 'titlebg',
-				'style' => 'float: right;',
+				'value' => '<input type="submit" name="install_submit" value="' . $txt['quickmod_install_selected'] . '" />',
+				'class' => 'arcade_install_button',
+				'style' => 'display: inline;float: right;',
 			),
 		),
 	);
@@ -344,7 +344,8 @@ function ManageGamesInstall()
 			var myConf = confirm("' . $txt['arcade_are_you_sure_delete'] . '");
 			return myConf;
 		}
-	</script>';
+	</script>
+	<link href="' . $settings['default_theme_url'] . '/css/arcade-upload.css?rc4" rel="stylesheet" type="text/css" />';
 
 	// Create the list.
 	require_once($sourcedir . '/Subs-List.php');

@@ -143,7 +143,7 @@ function template_arcade_list()
 
 		$code .= $open . '
 							<div class="titlebg" style="height: 18px;padding:2px 5px 2px 5px;margin:2px 5px 2px 5px;border-bottom:1px solid #808080">
-								<div class="catbg" style="float: left;padding-top: 1px;" >' . $gamename . '</div>
+								<div class="button_strip_random" style="float: left;padding-top: 1px;" >' . $gamename . '</div>
 								<div style="float: right; padding-top: 1px" >' . $fav . ' </div>
 							</div>
 							<div style="float: left; text-align: left; margin: 6px 3px 0px 5px">

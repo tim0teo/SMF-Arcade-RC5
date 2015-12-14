@@ -619,7 +619,11 @@ function unpackGames($games, $move_games = false)
 
 		if (substr($row['game_file'] , -3) == 'zip')
 		{
-			$files = arcadeUnzip($modSettings['gamesDirectory'] . '/' . $row['game_file'], $modSettings['gamesDirectory'] . '/' . $target . '/', true, false);
+			if ($smfVersion === 'v2.1')
+				$files = arcadeUnzip($from, $modSettings['gamesDirectory'] . '/' . $target . '/', true, false);
+			else
+				$files = read_tgz_file($from, $modSettings['gamesDirectory'] . '/' . $target);
+
 			$data = gameCacheInsertGames(getAvailableGames($target, 'unpack'), true);
 		}
 

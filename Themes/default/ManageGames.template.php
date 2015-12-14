@@ -120,11 +120,11 @@ function template_manage_games_upload()
                         <div>
 							<label for="upload_file">Please select game file(s)</label>
 						</div>
-                        <div>
+                        <div class="upload_padding">
 							<input class="arcade_upload" accept=".tar, .zip, .gz" type="file" name="Filedata[]" id="upload_file" onchange="fileSelected();" multiple />
 						</div>
                     </div>
-                    <div>
+                    <div class="upload_padding">
                         <input class="arcade_upload_button" type="button" value="Upload" onclick="startUploading(uploadScript)" />
                     </div>
                     <div id="fileinfo">
