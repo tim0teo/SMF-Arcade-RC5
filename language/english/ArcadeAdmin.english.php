@@ -15,9 +15,13 @@ $txt['arcade_download_update'] = 'download update';
 $txt['pgroups_post_group'] = 'This is post group.';
 $txt['regular_members'] = 'Regular Members';
 $txt['arcade_group_arena'] = 'Everyone on Arcade Arena';
-
+$txt['arcade_admin'] = 'Arcade Admin';
+$txt['arcade_general_information'] = 'Arcade Info';
+$txt['arcade_general_settings'] = 'Arcade Settings';
 $txt['arcade_general'] = 'Arcade';
 $txt['arcade_general_desc'] = 'Here you can check latest version, and edit settings of Arcade';
+$txt['arcadeStats'] = 'Arcade Statistics';
+$txt['sendArcadeChallenge'] = 'Arcade Challenge';
 
 // Information
 $txt['arcade_status'] = 'Version Information';
@@ -31,13 +35,8 @@ $txt['arcadeList'] = 'Show Default List';
 $txt['arcadeDropCat'] = 'Enable Drop Down Categories';
 $txt['arcade_catWidth'] = 'Set Category Icon Width';
 $txt['arcade_catHeight'] = 'Set Category Icon Height';
-// Arcade Settings
-$txt['arcadeList'] = 'Show Default List';
-$txt['arcadeDropCat'] = 'Enable Drop Down Categories';
-$txt['arcade_catWidth'] = 'Set Category Icon Width';
-$txt['arcade_catHeight'] = 'Set Category Icon Height';
 $txt['arcade_decimal'] = 'Set Decimal Places';
-
+$txt['arcadeSettings'] = 'Arcade Settings';
 $txt['skin_showcatchamps'] = 'Show Category Champs';
 $txt['arcade_decimal_recommend'] = '(recommend 3 max)';
 $txt['arcade_default'] = 'Classic';
@@ -77,6 +76,7 @@ $txt['arcade_check_level2'] = 'Default plus (Not recommended)';
 $txt['arcadeMaxScores'] = 'Maximum scores (per player per game)';
 
 // Arcade Admin permissions
+$txt['arcade_general_permissions'] = 'Arcade Permissions';
 $txt['arcadePermissionMode'] = 'Permission mode';
 $txt['arcade_permission_mode_none'] = 'None';
 $txt['arcade_permission_mode_category'] = 'Category only';
@@ -139,6 +139,7 @@ $txt['arcade_upload_complete'] = 'Upload Complete ~ %s';
 $txt['arcade_upload_exists'] = 'File Exists ~ %s';
 
 // Maintenance
+$txt['arcade_maintenance'] = 'Arcade Maintenance';
 $txt['arcade_maintenance_desc'] = 'Here you can perform maintenace actions on Arcade features.';
 $txt['arcade_maintain_done'] = 'Maintenance finished!';
 $txt['arcade_maintenance_fixScores'] = 'Check and repair any errors on score tables';
@@ -161,6 +162,7 @@ $txt['arcade_remove_all_scores'] = 'Remove all scores';
 $txt['arcade_remove_now'] = 'Remove Now';
 
 // Editor
+$txt['arcade_manage_games_edit_games'] = 'Edit Games';
 $txt['arcade_basic_settings'] = 'Basic Settings';
 $txt['arcade_thumbnail'] = 'Thumbnail';
 $txt['arcade_thumbnail_small'] = 'Thumbnail (small)';
@@ -195,6 +197,8 @@ $txt['game_info_export'] = 'Export game-info.xml';
 
 // Game Installer
 $txt['arcade_install_games'] = 'Install Games';
+$txt['arcade_manage_games_install'] = 'Manage Installations';
+$txt['arcade_manage_games_upload'] = 'Manage Uploads';
 $txt['arcade_following_games_install'] = 'Following games will be installed.<br />
 To add more games goto list and click install on game you want to install.<br />
 To edit game settings click name of game, when you are done press "Install Games" to complete process.';
@@ -224,6 +228,9 @@ Press "Uninstall Games" to confirm and complete process.';
 $txt['uninstall_remove_files'] = 'Remove files related to game(s)';
 
 // Category editor
+$txt['arcade_manage_category'] = 'Manage Category';
+$txt['arcade_manage_category_new'] = 'New Category';
+$txt['arcade_manage_category_list'] = 'Category List';
 $txt['arcade_manage_category_desc'] = 'Here you can create and edit categories for games';
 $txt['arcade_categories'] = 'Categories';
 $txt['category_name'] = 'Name';
