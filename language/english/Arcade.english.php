@@ -33,6 +33,9 @@ $txt['arcade_save'] = 'Save';
 $txt['arcade_edit_game'] = 'Edit Game';
 $txt['arcade_max_scores'] = 'You may have %d scores at same time';
 $txt['arcade'] = 'Arcade';
+$txt['arcadeSettings'] = 'Arcade Settings';
+$txt['arcadeStats'] = 'Arcade Statistics';
+$txt['sendArcadeChallenge'] = 'Arcade Challenge';
 
 // Information Center
 $txt['arcade_info_center'] = 'Arcade Information';
