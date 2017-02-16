@@ -93,6 +93,7 @@ function Arcade_profile_areas(&$profile_areas)
 	global $modSettings, $txt;
 
 	loadLanguage('Arcade');
+	loadLanguage('ArcadeAdmin');
 	arcade_array_insert($profile_areas['profile_action']['areas'], 'issuewarning',
 		array(
 			'arcadeChallenge' => array(
