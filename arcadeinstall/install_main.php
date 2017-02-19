@@ -13,6 +13,7 @@ global $project_version, $addSettings, $permissions, $tables, $sourcedir;
 if (!defined('SMF'))
 	die('<b>Error:</b> Cannot install - please run arcadeinstall/index.php instead');
 
+$version = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 $forced = false;
 
 // Step 1: Rename E-Arcade tables if needed
@@ -85,10 +86,14 @@ add_integration_function('integrate_pre_include', '$sourcedir/ArcadeHooks.php');
 add_integration_function('integrate_actions', 'Arcade_actions');
 add_integration_function('integrate_core_features', 'Arcade_core_features');
 add_integration_function('integrate_load_permissions', 'Arcade_load_permissions');
-add_integration_function('integrate_profile_areas', 'Arcade_profile_areas');
 add_integration_function('integrate_menu_buttons', 'Arcade_menu_buttons');
 add_integration_function('integrate_admin_areas', 'Arcade_admin_areas');
 add_integration_function('integrate_load_theme', 'Arcade_load_theme');
+
+if ($version === 'v2.0')
+	add_integration_function('integrate_profile_areas', 'Arcade_profile_areas');
+else
+	add_integration_function('integrate_pre_profile_areas', 'Arcade_profile_areas');
 
 function doRenameTables()
 {
