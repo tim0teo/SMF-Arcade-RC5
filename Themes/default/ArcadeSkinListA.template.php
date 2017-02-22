@@ -38,25 +38,25 @@ function template_arcade_list()
 	echo '
 		<div id="arcadebuttons_top" class="modbuttons clearfix margintop" style="top:-10px;position:relative;">', template_button_strip($arcade_buttons, 'right'), '<br /><br /></div>
 		<div class="game_table">
-			<table cellspacing="0" cellpadding="5" class="table_grid" width="100%">
+			<table style="border-collapse: collapse;width: 100%;" class="table_grid">
 				<thead>
 					<tr>';
 
 	// Is there games?
 	if (!empty($context['arcade']['games']))
 		echo '
-						<th ', ($context['curved'] ? 'scope="col" class="smalltext first_th"' : 'class="catbg"'), ' width="25%"></th>
-						<th colspan="2" ', ($context['curved'] ?  'scope="col" class="smalltext"' : 'class="catbg"'),' width="50%" style="font-family: georgia; text-align: center; font-style: oblique;font-size: 0.8em;">', $txt['arcade_game_list'], '</th>
-						<th ', ($context['curved'] ? 'scope="col" class="smalltext  last_th"' : 'class="catbg"'),' width="25%"></th>';
+						<th ', ($context['curved'] ? 'scope="col" class="smalltext first_th"' : 'class="catbg"'), ' style="padding: 5px;width: 25%;"></th>
+						<th colspan="2" ', ($context['curved'] ?  'scope="col" class="smalltext"' : 'class="catbg"'),' style="padding: 5px;width: 50%;font-family: georgia; text-align: center; font-style: oblique;font-size: 0.8em;">', $txt['arcade_game_list'], '</th>
+						<th ', ($context['curved'] ? 'scope="col" class="smalltext  last_th"' : 'class="catbg"'),' style="padding: 5px;width: 25%;"></th>';
 	elseif ($context['curved'])
 		echo '
-						<td class="catbg" style="border:0px;height: 23px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -160px;"></td>
-						<td colspan="2" class="smalltext catbg" style="border:0px;text-align:center;overflow: hidden;height: 23px;line-height: 23px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -160px;font-family: georgia; font-style: oblique;font-size: 0.8em;font-weight: bold;">', $txt['arcade_no_games'], '</td>
-						<td class="catbg" style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -160px;height: 23px;line-height: 23px;" ></td>';
+						<td class="catbg" style="padding: 5px;border:0px;height: 23px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -160px;"></td>
+						<td colspan="2" class="smalltext catbg" style="padding: 5px;border:0px;text-align:center;overflow: hidden;height: 23px;line-height: 23px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -160px;font-family: georgia; font-style: oblique;font-size: 0.8em;font-weight: bold;">', $txt['arcade_no_games'], '</td>
+						<td class="catbg" style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -160px;height: 23px;line-height: 23px;" ></td>';
 	else
-		echo '			<th class="catbg" width="25%"></th>
-						<th colspan="2" class="catbg" width="50%" style="font-family: georgia; text-align: center; font-style: oblique;">', $txt['arcade_no_games'], '</th>
-						<th class="catbg" width="25%"></th>';
+		echo '			<th class="catbg" style="padding: 5px;width: 25%;"></th>
+						<th colspan="2" class="catbg" style="width: 50%;padding: 5px;font-family: georgia; text-align: center; font-style: oblique;">', $txt['arcade_no_games'], '</th>
+						<th class="catbg" style="padding: 5px;width: 25%;"></th>';
 	$lines = 0;
 	$code = '';
 
@@ -138,17 +138,17 @@ function template_arcade_list()
 		if ($lines == 5)
 			$lines = 1;
 
-		$lines == 1 ? $open = '<tr><td class="windowbg smalltext" width="25%">' : $open = '<td class="windowbg smalltext" width="25%">';
+		$lines == 1 ? $open = '<tr><td class="windowbg smalltext" style="padding: 5px;width: 25%;">' : $open = '<td class="windowbg smalltext" style="padding: 5px;width: 25%;">';
 		$lines == 4 ? $close = '</td></tr>' : $close = '</td>';
 
 		$code .= $open . '
-							<div class="titlebg" style="height: 18px;padding:2px 5px 2px 5px;margin:2px 5px 2px 5px;border-bottom:1px solid #808080">
+							<div class="titlebg" style="height: 18px;padding:2px 5px 2px 5px;margin:2px 5px 2px 5px;border-bottom:1px solid #808080;">
 								<div class="button_strip_random" style="float: left;padding-top: 1px;" >' . $gamename . '</div>
 								<div style="float: right; padding-top: 1px" >' . $fav . ' </div>
 							</div>
-							<div style="float: left; text-align: left; margin: 6px 3px 0px 5px">
+							<div style="float: left; text-align: left; margin: 6px 3px 0px 5px;">
 								<a href="' . $game['url']['play'] . '">
-									<img class="imgBorder" width="40" height="40" src="' . $game['thumbnail'] . '" alt="' . $txt['alt_play'] . '" title="' . $txt['alt_play'] . '"/>
+									<img class="imgBorder" style="width: 40px;height: 40px;" src="' . $game['thumbnail'] . '" alt="' . $txt['alt_play'] . '" title="' . $txt['alt_play'] . '"/>
 								</a><br />
 							</div>
 							<div style="height:55px; margin: 4px 0px 5px 0px;padding-left: 3px; overflow: auto">' . $game['description'] . '</div>
@@ -168,21 +168,21 @@ function template_arcade_list()
 	{
 		$loop = 4-$lines;
 		for ($j=1; $j <= $loop; $j++)
-			$code .= '<td class="windowbg" width="25%">&nbsp;</td>';
+			$code .= '<td class="windowbg" style="padding: 5px;width: 25%;">&nbsp;</td>';
 	}
 
 	echo $code;
 	if($context['curved'])
 		echo '
 			<tr>
-				<td style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -173px;height:20px;"></td>
-				<td colspan="2" style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -173px;height:20px;"></td>
-				<td style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -173px;height:20px;"></td>
+				<td style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -173px;height:20px;"></td>
+				<td colspan="2" style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -173px;height:20px;"></td>
+				<td style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -173px;height:20px;"></td>
 			</tr>';
 	else
 		echo '
 			<tr>
-				<td colspan="5" class="catbg2">&nbsp;</td>
+				<td colspan="5" class="catbg2" style="padding: 5px;">&nbsp;</td>
 			</tr>';
 	echo '
 		</table>';

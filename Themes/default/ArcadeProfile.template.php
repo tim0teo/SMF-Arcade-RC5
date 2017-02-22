@@ -14,7 +14,7 @@ function template_arcade_arena_challenge()
 	echo '
 	<div class="cat_bar">
 		<h3 class="catbg">
-			<img src="', $settings['images_url'], '/stats_info.gif" width="20" height="20" alt="" />
+			<img src="', $settings['images_url'], '/stats_info.gif" style="width: 20px;height: 20px;" alt="" />
 			', $txt['arcade_invite_user'], ' - ', $context['member']['name'], '
 		</h3>
 	</div>
@@ -53,7 +53,7 @@ function template_arcade_user_statistics()
 	echo '
 	<div class="cat_bar">
 		<h3 class="catbg">
-			<img src="', $settings['images_url'], '/stats_info.gif" width="20" height="20" alt="" />
+			<img src="', $settings['images_url'], '/stats_info.gif" style="width: 20px;height: 20px;" alt="" />
 			', $txt['arcade_member_stats'], ' - ', $context['member']['name'], '
 		</h3>
 	</div>
@@ -78,23 +78,23 @@ function template_arcade_user_statistics()
 		echo '
 	<div class="cat_bar">
 		<h3 class="catbg">
-			<img src="', $settings['images_url'], '/stats_info.gif" width="20" height="20" alt="" />
+			<img src="', $settings['images_url'], '/stats_info.gif" style="width: 20px;height: 20px;" alt="" />
 			', $txt['arcade_member_stats'], ' - ', $txt['arcade_member_best_scores'], '
 		</h3>
 	</div>
 	<div class="windowbg">
 		<span class="topslice"><span></span></span>
 		<div class="content">
-			<table border="0" cellpadding="1" cellspacing="0" width="100%">';
+			<table style="border-collapse: collapse;width: 100%;border: 0px;width: 100%;overflow: hidden;">';
 
 		foreach ($context['arcade']['member_stats']['scores'] as $score)
 			echo '
 				<tr>
-					<td></td>
-					<td>', $score['position'], '</td>
-					<td><a href="', $score['link'], '">', $score['name'], '</a></td>
-					<td>', $score['score'], '</td>
-					<td>', $score['time'], '</td>
+					<td style="padding: 1px;"></td>
+					<td style="padding: 1px;">', $score['position'], '</td>
+					<td style="padding: 1px;"><a href="', $score['link'], '">', $score['name'], '</a></td>
+					<td style="padding: 1px;float: right;">', $score['score'], '</td>
+					<td style="padding: 1px 1px 1px 55px;">', $score['time'], '</td>
 				</tr>';
 
 		echo '
@@ -116,16 +116,16 @@ function template_arcade_user_statistics()
 	<div class="windowbg">
 		<span class="topslice"><span></span></span>
 		<div class="content">
-			<table border="0" cellpadding="1" cellspacing="0" width="100%">';
+			<table style="border-collapse: collapse;width: 100%;border: 0px;width: 100%;overflow: hidden;">';
 
 		foreach ($context['arcade']['member_stats']['latest_scores'] as $score)
 			echo '
 				<tr>
-					<td></td>
-					<td>', $score['position'], '</td>
-					<td><a href="', $score['link'], '">', $score['name'], '</a></td>
-					<td>', $score['score'], '</td>
-					<td>', $score['time'], '</td>
+					<td style="padding: 1px;"></td>
+					<td style="padding: 1px;">', $score['position'], '</td>
+					<td style="padding: 1px;"><a href="', $score['link'], '">', $score['name'], '</a></td>
+					<td style="padding: 1px;float: right;">', $score['score'], '</td>
+					<td style="padding: 1px 1px 1px 55px;">', $score['time'], '</td>
 				</tr>';
 
 		echo '
@@ -137,46 +137,59 @@ function template_arcade_user_statistics()
 	echo '
 	<div class="cat_bar">
 		<h3 class="catbg">
-			<img src="', $settings['images_url'], '/stats_info.gif" width="20" height="20" alt="" />
+			<img src="', $settings['images_url'], '/stats_info.gif" style="width: 20px;height: 20px;" alt="" />
 			', $txt['arcade_member_stats'], ' - ', $txt['arcade_positional'], '
 		</h3>
 	</div>
 	<div class="windowbg">
 		<span class="topslice"><span></span></span>
 		<div class="content">
-			<table border="0" cellpadding="5" cellspacing="2" width="100%">
+			<table style="border-spacing: 2px;border-collapse: separate;width: 100%;border: 0px;width: 100%;">
 				<tr>
-					<td width="33%" class="titlebg" style="padding:2px 5px 2px 5px;margin:2px 5px 0px 5px;border-bottom:1px solid #808080">
-						',$txt['arcade_1st'],' [',$context['position1'],']
+					<td class="titlebg" style="width: 33%;padding:2px 5px 2px 5px;margin:2px 5px 0px 5px;border-bottom:1px solid #808080">
+						',$txt['arcade_1st'],'
 					</td>
-					<td width="33%" class="titlebg" style="padding:2px 5px 2px 5px;margin:2px 5px 0px 5px;border-bottom:1px solid #808080">
-						',$txt['arcade_2nd'],' [',$context['position2'],']
+					<td class="titlebg" style="width: 33%;padding:2px 5px 2px 5px;margin:2px 5px 0px 5px;border-bottom:1px solid #808080">
+						',$txt['arcade_2nd'],'
 					</td>
-					<td width="33%" class="titlebg" style="padding:2px 5px 2px 5px;margin:2px 5px 0px 5px;border-bottom:1px solid #808080">
-						',$txt['arcade_3rd'],' [',$context['position3'],']
+					<td class="titlebg" style="width: 33%;padding:2px 5px 2px 5px;margin:2px 5px 0px 5px;border-bottom:1px solid #808080">
+						',$txt['arcade_3rd'],'
 					</td>
 				</tr>
 				<tr>
-					<td valign="top" class="windowbg2">
-						<div style="height: 100px; overflow: auto">';
+					<td style="padding: 5px;vertical-align: top;" class="windowbg2">
+						<div style="overflow: hidden;">';
+
 	foreach($context['arcade']['member_stats']['position1'] as $game)
-		echo $game['link'];
+		echo '
+							<div style="padding-bottom: 2px;padding-left: 1px;">
+								<a title="', $game['title'], '" href="', $game['link'], '">', $game['name'], '</a>
+								<span title="', $game['time'], '" style="float: right;padding-right: 1px;">', $game['score'], '</span>
+							</div>';
 
 	echo '
 						</div>
 					</td>
-					<td valign="top" class="windowbg2">
+					<td style="padding: 5px;vertical-align: top;" class="windowbg2">
 						<div style="height: 100px; overflow: auto">';
 	foreach($context['arcade']['member_stats']['position2'] as $game)
-		echo $game['link'];
+		echo '
+							<div style="padding-bottom: 2px;padding-left: 1px;">
+								<a title="', $game['title'], '" href="', $game['link'], '">', $game['name'], '</a>
+								<span title="', $game['time'], '" style="float: right;padding-right: 1px;">', $game['score'], '</span>
+							</div>';
 
 	echo '
 						</div>
 					</td>
-					<td valign="top" class="windowbg2">
+					<td style="padding: 5px;vertical-align: top;" class="windowbg2">
 						<div style="height: 100px; overflow: auto">';
 	foreach($context['arcade']['member_stats']['position3'] as $game)
-		echo $game['link'];
+		echo '
+							<div style="padding-bottom: 2px;padding-left: 1px;">
+								<a title="', $game['title'], '" href="', $game['link'], '">', $game['name'], '</a>
+								<span title="', $game['time'], '" style="float: right;padding-right: 1px;">', $game['score'], '</span>
+							</div>';
 
 	echo '
 						</div>

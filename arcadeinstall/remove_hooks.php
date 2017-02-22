@@ -16,6 +16,7 @@ if (!defined('SMF'))
 	require '../SSI.php';
 
 remove_integration_function('integrate_pre_include', '$sourcedir/ArcadeHooks.php');
+remove_integration_function('integrate_pre_load', 'Arcade_load_language');
 remove_integration_function('integrate_actions', 'Arcade_actions');
 remove_integration_function('integrate_core_features', 'Arcade_core_features');
 remove_integration_function('integrate_load_permissions', 'Arcade_load_permissions');
@@ -27,4 +28,5 @@ if ($version === 'v2.0')
 	remove_integration_function('integrate_profile_areas', 'Arcade_profile_areas');
 else
 	remove_integration_function('integrate_pre_profile_areas', 'Arcade_profile_areas');
+
 ?>

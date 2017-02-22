@@ -9,10 +9,9 @@
 
 function arcadeStats($memID)
 {
-	global $db_prefix, $scripturl, $txt, $modSettings, $context, $settings, $user_info, $smcFunc, $sourcedir;
+	global $db_prefix, $scripturl, $txt, $modSettings, $context, $settings, $user_info, $smcFunc, $sourcedir, $context;
 
 	require_once($sourcedir . '/Arcade.php');
-
 	loadArcade('profile');
 
 	$context['arcade']['member_stats'] = array();
@@ -88,6 +87,88 @@ function arcadeStats($memID)
 		$context['arcade']['member_stats']['latest_scores'][] = array(
 			'link' => $scripturl . '?action=arcade;game=' . $row['id_game'],
 			'name' => $row['game_name'],
+			'score' => comma_format($row['score']),
+			'position' => $row['position'],
+			'time' => timeformat($row['end_time'])
+		);
+	$smcFunc['db_free_result']($result);
+
+	// 1st 2nd 3rd placements
+	$result = $smcFunc['db_query']('', '
+		SELECT s.position, s.score, s.end_time, game.game_name, game.id_game
+		FROM ({db_prefix}arcade_scores AS s, {db_prefix}arcade_games AS game)
+		WHERE id_member = {int:member}
+			AND s.position = 1
+			AND s.id_game = game.id_game
+			AND game.enabled = 1
+		ORDER BY score DESC
+		LIMIT 10',
+		array(
+			'member' => $memID,
+		)
+	);
+
+	$context['arcade']['member_stats']['position1'] = array();
+
+	while ($row = $smcFunc['db_fetch_assoc']($result))
+		$context['arcade']['member_stats']['position1'][] = array(
+			'link' => $scripturl . '?action=arcade;game=' . $row['id_game'],
+			'name' => (strlen($row['game_name']) > 33) ? substr($row['game_name'], 0, 30) . '...' : $row['game_name'],
+			'title' => $row['game_name'],
+			'score' => comma_format($row['score']),
+			'position' => $row['position'],
+			'time' => timeformat($row['end_time'])
+		);
+	$smcFunc['db_free_result']($result);
+
+	$result = $smcFunc['db_query']('', '
+		SELECT s.position, s.score, s.end_time, game.game_name, game.id_game
+		FROM ({db_prefix}arcade_scores AS s, {db_prefix}arcade_games AS game)
+		WHERE id_member = {int:member}
+			AND s.position = 2
+			AND s.id_game = game.id_game
+			AND game.enabled = 1
+		ORDER BY score DESC
+		LIMIT 10',
+		array(
+			'member' => $memID,
+		)
+	);
+
+	$context['arcade']['member_stats']['position2'] = array();
+
+	while ($row = $smcFunc['db_fetch_assoc']($result))
+		$context['arcade']['member_stats']['position2'][] = array(
+			'link' => $scripturl . '?action=arcade;game=' . $row['id_game'],
+			'name' => (strlen($row['game_name']) > 33) ? substr($row['game_name'], 0, 30) . '...' : $row['game_name'],
+			'title' => $row['game_name'],
+			'score' => comma_format($row['score']),
+			'position' => $row['position'],
+			'time' => timeformat($row['end_time'])
+		);
+	$smcFunc['db_free_result']($result);
+
+	$result = $smcFunc['db_query']('', '
+		SELECT s.position, s.score, s.end_time, game.game_name, game.id_game
+		FROM ({db_prefix}arcade_scores AS s, {db_prefix}arcade_games AS game)
+		WHERE id_member = {int:member}
+			AND s.position = 3
+			AND s.id_game = game.id_game
+			AND game.enabled = 1
+		ORDER BY score DESC
+		LIMIT 10',
+		array(
+			'member' => $memID,
+		)
+	);
+
+	$context['arcade']['member_stats']['position3'] = array();
+
+	while ($row = $smcFunc['db_fetch_assoc']($result))
+		$context['arcade']['member_stats']['position3'][] = array(
+			'link' => $scripturl . '?action=arcade;game=' . $row['id_game'],
+			'name' => (strlen($row['game_name']) > 33) ? substr($row['game_name'], 0, 30) . '...' : $row['game_name'],
+			'title' => $row['game_name'],
 			'score' => comma_format($row['score']),
 			'position' => $row['position'],
 			'time' => timeformat($row['end_time'])

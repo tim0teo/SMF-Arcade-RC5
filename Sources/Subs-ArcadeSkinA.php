@@ -71,7 +71,7 @@ function ArcadeChamps($count = 3, $type='wins')
 		if(stristr($score['avatar'], 'http://'))
 		{
 			if($wihi = ArcadeSizer($score['avatar'], $size))
-				$avatar = '<img src="'.$score['avatar'].'" width="'.$wihi[0].'" height="'.$wihi[1].'" />';
+				$avatar = '<img src="' . $score['avatar'] . '" style="width: ' . $wihi[0] . 'px;height: ' . $wihi[1] . 'px;" alt="" />';
 			else
 				unset($avatar);
 		}
@@ -80,7 +80,7 @@ function ArcadeChamps($count = 3, $type='wins')
 		if($score['avatar'] && !isset($avatar))
 		{
 			if($wihi = ArcadeSizer($modSettings['avatar_url'].'/'.$score['avatar'], $size))
-				$avatar = '<img src="'.$modSettings['avatar_url'].'/'.$score['avatar'].'" width="'.$wihi[0].'" height="'.$wihi[1].'" />';
+				$avatar = '<img alt="" src="'.$modSettings['avatar_url'].'/'.$score['avatar'].'" style="width: ' . $wihi[0] . 'px;height: ' . $wihi[1] . 'px;" />';
 			else
 				unset($avatar);
 
@@ -92,13 +92,13 @@ function ArcadeChamps($count = 3, $type='wins')
 			if(isset($modSettings['custom_avatar_dir']) && file_exists($modSettings['custom_avatar_dir'].'/'.$score['filename']))
 			{
 				$wihi = ArcadeSizer($modSettings['custom_avatar_url'].'/'.$score['filename'], $size);
-				$avatar = '<img src="'. $modSettings['custom_avatar_url'].'/'.$score['filename'] .'" width="'.$wihi[0].'" height="'. $wihi[1] .'" />';
+				$avatar = '<img src="'. $modSettings['custom_avatar_url'].'/'.$score['filename'] .'" style="border: 0px;width: '.$wihi[0].'px;height: '. $wihi[1] .'px;" />';
 			}
 		}
 
 		//uploaded avatar attachment
 		if(isset($score['filename']) && !isset($avatar) && substr($score['filename'],0, 7) == 'avatar_')
-			$avatar = '<img src="'.$scripturl.'?action=dlattach;attach='.$score['id_attach'].';type=avatar" alt=""  border="0" '.($modSettings['avatar_max_height_upload'] > $size ? 'height="'.$size.'"' : '').'/>';
+			$avatar = '<img src="'.$scripturl.'?action=dlattach;attach='.$score['id_attach'].';type=avatar" alt="" '.($modSettings['avatar_max_height_upload'] > $size ? 'style="height: '.$size.'px;border: 0px;"' : 'style="border: 0px;"').'/>';
 
 		$champ_list[] = array(
 			'id' => $score['id_member'],
@@ -161,7 +161,7 @@ function ArcadeLatest($count=5,$curved=false)
 			$div_con = addslashes(sprintf($txt['skin_when'], $time));
 			$code .= '
 		<div style="height:3px;float:left;position:absolute;">
-			<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $game_id . '" title="' . $game_name . '"><img src="' . $game_pic . '" border="0" alt="' . $game_name . '"  width="20" height="20" /></a>
+			<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $game_id . '" title="' . $game_name . '"><img src="' . $game_pic . '" alt="' . $game_name . '"  style="border: 0px;width: 20px;height: 20px;" /></a>
 		</div>
 		<div style="height:7px;vertical-align:bottom;text-indent:28px;">';
 
@@ -232,7 +232,7 @@ function ArcadeNewChamps($count = 5)
 			$code .= '
 	<div style="height:3px;float:left;position:absolute;">
 		<a href="' . $scripturl.'?action=arcade;sa=play;game=' . $game_id . '">
-			<img src="' . $game_pic . '" border="0" alt="' . $game_name . '" title="' . $game_name . '" width="20" height="20" />
+			<img src="' . $game_pic . '" alt="' . $game_name . '" title="' . $game_name . '" style="border: 0px;width: 20px;height: 20px;" />
 		</a>
 	</div>
 	<div style="height:7px;vertical-align:bottom;text-indent:28px;">';
@@ -316,8 +316,8 @@ function ArcadeCats($highlight='')
 		}
 
 		$gamepic_name = 'Unassigned';
-		$category_pic = '<a href="' . $scripturl . '?action=arcade;category=0"><img src="' . $icon_folder . $gamepic_name . '.gif" border="0" alt="" title="' . $gamepic_name . '" width="' . $icon_width . '" height="' . $icon_height . '" /></a>';
-		$kittens = '<tr><td width=20% align="center" class="windowbg2 smalltext">' . $category_pic . '<br />';
+		$category_pic = '<a href="' . $scripturl . '?action=arcade;category=0"><img src="' . $icon_folder . $gamepic_name . '.gif" alt="" title="' . $gamepic_name . '" style="border: 0px;width: ' . $icon_width . 'px;height: ' . $icon_height . 'px;" /></a>';
+		$kittens = '<tr><td style="width: 20%;" class="centertext windowbg2 smalltext">' . $category_pic . '<br />';
 		$kittens .= '<a href="' . $scripturl . '?action=arcade;category=0" title="' . $txt['alt_no_cats'] . '" >' . $B_start . sprintf($txt['arcade_no_cats'], $no_cat) . $B_stop . '</a></td>';
 	}
 	else
@@ -332,7 +332,7 @@ function ArcadeCats($highlight='')
 			$filter = array(' ','--','&quot;','!','@','#','$','%','^','&','*','(',')','_','+','{','}','|',':','"','<','>','?','[',']','\\',';',"'",',','.','/','*','+','~','`','=');
 			$gamepic_name = str_replace("&#039;", "_", $gamepic_name);
 			$gamepic_name = str_replace($filter, "_", $gamepic_name);
-			$category_pic = '<a href="' . $scripturl.'?action=arcade;category=' . $cat[0] . '"><img src="' . $icon_folder . $gamepic_name . '.gif" border="0" alt="" title="' . $cat[1] . '" width="' . $icon_width . '" height="' . $icon_height . '" /></a><br />';
+			$category_pic = '<a href="' . $scripturl.'?action=arcade;category=' . $cat[0] . '"><img src="' . $icon_folder . $gamepic_name . '.gif" alt="" title="' . $cat[1] . '" style="border: 0px;width: ' . $icon_width . 'px;height: ' . $icon_height . 'px;" /></a><br />';
 
 			if ($highlight == $cat[0] )
 			{
@@ -350,7 +350,7 @@ function ArcadeCats($highlight='')
 			if ($lines == 6)
 				$lines = 1;
 
-			$lines == 1 ? $open = '<tr><td width="20%" align="center" class="windowbg2 smalltext">' : $open = '<td width=20% align="center" class="windowbg2 smalltext">';
+			$lines == 1 ? $open = '<tr><td style="width:20%;" class="windowbg2 smalltext centertext">' : $open = '<td style="width: 20%;" class="centertext windowbg2 smalltext">';
 			$lines == 5 ? $close = '</td></tr>' : $close = '</td>';
 			$kittens .= $open . $category_pic . '<a href="' . $scripturl . '?action=arcade;category=' . $cat[0] . '">' . $B_start . $cat[1] . '(' . $cat[2] . ')' . $B_stop . '</a>' . $close;
 		}
@@ -359,7 +359,7 @@ function ArcadeCats($highlight='')
 		{
 			$loop = 5-$lines;
 			for ($j=1; $j <= $loop; $j++)
-				$kittens .= '<td width=20% class="windowbg2">&nbsp;</td>';
+				$kittens .= '<td style="width: 20%;" class="windowbg2">&nbsp;</td>';
 		}
 	}
 	return $kittens;
@@ -472,7 +472,7 @@ function ArcadeRandomGames($limit=5)
 		$random_description = false;
 		$random .= '
 	<div style="text-align:center;margin:10px;font-size:1.2em;" class="smalltext">
-		<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $rg['id_game'] . '"><img height="55" width="55" class="imgBorder" src="' . $modSettings['gamesUrl'] . '/' . $rg['game_directory'] . '/' . $rg['thumbnail'] . '" title="' . $rg['game_name'] . '" alt="' . $rg['game_name'] . '" /></a>' . $random_name . $random_description . '
+		<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $rg['id_game'] . '"><img style="height: 55px;width: 55px;" class="imgBorder" src="' . $modSettings['gamesUrl'] . '/' . $rg['game_directory'] . '/' . $rg['thumbnail'] . '" title="' . $rg['game_name'] . '" alt="' . $rg['game_name'] . '" /></a>' . $random_name . $random_description . '
 	</div>';
 	}
 

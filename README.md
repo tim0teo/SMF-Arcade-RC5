@@ -1,7 +1,7 @@
 # SMF-Arcade-RC4
 Arcade modification for SMF 2.0.X &amp; SMF 2.1.X branches
 
-SMF Arcade 2.5 RC4
+SMF Arcade 2.5 RC5
 
 Official support website/board: http://web-develop.ca/index.php?board=9.0 
 

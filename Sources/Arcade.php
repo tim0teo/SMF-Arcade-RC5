@@ -155,7 +155,7 @@ function loadArcade($mode = 'normal', $index = '')
 	if (!empty($arcade_version))
 		return;
 
-	$arcade_version = '2.5 RC4';
+	$arcade_version = $modSettings['arcadeVersion'];
 	$arcade_lang_version = '2.5';
 
 	$context['arcade'] = array();

@@ -34,7 +34,7 @@ function template_manage_games_list()
 				</div>
 			</div>
 		</div><br />
-		<form id="upload_form" action="', $scripturl, '?action=admin;area=managegames;sesc=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form enctype="multipart/form-data" id="upload_form" action="', $scripturl, '?action=admin;area=managegames;sesc=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
 			<input type="hidden" name="sesc" value="', $context['session_id'], '" />
 		</form>';
 	}
@@ -47,7 +47,7 @@ function template_manage_games_uninstall_confirm()
 	global $context, $txt, $scripturl, $settings;
 
 	echo '
-	<form action="', $context['confirm_url'], ';confirm;sesc=', $context['session_id'], '" method="post">
+	<form action="', $context['confirm_url'], ';confirm;sesc=', $context['session_id'], '" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 
 		<div class="tborder">
@@ -164,7 +164,7 @@ function template_edit_game_above()
 	global $scripturl, $context, $txt;
 
 	echo '
-	<form action="', $scripturl, '?action=admin;area=managegames;sa=edit2;sesc=', $context['session_id'], '" method="post">
+	<form action="', $scripturl, '?action=admin;area=managegames;sa=edit2;sesc=', $context['session_id'], '" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="game" value="', $context['game']['id'], '" />
 		<input type="hidden" name="sesc" value="', $context['session_id'], '" />
 		<input type="hidden" name="edit_page" value="', $context['edit_page'], '" />

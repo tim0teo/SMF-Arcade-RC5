@@ -29,9 +29,9 @@ function arcade_array_insert(&$input, $key, $insert, $where = 'before', $strict 
 		$input = array_merge($insert, $input);
 	else
 		$input = array_merge(
-			array_slice($input, 0, $position, true),
+			array_slice($input, 0, $position),
 			$insert,
-			array_slice($input, $position, null, true)
+			array_slice($input, $position)
 		);
 }
 
@@ -57,7 +57,7 @@ function Arcade_core_features(&$core_features)
 
 function Arcade_load_permissions(&$permissionGroups, &$permissionList, &$leftPermissionGroups, &$hiddenPermissions, &$relabelPermissions)
 {
-	global $context;
+	global $context, $modSettings, $txt;
 
 	$permissionList['membergroup'] += array(
 		'arcade_view' => array(false, 'arcade', 'arcade'),
@@ -86,57 +86,68 @@ function Arcade_load_permissions(&$permissionGroups, &$permissionList, &$leftPer
 			'arcade_user_stats',
 		)
 	);
+
+	// SMF 2.1.X behavior will differ
+	$version = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
+
+	if ($version === 'v2.0')
+	{
+		$permissionGroups['membergroup']['simple'] += array(
+			'arcade',
+		);
+		$permissionGroups['membergroup']['classic'] += array(
+			'arcade',
+		);
+	}
+	else
+		$permissionGroups['membergroup'] += array(
+			'arcade',
+		);
 }
 
 function Arcade_profile_areas(&$profile_areas)
 {
 	global $modSettings, $txt;
 
-	loadLanguage('Arcade');
-	loadLanguage('ArcadeAdmin');
-	arcade_array_insert($profile_areas['profile_action']['areas'], 'issuewarning',
-		array(
-			'arcadeChallenge' => array(
-				'label' => $txt['sendArcadeChallenge'],
-				'file' => 'Profile-Arcade.php',
-				'function' => 'arcadeChallenge',
-				'enabled' => !empty($modSettings['arcadeArenaEnabled']) && !empty($modSettings['arcadeEnabled']),
-				'permission' => array(
-					'own' => array(),
-					'any' => array('arcade_create_match'),
-				),
+	$profile_areas['profile_action']['areas'] += array(
+		'arcadeChallenge' => array(
+			'label' => $txt['sendArcadeChallenge'],
+			'file' => 'Profile-Arcade.php',
+			'function' => 'arcadeChallenge',
+			'enabled' => !empty($modSettings['arcadeArenaEnabled']) && !empty($modSettings['arcadeEnabled']),
+			'permission' => array(
+				'own' => array(),
+				'any' => array('arcade_create_match'),
 			),
-		)
+		),
 	);
 
-	arcade_array_insert($profile_areas['info']['areas'], 'showposts',
-		array(
-			'arcadeStats' => array(
-				'label' => $txt['arcadeStats'],
-				'file' => 'Profile-Arcade.php',
-				'function' => 'arcadeStats',
-				'enabled' => !empty($modSettings['arcadeEnabled']),
-				'permission' => array(
-					'own' => array('arcade_user_stats_any', 'arcade_user_stats_own'),
-					'any' => array('arcade_user_stats_any'),
-				),
+
+	$profile_areas['info']['areas'] += array(
+		'arcadeStats' => array(
+			'label' => $txt['arcadeStats'],
+			'file' => 'Profile-Arcade.php',
+			'function' => 'arcadeStats',
+			'icon' => 'stats',
+			'enabled' => !empty($modSettings['arcadeEnabled']),
+			'permission' => array(
+				'own' => array('arcade_user_stats_any', 'arcade_user_stats_own'),
+				'any' => array('arcade_user_stats_any'),
 			),
-		)
+		),
 	);
 
-	arcade_array_insert($profile_areas['edit_profile']['areas'], 'forumprofile',
-		array(
-			'arcadeSettings' => array(
-				'label' => $txt['arcadeSettings'],
-				'file' => 'Profile-Arcade.php',
-				'function' => 'arcadeSettings',
-				'enabled' => !empty($modSettings['arcadeEnabled']),
-				'permission' => array(
-					'own' => array('arcade_edit_settings_any', 'arcade_edit_settings_own'),
-					'any' => array('arcade_edit_settings_any'),
-				),
+	$profile_areas['edit_profile']['areas'] += array(
+		'arcadeSettings' => array(
+			'label' => $txt['arcadeSettings'],
+			'file' => 'Profile-Arcade.php',
+			'function' => 'arcadeSettings',
+			'enabled' => !empty($modSettings['arcadeEnabled']),
+			'permission' => array(
+				'own' => array('arcade_edit_settings_any', 'arcade_edit_settings_own'),
+				'any' => array('arcade_edit_settings_any'),
 			),
-		)
+		),
 	);
 }
 
@@ -147,7 +158,6 @@ function Arcade_menu_buttons(&$menu_buttons)
 	if (!$context['allow_admin'])
 		$context['allow_admin'] = allowedTo('arcade_admin');
 
-	loadLanguage('Arcade');
 	$context['allow_arcade'] = allowedTo('arcade_view') && !empty($modSettings['arcadeEnabled']);
 
 	arcade_array_insert($menu_buttons, 'search',
@@ -168,8 +178,6 @@ function Arcade_menu_buttons(&$menu_buttons)
 function Arcade_admin_areas(&$admin_areas)
 {
 	global $context, $modSettings, $scripturl, $txt;
-	loadLanguage('Arcade');
-	loadLanguage('ArcadeAdmin');
 
 	arcade_array_insert($admin_areas, 'members',
 		array(
@@ -243,5 +251,12 @@ function Arcade_load_theme()
 		$context['html_headers'] .= '
 	<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-func.js?rc4"></script>';
 		return;
+}
+
+function Arcade_load_language()
+{
+	global $txt;
+	loadLanguage('Arcade');
+	loadLanguage('ArcadeAdmin');
 }
 ?>

@@ -22,6 +22,7 @@ $txt['arcade_general'] = 'Arcade';
 $txt['arcade_general_desc'] = 'Here you can check latest version, and edit settings of Arcade';
 $txt['arcadeStats'] = 'Arcade Statistics';
 $txt['sendArcadeChallenge'] = 'Arcade Challenge';
+$txt['arcade_default_email'] = 'no_reply_' . mt_rand() . '@arcadebot.com';
 
 // Information
 $txt['arcade_status'] = 'Version Information';
@@ -64,6 +65,8 @@ $txt['gamesPerPage'] = 'Games per page';
 $txt['matchesPerPage'] = 'Matches per page';
 $txt['scoresPerPage'] = 'Scores per page';
 
+$txt['gamesEmail'] = 'Email address to send high scores';
+$txt['gamesNotificationsBulk'] = 'Enable bulk notification for Emails and PMs';
 $txt['gamesUrl'] = 'Url to games';
 $txt['gamesDirectory'] = 'Path to games directory';
 $txt['arcadeGamecacheUpdate'] = 'Update Gamecache automatically';
@@ -299,4 +302,40 @@ $txt['unable_to_move'] = 'Unable to move directories from "%s" to "%s". Please d
 // Skin B
 $txt['arcadeTabs'] = 'Enable Toolbar Tabs';
 
+// Permission names and help
+$txt['permissiongroup_arcade'] = 'Arcade';
+$txt['permissionname_arcade_view'] = 'View Arcade';
+$txt['permissionhelp_arcade_view'] = 'May access Arcade and use basic features like search and view highscores';
+$txt['permissionname_arcade_play'] = 'Play on Arcade';
+$txt['permissionhelp_arcade_play'] = 'Allows member to play, on Arcade, games which they have rights to';
+$txt['permissionname_arcade_admin'] = 'Administrate arcade';
+$txt['permissionhelp_arcade_admin'] = 'Arcade Administrator can Install/Edit/Delete game, Delete scores and edit settings for Arcade';
+$txt['permissionname_arcade_submit'] = 'Save scores';
+$txt['permissionhelp_arcade_submit'] = 'Allows users to save their scores.';
+$txt['permissionname_arcade_comment'] = 'Edit Comments';
+$txt['permissionhelp_arcade_comment'] = 'Allows user to edit comments, ';
+$txt['permissionname_arcade_comment_own'] = 'Own';
+$txt['permissionname_arcade_comment_any'] = 'Any';
+$txt['permissionname_arcade_user_stats'] = 'View User Statistics';
+$txt['permissionname_arcade_user_stats_own'] = 'Own';
+$txt['permissionname_arcade_user_stats_any'] = 'Any';
+$txt['permissionname_arcade_view_arena'] = 'View Arena';
+$txt['permissionname_arcade_create_match'] = 'Create a new match on Arena';
+$txt['permissionname_arcade_join_match'] = 'Join match on Arena';
+$txt['permissionname_arcade_join_invite_match'] = 'Join match on Arena when invited';
+$txt['permissionname_arcade_edit_settings'] = 'Edit Arcade Settings';
+$txt['permissionname_arcade_edit_settings_own'] = 'Own';
+$txt['permissionname_arcade_edit_settings_any'] = 'Any';
+
+// Simple permission gropus
+$txt['permissiongroup_simple_arcade'] = 'Use Arcade';
+$txt['permissiongroup_simple_arcade_moderate'] = 'Moderate Arcade';
+
+// Simple permission names
+$txt['permissionname_simple_arcade_comment_own'] = 'Edit their own comments';
+$txt['permissionname_simple_arcade_comment_any'] = 'Edit any comment';
+$txt['permissionname_simple_arcade_user_stats_own'] = 'View their own statistics';
+$txt['permissionname_simple_arcade_user_stats_any'] = 'View other people\'s statistics';
+$txt['permissionname_simple_arcade_edit_settings_own'] = 'Edit their own Arcade Settings';
+$txt['permissionname_simple_arcade_edit_settings_any'] = 'Edit other people\'s Arcade Settings';
 ?>

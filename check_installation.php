@@ -8,12 +8,12 @@
  */
  if (!defined('SMF'))
 	die('Hacking attempt...');
- 
-/* This file checks if SMF Arcade v2.5 RC4 is installed on your forum */
+
+/* This file checks if SMF Arcade v2.5 RC5 is installed on your forum */
 $check = checkArcadeVersion();
 
 if ($check == false)
-    fatal_error('Installation cancelled!  SMF Arcade v2.5 RC4 does not appear to be installed.', false);
+    fatal_error('Installation cancelled!  SMF Arcade v2.5 RC5 does not appear to be installed.', false);
 return;
 
 /* Check if the column exists */

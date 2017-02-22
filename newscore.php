@@ -3,7 +3,7 @@
  * SMF Arcade
  *
  * @package SMF Arcade
- * @version 2.5 RC4
+ * @version 2.5 RC5
  * @license http://web-develop.ca/index.php?page=arcade_license_BSD2 BSD 2
  */
 

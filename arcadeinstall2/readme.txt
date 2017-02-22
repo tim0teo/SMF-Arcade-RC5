@@ -1,5 +1,5 @@
 [hr]
-[center][color=red][size=16pt][b]SMF Arcade 2.5 RC4[/b][/size][/color]
+[center][color=red][size=16pt][b]SMF Arcade 2.5 RC5[/b][/size][/color]
 [/center]
 [hr]
 [center][url=http://web-develop.ca/index.php?board=9.0]Official support website[/url] | [url=http://web-develop.ca/index.php?board=9.0]SMF Arcade Plug-ins[/url][/center]
@@ -31,7 +31,7 @@ You can view this link for information regarding games for this arcade system: [
 [li]Sort games[/li]
 [li]Installs Tar game files[/li]
 [li]Admin settings for added features[/li]
-[li]Core theme support[/li]
+[li]Notifications for high scores and tournament matches[/li]
 [li]Non curved theme support[/li]
 [li]Users can Report game errors[/li]
 [li]Download game option[/li]
@@ -45,6 +45,6 @@ Please report bugs to the [url=http://web-develop.ca/index.php?board=9.0]Officia
 This helps make this modification better!
 
 Copyright (c) 2004 - 2012, [url=http://www.madjoki.com/]Niko Pahajoki[/url]
-Copyright (c) 2015, [url=http://web-develop.ca/index.php?page=arcade_license_BSD2]Chen Zhen[/url]
+Copyright (c) 2015 - 2017, [url=http://web-develop.ca/index.php?page=arcade_license_BSD2]Chen Zhen[/url]
 Current support provided by Chen Zhen @ [url=http://web-develop.ca/]web-develop.ca[/url]
 SMF Arcade License: [url=http://web-develop.ca/index.php?page=arcade_license_BSD2]BSD 2[/url]

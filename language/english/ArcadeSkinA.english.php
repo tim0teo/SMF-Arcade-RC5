@@ -74,7 +74,7 @@ $txt['arcade_favs'] = 'Favorites';
 $txt['arcade_all'] = 'All';
 
 //Arcade Profile
-$txt['arcade_positional'] = 'Positional Wins';
+$txt['arcade_positional'] = 'Top Ten Positional Wins';
 $txt['arcade_1st'] = '1st Place';
 $txt['arcade_2nd'] = '2nd Place';
 $txt['arcade_3rd'] = '3rd Place';

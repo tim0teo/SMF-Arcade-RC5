@@ -35,7 +35,7 @@ function template_arcade_above()
 			<div id="search_extra">
 				<input type="checkbox" id="favorites" name="favorites" value="1"', !empty($context['arcade_search']['favorites']) ? ' checked="checked"' : '', ' class="check" /> <label for="favorites">', $txt['search_favorites'], '</label>
 			</div>
-			<script language="JavaScript" type="text/javascript"><!-- // --><![CDATA[
+			<script type="text/javascript"><!-- // --><![CDATA[
 				var gSuggest = new gameSuggest("', $context['session_id'], '", "gamesearch");
 			// ]]></script>
 		</form>
@@ -114,7 +114,7 @@ function template_arcade_below()
 	</div>
 
 	<div id="arcade_bottom" class="smalltext" style="text-align: center;">
-		Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ', $arcade_version, '</a> &copy; 2004-2015
+		Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ', $arcade_version, '</a> &copy; 2004-2017
 	</div>';
 
 }

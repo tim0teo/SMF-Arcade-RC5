@@ -303,7 +303,7 @@ function template_arcade_game_highscore()
 			</h3>
 		</div>
 		<div class="score_table smalltext">
-			<table cellspacing="0" class="table_grid">
+			<table style="border-collapse: collapse;" class="table_grid">
 				<thead>
 					<tr class="catbg">';
 
@@ -311,21 +311,21 @@ function template_arcade_game_highscore()
 	if (!empty($context['arcade']['scores']))
 	{
 			echo '
-						<th scope="col" class="first_th" width="5">', $txt['arcade_position'], '</th>
+						<th scope="col" class="first_th" style="width: 5px;">', $txt['arcade_position'], '</th>
 						<th scope="col">', $txt['arcade_member'], '</th>
 						<th scope="col"> ', $txt['arcade_comment'], '</th>
 						<th scope="col" class="', !$context['arcade']['can_admin_arcade'] ? ' last_th' : '', '">', $txt['arcade_score'], '</th>';
 
 		if ($context['arcade']['can_admin_arcade'])
 			echo '
-						<th scope="col" class="last_th" align="center" width="15"><input type="checkbox" onclick="invertAll(this, this.form, \'scores[]\');" class="check" /></th>';
+						<th scope="col" class="last_th centertext" style="width: 15px;"><input type="checkbox" onclick="invertAll(this, this.form, \'scores[]\');" class="check" /></th>';
 	}
 	else
 	{
 		echo '
-						<th scope="col" class="first_th" width="8%">&nbsp;</th>
+						<th scope="col" class="first_th" style="width: 8%;">&nbsp;</th>
 						<th class="smalltext" colspan="', !$context['arcade']['can_admin_arcade'] ? '2' : '3', '"><strong>', $txt['arcade_no_scores'], '</strong></th>
-						<th scope="col" class="last_th" width="8%">&nbsp;</th>';
+						<th scope="col" class="last_th" style="width: 8%;">&nbsp;</th>';
 	}
 
 	echo '
@@ -344,9 +344,9 @@ function template_arcade_game_highscore()
 
 		echo '
 					<tr class="', $score['own'] ? 'windowbg arcade_own_score' : 'windowbg', '"', !empty($score['highlight']) ? ' style="font-weight: bold;"' : '', ' onmouseover="arcadeBox(\'', $div_con, '\')" onmousemove="arcadeBoxMove(event)" onmouseout="arcadeBox(\'\')">
-						<td class="windowbg2" align="center">', $score['position'], '</td>
+						<td class="windowbg2 centertext">', $score['position'], '</td>
 						<td>', $score['member']['link'], '</td>
-						<td width="300" class="windowbg2">';
+						<td style="width: 300px;" class="windowbg2">';
 
 		if ($score['can_edit'] && empty($score['edit']))
 			echo '
@@ -370,12 +370,12 @@ function template_arcade_game_highscore()
 
 		echo '
 						</td>
-						<td align="center">', $score['score'], '</td>';
+						<td class="centertext">', $score['score'], '</td>';
 
 
 		if ($context['arcade']['can_admin_arcade'])
 			echo '
-						<td class="windowbg2" align="center"><input type="checkbox" name="scores[]" value="', $score['id'], '" class="check" /></td>';
+						<td class="windowbg2 centertext"><input type="checkbox" name="scores[]" value="', $score['id'], '" class="check" /></td>';
 
 		echo '
 					</tr>';

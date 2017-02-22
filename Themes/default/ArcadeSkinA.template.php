@@ -15,16 +15,16 @@ function template_arcade_above()
 	{
 		$categories = ArcadeCats($_SESSION['current_cat']);
 		echo '
-	<div class="tborder" style="text-align:center;">
-		<table cellspacing="0" cellpadding="5" class="table_grid" width="100%">
+	<div class="tborder" style="text-align:center;border: 2px solid;">
+		<table style="border-collapse: collapse;width: 100%;" class="tborder table_grid">
 			<thead>
 				<tr>';
 
 		if($context['curved'])
 			echo '
-					<td class="catbg" style="border:0px;height: 23px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -160px;"></td>
-					<td class="smalltext catbg" style="border:0px;text-align:center;overflow: hidden;height: 23px;line-height: 23px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -160px;font-family: georgia; font-style: oblique;font-size: 1.1em;font-weight: bold;">', $txt['arcade_title'], '</td>
-					<td class="catbg" style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -160px;height: 23px;line-height: 23px;"></td>';
+					<td class="catbg" style="padding: 5px;border:0px;height: 23px;"></td>
+					<td class="smalltext catbg" style="padding: 5px;border:0px;text-align:center;overflow: hidden;height: 23px;line-height: 23px;border:0px;font-family: georgia; font-style: oblique;font-size: 1.1em;font-weight: bold;">', $txt['arcade_title'], '</td>
+					<td class="catbg" style="padding: 5px;border:0px;height: 23px;line-height: 23px;"></td>';
 		else
 			echo '
 					<th class="catbg">&nbsp;</th>
@@ -36,7 +36,7 @@ function template_arcade_above()
 		echo '
 				</tr>
 				<tr>
-					<td class="windowbg smalltext" valign="top" width="24%" style="font-size:0.85em;">
+					<td class="windowbg smalltext" style="vertical-align: top;width: 24%;padding: 5px;font-size:0.85em;">
 						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['latest_games'] ,'</div>
 						',  ArcadeNewestGames($modSettings['skin_latest_games']), '
 						<div class="titlebg centertext" style="margin-bottom:10px;font-size:1.3em;">
@@ -47,7 +47,7 @@ function template_arcade_above()
 								<input id="gamesearch" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" />
 								<input class="button_submit smalltext" type="submit" value="', $txt['arcade_search_go'] , '"  name="submit1" />
 								<div id="suggest_gamesearch" class="game_suggest"></div>
-								<script language="JavaScript" type="text/javascript"><!-- // --><![CDATA[
+								<script type="text/javascript"><!-- // --><![CDATA[
 									var gSuggest = new gameSuggest("', $context['session_id'], '", "gamesearch");
 								// ]]></script>
 							</form>
@@ -76,7 +76,7 @@ function template_arcade_above()
 						</div><br />
 						<div style="margin-bottom:3px;font-size:0.8em;">', ArcadeRandomGames(1), '</div>
 					</td>
-					<td class="windowbg smalltext" valign="top" style="font-size:0.85em;">
+					<td class="windowbg smalltext" style="padding: 5px;vertical-align: top;font-size:0.85em;">
 						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
 						', $txt['latest_champs'],'
 						</div>
@@ -88,7 +88,7 @@ function template_arcade_above()
 							', ($_SESSION['current_cat'] == 'all' ? $txt['arcade_champs'] : sprintf($txt['cat_champs'], $context['cat_name'])), '
 							<img src="', $settings['images_url'], '/gold.gif" alt="" />
 						</div>
-						<table width="100%" border="0" cellspacing="2">
+						<table style="border: 0px;width: 100%;border-spacing: 2px;border-collapse: separate;">
 							<tr>';
 
 		$bp = ArcadeChamps(3, $_SESSION['current_cat'] == 'all' ? 'wins' : 'cats');
@@ -99,7 +99,7 @@ function template_arcade_above()
 			{
 				$score_poss++;
 				echo '
-								<td class="windowbg2 centertext" width="33%" style="border:0px;font-size:1.0em;">
+								<td class="windowbg2 centertext" style="width: 33%;border:0px;font-size:1.0em;">
 									<img src="', $settings['images_url'], '/', $score_poss, '.gif" style="margin-bottom: 3px" alt="" /><br />
 									', $out['avatar'], '<br /><strong>', $out['link'], '</strong><br />
 									', $txt['win'], ' ', $out['champions'], '
@@ -108,7 +108,7 @@ function template_arcade_above()
 		}
 		else
 			echo '
-								<td class="windowbg2 smalltext" align="center" style="border:0px;font-size:1.0em;">
+								<td class="windowbg2 smalltext centertext" style="border:0px;font-size:1.0em;">
 									', $txt['no_new_champs'], '
 								</td>';
 
@@ -122,7 +122,7 @@ function template_arcade_above()
 						', ArcadeLatest($modSettings['skin_latest_scores']), '
 						</div>
 					</td>
-					<td class="windowbg smalltext" valign="top" width="24%" style="font-size:0.85em;">
+					<td class="windowbg smalltext" style="width: 24%;vertical-align: top;font-size:0.85em;">
 						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['most_played'], '</div>
 						', ArcadePopular($modSettings['skin_most_popular']), '
 						<div class="titlebg centertext" style="margin-bottom:4px;font-size:1.3em;">
@@ -141,7 +141,7 @@ function template_arcade_above()
 							</div><br />
 							<div style="float: left; margin: 0px 5px 0px 0px;height:55px;">
 								<a href="', $game['url']['play'], '">
-									<img width="40" height="40" class="imgBorder" src="', $game['thumbnail'], '" alt="' . $txt['alt_play'] . '" title="' . $txt['alt_play'] . '"/>
+									<img style="width: 40px;height: 40px;" class="imgBorder" src="', $game['thumbnail'], '" alt="' . $txt['alt_play'] . '" title="' . $txt['alt_play'] . '"/>
 								</a>
 							</div>
 						</div>';
@@ -186,9 +186,9 @@ function template_arcade_above()
 
 		if($context['curved'])
 			echo '
-					<td style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -173px;" height="20"></td>
-					<td style="border:0px;background: url(',$settings['default_theme_url'],'/images/theme/main_block.png) no-repeat -10px -173px;" height="20"></td>
-					<td style="border:0px;background: url(',$settings['default_theme_url'],'/images/theme/main_block.png) no-repeat 100% -173px;" ></td>';
+					<td style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -173px;height: 20px;"></td>
+					<td style="border:0px;background: url(',$settings['default_theme_url'],'/images/theme/main_block.png) no-repeat -10px -173px;height: 20px;"></td>
+					<td style="border:0px;background: url(',$settings['default_theme_url'],'/images/theme/main_block.png) no-repeat 100% -173px;"></td>';
 		else
 			echo '
 					<td colspan="3" class="catbg2 headerpadding">&nbsp;</td>';
@@ -222,28 +222,28 @@ function template_arcade_above()
 
 		echo '
 			</div>
-		</div><br clear="all" />
-		<div style="height:10px">
+		</div><br style="clear: both;" />
+		<div style="height:10px;">
 			<span>&nbsp;</span>
 		</div>';
 
 		if ($modSettings['arcadeDropCat'] == 0)
 		{
 			echo '
-		<table width="100%" cellspacing="0" cellpadding="5" class="table_grid">
+		<table style="width: 100%;border-collapse: collapse;" class="table_grid">
 			<thead>
 				<tr>';
 
 			if($context['curved'])
 				echo '
-					<td class="catbg" style="border:0px;display: block;height: 23px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -160px;"></td>
-					<td class="catbg" colspan="3" style="border: 0px;text-align: center;overflow: hidden;height: 23px;line-height: 23px;border: 0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -160px;font-family: georgia; font-style: oblique;font-size: 0.8em;font-weight: bold;">
+					<td class="catbg" style="padding: 5px;border:0px;display: block;height: 23px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -160px;"></td>
+					<td class="catbg" colspan="3" style="padding: 5px;border: 0px;text-align: center;overflow: hidden;height: 23px;line-height: 23px;border: 0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -160px;font-family: georgia; font-style: oblique;font-size: 0.8em;font-weight: bold;">
 						<a title="', $txt['arcade_defcat'], '" href="', $scripturl, '?action=arcade;category=0">', $txt['arcade_game_cats'], '</a>
 					</td>
-					<td class="catbg" style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -160px;padding-right: 9px;" ></td>';
+					<td class="catbg" style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -160px;padding-right: 9px;" ></td>';
 			else
 				echo '
-					<td class="catbg centertext" colspan="5">
+					<td class="catbg centertext" colspan="5" style="padding: 5px;">
 						<div style="font-family: georgia; font-style: oblique;font-size: 1.1em;font-weight: bold;text-align:center">
 							<a title="', $txt['arcade_defcat'], '" href="', $scripturl, '?action=arcade;category=0">', $txt['arcade_game_cats'], '</a>
 						</div>
@@ -255,19 +255,19 @@ function template_arcade_above()
 			if($context['curved'])
 				echo '
 				<tr>
-					<td style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -173px;" height="20"></td>
-					<td colspan="3" style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -173px;" height="20"></td>
-					<td style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -173px;" ></td>
+					<td style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -173px;height: 20px;"></td>
+					<td colspan="3" style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -173px;height: 20px;"></td>
+					<td style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -173px;" ></td>
 				</tr>';
 			else
 				echo '
 				<tr>
-					<td colspan="5" class="catbg">&nbsp;</td>
+					<td colspan="5" class="catbg" style="padding: 5px;">&nbsp;</td>
 				</tr>';
 
 			echo '
 				<tr>
-					<td>&nbsp;</td>
+					<td colspan="5" style="padding: 5px;">&nbsp;</td>
 				</tr>
 			</table>';
 		}
@@ -290,7 +290,7 @@ function template_arcade_below()
 	echo '
 			</div>
 			<div id="arcade_bottom" class="smalltext" style="text-align: center;">
-				Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ', $arcade_version, '</a> &copy; 2004-2015
+				Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ', $arcade_version, '</a> &copy; 2004-2017
 			</div>';
 
 	 if (empty($context['game']['id']) && $modSettings['arcadeList'] == 0 && $subAction !== 'stats')

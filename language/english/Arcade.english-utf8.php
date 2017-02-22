@@ -219,6 +219,8 @@ $txt['arena_error_not_enough_players'] = 'There is not enough slots for players'
 $txt['arena_error_invalid_rounds'] = 'Invalid Games selected for the match';
 
 // Email notifications
+$txt['arcade_notification_championPM'] = 'PM Arcade alerts';
+$txt['arcade_notification_championEmail'] = 'Email Arcade alerts';
 $txt['arcade_notification_new_champion_own'] = 'When someone takes championship from me';
 $txt['arcade_notification_arena_invite_own_subject'] = 'You are invited to join a match';
 $txt['arcade_notification_new_champion_any'] = 'When someone takes championship from anyone';
@@ -230,13 +232,12 @@ $txt['arcade_none_played'] = 'No games have been played';
 $txt['arcade_title'] = 'Arcade';
 
 // Arcade Advanced
-$modSettings['arcadeVersion'] = !empty($modSettings['arcadeVersion']) ? $modSettings['arcadeVersion'] : '2.5 RC4';
 $txt['arcade_download_gameplay'] = 'Download';
 $txt['pdl_play'] = '<img src="Themes/default/images/arc_icons/pdl_play.gif" alt="Play" title="Play Game" />';
 $txt['pdl_download_game'] = '<img src="Themes/default/images/arc_icons/pdl_download.gif" alt="Download" title="Download" />';
-$txt['arcade_download_gameplay'] = '<img src="' . $boardurl . '/Themes/default/images/arc_icons/dl_btn.png" width="70" height="18" title="Download" alt="Download"></img>';
+$txt['arcade_download_gameplay'] = '<img src="' . $boardurl . '/Themes/default/images/arc_icons/dl_btn.png" style="width: 70px;height: 18px;" title="Download" alt="Download"></img>';
 $txt['pdl_erroricon'] = '<a href="'.$scripturl.'?action=arcade" target="_parent"><img src="'.$boardurl.'/Themes/default/images/arc_icons/arcade_popup_error.gif" alt="SMF ARCADE" title="SMF ARCADE" /></a><br />';
-$txt['pdl_arcade_copyright'] = '<div id="arcade_bottom" class="smalltext" style="text-align: center;">Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ' . $modSettings['arcadeVersion'] . '</a> &copy; 2004-2015</div>';
+$txt['pdl_arcade_copyright'] = '<div id="arcade_bottom" class="smalltext" style="text-align: center;">Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ' . $modSettings['arcadeVersion'] . '</a> &copy; 2004-2017</div>';
 $txt['permissionname_arcade_download'] = 'Download Games';
 $txt['permissionname_arcade_report'] = 'Report Game Errors';
 $txt['pdl_listplay'] = 'PLAY';
@@ -267,9 +268,60 @@ $txt['pdl_yes'] = 'Yes';
 $txt['arcade_post'] = 'Try %#@$ from the Arcade';
 $txt['pdl_down'] = '<br /><br /><br />';
 /* If you want a button for downloads, omit the remark tags from the line below  */
-/* $txt['pdl_button1'] = '<img src="' . $boardurl . '/Themes/default/images/arc_icons/dl_btn.png" width="70" height="18" alt="Download" title="Download" />'; */
+/* $txt['pdl_button1'] = '<img src="' . $boardurl . '/Themes/default/images/arc_icons/dl_btn.png" style="70px;height: 18px;" alt="Download" title="Download" />'; */
 $txt['show_pdl_report'] = 'View Report';
 $txt['arcade_tour_tour'] = 'Tournament';
 $txt['arcade_administrator'] = 'Admin';
 
+// Arcade
+$txt['arcade'] = 'Arcade';
+
+// Core Features
+$txt['core_settings_item_arcade'] = 'Arcade';
+$txt['core_settings_item_arcade_desc'] = 'Enable Arcade section which allows users to play games and store their records for others to see.';
+
+// Admin
+$txt['arcade_admin'] = 'Arcade';
+$txt['arcade_manage_games'] = 'Games';
+$txt['arcade_manage_games_edit_games'] = 'Edit Games';
+$txt['arcade_manage_games_install'] = 'Install Games';
+$txt['arcade_manage_games_upload'] = 'Upload';
+$txt['arcade_manage_category'] = 'Categories';
+$txt['arcade_manage_category_list'] = 'List';
+$txt['arcade_manage_category_new'] = 'New';
+$txt['arcade_general'] = 'General';
+$txt['arcade_general_information'] = 'Information';
+$txt['arcade_general_settings'] = 'Settings';
+$txt['arcade_general_permissions'] = 'Permissions';
+$txt['arcade_maintenance'] = 'Maintenance';
+$txt['arcade_maintenance_main'] = 'Main';
+$txt['arcade_maintenance_highscore'] = 'Highscore';
+
+// Moderation Log
+$txt['modlog_ac_arcade_install_game'] = 'Installed Game &quot;{game}&quot;';
+$txt['modlog_ac_arcade_update_game'] = 'Updated Game &quot;{game}&quot;';
+$txt['modlog_ac_arcade_delete_game'] = 'Deleted Game &quot;{game}&quot;';
+$txt['modlog_ac_arcade_remove_scores'] = 'Removed {scores} scores from Game &quot;{game}&quot;';
+
+// Profile
+$txt['arcadeStats'] = 'Arcade Statistics';
+$txt['arcadeChallenge'] = 'Arcade Arena';
+$txt['sendArcadeChallenge'] = 'Send Challenge';
+$txt['arcadeSettings'] = 'Arcade Settings';
+
+// Errors if they can't do something
+$txt['cannot_arcade_play'] = 'You are not allowed to play games!';
+$txt['cannot_arcade_view'] = 'You are not allowed to access arcade.';
+$txt['cannot_arcade_comment_own'] = 'You are not allowed to comment';
+$txt['cannot_arcade_user_stats_any'] = 'You are not allowed to view statistics of any user';
+$txt['cannot_arcade_user_stats_own'] = 'You are not allowed to view your statistics';
+
+// Who's online
+$txt['who_arcade'] = 'Viewing Arcade index';
+$txt['who_arcade_play'] = 'Playing <a href="' . $scripturl . '?action=arcade;sa=play;game=%d">%s</a> on Arcade';
+$txt['who_arcade_highscore'] = 'Viewing highscores of <a href="' . $scripturl . '?action=arcade;sa=play;game=%d">%s</a> on Arcade';
+
+// Help
+$txt['arcade_max_scores_help'] = 'Maximum scores that will be stored per member. (0 means unlimited)';
+$txt['arcade_membergroups_help'] = 'These groups will be allowed to play and view highscores. Others will not see this game, only used if permission mode will use game permissions.';
 ?>

@@ -189,19 +189,19 @@ function template_arcade_admin_category_list()
 		<div class="windowbg2">
 			<span class="topslice"><span></span></span>
 			<div style="padding: 0.5em;">
-				<table border="0" cellspacing="0" cellpadding="4" width="100%" align="center">';
+				<table class="centertext" style="border: 0px;width: 100%;border-collapse: collapse;">';
 
 	foreach ($context['arcade_category'] as $category)
 	{
 		echo '
 					<tr>
-						<td width="20" align="center" valign="top" style="margin-top: 5px;">
+						<td class="centertext" style="padding: 4px;vertical-align: top;width: 20px;margin-top: 5px;">
 							<input id="cat', $category['id'], '" type="checkbox" name="category[', $category['id'], ']" value="', $category['id'], '" style="check" />
 						</td>
-						<td width="50" align="left" valign="top" style="margin-top: 5px;">
+						<td style="width: 50px;text-align: left;vertical-align: top;margin-top: 5px;padding: 4px;">
 							<input type="text" name="category_order[', $category['id'], ']" value="', $category['order'], '" style="width: 100%;" />
 						</td>
-						<td valign="top">
+						<td style="padding: 4px;vertical-align: top;">
 							<a href="', $category['href'], '">', $category['name'], '</a>
 						</td>
 					</tr>';
@@ -233,14 +233,16 @@ function template_arcade_admin_category_edit()
 		<div class="windowbg2">
 			<span class="topslice"><span></span></span>
 			<div style="padding: 0.5em;">
-				<table border="0" cellspacing="0" cellpadding="4" width="100%" align="center">
+				<table style="border: 0px;width: 100%;border-collapse: collapse;" class="centertext">
 					<tr class="windowbg2">
-						<td>', $txt['category_name'], '</td>
-						<td width="50%"><input type="text" name="category_name" value="', $context['category']['name'], '" /></td>
+						<td style="padding: 4px;">', $txt['category_name'], '</td>
+						<td style="padding: 4px;width: 50%;">
+							<input type="text" name="category_name" value="', $context['category']['name'], '" />
+						</td>
 					</tr>
 					<tr class="windowbg2">
-						<td>', $txt['arcade_category_permission_allowed'], '</td>
-						<td width="50%">';
+						<td style="padding: 4px;">', $txt['arcade_category_permission_allowed'], '</td>
+						<td style="padding: 4px;width: 50%;">';
 
 	foreach ($context['groups'] as $group)
 		echo '
@@ -273,7 +275,7 @@ function template_arcadeadmin_below()
 	// Print out copyright and version. Removing copyright is not allowed by license
 	echo '
 	<div id="arcade_bottom" class="smalltext" style="text-align: center;">
-		Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ', $arcade_version, '</a> &copy; 2004-2015
+		Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ', $arcade_version, '</a> &copy; 2004-2017
 	</div>';
 
 }

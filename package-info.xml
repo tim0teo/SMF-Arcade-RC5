@@ -19,7 +19,7 @@
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
 	<id>ChenZhen:Arcade</id>
 	<name>SMF Arcade</name>
-	<version>2.54</version>
+	<version>2.55</version>
 	<type>modification</type>
 	<install for="2.0 - 2.0.98">
 		<readme parsebbc="true">arcadeinstall2/readme.txt</readme>
@@ -126,7 +126,6 @@
 		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english-utf8.php" destination="$languagedir" />
-		<modification format="xml" type="file">language/english/english.xml</modification>
 
 		<!-- Edit SMF files -->
 		<modification format="xml" type="file">arcadeinstall2/main.xml</modification>
@@ -242,7 +241,6 @@
 		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english-utf8.php" destination="$languagedir" />
-		<modification format="xml" type="file">language/english/english.xml</modification>
 
 		<!-- Edit SMF files -->
 		<modification format="xml" type="file">arcadeinstall2/main2-1.xml</modification>

@@ -41,7 +41,7 @@ function template_arcade_list()
 			', template_button_strip($arcade_buttons, 'right'), '
 		</div>
 		<div class="game_table">
-			<table cellspacing="0" class="table_grid">
+			<table style="border-collapse: collapse;" class="table_grid">
 				<thead>
 					<tr  class="catbg">';
 
@@ -58,9 +58,9 @@ function template_arcade_list()
 	else
 	{
 		echo '
-						<th scope="col" class="first_th" width="8%">&nbsp;</th>
+						<th scope="col" class="first_th" style="width: 8%;">&nbsp;</th>
 						<th class="smalltext" colspan="2"><strong>', $txt['arcade_no_games'], '</strong></th>
-						<th scope="col" class="last_th" width="8%">&nbsp;</th>';
+						<th scope="col" class="last_th" style="width: 8%;">&nbsp;</th>';
 	}
 
 	echo '

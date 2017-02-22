@@ -28,6 +28,7 @@ if (!defined('SMF'))
 global $addSettings, $tables, $permissions, $columnRename, $boarddir, $boardurl, $smcFunc, $modSettings;
 
 $arcade_version = '2.5';
+$rc = ' RC5';
 $arcade_lang_version = '2.5';
 $arcade_server = 'http://service.smfarcade.info/arcade';
 $htmlUpload = !isset($modSettings['arcadeUploadSystem']) ? 1 : 0;
@@ -40,6 +41,7 @@ $addSettings = array(
 	'gamesDirectory' => array(str_replace('\\', '/', $boarddir . '/Games'), false),
     'arcadeDBUpdate' => array(0, true),
 	'gamesUrl' => array($boardurl . '/Games', false),
+	'gamesNotificationsBulk' => array(0, false),
 	'arcadeEnabled' => array(true, false),
 	'arcadeArenaEnabled' => array(false, false),
 	'arcadeCheckLevel' => array(1, false),
@@ -55,6 +57,7 @@ $addSettings = array(
 	'arcadeShowInfoCenter' => array(1, false),
 	'arcadeCommentLen' => array(75, false),
 	'arcadeUploadSystem' => array($htmlUpload, false),
+	'arcadeVersion' => array($arcade_version . $rc, true),
 );
 
 // Permissions array
