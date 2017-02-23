@@ -24,7 +24,7 @@ $txt['arcade_search'] = 'Search';
 $txt['search_favorites'] = 'From Favorites only';
 
 // General
-$txt['arcade_game_name'] = 'Name';
+$txt['arcade_game_name'] = 'Game';
 $txt['arcade_personal_best'] = 'Personal best';
 $txt['arcade_champion'] = 'Champion';
 $txt['arcade_stats'] = 'Statistics';

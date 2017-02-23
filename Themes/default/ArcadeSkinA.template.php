@@ -11,85 +11,75 @@ function template_arcade_above()
 {
 	global $scripturl, $txt, $context, $settings, $modSettings;
 
+	$selected = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? ' selected="selected"' : ' selected';
 	if ( $_REQUEST['sa'] == 'list' || $_REQUEST['sa'] == 'search')
 	{
 		$categories = ArcadeCats($_SESSION['current_cat']);
 		echo '
-	<div class="tborder" style="text-align:center;border: 2px solid;">
-		<table style="border-collapse: collapse;width: 100%;" class="tborder table_grid">
-			<thead>
-				<tr>';
-
-		if($context['curved'])
-			echo '
-					<td class="catbg" style="padding: 5px;border:0px;height: 23px;"></td>
-					<td class="smalltext catbg" style="padding: 5px;border:0px;text-align:center;overflow: hidden;height: 23px;line-height: 23px;border:0px;font-family: georgia; font-style: oblique;font-size: 1.1em;font-weight: bold;">', $txt['arcade_title'], '</td>
-					<td class="catbg" style="padding: 5px;border:0px;height: 23px;line-height: 23px;"></td>';
-		else
-			echo '
-					<th class="catbg">&nbsp;</th>
-					<th class="catbg centertext">
-						<div style="font-family: georgia; font-style: oblique;font-size: 1.1em;font-weight: bold;">', $txt['arcade_stats'] , '</div>
-					</th>
-					<th class="catbg">&nbsp;</th>';
-
-		echo '
-				</tr>
-				<tr>
-					<td class="windowbg smalltext" style="vertical-align: top;width: 24%;padding: 5px;font-size:0.85em;">
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['latest_games'] ,'</div>
-						',  ArcadeNewestGames($modSettings['skin_latest_games']), '
-						<div class="titlebg centertext" style="margin-bottom:10px;font-size:1.3em;">
-						', $txt['arcade_game_search'] ,'
-						</div>
-						<div class="centertext smalltext" style="margin-bottom:15px;font-size:1.0em;">
-							<form name="search" action="', $scripturl, '?action=arcade;sa=search" method="post" onSubmit="return empty();">
-								<input id="gamesearch" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" />
-								<input class="button_submit smalltext" type="submit" value="', $txt['arcade_search_go'] , '"  name="submit1" />
-								<div id="suggest_gamesearch" class="game_suggest"></div>
-								<script type="text/javascript"><!-- // --><![CDATA[
-									var gSuggest = new gameSuggest("', $context['session_id'], '", "gamesearch");
-								// ]]></script>
-							</form>
-						</div>
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
-						', $txt['arcade_game_sort'],'
-						</div>
-						<div class="centertext smalltext" style="padding:5px;margin:10px;font-size:1.0em;">
-							<form action="', $scripturl, '?action=arcade;sa=list" method="post">
-								<select name="sortby" onchange="submit();">
-									<option value="0">', $txt['arcade_sort_by'], '</option>
-									<option value="age"', $_SESSION['arcade_sortby'] === 'age' ? ' selected' : '', '>', $txt['arcade_age'], '</option>
-									<option value="a2z"', $_SESSION['arcade_sortby'] === 'a2z' ? ' selected' : '', '>', $txt['arcade_a2z'], '</option>
-									<option value="z2a"', $_SESSION['arcade_sortby'] === 'z2a' ? ' selected' : '', '>', $txt['arcade_z2a'], '</option>
-									<option value="plays"', $_SESSION['arcade_sortby'] === 'plays' ? ' selected' : '', '>', $txt['arcade_plays'], '</option>
-									<option value="plays_reverse"', $_SESSION['arcade_sortby'] === 'plays_reverse' ? ' selected' : '', '>', $txt['arcade_playsl'], '</option>
-									<option value="champion"', $_SESSION['arcade_sortby'] === 'champion' ? ' selected' : '', '>', $txt['arcade_champion'], '</option>
-									<option value="champs"', $_SESSION['arcade_sortby'] === 'champs' ? ' selected' : '', '>', $txt['arcade_latest_champions'], '</option>
-									<option value="rating"', $_SESSION['arcade_sortby'] === 'rating' ? ' selected' : '', '>', $txt['arcade_rating'], '</option>
-									<option value="favorites"', $_SESSION['arcade_sortby'] === 'favorites' ? ' selected' : '', '>', $txt['arcade_favs'], '</option>
-								</select>
-							</form>
-						</div>
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
-						', $txt['arcade_random_game'],'
-						</div><br />
-						<div style="margin-bottom:3px;font-size:0.8em;">', ArcadeRandomGames(1), '</div>
-					</td>
-					<td class="windowbg smalltext" style="padding: 5px;vertical-align: top;font-size:0.85em;">
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
-						', $txt['latest_champs'],'
-						</div>
-						<div class="windowbg2" style="margin:5px 2px 5px 2px;font-size:1.0em;text-align:left;">
-						', ArcadeNewChamps($modSettings['skin_latest_champs']), '
-						</div>
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
-							<img src="', $settings['images_url'], '/gold.gif" alt="" />
-							', ($_SESSION['current_cat'] == 'all' ? $txt['arcade_champs'] : sprintf($txt['cat_champs'], $context['cat_name'])), '
-							<img src="', $settings['images_url'], '/gold.gif" alt="" />
-						</div>
-						<table style="border: 0px;width: 100%;border-spacing: 2px;border-collapse: separate;">
-							<tr>';
+	<span class="clear upperframe"><span></span></span>
+	<div class="roundframe">
+		<div class="innerframe">
+			<div class="cat_bar">
+				<h3 class="catbg centertext" style="vertical-align: middle;">
+					<span style="clear: right;">', $txt['arcade_title'], '</span>
+				</h3>
+			</div>
+			<table style="border-collapse: collapse;width: 100%;" class="tborder table_grid">				
+					<tr>
+						<td class="windowbg smalltext" style="vertical-align: top;width: 24%;padding: 5px;font-size:0.85em;">
+							<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['latest_games'] ,'</div>
+							',  ArcadeNewestGames($modSettings['skin_latest_games']), '
+							<div class="titlebg centertext" style="margin-bottom:10px;font-size:1.3em;">
+							', $txt['arcade_game_search'] ,'
+							</div>
+							<div class="centertext smalltext" style="margin-bottom:15px;font-size:1.0em;">
+								<form name="search" action="', $scripturl, '?action=arcade;sa=search" method="post" onsubmit="return empty();">
+									<input id="gamesearch" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" />
+									<input class="button_submit smalltext" type="submit" value="', $txt['arcade_search_go'] , '"  name="submit1" />
+									<div id="suggest_gamesearch" class="game_suggest"></div>
+									<script type="text/javascript"><!-- // --><![CDATA[
+										var gSuggest = new gameSuggest("', $context['session_id'], '", "gamesearch");
+									// ]]></script>
+								</form>
+							</div>
+							<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
+							', $txt['arcade_game_sort'],'
+							</div>
+							<div class="centertext smalltext" style="padding:5px;margin:10px;font-size:1.0em;">
+								<form action="', $scripturl, '?action=arcade;sa=list" method="post">
+									<select name="sortby" onchange="submit();">
+										<option value="0">', $txt['arcade_sort_by'], '</option>
+										<option value="age"' . ($_SESSION['arcade_sortby'] === 'age' ? $selected : '') . '>', $txt['arcade_age'], '</option>
+										<option value="a2z"' . ($_SESSION['arcade_sortby'] === 'a2z' ? $selected : '') . '>', $txt['arcade_a2z'], '</option>
+										<option value="z2a"' . ($_SESSION['arcade_sortby'] === 'z2a' ? $selected : '') . '>', $txt['arcade_z2a'], '</option>
+										<option value="plays"' . ($_SESSION['arcade_sortby'] === 'plays' ? $selected : '') . '>', $txt['arcade_plays'], '</option>
+										<option value="plays_reverse"' . ($_SESSION['arcade_sortby'] === 'plays_reverse' ? $selected : '') . '>', $txt['arcade_playsl'], '</option>
+										<option value="champion"' . ($_SESSION['arcade_sortby'] === 'champion' ? $selected : '') . '>', $txt['arcade_champion'], '</option>
+										<option value="champs"' . ($_SESSION['arcade_sortby'] === 'champs' ? $selected : '') . '>', $txt['arcade_latest_champions'], '</option>
+										<option value="rating"' . ($_SESSION['arcade_sortby'] === 'rating' ? $selected : '') . '>', $txt['arcade_rating'], '</option>
+										<option value="favorites"' . ($_SESSION['arcade_sortby'] === 'favorites' ? $selected : '') . '>', $txt['arcade_favs'], '</option>
+									</select>
+								</form>
+							</div>
+							<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
+							', $txt['arcade_random_game'],'
+							</div><br />
+							<div style="margin-bottom:3px;font-size:0.8em;">', ArcadeRandomGames(1), '</div>
+						</td>
+						<td class="windowbg smalltext" style="padding: 5px;vertical-align: top;font-size:0.85em;">
+							<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
+							', $txt['latest_champs'],'
+							</div>
+							<div class="windowbg2" style="margin:5px 2px 5px 2px;font-size:1.0em;text-align:left;">
+							', ArcadeNewChamps($modSettings['skin_latest_champs']), '
+							</div>
+							<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
+								<img src="', $settings['images_url'], '/gold.gif" alt="" />
+								', ($_SESSION['current_cat'] == 'all' ? $txt['arcade_champs'] : sprintf($txt['cat_champs'], $context['cat_name'])), '
+								<img src="', $settings['images_url'], '/gold.gif" alt="" />
+							</div>
+							<table style="border: 0px;width: 100%;border-spacing: 2px;border-collapse: separate;">
+								<tr>';
 
 		$bp = ArcadeChamps(3, $_SESSION['current_cat'] == 'all' ? 'wins' : 'cats');
 		$score_poss = 0;
@@ -99,35 +89,35 @@ function template_arcade_above()
 			{
 				$score_poss++;
 				echo '
-								<td class="windowbg2 centertext" style="width: 33%;border:0px;font-size:1.0em;">
-									<img src="', $settings['images_url'], '/', $score_poss, '.gif" style="margin-bottom: 3px" alt="" /><br />
-									', $out['avatar'], '<br /><strong>', $out['link'], '</strong><br />
-									', $txt['win'], ' ', $out['champions'], '
-								</td>';
+									<td class="windowbg2 centertext" style="width: 33%;border:0px;font-size:1.0em;">
+										<img src="', $settings['images_url'], '/', $score_poss, '.gif" style="margin-bottom: 3px" alt="" /><br />
+										', $out['avatar'], '<br /><strong>', $out['link'], '</strong><br />
+										', $txt['win'], ' ', $out['champions'], '
+									</td>';
 			}
 		}
 		else
 			echo '
-								<td class="windowbg2 smalltext centertext" style="border:0px;font-size:1.0em;">
-									', $txt['no_new_champs'], '
-								</td>';
+									<td class="windowbg2 smalltext centertext" style="border:0px;font-size:1.0em;">
+										', $txt['no_new_champs'], '
+									</td>';
 
 		echo '
-							</tr>
-						</table>
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
-						', $txt['latest_scores'] ,'
-						</div>
-						<div class="windowbg2" style="border:0px;margin:5px 2px 1px 2px;font-size:1.0em;text-align:left;">
-						', ArcadeLatest($modSettings['skin_latest_scores']), '
-						</div>
-					</td>
-					<td class="windowbg smalltext" style="width: 24%;vertical-align: top;font-size:0.85em;">
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['most_played'], '</div>
-						', ArcadePopular($modSettings['skin_most_popular']), '
-						<div class="titlebg centertext" style="margin-bottom:4px;font-size:1.3em;">
-						', $txt['arcade_daily'], '
-						</div>';
+								</tr>
+							</table>
+							<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
+							', $txt['latest_scores'] ,'
+							</div>
+							<div class="windowbg2" style="border:0px;margin:5px 2px 1px 2px;font-size:1.0em;text-align:left;">
+							', ArcadeLatest($modSettings['skin_latest_scores']), '
+							</div>
+						</td>
+						<td class="windowbg smalltext" style="width: 24%;vertical-align: top;font-size:0.85em;">
+							<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['most_played'], '</div>
+							', ArcadePopular($modSettings['skin_most_popular']), '
+							<div class="titlebg centertext" style="margin-bottom:4px;font-size:1.3em;">
+							', $txt['arcade_daily'], '
+							</div>';
 
 		$game = getGameOfDay();
 		strlen($game['name']) >= 23 ? $game['name'] = substr($game['name'],0,22) . '...' : '';
@@ -135,68 +125,59 @@ function template_arcade_above()
 		if (!empty($game['url']['play']))
 		{
 			echo '
-						<div class="smalltext" style="padding: 0px 5px 0px 5px">
-							<div class="titlebg centertext" style="margin:4px 0px 5px 0px;border-bottom:1px solid #808080;font-size:1.1em;">
-							', $game['name'], '
-							</div><br />
-							<div style="float: left; margin: 0px 5px 0px 0px;height:55px;">
-								<a href="', $game['url']['play'], '">
-									<img style="width: 40px;height: 40px;" class="imgBorder" src="', $game['thumbnail'], '" alt="' . $txt['alt_play'] . '" title="' . $txt['alt_play'] . '"/>
-								</a>
-							</div>
-						</div>';
+							<div class="smalltext" style="padding: 0px 5px 0px 5px">
+								<div class="titlebg centertext" style="margin:4px 0px 5px 0px;border-bottom:1px solid #808080;font-size:1.1em;">
+								', $game['name'], '
+								</div><br />
+								<div style="float: left; margin: 0px 5px 0px 0px;height:55px;">
+									<a href="', $game['url']['play'], '">
+										<img style="width: 40px;height: 40px;" class="imgBorder" src="', $game['thumbnail'], '" alt="' . $txt['alt_play'] . '" title="' . $txt['alt_play'] . '"/>
+									</a>
+								</div>
+							</div>';
 
 			if($game['description'])
 				echo '
-						<div style="height:55px; overflow: auto;font-size:0.95em">&nbsp;&nbsp;', $game['description'], '</div>';
+							<div style="height:55px; overflow: auto;font-size:0.95em">&nbsp;&nbsp;', $game['description'], '</div>';
 			else
 				echo '
-						<div style="height:55px; overflow: auto">&nbsp;&nbsp;', $txt['no_description'], '</div>';
+							<div style="height:55px; overflow: auto">&nbsp;&nbsp;', $txt['no_description'], '</div>';
 		}
 
 		echo '
-						<div class="titlebg" style="margin:4px 0px 5px 0px;border-bottom:1px solid #808080; text-align:center;font-size:1.1em;">
-						', $txt['todays_scores'], '</div>
-							<div style="margin: 5px 0px 0px 5px">
-							', ArcadeDailyChallenge($game);
+							<div class="titlebg" style="margin:4px 0px 5px 0px;border-bottom:1px solid #808080; text-align:center;font-size:1.1em;">
+							', $txt['todays_scores'], '</div>
+								<div style="margin: 5px 0px 0px 5px">
+								', ArcadeDailyChallenge($game);
 
 		if ($context['CH_error'])
 			echo '
-						<div class="smalltext centertext">', $txt['arcade_daily_none'], '</div>';
+							<div class="smalltext centertext">', $txt['arcade_daily_none'], '</div>';
 
 		echo '
-						</div>';
+							</div>';		
 
-		if (empty($modSettings['arcadeDropCat']))
-			$modSettings['arcadeDropCat'] = 0;
-
-		if ($modSettings['arcadeDropCat'] == 1)
+		if (!empty($modSettings['arcadeDropCat']))
 			echo '
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
-						', $txt['game_categories'], '
-						</div>
-						<div class="smalltext centertext" style="margin: 5px 0px 0px 5px;font-size:1.0em;"><br />
-						', ArcadeCategoryDropdown(), '
-						</div>';
+							<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
+							', $txt['game_categories'], '
+							</div>
+							<div class="smalltext centertext" style="margin: 5px 0px 0px 5px;font-size:1.0em;"><br />
+							', ArcadeCategoryDropdown(), '
+							</div>';
 
 			echo '
-					</td>
-				</tr>
-				<tr>';
+						</td>
+					</tr>';
 
-		if($context['curved'])
-			echo '
-					<td style="border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -173px;height: 20px;"></td>
-					<td style="border:0px;background: url(',$settings['default_theme_url'],'/images/theme/main_block.png) no-repeat -10px -173px;height: 20px;"></td>
-					<td style="border:0px;background: url(',$settings['default_theme_url'],'/images/theme/main_block.png) no-repeat 100% -173px;"></td>';
-		else
-			echo '
-					<td colspan="3" class="catbg2 headerpadding">&nbsp;</td>';
+
 
 		echo '
-				</tr>
-			</table>
-		</div>
+				</table>
+			</div>
+		</div>	
+		<span class="lowerframe"><span></span></span>
+		
 		<div style="width:100%;">
 			<div style="text-align:left;padding:6px 0px 3px 4px;">
 				<ul class="dropmenu">';
@@ -227,55 +208,22 @@ function template_arcade_above()
 			<span>&nbsp;</span>
 		</div>';
 
-		if ($modSettings['arcadeDropCat'] == 0)
+		if (empty($modSettings['arcadeDropCat']))
 		{
 			echo '
-		<table style="width: 100%;border-collapse: collapse;" class="table_grid">
-			<thead>
-				<tr>';
-
-			if($context['curved'])
-				echo '
-					<td class="catbg" style="padding: 5px;border:0px;display: block;height: 23px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -160px;"></td>
-					<td class="catbg" colspan="3" style="padding: 5px;border: 0px;text-align: center;overflow: hidden;height: 23px;line-height: 23px;border: 0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -160px;font-family: georgia; font-style: oblique;font-size: 0.8em;font-weight: bold;">
-						<a title="', $txt['arcade_defcat'], '" href="', $scripturl, '?action=arcade;category=0">', $txt['arcade_game_cats'], '</a>
-					</td>
-					<td class="catbg" style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -160px;padding-right: 9px;" ></td>';
-			else
-				echo '
-					<td class="catbg centertext" colspan="5" style="padding: 5px;">
-						<div style="font-family: georgia; font-style: oblique;font-size: 1.1em;font-weight: bold;text-align:center">
-							<a title="', $txt['arcade_defcat'], '" href="', $scripturl, '?action=arcade;category=0">', $txt['arcade_game_cats'], '</a>
-						</div>
-					</td>';
-
-			echo '
-				</tr>', $categories;
-
-			if($context['curved'])
-				echo '
-				<tr>
-					<td style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 0 -173px;height: 20px;"></td>
-					<td colspan="3" style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat -10px -173px;height: 20px;"></td>
-					<td style="padding: 5px;border:0px;background: url(', $settings['default_theme_url'], '/images/theme/main_block.png) no-repeat 100% -173px;" ></td>
-				</tr>';
-			else
-				echo '
-				<tr>
-					<td colspan="5" class="catbg" style="padding: 5px;">&nbsp;</td>
-				</tr>';
-
-			echo '
-				<tr>
-					<td colspan="5" style="padding: 5px;">&nbsp;</td>
-				</tr>
-			</table>';
+		<span class="clear upperframe"><span></span></span>
+		<div class="roundframe">
+			<div class="innerframe">
+				<div class="cat_bar">
+					<h3 class="catbg centertext" style="vertical-align: middle;">
+						<span style="clear: right;"><a title="', $txt['arcade_defcat'], '" href="', $scripturl, '?action=arcade;category=0">', $txt['arcade_game_cats'], '</a></span>
+					</h3>
+				</div>', $categories, '
+			</div>
+		</div>
+		<span class="lowerframe"><span></span></span>';
 		}
-
-	}
-
-	echo '
-			<div class="mediumtext" style="font-size:1.1em;">';
+	}	
 }
 
 function template_arcade_below()
@@ -287,8 +235,7 @@ function template_arcade_below()
 		$modSettings['arcadeList'] = 0;
 
 	// Print out copyright and version. Removing copyright is not allowed by license
-	echo '
-			</div>
+	echo '			
 			<div id="arcade_bottom" class="smalltext" style="text-align: center;">
 				Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ', $arcade_version, '</a> &copy; 2004-2017
 			</div>';

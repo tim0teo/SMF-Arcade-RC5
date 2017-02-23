@@ -263,6 +263,7 @@ function ArcadeCats($highlight='')
 {
 	global $smcFunc, $db_prefix, $context, $scripturl, $txt, $boardurl, $modSettings;
 
+	$kittens = '';
 	/* These are your adjustable variables */
 	if (empty($modSettings['arcade_catWidth']))
 		$modSettings['arcade_catWidth'] = 23;
@@ -317,8 +318,8 @@ function ArcadeCats($highlight='')
 
 		$gamepic_name = 'Unassigned';
 		$category_pic = '<a href="' . $scripturl . '?action=arcade;category=0"><img src="' . $icon_folder . $gamepic_name . '.gif" alt="" title="' . $gamepic_name . '" style="border: 0px;width: ' . $icon_width . 'px;height: ' . $icon_height . 'px;" /></a>';
-		$kittens = '<tr><td style="width: 20%;" class="centertext windowbg2 smalltext">' . $category_pic . '<br />';
-		$kittens .= '<a href="' . $scripturl . '?action=arcade;category=0" title="' . $txt['alt_no_cats'] . '" >' . $B_start . sprintf($txt['arcade_no_cats'], $no_cat) . $B_stop . '</a></td>';
+		$kittens .= '<div style="display: table;width: 100%;"><span style="display: table-cell;vertical-align: bottom;padding-top: 15px;border: 0px;width: 20%;" class="centertext windowbg2 smalltext">' . $category_pic . '<br />';
+		$kittens .= '<a href="' . $scripturl . '?action=arcade;category=0" title="' . $txt['alt_no_cats'] . '" >' . $B_start . sprintf($txt['arcade_no_cats'], $no_cat) . $B_stop . '</a></span>';
 	}
 	else
 		$lines = 0;
@@ -350,8 +351,8 @@ function ArcadeCats($highlight='')
 			if ($lines == 6)
 				$lines = 1;
 
-			$lines == 1 ? $open = '<tr><td style="width:20%;" class="windowbg2 smalltext centertext">' : $open = '<td style="width: 20%;" class="centertext windowbg2 smalltext">';
-			$lines == 5 ? $close = '</td></tr>' : $close = '</td>';
+			$lines == 1 ? $open = '<div style="display: table;width: 100%;"><span style="display: table-cell;vertical-align: bottom;padding-top: 15px;border: 0px;width: 20%;" class="windowbg2 smalltext centertext">' : $open = '<span style="display: table-cell;vertical-align: bottom;padding-top: 15px;border: 0px;width: 20%;" class="centertext windowbg2 smalltext">';
+			$lines == 5 ? $close = '</span></div>' : $close = '</span>';
 			$kittens .= $open . $category_pic . '<a href="' . $scripturl . '?action=arcade;category=' . $cat[0] . '">' . $B_start . $cat[1] . '(' . $cat[2] . ')' . $B_stop . '</a>' . $close;
 		}
 
@@ -359,9 +360,13 @@ function ArcadeCats($highlight='')
 		{
 			$loop = 5-$lines;
 			for ($j=1; $j <= $loop; $j++)
-				$kittens .= '<td style="width: 20%;" class="windowbg2">&nbsp;</td>';
+				$kittens .= '<span style="display: table-cell;vertical-align: bottom;padding-top: 15px;border: 0px;width: 20%;" class="windowbg2">&nbsp;</span>';
 		}
+		
+		if ($lines %5 != 0)
+			$kittens .= '</div>';
 	}
+	
 	return $kittens;
 }
 

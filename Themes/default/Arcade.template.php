@@ -14,45 +14,54 @@ function template_arcade_above()
 	if (!empty($context['arcade_tabs']))
 	{
 		echo '
-	<div class="cat_bar">
-		<h3 class="catbg">
-			<span class="floatleft">', $context['arcade_tabs']['title'], '</span>',
+	<span class="clear upperframe"><span></span></span>
+	<div class="roundframe">
+		<div class="innerframe">
+			<div class="cat_bar">
+				<h3 class="catbg" style="vertical-align: middle;">',
 		(version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? '
-			<img id="arcade_toggle" class="floatright" src="' . $settings['images_url'] . '/collapse.gif' . '" alt="" title="' . $txt['upshrink_description'] . '" style="margin: 0 1ex; display: none;vertical-align: bottom;" />' : '
-			<span id="arcade_toggle" class="floatright' . (empty($options['arcade_panel_collapse']) ? ' toggle_up' : ' toggle_down') . '" title="' . $txt['upshrink_description'] . '" style="margin: 0; vertical-align: bottom;"></span>'), '
-		</h3>
-	</div>
-	<div id="arcade_panel" class="plainbox"', empty($options['arcade_panel_collapse']) ? '' : ' style="display: none;"', '>';
+					<img id="arcade_toggle" class="floatright icon" src="' . $settings['images_url'] . '/collapse.gif' . '" alt="" title="' . $txt['upshrink_description'] . '" style="cursor: pointer;margin: 10px 5px 0 0;" />' : '
+					<span id="arcade_toggle" class="floatright icon' . (empty($options['arcade_panel_collapse']) ? ' toggle_up' : ' toggle_down') . '" title="' . $txt['upshrink_description'] . '" style="cursor: pointer;margin: 10px 5px 0 0;"></span>'), '
+					<span style="clear: right;">', $context['arcade_tabs']['title'], '</span>
+				</h3>
+			</div>
+			<div id="arcade_panel" class="plainbox"', empty($options['arcade_panel_collapse']) ? '' : ' style="display: none;"', '>';
 
 		if (!empty($context['arcade']['notice']))
 			echo '
-		<span class="arcade_notice">', $context['arcade']['notice'], '</span><br />';
+				<span class="arcade_notice">', $context['arcade']['notice'], '</span><br />';
 
 		echo '
-		<form action="', $scripturl, '?action=arcade;sa=search" method="post">
-			<input id="gamesearch" style="width: 240px;" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" /> <input class="button_submit" type="submit" value="', $txt['arcade_search'], '" />
-			<div id="suggest_gamesearch" class="game_suggest"></div>
-			<div id="search_extra">
-				<input type="checkbox" id="favorites" name="favorites" value="1"', !empty($context['arcade_search']['favorites']) ? ' checked="checked"' : '', ' class="check" /> <label for="favorites">', $txt['search_favorites'], '</label>
-			</div>
-			<script type="text/javascript"><!-- // --><![CDATA[
+				<form action="', $scripturl, '?action=arcade;sa=search" method="post">
+					<input id="gamesearch" style="width: 240px;" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" /> <input class="button_submit" type="submit" value="', $txt['arcade_search'], '" />
+					<div id="suggest_gamesearch" class="game_suggest"></div>
+					<div id="search_extra">
+						<input type="checkbox" id="favorites" name="favorites" value="1"', !empty($context['arcade_search']['favorites']) ? ' checked="checked"' : '', ' class="check" /> <label for="favorites">', $txt['search_favorites'], '</label>
+					</div>
+					<script type="text/javascript"><!-- // --><![CDATA[
 				var gSuggest = new gameSuggest("', $context['session_id'], '", "gamesearch");
 			// ]]></script>
-		</form>
-	</div>
-	<div id="adm_submenus"><ul class="dropmenu">';
+				</form>
+			</div>
+			<div id="adm_submenus">
+				<ul class="dropmenu">';
 
 		// Print out all the items in this tab.
 		foreach ($context['arcade_tabs']['tabs'] as $tab)
 			echo '
-		<li>
-			<a href="', $tab['href'], '" class="', !empty($tab['is_selected']) ? 'active ' : '', 'firstlevel">
-				<span class="firstlevel">', $tab['title'], '</span>
-			</a>
-		</li>';
+					<li>
+						<a href="', $tab['href'], '" class="', !empty($tab['is_selected']) ? 'active ' : '', 'firstlevel">
+							<span class="firstlevel">', $tab['title'], '</span>
+						</a>
+					</li>';
 
 		echo '
-	</ul></div>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<span class="lowerframe"><span></span></span>
+</div>
 	<script type="text/javascript"><!-- // --><![CDATA[
 		var oArcadeHeaderToggle = new smc_Toggle({
 			bToggleEnabled: true,
@@ -111,8 +120,6 @@ function template_arcade_below()
 
 	// Print out copyright and version. Removing copyright is not allowed by license
 	echo '
-	</div>
-
 	<div id="arcade_bottom" class="smalltext" style="text-align: center;">
 		Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ', $arcade_version, '</a> &copy; 2004-2017
 	</div>';
