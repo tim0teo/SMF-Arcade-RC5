@@ -120,13 +120,12 @@
 		<!-- These files go into the language directory -->
 		<require-file name="language/english/Arcade.english.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeAdmin.english.php" destination="$languagedir" />
-		<require-file name="language/english/ArcadeEmail.english.php" destination="$languagedir" />
 		<require-file name="language/english/Arcade.english-utf8.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeAdmin.english-utf8.php" destination="$languagedir" />
-		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english-utf8.php" destination="$languagedir" />
-
+		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
 		<!-- Edit SMF files -->
 		<modification format="xml" type="file">arcadeinstall2/main.xml</modification>
 	</install>
@@ -235,12 +234,12 @@
 		<!-- These files go into the language directory -->
 		<require-file name="language/english/Arcade.english.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeAdmin.english.php" destination="$languagedir" />
-		<require-file name="language/english/ArcadeEmail.english.php" destination="$languagedir" />
 		<require-file name="language/english/Arcade.english-utf8.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeAdmin.english-utf8.php" destination="$languagedir" />
-		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
 
 		<!-- Edit SMF files -->
 		<modification format="xml" type="file">arcadeinstall2/main2-1.xml</modification>

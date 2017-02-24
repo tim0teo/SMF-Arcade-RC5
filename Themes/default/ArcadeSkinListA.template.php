@@ -36,7 +36,7 @@ function template_arcade_list()
 
 	// Header for Game listing
 	echo '
-		<div id="arcadebuttons_top" class="modbuttons clearfix margintop">', template_button_strip($arcade_buttons, 'right'), '<br /><br /></div>
+		<div style="padding: 15px;"><span></span></div>
 		<span class="clear upperframe"><span></span></span>
 		<div class="game_table roundframe">
 			<div class="innerframe">

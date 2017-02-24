@@ -203,64 +203,68 @@ function template_arcade_list()
 	{
 		echo '
 		<span class="clear upperframe"><span></span></span>
-		<div class="roundframe"><div class="innerframe">
-			<div class="centertext" style="opacity: 0.7;">
-				<h3 class="centertext" style="opacity: 0.7;">
-					<img class="icon" id="upshrink_arcade_ic" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />
-					', $txt['arcade_info_center'], '
-				</h3>
-			</div>
-			<div id="upshrinkHeaderArcadeIC"', empty($options['collapse_header_arcade_ic']) ? '' : ' style="display: none;"', '>
-				<h4 class="left"><span class="left"></span>
-					<span>', $txt['arcade_latest_scores'], '</span>
-				</h4>';
+		<div class="roundframe">
+			<div class="innerframe">
+				<div class="centertext" style="opacity: 0.7;">
+					<h3 class="centertext" style="opacity: 0.7;">
+						<img class="icon" id="upshrink_arcade_ic" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />
+						', $txt['arcade_info_center'], '
+					</h3>
+				</div>
+				<div id="upshrinkHeaderArcadeIC"', empty($options['collapse_header_arcade_ic']) ? '' : ' style="display: none;"', '>
+					<h4 class="left"><span class="left"></span>
+						<span>', $txt['arcade_latest_scores'], '</span>
+					</h4>';
 
 		if (!empty($context['arcade']['latest_scores']))
 		{
 			echo '
-				<div class="smalltext" style="padding-left: 15px;word-wrap: break-word;word-break: hyphenate;overflow: hidden;">';
+					<div class="smalltext" style="padding-left: 15px;word-wrap: break-word;word-break: hyphenate;overflow: hidden;">';
 
 			foreach ($context['arcade']['latest_scores'] as $score)
 				echo '
-					<span>', sprintf($txt['arcade_latest_score_item'], $scripturl . '?action=arcade;sa=play;game=' . $score['game_id'], $score['name'], $score['score'], $score['memberLink']), '</span><br />
-					<span style="padding-left: 5px;padding-bottom: 1px;">',  $score['time'], '</span><br />';
+						<span>', sprintf($txt['arcade_latest_score_item'], $scripturl . '?action=arcade;sa=play;game=' . $score['game_id'], $score['name'], $score['score'], $score['memberLink']), '</span><br />
+						<span style="padding-left: 5px;padding-bottom: 1px;">',  $score['time'], '</span><br />';
 
 			echo '
-				</div>';
+					</div>';
 		}
 		else
 			echo '
-				<div class="smalltext" style="padding-left:15px;">', $txt['arcade_no_scores'], '</div>';
+					<div class="smalltext" style="padding-left:15px;">', $txt['arcade_no_scores'], '</div>';
 
 		echo '
-				<h4 class="left clear" style="padding-top:10px;"><span class="left"></span>
-					<span>', $txt['arcade_game_highlights'], '</span>
-				</h4>
-				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">
+					<h4 class="left clear" style="padding-top:10px;"><span class="left"></span>
+						<span>', $txt['arcade_game_highlights'], '</span>
+					</h4>
+					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">
 		';
 
 		if ($context['arcade']['stats']['longest_champion'] !== false)
-			echo '<span>', sprintf($txt['arcade_game_with_longest_champion'], $context['arcade']['stats']['longest_champion']['member_link'], $context['arcade']['stats']['longest_champion']['game_link']), '</span><br />';
+			echo '
+						<span>', sprintf($txt['arcade_game_with_longest_champion'], $context['arcade']['stats']['longest_champion']['member_link'], $context['arcade']['stats']['longest_champion']['game_link']), '</span><br />';
 
 		if ($context['arcade']['stats']['most_played'] !== false)
-			echo '<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_most_played'], $context['arcade']['stats']['most_played']['link']), '</span><br />';
+			echo '
+						<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_most_played'], $context['arcade']['stats']['most_played']['link']), '</span><br />';
 
 		if ($context['arcade']['stats']['best_player'] !== false)
-			echo '<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_best_player'], $context['arcade']['stats']['best_player']['link']), '</span><br />';
+			echo '
+						<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_best_player'], $context['arcade']['stats']['best_player']['link']), '</span><br />';
 
 		if ($context['arcade']['stats']['games'] != 0)
-			echo '<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']), '</span>';
+			echo '
+						<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']), '</span>';
 
 		echo '
-				</div>
-				<h4 class="left" style="padding-top: 10px;"><span class="left"></span>
-					<span>', $txt['arcade_users'], '</span>
-				</h4>
-				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">
-					', implode(', ', $context['arcade_viewing']), '
+					</div>
+					<h4 class="left" style="padding-top: 10px;"><span class="left"></span>
+						<span>', $txt['arcade_users'], '</span>
+					</h4>
+					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">', implode(', ', $context['arcade_viewing']), '</div>
 				</div>
 			</div>
-		</div></div>
+		</div>
 		<span class="lowerframe"><span></span></span>';
 	}
 }
