@@ -125,7 +125,7 @@
 		<require-file name="language/english/ArcadeSkinA.english.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english-utf8.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
-		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english.php" destination="$languagedir" />
 		<!-- Edit SMF files -->
 		<modification format="xml" type="file">arcadeinstall2/main.xml</modification>
 	</install>
@@ -239,7 +239,7 @@
 		<require-file name="language/english/ArcadeSkinA.english.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeSkinA.english-utf8.php" destination="$languagedir" />
 		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
-		<require-file name="language/english/ArcadeEmail.english-utf8.php" destination="$languagedir" />
+		<require-file name="language/english/ArcadeEmail.english.php" destination="$languagedir" />
 
 		<!-- Edit SMF files -->
 		<modification format="xml" type="file">arcadeinstall2/main2-1.xml</modification>
