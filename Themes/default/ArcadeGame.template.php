@@ -197,7 +197,8 @@ function template_arcade_game_play()
 					', !$context['arcade']['can_submit'] ? '<br /><strong>' . $txt['arcade_cannot_save'] . '</strong>' : '', '
 				</div>
 				<span class="botslice"><span></span></span>
-			</div>';
+			</div>
+		</div>';
 }
 
 // Highscore
@@ -378,9 +379,7 @@ function template_arcade_game_highscore()
 	echo '
 				</table>
 			</div>
-		</form>
-	</div>
-	<span class="lowerframe"><span></span></span>';
+		</form>';
 }
 
 // Below game
@@ -389,7 +388,6 @@ function template_arcade_game_below()
 	global $scripturl, $txt, $context, $settings, $modSettings;
 
 	echo '
-		</div>
 	</div>
 	<span class="lowerframe"><span></span></span>
 	<div class="pagesection">
