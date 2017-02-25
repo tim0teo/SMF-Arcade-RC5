@@ -61,7 +61,6 @@ function template_arcade_above()
 		</div>
 	</div>
 	<span class="lowerframe"><span></span></span>
-</div>
 	<script type="text/javascript"><!-- // --><![CDATA[
 		var oArcadeHeaderToggle = new smc_Toggle({
 			bToggleEnabled: true,
@@ -109,9 +108,6 @@ function template_arcade_above()
 		}'), '
 	// ]]></script>';
 	}
-
-	echo '
-	<div id="arcade_top">';
 }
 
 function template_arcade_below()

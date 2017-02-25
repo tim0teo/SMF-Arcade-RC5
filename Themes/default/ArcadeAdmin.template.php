@@ -120,7 +120,7 @@ function template_arcade_admin_maintenance_highscore()
 					<div>
 						<input type="radio" name="score_action" value="all" />', $txt['arcade_remove_all_scores'], '
 					</div>
-					<div style="margin: 1ex;" align="right">
+					<div style="margin: 1ex;text-align: right;">
 						<input class="button_submit" type="submit" name="clear_score" value="', $txt['arcade_remove_now'], '" />
 					</div>
 				</div>
@@ -152,19 +152,19 @@ function template_arcade_admin_maintenance_category()
 			<span class="topslice"><span></span></span>
 				<div style="padding: 0.5em;">
 					<div style="padding-bottom: 3px;">
-						<input type="radio" name="cat_action" value="undefault" style="vertical-align: top;" />', $txt['arcade_cats_undefault'], '
+						<input style="vertical-align: middle;margin: 5px 5px;" class="icon" type="radio" name="cat_action" value="undefault" /><span style="vertical-align: middle;padding: 2px 0px 2px 5px;">', $txt['arcade_cats_undefault'], '</span>
 					</div>
 					<div style="padding-bottom: 3px;">
-						<input type="radio" name="cat_action" value="default" style="vertical-align: top;" />', $txt['arcade_cats_default'], '
+						<input style="vertical-align: middle;margin: 5px 5px;" class="icon" type="radio" name="cat_action" value="default" /><span style="vertical-align: middle;padding: 2px 0px 2px 5px;">', $txt['arcade_cats_default'], '</span>
 					</div>
 					<div style="padding-bottom: 3px;">
-						<input type="radio" name="cat_action" value="peruse" style="vertical-align: top;" />', $txt['arcade_cats_peruse'], '
+						<input style="vertical-align: middle;margin: 5px 5px;" class="icon" type="radio" name="cat_action" value="peruse" /><span style="vertical-align: middle;padding: 2px 0px 2px 5px;">', $txt['arcade_cats_peruse'], '</span>
 					</div>
-					<div style="padding-bottom: 3px;padding-top: 5px;">
+					<div style="padding-bottom: 3px;padding-top: 15px;">
 						<span style="padding-right: 5px;">', $txt['arcade_admin_opt_cat_title'], '</span>
 						', ArcadeAdminCategoryDropdown(), '
 					</div>
-					<div style="margin: 1ex;" align="right">
+					<div style="margin: 1ex;text-align: right;">
 						<input class="button_submit" type="submit" name="clear_score" value="', $txt['arcade_commence_now'], '" />
 					</div>
 				</div>
@@ -186,29 +186,29 @@ function template_arcade_admin_category_list()
 				', $txt['arcade_categories'], '
 			</h3>
 		</div>
-		<div class="windowbg2">
+		<div class="windowbg">
 			<span class="topslice"><span></span></span>
 			<div style="padding: 0.5em;">
-				<table class="centertext" style="border: 0px;width: 100%;border-collapse: collapse;">';
+				<div class="centertext" style="border: 0px;width: 100%;">';
 
 	foreach ($context['arcade_category'] as $category)
 	{
 		echo '
-					<tr>
-						<td class="centertext" style="padding: 4px;vertical-align: top;width: 20px;margin-top: 5px;">
+					<div style="display: table-row;width: 100%;">
+						<span class="centertext" style="display: table-cell;padding: 4px;vertical-align: top;width: 15%;margin-top: 5px;">
 							<input id="cat', $category['id'], '" type="checkbox" name="category[', $category['id'], ']" value="', $category['id'], '" style="check" />
-						</td>
-						<td style="width: 50px;text-align: left;vertical-align: top;margin-top: 5px;padding: 4px;">
+						</span>
+						<span style="display: table-cell;width: 25%;text-align: left;vertical-align: top;margin-top: 5px;padding: 4px;">
 							<input type="text" name="category_order[', $category['id'], ']" value="', $category['order'], '" style="width: 100%;" />
-						</td>
-						<td style="padding: 4px;vertical-align: top;">
+						</span>
+						<span style="display: table-cell;width: 60%;padding: 4px;vertical-align: top;">
 							<a href="', $category['href'], '">', $category['name'], '</a>
-						</td>
-					</tr>';
+						</span>
+					</div>';
 	}
 
 	echo '
-				</table>
+				</div>
 				<input class="button_submit" type="submit" name="save_settings" value="', $txt['arcade_save_category'], '" />
 			</div>
 			<span class="botslice"><span></span></span>
@@ -230,30 +230,33 @@ function template_arcade_admin_category_edit()
 				', $txt['arcade_categories'], '
 			</h3>
 		</div>
-		<div class="windowbg2">
+		<div class="windowbg">
 			<span class="topslice"><span></span></span>
 			<div style="padding: 0.5em;">
-				<table style="border: 0px;width: 100%;border-collapse: collapse;" class="centertext">
-					<tr class="windowbg2">
-						<td style="padding: 4px;">', $txt['category_name'], '</td>
-						<td style="padding: 4px;width: 50%;">
-							<input type="text" name="category_name" value="', $context['category']['name'], '" />
-						</td>
-					</tr>
-					<tr class="windowbg2">
-						<td style="padding: 4px;">', $txt['arcade_category_permission_allowed'], '</td>
-						<td style="padding: 4px;width: 50%;">';
+				<div style="border: 0px;width: 100%;" class="centertext">
+					<div style="display: table-row;width: 100%;">
+						<span style="text-align:left;display: table-cell;padding: 4px;width: 20%;">', $txt['category_name'], '</span>
+						<span style="display: table-cell;padding: 20px 4px 4px 4px;width: 80%;">
+							<input size="50" type="text" name="category_name" value="', $context['category']['name'], '" />
+						</span>
+					</div>
+					<div style="display: table-row;width: 100%;">
+						<span style="text-align:left;display: table-cell;width: 20%;padding: 4px;">', $txt['arcade_category_permission_allowed'], '</span>
+						<span style="display: table-cell;padding: 20px 4px 4px 4px;width: 80%;">';
 
 	foreach ($context['groups'] as $group)
 		echo '
-							<label for="groups_', $group['id'], '"><input type="checkbox" name="groups[]" value="', $group['id'], '" id="groups_', $group['id'], '"', $group['checked'] ? ' checked="checked"' : '', ' class="check" /><span', $group['is_post_group'] ? ' style="border-bottom: 1px dotted;" title="' . $txt['pgroups_post_group'] . '"' : '', '>', $group['name'], '</span></label><br />';
+							<label for="groups_', $group['id'], '">
+								<input style="display: inline;" type="checkbox" name="groups[]" value="', $group['id'], '" id="groups_', $group['id'], '"', $group['checked'] ? ' checked="checked"' : '', ' class="check" />
+								<span', $group['is_post_group'] ? ' style="border-bottom: 1px dotted;" title="' . $txt['pgroups_post_group'] . '"' : '', '>', $group['name'], '</span>
+							</label>';
 
 	echo '
-							<i>', $txt['check_all'], '</i> <input type="checkbox" onclick="invertAll(this, this.form, \'groups[]\');" class="check" /><br />
+							<br /><br /><span style="padding-top: 20px;"></span><i>', $txt['check_all'], '</i> <input type="checkbox" onclick="invertAll(this, this.form, \'groups[]\');" class="check" /><br />
 							<br />
-						</td>
-					</tr>
-				</table>
+						</span>
+					</div>
+				</div>
 				<input class="button_submit" type="submit" name="save_settings" value="', $txt['arcade_save_category'], '" />
 			</div>
 			<span class="botslice"><span></span></span>

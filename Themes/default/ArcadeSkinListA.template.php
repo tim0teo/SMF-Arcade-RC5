@@ -44,8 +44,7 @@ function template_arcade_list()
 					<h3 class="catbg centertext" style="vertical-align: middle;">
 						<span style="clear: right;">', $txt['arcade_game_list'], '</span>
 					</h3>
-				</div>
-				<table style="border-collapse: collapse;width: 100%;" class="table_grid">';
+				</div>';
 	$lines = 0;
 	$code = '';
 
@@ -127,8 +126,8 @@ function template_arcade_list()
 		if ($lines == 5)
 			$lines = 1;
 
-		$lines == 1 ? $open = '<tr><td class="windowbg smalltext" style="padding: 5px;width: 25%;">' : $open = '<td class="windowbg smalltext" style="padding: 5px;width: 25%;">';
-		$lines == 4 ? $close = '</td></tr>' : $close = '</td>';
+		$lines == 1 ? $open = '<div style="display: table-row;width: 100%;"><div class="windowbg smalltext" style="display: table-cell;padding: 5px;width: 25%;">' : $open = '<div class="windowbg smalltext" style="display: table-cell;padding: 5px;width: 25%;">';
+		$lines == 4 ? $close = '</div></div>' : $close = '</div>';
 
 		$code .= $open . '
 							<div class="titlebg" style="height: 18px;padding:2px 5px 2px 5px;margin:2px 5px 2px 5px;border-bottom:1px solid #808080;">
@@ -157,21 +156,21 @@ function template_arcade_list()
 	{
 		$loop = 4-$lines;
 		for ($j=1; $j <= $loop; $j++)
-			$code .= '<td class="windowbg" style="padding: 5px;width: 25%;">&nbsp;</td>';
+			$code .= '<div class="windowbg" style="display: table-cell;padding: 5px;width: 25%;"></div>';
 	}
-	if($lines %4 != 0)
-		$code .= '</tr>';
+	else
+		$code .= '</div>';
 
-	echo $code;
+	echo '<div style="display: table;width: 100%;">', $code, '</div>';
 
 	echo '
-					<tr>
-						<td colspan="4"><span style="display: none;"></span></td>
-					</tr>
-				</table>
+						<div style="width: 100%;display: table-row;">
+							<div style="display: table-cell;width: 25%;"><span style="display: none;"></span></div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<span class="lowerframe"><span></span></span>';
+			<span class="lowerframe"><span></span></span>';
 
 	echo '
 		<div id="arcadebuttons_bottom" class="modbuttons clearfix marginbottom">
@@ -241,14 +240,15 @@ function template_arcade_list()
 
 		echo '
 					</div>
-					<h4 class="left" style="padding-top: 10px;"><span class="left"></span>
-						<span>', $txt['arcade_users'], '</span>
-					</h4>
-					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">
-						', implode(', ', $context['arcade_viewing']), '
-					</div>
 				</div>
-			</div>';
+				<h4 class="smalltext" style="padding-top: 10px;text-align: left;"><span class="left"></span>
+					<span>', $txt['arcade_users'], '</span>
+				</h4>
+				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">
+					', implode(', ', $context['arcade_viewing']), '
+				</div>
+			</div>
+		</div>';
 	}
 }
 ?>

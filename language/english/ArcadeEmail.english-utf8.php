@@ -13,13 +13,15 @@ $txt['notification_arcade_new_champion_own_subject'] = 'You are no longer champi
 $txt['notification_arcade_new_champion_own_body'] = '<div>You are no longer champion of {GAMENAME},</div>
 <div style="padding-top: 5px;"> {champion.name} has beaten your score and is a new champion!</div>
 <div style="padding-top: 5px;">To reclaim this title, {play.the.game} and get a score better than {champion.score}.</div>
-<div style="padding-top: 15px;">You may opt to disable this notification from: {ARCADE_SETTINGS_URL}</div>
+<div style="padding-top: 15px;">You may opt to disable this notification from your profile settings.</div>
+<div style="padding-top: 15px;">In order to save your score you must login.</div>
 <div style="padding-top: 25px;">{REGARDS}</div>';
 
 $txt['notification_arcade_new_champion_any_subject'] = '{old_champion.name} is no longer champion of {GAMENAMESUB}';
 $txt['notification_arcade_new_champion_any_body'] = '<div>{old_champion.name} is no longer champion of {GAMENAME},</div>
 <div style="padding-top: 5px;">{champion.name} has beaten {old_champion.name}\'s score and is a new champion!</div>
-<div style="padding-top: 15px;">You may opt to disable this notification from: {ARCADE_SETTINGS_URL}</div>
+<div style="padding-top: 15px;">You may opt to disable this notification from your profile settings.</div>
+<div style="padding-top: 15px;">In order to save your score you must login.</div>
 <div style="padding-top: 25px;">{REGARDS}</div>';
 
 // Highscore PM notifications should be plain text only

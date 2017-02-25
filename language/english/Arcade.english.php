@@ -196,7 +196,11 @@ $txt['arcade_submit_adjust_configure_log'] = 'Error while saving score for game 
 $txt['pdl_zipfile1'] = 'The download file was NOT SPECIFIED.';
 $txt['pdl_zipfile2'] = 'File not found.';
 $txt['pdl_zipfile3'] = 'Could not locate the specified directory - ';
-$txt['view_cat'] = 'View By Category';
+$txt['arcade_email_play_error'] = 'You need to log in to save a new score!';
+$txt['arcade_email_play_error_msg'] = 'You will be redirected to the game after logging in.';
+$txt['arcade_email_score_error'] = 'You need to log in to view high scores!';
+$txt['arcade_email_score_error_msg'] = 'You will be redirected to the highscores after logging in.';
+$txt['arcade_email_hs_error'] = 'You need to log in to view high scores because the Admin has disabled viewing scores for guests.';
 
 $txt['arcade_disabled'] = 'Arcade is currently disabled by admin';
 $txt['arcade_game_update_error'] = 'Unable to update game data';
@@ -265,6 +269,7 @@ $txt['pdl_dl_status'] = 'Download Status';
 $txt['pdl_dl_enabled'] = 'Enabled';
 $txt['pdl_dl_disabled'] = 'Disabled';
 $txt['pdl_yes'] = 'Yes';
+$txt['view_cat'] = 'View By Category';
 $txt['arcade_post'] = 'Try %#@$ from the Arcade';
 $txt['pdl_down'] = '<br /><br /><br />';
 /* If you want a button for downloads, omit the remark tags from the line below  */

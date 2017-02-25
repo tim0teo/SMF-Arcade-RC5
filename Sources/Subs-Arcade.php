@@ -185,7 +185,7 @@ function arcadePermissionQuery()
 		{
 			// Can see game?
 			if ($user_info['is_guest'])
-				$see_game = '(game.local_permissions = 0 OR FIND_IN_SET(-1, game.member_groups))';
+				$see_game = '(game.id_cat = 0 AND ' . (allowedTo('arcade_view') ? 1 : 0) . ' = 1) OR (game.local_permissions = 0 OR FIND_IN_SET(-1, game.member_groups))';
 			// Registered user.... just the groups in $user_info['groups'].
 			else
 				$see_game = '(game.local_permissions = 0 OR (FIND_IN_SET(' . implode(', game.member_groups) OR FIND_IN_SET(', $user_info['groups']) . ', game.member_groups)))';
@@ -195,7 +195,7 @@ function arcadePermissionQuery()
 		{
 			// Can see category?
 			if ($user_info['is_guest'])
-				$see_category = 'FIND_IN_SET(-1, category.member_groups)';
+				$see_category = '(game.id_cat = 0 AND ' . (allowedTo('arcade_view') ? 1 : 0) . ' = 1) OR (FIND_IN_SET(-1, category.member_groups))';
 			// Registered user.... just the groups in $user_info['groups'].
 			else
 				$see_category = '(FIND_IN_SET(' . implode(', category.member_groups) OR FIND_IN_SET(', $user_info['groups']) . ', category.member_groups) OR ISNULL(category.member_groups))';
@@ -574,7 +574,7 @@ function loadGame($id_game, $from_admin = false)
 		SELECT game.id_game, game.game_name, game.description, game.game_rating, game.num_plays,
 			game.game_file, game.game_directory, game.submit_system, game.internal_name,
 			game.score_type, game.thumbnail, game.thumbnail_small,
-			game.help, game.enabled, game.member_groups, game.extra_data,
+			game.help, game.enabled, game.member_groups, game.extra_data, game.id_cat,
 			IFNULL(score.id_score,0) AS id_score, IFNULL(score.score, 0) AS champ_score,
 			IFNULL(mem.id_member, 0) AS id_member, IFNULL(mem.real_name, score.player_name) AS real_name,
 			IFNULL(score.end_time, 0) AS champion_time, IFNULL(favorite.id_favorite, 0) AS is_favorite,
@@ -1071,7 +1071,7 @@ function arcadeEvent($id_event, $data = array())
 	// email variables
 	$old_champ = $data['game']['champion']['name'];
 	$new_champ = $user_info['name'];
-	$game = '<a href="' . $data['game']['url']['highscore'] . '">' . $data['game']['name'] . '</a>';
+	$game = '<a href="' . $data['game']['url']['highscore'] . ';arcade_email=1;hs=1">' . $data['game']['name'] . '</a>';
 	$game_pm = '[url=' . $data['game']['url']['highscore'] . ']' . $data['game']['name'] . '[/url]';
 
 	// set the sender as the user ID for posting from arcade settings else use the current user ID
@@ -1146,21 +1146,21 @@ function arcadeEvent($id_event, $data = array())
 				switch ($id_event)
 				{
 					case 'new_champion':
-						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . '">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_' . $adj . '_body']);
+						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_' . $adj . '_body']);
 						$subject = str_replace(array('{old_champion.name}', '{GAMENAMESUB}'), array($old_champ, $data['game']['name']), $txt['notification_arcade_new_champion_' . $adj . '_subject']);
-						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $subject . '</div></body></html>';
+						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $message . '</div></body></html>';
 						$replacements = array(
 							'SUBJECT' => $subject,
 							'MESSAGE' => $htmlMessage,
 							'SENDER' => un_htmlspecialchars($mbname),
-							'READLINK' => $data['game']['url']['highscore'],
-							'REPLYLINK' => $data['game']['url']['play'],
+							'READLINK' => $data['game']['url']['highscore'] . 'arcade_email=1;hs=1',
+							'REPLYLINK' => $data['game']['url']['play'] . ';arcade_email=1',
 							'TOLIST' => $rowmember['email_address'],
 							'old_champion.name' => $old_champ,
 							'champion.score' => $data['score']['score'],
 							'GAMENAMESUB' => $data['game']['name'],
 							'GAMENAME' => $game,
-							'play.the.game' => '<a href="' . $data['game']['url']['play'] . '">' . $txt['arcade_pm_play_game'] . '</a>',
+							'play.the.game' => '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>',
 							'champion.name' => $new_champ,
 							'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
 							'REGARDS' => un_htmlspecialchars($mbname)
@@ -1168,17 +1168,17 @@ function arcadeEvent($id_event, $data = array())
 						$email_template = 'notification_arcade_new_champion_' . $adj;
 						break;
 					default:
-						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . '">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
+						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
 						$subject = str_replace('{MATCHNAME}', $data['match_name'], $txt['notification_arcade_' . $id_event . '_subject']);
-						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $subject . '</div></body></html>';
+						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $message . '</div></body></html>';
 						$replacements = array(
 							'SUBJECT' => $subject,
 							'MESSAGE' => $htmlMessage,
 							'SENDER' => un_htmlspecialchars($mbname),
 							'READLINK' => $data['match_name'],
-							'REPLYLINK' => $data['match_url'],
+							'REPLYLINK' => $data['match_url'] . ';arcade_email=1',
 							'TOLIST' => $rowmember['email_address'],
-							'MATCHURL' => '<a href="' . $data['match_url'] . '">' . $txt['arcade_pm_join_match'] . '</a>',
+							'MATCHURL' => '<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>',
 							'MATCHNAME' => $data['match_name'],
 							'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
 							'REGARDS' => un_htmlspecialchars($mbname)
@@ -1194,21 +1194,21 @@ function arcadeEvent($id_event, $data = array())
 				switch ($id_event)
 				{
 					case 'new_champion':
-						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . '">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_' . $adj . '_body']);
+						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_' . $adj . '_body']);
 						$subject = str_replace(array('{old_champion.name}', '{GAMENAMESUB}'), array($old_champ, $data['game']['name']), $txt['notification_arcade_new_champion_' . $adj . '_subject']);
-						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $subject . '</div></body></html>';
+						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $message . '</div></body></html>';
 						$replacements = array(
 							'SUBJECT' => $subject,
 							'MESSAGE' => $htmlMessage,
 							'SENDER' => un_htmlspecialchars($mbname),
-							'READLINK' => $data['game']['url']['highscore'],
-							'REPLYLINK' => $data['game']['url']['play'],
+							'READLINK' => $data['game']['url']['highscore'] . ';arcade_email=1;hs=1',
+							'REPLYLINK' => $data['game']['url']['play'] . ';arcade_email=1',
 							'TOLIST' => $rowmember['email_address'],
 							'old_champion.name' => $old_champ,
 							'champion.score' => $data['score']['score'],
 							'GAMENAMESUB' => $data['game']['name'],
 							'GAMENAME' => $game,
-							'play.the.game' => '<a href="' . $data['game']['url']['play'] . '">' . $txt['arcade_pm_play_game'] . '</a>',
+							'play.the.game' => '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>',
 							'champion.name' => $new_champ,
 							'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
 							'REGARDS' => un_htmlspecialchars($mbname)
@@ -1216,17 +1216,17 @@ function arcadeEvent($id_event, $data = array())
 						$email_template = 'notification_arcade_new_champion_' . $adj;
 						break;
 					default:
-						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . '">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
+						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
 						$subject = str_replace('{MATCHNAME}', $data['match_name'], $txt['notification_arcade_' . $id_event . '_subject']);
-						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $subject . '</div></body></html>';
+						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $message . '</div></body></html>';
 						$replacements = array(
 							'SUBJECT' => $subject,
 							'MESSAGE' => $htmlMessage,
 							'SENDER' => un_htmlspecialchars($mbname),
 							'READLINK' => $data['match_name'],
-							'REPLYLINK' => $data['match_url'],
+							'REPLYLINK' => $data['match_url'] . ';arcade_email=1',
 							'TOLIST' => $rowmember['email_address'],
-							'MATCHURL' => '<a href="' . $data['match_url'] . '">' . $txt['arcade_pm_join_match'] . '</a>',
+							'MATCHURL' => '<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>',
 							'MATCHNAME' => $data['match_name'],
 							'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
 							'REGARDS' => un_htmlspecialchars($mbname)
@@ -1272,14 +1272,14 @@ function arcadeEvent($id_event, $data = array())
 						'SUBJECT' => $subject,
 						'MESSAGE' => $htmlMessage,
 						'SENDER' => un_htmlspecialchars($mbname),
-						'READLINK' => $data['game']['url']['highscore'],
-						'REPLYLINK' => $data['game']['url']['play'],
+						'READLINK' => $data['game']['url']['highscore'] . ';arcade_email=1;hs=1',
+						'REPLYLINK' => $data['game']['url']['play'] . ';arcade_email=1',
 						'TOLIST' => $emails,
 						'old_champion.name' => $old_champ,
 						'champion.score' => $data['score']['score'],
 						'GAMENAMESUB' => $data['game']['name'],
 						'GAMENAME' => $game,
-						'play.the.game' => '<a href="' . $data['game']['url']['play'] . '">' . $txt['arcade_pm_play_game'] . '</a>',
+						'play.the.game' => '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>',
 						'champion.name' => $new_champ,
 						'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
 						'REGARDS' => un_htmlspecialchars($mbname)
@@ -1287,7 +1287,7 @@ function arcadeEvent($id_event, $data = array())
 					$email_template = 'notification_arcade_new_champion_any';
 					break;
 				default:
-					$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . '">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
+					$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
 					$subject = str_replace('{MATCHNAME}', $data['match_name'], $txt['notification_arcade_' . $id_event . '_subject']);
 					$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $subject . '</div></body></html>';
 					$replacements = array(
@@ -1295,9 +1295,9 @@ function arcadeEvent($id_event, $data = array())
 						'MESSAGE' => $htmlMessage,
 						'SENDER' => un_htmlspecialchars($mbname),
 						'READLINK' => $data['match_name'],
-						'REPLYLINK' => $data['match_url'],
+						'REPLYLINK' => $data['match_url'] . ';arcade_email=1',
 						'TOLIST' => $rowmember['email_address'],
-						'MATCHURL' => '<a href="' . $data['match_url'] . '">' . $txt['arcade_pm_join_match'] . '</a>',
+						'MATCHURL' => '<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>',
 						'MATCHNAME' => $data['match_name'],
 						'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
 						'REGARDS' => un_htmlspecialchars($mbname)

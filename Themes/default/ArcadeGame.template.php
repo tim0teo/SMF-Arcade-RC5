@@ -181,6 +181,10 @@ function template_arcade_game_above()
 					$("#game_toggle").toggleClass("toggle_up", true);
 					writeArcadeCookie("checkArcadeContainer", "none", 1);
 				}'), '
+				function myformxyz(myform)
+				{
+					document.getElementById(myform).submit();
+				}
 			// ]]></script>';
 }
 
@@ -243,7 +247,7 @@ function template_arcade_game_highscore()
 					echo '
 					</div>
 					<div>
-						<form id="commentform1" action="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';score=',  $score['id'], '" method="post" onsubmit="return(document.getElementById(\'commentform1\').submit();)">
+						<form id="commentform1" action="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';score=',  $score['id'], '" method="post" onsubmit="myformxyz(\'commentform1\')">
 							<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 							<input type="text" id="new_comment" name="new_comment" style="width: 95%;" />
 							<input class="button_submit" type="submit" name="csave" value="', $txt['arcade_save'], '" />
@@ -267,7 +271,7 @@ function template_arcade_game_highscore()
 			<div class="windowbg2 smalltext">
 				<span class="topslice"><span></span></span>
 				<div style="padding: 0 0.5em">
-					<form id="commentform2" action="', $scripturl, '?action=arcade;sa=save" method="post" onsubmit="return(document.getElementById(\'commentform2\').submit();)">
+					<form id="commentform2" action="', $scripturl, '?action=arcade;sa=save" method="post" onsubmit="myformxyz(\'commentform2\')">
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 						<input type="text" name="name" style="width: 95%;" />
 						<input class="button_submit" type="submit" value="', $txt['arcade_save'], '" />
@@ -279,7 +283,7 @@ function template_arcade_game_highscore()
 	echo '
 		</div>';
 	echo '
-		<form id="commentform3" name="score" action="', $scripturl, '?action=arcade;sa=highscore;" method="post" onsubmit="return(document.getElementById(\'commentform3\').submit();)">
+		<form id="commentform3" name="score" action="', $scripturl, '?action=arcade;sa=highscore;" method="post" onsubmit="myformxyz(\'commentform3\')">
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 			<input type="hidden" name="game" value="', $context['game']['id'], '" />
 			<div style="padding-top: 10px;"><span></span></div>
@@ -366,7 +370,7 @@ function template_arcade_game_highscore()
 	{
 		echo '
 					<tr>
-						<td colspan="', $context['arcade']['can_admin_arcade'] ? '6' : '5', '" align="right">
+						<td colspan="', $context['arcade']['can_admin_arcade'] ? '5' : '6', '" style="text-align: right;">
 							<select name="qaction">
 								<option value="">--------</option>
 								<option value="delete">', $txt['arcade_delete_selected'], '</option>

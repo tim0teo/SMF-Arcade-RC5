@@ -1430,6 +1430,7 @@ function ArcadeAdminCategoryDropdown()
 	global $scripturl, $smcFunc, $txt, $modSettings;
 	$count = 0;
 	$current = !empty($modSettings['arcadeDefaultCategory']) ? (int)$modSettings['arcadeDefaultCategory'] : 0;
+	$selected = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? ' selected="selected"' : ' selected';
 	$display = '
 		<select name="cat_default" style="font-size: 100%;" onchange="JavaScript:submit()">
 			<option value="">' . $txt['arcade_admin_opt_cat'] . '</option>';
@@ -1447,13 +1448,13 @@ function ArcadeAdminCategoryDropdown()
 		$cat_name[$count] = $row['cat_name'];
 
 		$display .= '
-			<option value="' . $count . '"'. ($current == $count ? ' selected' : '') . '>' . $cat_name[$count] . '</option>';
+			<option value="' . $count . '"'. ($current == $count ? $selected : '') . '>' . $cat_name[$count] . '</option>';
 	}
 
 	$smcFunc['db_free_result']($request);
 
 	$display .= '
-			<option value="all"'. ($current == 0 ? ' selected' : '') . '>' . $txt['arcade_all'] . '</option>
+			<option value="all"'. ($current == 0 ? $selected : '') . '>' . $txt['arcade_all'] . '</option>
 		</select>';
 
 	return $display;

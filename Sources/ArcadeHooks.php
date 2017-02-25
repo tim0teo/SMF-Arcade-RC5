@@ -179,8 +179,73 @@ function Arcade_admin_areas(&$admin_areas)
 {
 	global $context, $modSettings, $scripturl, $txt;
 
-	arcade_array_insert($admin_areas, 'members',
-		array(
+	// SMF 2.0 insertion else add to end of array for SMF 2.1 (<- beta 3 ~ inserting array with unique icons causing issue)
+	if (version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<'))
+		arcade_array_insert($admin_areas, 'members',
+			array(
+				'arcade' => array(
+					'title' => $txt['arcade_admin'],
+					'permission' => array('arcade_admin'),
+					'areas' => array(
+						'arcade' => array(
+							'label' => $txt['arcade_general'],
+							'icon' => 'arcade_general.png',
+							'file' => 'ArcadeAdmin.php',
+							'function' => 'ArcadeAdmin',
+							'enabled' => !empty($modSettings['arcadeEnabled']),
+							'permission' => array('arcade_admin'),
+							'subsections' => array(
+								'main' => array($txt['arcade_general_information']),
+								'settings' => array($txt['arcade_general_settings']),
+								'permission' => array($txt['arcade_general_permissions']),
+							'pdl_settings' => array($txt['arcade_general_pdl_settings']),
+							'pdl_reports' => array($txt['arcade_general_pdl_reports']),
+							),
+						),
+						'managegames' => array(
+							'label' => $txt['arcade_manage_games'],
+							'icon' => 'arcade_settings.png',
+							'file' => 'ManageGames.php',
+							'function' => 'ManageGames',
+							'enabled' => !empty($modSettings['arcadeEnabled']),
+							'permission' => array('arcade_admin'),
+							'subsections' => array(
+								'main' => array($txt['arcade_manage_games_edit_games']),
+								'install' => array($txt['arcade_manage_games_install']),
+								'upload' => array($txt['arcade_manage_games_upload']),
+							),
+						),
+						'arcadecategory' => array(
+							'label' => $txt['arcade_manage_category'],
+							'icon' => 'arcade_categories.png',
+							'file' => 'ArcadeAdmin.php',
+							'function' => 'ArcadeAdminCategory',
+							'enabled' => !empty($modSettings['arcadeEnabled']),
+							'permission' => array('arcade_admin'),
+							'subsections' => array(
+								'list' => array($txt['arcade_manage_category_list']),
+								'new' => array($txt['arcade_manage_category_new']),
+							),
+						),
+						'arcademaintenance' => array(
+							'label' => $txt['arcade_maintenance'],
+							'icon' => 'arcade_maintenance.png',
+							'file' => 'ArcadeMaintenance.php',
+							'function' => 'ArcadeMaintenance',
+							'enabled' => !empty($modSettings['arcadeEnabled']),
+							'permission' => array('arcade_admin'),
+							'subsections' => array(
+								'main' => array($txt['arcade_maintenance_main']),
+								'highscore' => array($txt['arcade_maintenance_highscore']),
+								'category' => array($txt['arcade_maintenance_category']),
+							),
+						),
+					),
+				),
+			)
+		);
+	else
+		$admin_areas += array(
 			'arcade' => array(
 				'title' => $txt['arcade_admin'],
 				'permission' => array('arcade_admin'),
@@ -240,22 +305,59 @@ function Arcade_admin_areas(&$admin_areas)
 					),
 				),
 			),
-		)
-	);
+		);
 }
 
 function Arcade_load_theme()
 {
-		global $context, $settings;
-
-		$context['html_headers'] .= '
+	global $context, $settings, $txt;	
+	$context['html_headers'] .= '
 	<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-func.js?rc4"></script>';
-		return;
+
+	// message to tell users they must log in
+	// some javascript to display the unique error message
+	$flag = (!empty($context['current_action'])) && !empty($_REQUEST['arcade_email']) ? true : false;
+	$sub = (!empty($_REQUEST['hs'])) ? 'score' : 'play';
+	$bodyId = !empty($context['browser_body_id']) ? $context['browser_body_id'] : 'arcadeEmail';
+	if ($context['current_action'] == 'login' && $flag)
+		$context['html_headers'] .= '
+	<script type="text/javascript">
+		window.onload = function() {
+			' . ($bodyId == 'arcadeEmail' ? 'document.body.id = "' . $bodyId . '";' : '') . '
+			var arcnode1 = document.createElement("DIV");
+			document.getElementById("' . $bodyId. '").appendChild(arcnode1);
+			var arcnode2 = document.createElement("DIV");
+			var arcnode3 = document.createElement("H3");
+			var arcnode4 = document.createElement("DIV");
+			var arcnode5 = document.createElement("DIV");
+			var arcnode6 = document.createElement("DIV");
+			var arcnode7 = document.createElement("DIV");
+			var arctextnode1 = document.createTextNode("' . $txt['arcade_email_' . $sub . '_error'] . '");
+			var arctextnode2 = document.createTextNode("' . $txt['arcade_email_' . $sub . '_error_msg'] . '");			
+			arcnode1.appendChild(arcnode2);
+			arcnode2.appendChild(arcnode3);
+			arcnode1.appendChild(arcnode4);
+			arcnode4.appendChild(arcnode5);
+			arcnode5.appendChild(arcnode6);
+			arcnode5.appendChild(arcnode7);
+			arcnode3.appendChild(arctextnode1);
+			arcnode6.appendChild(arctextnode2);			
+			arcnode1.style = "position: fixed;top: 66%;left: 40%;border: 1px solid;padding: 5px;border-radius: 3px;";
+			arcnode2.className = "cat_bar";
+			arcnode3.className = "catbg centertext";
+			arcnode4.className = "windowbg";
+			arcnode5.className = "padding";
+			arcnode6.className = "noticebox";			
+		}
+	</script>';
+
+	return;
 }
 
 function Arcade_load_language()
 {
 	global $txt;
+
 	loadLanguage('Arcade');
 	loadLanguage('ArcadeAdmin');
 }

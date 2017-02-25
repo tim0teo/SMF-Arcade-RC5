@@ -7,12 +7,15 @@ February 2017
  + Added specific user settings for PM and/or EMail notifications
  + Added option to send notification Emails/PMs in bulk
  + Main language files loaded with pre_load hook
+ + Links from emails while not logged in triggers login prompt that redirects to arcade action/sa
  ! Eliminated/changed deprecated css in templates
  ! Various aesthetic template fixes for light/dark themes
+ ! Fixed typing enter after save comment
  ! Fixed profile area to show users top 10 - 1st, 2nd & 3rd high score placements
  ! Fixed SMF 2.1 installation for profile area hook changes
  ! Fixed PM, EMail & Arena/Match notifications
- 
+ ! Fixed guest permissions for games with no opted category
+
 SMF Arcade 2.5 RC4                                                    xx.12.2015
 ================================================================================
 December 2015
