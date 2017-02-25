@@ -263,36 +263,28 @@ function ArcadeList()
 
 		$context['arcade']['latest_scores'] = ArcadeLatestScores(5, 0);
 
+
 		$context['arcade_viewing'] = array();
 		$context['arcade_num_viewing'] = array('member' => 0, 'guest' => 0, 'hidden' => 0);
 
-		// Search for members in arcade
+		// log the current user to the online list & then search for members in the arcade within 10 minutes
+		$log_online = arcade_online();
 		$request = $smcFunc['db_query']('', '
 			SELECT
-				lo.id_member, lo.log_time, lo.url, mem.real_name, mem.member_name, mem.show_online,
-				mg.online_color, mg.id_group, mg.group_name
-			FROM {db_prefix}log_online AS lo
-				LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = lo.id_member)
-				LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = 0 THEN mem.id_post_group ELSE mem.id_group END)
-			WHERE INSTR(lo.url, {string:url}) OR lo.session = {string:session}',
+				id_member, online_time, show_online, online_name, online_color
+			FROM {db_prefix}arcade_member_data
+			WHERE {int:now} - online_time < 600',
 			array(
-				'url' => 's:6:"action";s:6:"arcade"',
-				'session' => $user_info['is_guest'] ? 'ip' . $user_info['ip'] : session_id(),
+				'now' => $log_online,
 			)
 		);
 
 		while ($row = $smcFunc['db_fetch_assoc']($request))
 		{
-			if (empty($row['id_member']))
-			{
-				$context['arcade_num_viewing']['guest']++;
-				continue;
-			}
-
 			if (!empty($row['online_color']))
-				$link = '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '" style="color: ' . $row['online_color'] . ';">' . $row['real_name'] . '</a>';
+				$link = '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '" style="color: ' . $row['online_color'] . ';">' . $row['online_name'] . '</a>';
 			else
-				$link = '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['real_name'] . '</a>';
+				$link = '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['online_name'] . '</a>';
 
 			$is_buddy = in_array($row['id_member'], $user_info['buddies']);
 			if ($is_buddy)
@@ -302,7 +294,7 @@ function ArcadeList()
 			if (!empty($row['show_online']) || allowedTo('moderate_forum'))
 			{
 				$context['arcade_num_viewing']['member']++;
-				$context['arcade_viewing'][$row['log_time'] . $row['member_name']] = empty($row['show_online']) ? '<i>' . $link . '</i>' : $link;
+				$context['arcade_viewing'][$row['online_time'] . $row['online_name']] = empty($row['show_online']) ? '<i>' . $link . '</i>' : $link;
 			}
 
 			if (empty($row['show_online']))

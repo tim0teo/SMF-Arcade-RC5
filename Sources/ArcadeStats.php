@@ -11,10 +11,7 @@ if (!defined('SMF'))
 	die('Hacking attempt...');
 
 /*
-	void ArcadeStats()
-		- ...
-
-	void arcadeStats2()
+	void ArcadeStatistics()
 		- ...
 
 	array ArcadeStats_MostPlayed([count = 10], [time])

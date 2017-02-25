@@ -101,6 +101,9 @@ if (!defined('SMF'))
 
 	string duration_format()
 		- ???
+
+	array arcade_online()
+		- ???
 */
 
 function arcade_get_url($params = array())
@@ -2748,5 +2751,62 @@ function duration_format($seconds, $max = 2)
 	}
 
 	return implode(' ', $out);
+}
+
+function arcade_online()
+{
+	global $smcFunc, $user_info, $context;
+
+	if ($user_info['is_guest'])
+		return time();
+
+	list($userid, $time, $show, $name, $color) = array($user_info['id'], time(), '0', $user_info['name'], '');
+
+	$request = $smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}arcade_member_data
+		WHERE id_member = {int:member}',
+		array(
+			'member' => $user_info['id']
+		)
+	);
+
+	$request = $smcFunc['db_query']('', '
+		SELECT
+			mem.id_member, mem.real_name, mem.member_name, mem.show_online,
+			mg.online_color, mg.id_group, mg.group_name
+		FROM {db_prefix}members AS mem
+			LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = 0 THEN mem.id_post_group ELSE mem.id_group END)
+		WHERE mem.id_member = {int:member}',
+		array(
+			'member' => $user_info['id'],
+		)
+	);
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+	{
+		$color = !empty($row['online_color']) ? $row['online_color'] : '';
+		$show = !empty($row['show_online']) ? 1 : 0;
+	}
+	$smcFunc['db_free_result']($request);
+
+	$smcFunc['db_insert']('insert',
+		'{db_prefix}arcade_member_data',
+		array(
+			'id_member' => 'int',
+			'online_time' => 'int',
+			'show_online' => 'int',
+			'online_name' => 'string',
+			'online_color' => 'string',
+		),
+		array(
+			$userid,
+			$time,
+			$show,
+			$name,
+			$color,
+		),
+		array()
+	);
+
+	return time();
 }
 ?>

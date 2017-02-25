@@ -472,7 +472,7 @@ $tables = array(
 			)
 		)
 	),
-	// Matchers
+	// Matches
 	'arcade_matches' => array(
 		'name' => 'arcade_matches',
 		'columns' => array(
@@ -860,6 +860,48 @@ $tables = array(
 				'internal_name' => 'drop',
 			),
 		),
+	),
+	// arcade who's online
+	'arcade_member_data' => array(
+		'name' => 'arcade_member_data',
+		'columns' => array(
+			array(
+				'name' => 'id_member',
+				'type' => 'int',
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'online_time',
+				'type' => 'int',
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'show_online',
+				'type' => 'int',
+				'default' => 0,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'online_name',
+				'type' => 'varchar',
+				'default' => '',
+				'size' => 255,
+			),
+			array(
+				'name' => 'online_color',
+				'type' => 'varchar',
+				'default' => '',
+				'size' => 255,
+			),
+		),
+		'indexes' => array(
+			array(
+				'type' => 'primary',
+				'columns' => array('id_member')
+			),
+		)
 	)
 );
 

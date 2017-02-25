@@ -15,6 +15,11 @@ function template_arcade_above()
 	if ( $_REQUEST['sa'] == 'list' || $_REQUEST['sa'] == 'search')
 	{
 		$categories = ArcadeCats($_SESSION['current_cat']);
+
+		// SMF 2.0 / 2.1 css differs for inner title bg
+		$divbg = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'titlebg' : 'title_bar';
+		$spanbg = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? '' : ' class="titlebg"';
+
 		echo '
 	<span class="clear upperframe"><span></span></span>
 	<div class="roundframe">
@@ -27,9 +32,9 @@ function template_arcade_above()
 			<table style="border-collapse: collapse;width: 100%;" class="tborder table_grid">
 				<tr>
 					<td class="windowbg smalltext" style="vertical-align: top;width: 24%;padding: 5px;font-size:0.85em;">
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['latest_games'] ,'</div>
+						<div class="' . $divbg . ' centertext" style="font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['latest_games'] ,'</span></div>
 						',  ArcadeNewestGames($modSettings['skin_latest_games']), '
-						<div class="titlebg centertext" style="margin-bottom:10px;font-size:1.3em;">', $txt['arcade_game_search'] ,'</div>
+						<div class="' . $divbg . ' centertext" style="margin-bottom:10px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['arcade_game_search'] ,'</span></div>
 						<div class="centertext smalltext" style="margin-bottom:15px;font-size:1.0em;">
 							<form name="search" action="', $scripturl, '?action=arcade;sa=search" method="post" onsubmit="return empty();">
 								<input id="gamesearch" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" />
@@ -40,7 +45,7 @@ function template_arcade_above()
 								// ]]></script>
 							</form>
 						</div>
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['arcade_game_sort'],'</div>
+						<div class="' . $divbg . ' centertext" style="margin-bottom:3px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['arcade_game_sort'],'</span></div>
 						<div class="centertext smalltext" style="padding:5px;margin:10px;font-size:1.0em;">
 							<form action="', $scripturl, '?action=arcade;sa=list" method="post">
 								<select name="sortby" onchange="submit();">
@@ -57,16 +62,18 @@ function template_arcade_above()
 								</select>
 							</form>
 						</div>
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['arcade_random_game'],'</div><br />
+						<div class="' . $divbg . ' centertext" style="margin-bottom:3px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['arcade_random_game'],'</span></div><br />
 						<div style="margin-bottom:3px;font-size:0.8em;">', ArcadeRandomGames(1), '</div>
 					</td>
 					<td class="windowbg smalltext" style="padding: 5px;vertical-align: top;font-size:0.85em;">
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['latest_champs'],'</div>
+						<div class="' . $divbg . ' centertext" style="margin-bottom:3px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['latest_champs'],'</span></div>
 						<div class="windowbg2" style="margin:5px 2px 5px 2px;font-size:1.0em;text-align:left;">', ArcadeNewChamps($modSettings['skin_latest_champs']), '</div>
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">
-							<img src="', $settings['images_url'], '/gold.gif" alt="" />
-							', ($_SESSION['current_cat'] == 'all' ? $txt['arcade_champs'] : sprintf($txt['cat_champs'], $context['cat_name'])), '
-							<img src="', $settings['images_url'], '/gold.gif" alt="" />
+						<div class="' . $divbg . ' centertext" style="margin-bottom:3px;font-size:1.3em;border-radius: 3px;overflow: hidden;">
+							<span'. $spanbg . '>
+								<img src="', $settings['images_url'], '/gold.gif" alt="" />
+								', ($_SESSION['current_cat'] == 'all' ? $txt['arcade_champs'] : sprintf($txt['cat_champs'], $context['cat_name'])), '
+								<img src="', $settings['images_url'], '/gold.gif" alt="" />
+							</span>
 						</div>
 						<table style="border: 0px;width: 100%;border-spacing: 2px;border-collapse: separate;">
 							<tr>';
@@ -95,13 +102,13 @@ function template_arcade_above()
 		echo '
 							</tr>
 						</table>
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['latest_scores'] ,'</div>
+						<div class="' . $divbg . ' centertext" style="margin-bottom:3px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['latest_scores'] ,'</span></div>
 						<div class="windowbg2" style="border:0px;margin:5px 2px 1px 2px;font-size:1.0em;text-align:left;">', ArcadeLatest($modSettings['skin_latest_scores']), '</div>
 					</td>
 					<td class="windowbg smalltext" style="width: 24%;vertical-align: top;font-size:0.85em;">
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['most_played'], '</div>
+						<div class="' . $divbg . ' centertext" style="margin-bottom:3px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['most_played'], '</span></div>
 						', ArcadePopular($modSettings['skin_most_popular']), '
-						<div class="titlebg centertext" style="margin-bottom:4px;font-size:1.3em;">', $txt['arcade_daily'], '</div>';
+						<div class="' . $divbg . ' centertext" style="margin-bottom:4px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['arcade_daily'], '</span></div>';
 
 		$game = getGameOfDay();
 		strlen($game['name']) >= 23 ? $game['name'] = substr($game['name'],0,22) . '...' : '';
@@ -139,7 +146,7 @@ function template_arcade_above()
 
 		if (!empty($modSettings['arcadeDropCat']))
 			echo '
-						<div class="titlebg centertext" style="margin-bottom:3px;font-size:1.3em;">', $txt['game_categories'], '</div>
+						<div class="' . $divbg . ' centertext" style="margin-bottom:3px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['game_categories'], '</span></div>
 						<div class="smalltext centertext" style="margin: 5px 0px 0px 5px;font-size:1.0em;"><br />', ArcadeCategoryDropdown(), '</div>';
 
 		echo '

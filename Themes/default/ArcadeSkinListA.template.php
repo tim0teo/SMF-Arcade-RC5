@@ -184,7 +184,7 @@ function template_arcade_list()
 	{
 		echo '
 		<span class="clear upperframe"><span></span></span>
-		<div class="roundframe">
+		<div class="roundframe" style="border-radius: 3px;">
 			<div class="innerframe">
 				<div class="centertext" style="opacity: 0.7;">
 					<h3 class="centertext" style="opacity: 0.7;">
@@ -248,7 +248,9 @@ function template_arcade_list()
 					', implode(', ', $context['arcade_viewing']), '
 				</div>
 			</div>
-		</div>';
+		</div>
+		<span class="lowerframe"><span></span></span>
+		<div style="padding-bottom: 10px;"><span></span></div>';
 	}
 }
 ?>

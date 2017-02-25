@@ -45,7 +45,7 @@ function ArcadeMaintenance()
 	$subActions = array(
 		'main' => array('ArcadeMaintenanceActions'),
 		'highscore' =>  array('ArcadeMaintenanceHighscore'),
-		'category' => array('ArcadeMaintenanceCategory'),
+		'category' => array('ArcadeMaintenanceCategory'),		
 	);
 
 	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'main';
@@ -60,6 +60,7 @@ function ArcadeMaintenanceActions()
 	$maintenanceActions = array(
 		'fixScores' => array('MaintenanceFixScores'),
 		'updateGamecache' => array('MaintenanceGameCache'),
+		'onlinePurge' => array('ArcadeMaintenanceOnline'),
 	);
 
 	$context['maintenance_finished'] = false;
@@ -452,5 +453,20 @@ function ArcadeMaintenanceCategory()
 
 	// Template
 	$context['sub_template'] = 'arcade_admin_maintenance_category';
+}
+
+function ArcadeMaintenanceOnline()
+{
+	global $smcFunc;
+	$time = time();
+	
+	// Just check we haven't ended up with something theme exclusive somehow.
+	$smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}arcade_member_data
+		WHERE {int:now} - online_time > 600',
+		array(
+			'now' => $time,			
+		)
+	);
 }
 ?>
