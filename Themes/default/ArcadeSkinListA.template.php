@@ -185,8 +185,9 @@ function template_arcade_list()
 				<span class="lowerframe"><span></span></span>
 				<div id="arcadebuttons_bottom" class="modbuttons clearfix marginbottom">', template_button_strip($arcade_buttons, 'right'), '<br /><br /></div>
 				<div class="modbuttons clearfix marginbottom">
-					<div class="floatleft middletext">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a name="bot" href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div><br /><br /><br />
-				<br /><br /></div>';
+					<div class="floatleft middletext">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a name="bot" href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
+				</div>
+				<div style="padding-top: 40px;"><span></span></div>';
 
 	if (!empty($modSettings['arcadeShowIC']))
 	{
