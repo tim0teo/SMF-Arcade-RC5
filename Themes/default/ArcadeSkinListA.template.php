@@ -6,9 +6,13 @@
  * @version 2.5
  * @license http://web-develop.ca/index.php?page=arcade_license_BSD2 BSD 2
  */
+
 function template_arcade_list()
 {
 	global $scripturl, $txt, $context, $settings, $user_info, $modSettings;
+
+	// games per row
+	$row_tally = 4;
 
 	if (empty($modSettings['arcadeEnableDownload']))
 		$modSettings['arcadeEnableDownload'] = false;
@@ -45,7 +49,7 @@ function template_arcade_list()
 						<span style="clear: right;">', $txt['arcade_game_list'], '</span>
 					</h3>
 				</div>';
-	$lines = 0;
+	$tally = 0;
 	$code = '';
 
 	/*  loop through games for the list  */
@@ -121,13 +125,24 @@ function template_arcade_list()
 		if ($context['arcade']['can_admin_arcade'])
 			$viewdl .= '<b>&bull;</b>&nbsp;<a href="' . $scripturl . '?action=admin;area=managegames;sa=edit;game=' . $game['id'] . '">' . $txt['pdl_edit'] . '</a><br />';
 
-		$lines++;
+		// four cells wide
+		$tally++;
+		$remainder = intval($tally % $row_tally);
 
-		if ($lines == 5)
-			$lines = 1;
-
-		$lines == 1 ? $open = '<div style="display: table-row;width: 100%;"><div class="windowbg smalltext" style="display: table-cell;padding: 5px;width: 25%;">' : $open = '<div class="windowbg smalltext" style="display: table-cell;padding: 5px;width: 25%;">';
-		$lines == 4 ? $close = '</div></div>' : $close = '</div>';
+		switch ($remainder)
+		{
+			case 0:
+				$open = '<div class="windowbg smalltext" style="display: table-cell;padding: 5px;width: 25%;">';
+				$close = '</div></div>';
+				break;
+			case 1:
+				$open = '<div style="display: table-row;width: 100%;"><div class="windowbg smalltext" style="display: table-cell;padding: 5px;width: 25%;">';
+				$close = '</div>';
+				break;
+			default:
+				$open = '<div class="windowbg smalltext" style="display: table-cell;padding: 5px;width: 25%;">';
+				$close = '</div>';
+		}
 
 		$code .= $open . '
 							<div class="titlebg" style="height: 18px;padding:2px 5px 2px 5px;margin:2px 5px 2px 5px;border-bottom:1px solid #808080;">
@@ -152,33 +167,26 @@ function template_arcade_list()
 							' . $close;
 	}
 
-	if ($lines > 0 && $lines < 4)
-	{
-		$loop = 4-$lines;
-		for ($j=1; $j <= $loop; $j++)
-			$code .= '<div class="windowbg" style="display: table-cell;padding: 5px;width: 25%;"></div>';
-	}
-	else
-		$code .= '</div>';
 
-	echo '<div style="display: table;width: 100%;">', $code, '</div>';
+	if ($remainder != 0)
+		$code .= str_repeat('<div class="windowbg" style="display: table-cell;padding: 5px;width: 25%;"></div>', $row_tally-$remainder);
+	else
+		$code .= '
+							</div>';
 
 	echo '
-						<div style="width: 100%;display: table-row;">
-							<div style="display: table-cell;width: 25%;"><span style="display: none;"></span></div>
+							<div style="display: table;width: 100%;">', $code, '</div>
+							<div style="width: 100%;display: table-row;">
+								<div style="display: table-cell;width: 25%;"><span style="display: none;"></span></div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<span class="lowerframe"><span></span></span>';
-
-	echo '
-		<div id="arcadebuttons_bottom" class="modbuttons clearfix marginbottom">
-		', template_button_strip($arcade_buttons, 'right'), '<br /><br />
-		</div>
-		<div class="modbuttons clearfix marginbottom">
-			<div class="floatleft middletext">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a name="bot" href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div><br />
-		<br /><br /></div>';
+				<span class="lowerframe"><span></span></span>
+				<div id="arcadebuttons_bottom" class="modbuttons clearfix marginbottom">', template_button_strip($arcade_buttons, 'right'), '<br /><br /></div>
+				<div class="modbuttons clearfix marginbottom">
+					<div class="floatleft middletext">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a name="bot" href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div><br /><br /><br />
+				<br /><br /></div>';
 
 	if (!empty($modSettings['arcadeShowIC']))
 	{
