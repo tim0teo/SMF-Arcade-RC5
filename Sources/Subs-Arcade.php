@@ -1149,7 +1149,7 @@ function arcadeEvent($id_event, $data = array())
 				switch ($id_event)
 				{
 					case 'new_champion':
-						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_' . $adj . '_body']);
+						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $txt['arcade_email_profile'], $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_' . $adj . '_body']);
 						$subject = str_replace(array('{old_champion.name}', '{GAMENAMESUB}'), array($old_champ, $data['game']['name']), $txt['notification_arcade_new_champion_' . $adj . '_subject']);
 						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $message . '</div></body></html>';
 						$replacements = array(
@@ -1165,13 +1165,13 @@ function arcadeEvent($id_event, $data = array())
 							'GAMENAME' => $game,
 							'play.the.game' => '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>',
 							'champion.name' => $new_champ,
-							'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
+							'ARCADE_SETTINGS_URL' => $txt['arcade_email_profile'],
 							'REGARDS' => un_htmlspecialchars($mbname)
 						);
 						$email_template = 'notification_arcade_new_champion_' . $adj;
 						break;
 					default:
-						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
+						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $txt['arcade_email_profile'], $mbname), $txt['notification_arcade_' . $id_event . '_body']);
 						$subject = str_replace('{MATCHNAME}', $data['match_name'], $txt['notification_arcade_' . $id_event . '_subject']);
 						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $message . '</div></body></html>';
 						$replacements = array(
@@ -1183,7 +1183,7 @@ function arcadeEvent($id_event, $data = array())
 							'TOLIST' => $rowmember['email_address'],
 							'MATCHURL' => '<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>',
 							'MATCHNAME' => $data['match_name'],
-							'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
+							'ARCADE_SETTINGS_URL' => $txt['arcade_email_profile'],
 							'REGARDS' => un_htmlspecialchars($mbname)
 						);
 						$email_template = 'notification_arcade_' . $id_event;
@@ -1197,7 +1197,7 @@ function arcadeEvent($id_event, $data = array())
 				switch ($id_event)
 				{
 					case 'new_champion':
-						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_' . $adj . '_body']);
+						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $txt['arcade_email_profile'], $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_' . $adj . '_body']);
 						$subject = str_replace(array('{old_champion.name}', '{GAMENAMESUB}'), array($old_champ, $data['game']['name']), $txt['notification_arcade_new_champion_' . $adj . '_subject']);
 						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $message . '</div></body></html>';
 						$replacements = array(
@@ -1213,13 +1213,13 @@ function arcadeEvent($id_event, $data = array())
 							'GAMENAME' => $game,
 							'play.the.game' => '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>',
 							'champion.name' => $new_champ,
-							'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
+							'ARCADE_SETTINGS_URL' => $txt['arcade_email_profile'],
 							'REGARDS' => un_htmlspecialchars($mbname)
 						);
 						$email_template = 'notification_arcade_new_champion_' . $adj;
 						break;
 					default:
-						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
+						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $txt['arcade_email_profile'], $mbname), $txt['notification_arcade_' . $id_event . '_body']);
 						$subject = str_replace('{MATCHNAME}', $data['match_name'], $txt['notification_arcade_' . $id_event . '_subject']);
 						$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $message . '</div></body></html>';
 						$replacements = array(
@@ -1231,7 +1231,7 @@ function arcadeEvent($id_event, $data = array())
 							'TOLIST' => $rowmember['email_address'],
 							'MATCHURL' => '<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>',
 							'MATCHNAME' => $data['match_name'],
-							'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
+							'ARCADE_SETTINGS_URL' => $txt['arcade_email_profile'],
 							'REGARDS' => un_htmlspecialchars($mbname)
 						);
 						$email_template = 'notification_arcade_' . $id_event;
@@ -1247,11 +1247,11 @@ function arcadeEvent($id_event, $data = array())
 				switch ($id_event)
 				{
 					case 'new_champion':
-						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game_pm, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '[url=' . $data['game']['url']['play'] . ']' . $txt['arcade_pm_play_game'] . '[/url]'), $txt['notification_arcade_new_champion_' . $adj . 'PM_body']);
+						$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game_pm, $new_champ, $old_champ, '[url=' . $scripturl . '?action=profile;area=arcadeSettings;' . ']' . $txt['arcade_pm_profile'] . '[/url]', $mbname, $data['score']['score'], '[url=' . $data['game']['url']['play'] . ']' . $txt['arcade_pm_play_game'] . '[/url]'), $txt['notification_arcade_new_champion_' . $adj . 'PM_body']);
 						$subject = str_replace(array('{old_champion.name}', '{GAMENAMESUB}'), array($old_champ, $data['game']['name']), $txt['notification_arcade_new_champion_' . $adj . 'PM_subject']);
 						break;
 					default:
-						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('[url=' . $data['match_url'] . ']' . $txt['arcade_pm_join_match'] . '[/url]', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
+						$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('[url=' . $data['match_url'] . ']' . $txt['arcade_pm_join_match'] . '[/url]', $data['match_name'], '[url=' . $scripturl . '?action=profile;area=arcadeSettings;' . ']' . $txt['arcade_pm_profile'] . '[/url]', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
 						$subject = str_replace('{MATCHNAME}', $data['match_name'], $txt['notification_arcade_' . $id_event . '_subject']);
 				}
 				sendpm (array('to' => array($rowmember['id_member']), 'bcc' => array()), $subject, $message, '0', $from, '0');
@@ -1268,7 +1268,7 @@ function arcadeEvent($id_event, $data = array())
 			switch ($id_event)
 			{
 				case 'new_champion':
-					$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . '">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_any_body']);
+					$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game, $new_champ, $old_champ, $txt['arcade_email_profile'], $mbname, $data['score']['score'], '<a href="' . $data['game']['url']['play'] . '">' . $txt['arcade_pm_play_game'] . '</a>'), $txt['notification_arcade_new_champion_any_body']);
 					$subject = str_replace(array('{old_champion.name}', '{GAMENAMESUB}'), array($old_champ, $data['game']['name']), $txt['notification_arcade_new_champion_any_subject']);
 					$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $subject . '</div></body></html>';
 					$replacements = array(
@@ -1284,13 +1284,13 @@ function arcadeEvent($id_event, $data = array())
 						'GAMENAME' => $game,
 						'play.the.game' => '<a href="' . $data['game']['url']['play'] . ';arcade_email=1">' . $txt['arcade_pm_play_game'] . '</a>',
 						'champion.name' => $new_champ,
-						'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
+						'ARCADE_SETTINGS_URL' => $txt['arcade_email_profile'],
 						'REGARDS' => un_htmlspecialchars($mbname)
 					);
 					$email_template = 'notification_arcade_new_champion_any';
 					break;
 				default:
-					$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
+					$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>', $data['match_name'], $txt['arcade_email_profile'], $mbname), $txt['notification_arcade_' . $id_event . '_body']);
 					$subject = str_replace('{MATCHNAME}', $data['match_name'], $txt['notification_arcade_' . $id_event . '_subject']);
 					$htmlMessage = '<html><head><title>' . $mbname . '</title></head><body><div>' . $subject . '</div></body></html>';
 					$replacements = array(
@@ -1302,7 +1302,7 @@ function arcadeEvent($id_event, $data = array())
 						'TOLIST' => $rowmember['email_address'],
 						'MATCHURL' => '<a href="' . $data['match_url'] . ';arcade_email=1">' . $txt['arcade_pm_join_match'] . '</a>',
 						'MATCHNAME' => $data['match_name'],
-						'ARCADE_SETTINGS_URL' => $scripturl . '?action=profile;area=arcadeSettings;',
+						'ARCADE_SETTINGS_URL' => $txt['arcade_email_profile'],
 						'REGARDS' => un_htmlspecialchars($mbname)
 					);
 					$email_template = 'notification_arcade_' . $id_event;
@@ -1318,11 +1318,11 @@ function arcadeEvent($id_event, $data = array())
 			switch ($id_event)
 			{
 				case 'new_champion':
-					$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game_pm, $new_champ, $old_champ, $scripturl . '?action=profile;area=arcadeSettings', $mbname, $data['score']['score'], '[url=' . $data['game']['url']['play'] . ']' . $txt['arcade_pm_play_game'] . '[/url]'), $txt['notification_arcade_new_champion_anyPM_body']);
+					$message = str_replace(array('{old_champion.name}', '{GAMENAME}', '{champion.name}', '{old_champion.name}', '{ARCADE_SETTINGS_URL}', '{REGARDS}', '{champion.score}', '{play.the.game}'), array($old_champ, $game_pm, $new_champ, $old_champ, '[url=' . $scripturl . '?action=profile;area=arcadeSettings;' . ']' . $txt['arcade_pm_profile'] . '[/url]', $mbname, $data['score']['score'], '[url=' . $data['game']['url']['play'] . ']' . $txt['arcade_pm_play_game'] . '[/url]'), $txt['notification_arcade_new_champion_anyPM_body']);
 					$subject = str_replace(array('{old_champion.name}', '{GAMENAMESUB}'), array($old_champ, $data['game']['name']), $txt['notification_arcade_new_champion_anyPM_subject']);
 					break;
 				default:
-					$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('[url=' . $data['match_url'] . ']' . $txt['arcade_pm_join_match'] . '[/url]', $data['match_name'], $scripturl . '?action=profile;area=arcadeSettings', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
+					$message = str_replace(array('{MATCHURL}', '{MATCHNAME}', '{ARCADE_SETTINGS_URL}', '{REGARDS}'), array('[url=' . $data['match_url'] . ']' . $txt['arcade_pm_join_match'] . '[/url]', $data['match_name'], '[url=' . $scripturl . '?action=profile;area=arcadeSettings;' . ']' . $txt['arcade_pm_profile'] . '[/url]', $mbname), $txt['notification_arcade_' . $id_event . '_body']);
 					$subject = str_replace('{MATCHNAME}', $data['match_name'], $txt['notification_arcade_' . $id_event . '_subject']);
 			}
 
@@ -2756,57 +2756,110 @@ function duration_format($seconds, $max = 2)
 function arcade_online()
 {
 	global $smcFunc, $user_info, $context;
+	$time = time();
+	$checkIp = !empty($user_info['ip']) ? $user_info['ip'] : !empty($user_info['ip2']) ? $user_info['ip2'] : 0;
+	list($guests, $users) = array(0, 0);
 
-	if ($user_info['is_guest'])
-		return time();
-
-	list($userid, $time, $show, $name, $color) = array($user_info['id'], time(), '0', $user_info['name'], '');
-
+	// remove user & guest values that refresh the page or are gone over 10 minutes
 	$request = $smcFunc['db_query']('', '
 		DELETE FROM {db_prefix}arcade_member_data
-		WHERE id_member = {int:member}',
+		WHERE id_member = {int:member} OR {int:now} - online_time >= 600',
 		array(
-			'member' => $user_info['id']
+			'member' => $user_info['id'],
+			'now' => $time
 		)
 	);
 
 	$request = $smcFunc['db_query']('', '
-		SELECT
-			mem.id_member, mem.real_name, mem.member_name, mem.show_online,
-			mg.online_color, mg.id_group, mg.group_name
-		FROM {db_prefix}members AS mem
-			LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = 0 THEN mem.id_post_group ELSE mem.id_group END)
-		WHERE mem.id_member = {int:member}',
+		DELETE FROM {db_prefix}arcade_guest_data
+		WHERE online_ip = {string:ip} OR {int:now} - online_time >= 600',
 		array(
-			'member' => $user_info['id'],
+			'ip' => trim($checkIp),
+			'now' => $time
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
-	{
-		$color = !empty($row['online_color']) ? $row['online_color'] : '';
-		$show = !empty($row['show_online']) ? 1 : 0;
-	}
-	$smcFunc['db_free_result']($request);
 
-	$smcFunc['db_insert']('insert',
-		'{db_prefix}arcade_member_data',
-		array(
-			'id_member' => 'int',
-			'online_time' => 'int',
-			'show_online' => 'int',
-			'online_name' => 'string',
-			'online_color' => 'string',
-		),
-		array(
-			$userid,
-			$time,
-			$show,
-			$name,
-			$color,
-		),
+	// insert user or guest into the online log
+	if ($user_info['is_guest'] && !empty($checkIp))
+	{
+		list($time, $show, $ip) = array(time(), '0', $checkIp);
+
+		$smcFunc['db_insert']('insert',
+			'{db_prefix}arcade_guest_data',
+			array(
+				'online_ip' => 'string',
+				'online_time' => 'int',
+				'show_online' => 'int',
+			),
+			array(
+				$ip,
+				$time,
+				$show,
+			),
+			array()
+		);
+	}
+	else
+	{
+		list($userid, $time, $show, $name, $color) = array($user_info['id'], time(), '0', $user_info['name'], '');
+
+		$request = $smcFunc['db_query']('', '
+			SELECT
+				mem.id_member, mem.real_name, mem.member_name, mem.show_online,
+				mg.online_color, mg.id_group, mg.group_name
+			FROM {db_prefix}members AS mem
+				LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = 0 THEN mem.id_post_group ELSE mem.id_group END)
+			WHERE mem.id_member = {int:member}',
+			array(
+				'member' => $user_info['id'],
+			)
+		);
+
+		while ($row = $smcFunc['db_fetch_assoc']($request))
+		{
+			$color = !empty($row['online_color']) ? $row['online_color'] : '';
+			$show = !empty($row['show_online']) ? 1 : 0;
+		}
+		$smcFunc['db_free_result']($request);
+
+		$smcFunc['db_insert']('insert',
+			'{db_prefix}arcade_member_data',
+			array(
+				'id_member' => 'int',
+				'online_time' => 'int',
+				'show_online' => 'int',
+				'online_name' => 'string',
+				'online_color' => 'string',
+			),
+			array(
+				$userid,
+				$time,
+				$show,
+				$name,
+				$color,
+			),
+			array()
+		);
+	}
+
+	// count users online
+	$request = $smcFunc['db_query']('', '
+		SELECT *
+		FROM {db_prefix}arcade_member_data',
 		array()
 	);
+	$users = $smcFunc['db_num_rows']($request);
+	$smcFunc['db_free_result']($request);
 
-	return time();
+	// count guests online
+	$request = $smcFunc['db_query']('', '
+		SELECT *
+		FROM {db_prefix}arcade_guest_data',
+		array()
+	);
+	$guests = $smcFunc['db_num_rows']($request);
+	$smcFunc['db_free_result']($request);
+
+	return array(time(), $guests, $users);
 }
 ?>

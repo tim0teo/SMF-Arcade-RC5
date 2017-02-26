@@ -14,15 +14,15 @@ function template_arcade_statistics()
 	echo '
 	<div style="padding-top: 15px;"><span></span></div>
 	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe">
-		<div class="innerframe">
+	<div class="roundframe" style="border-radius: 3px;">
+		<div class="innerframe" style="border-radius: 5px;">
 			<div class="cat_bar">
 				<h3 class="catbg centertext" style="vertical-align: middle;">
 					<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/gold.gif" alt="" />
 					<span class="mediumtext" style="padding: 0px 6px 0px 0px;vertical-align: middle;">', $txt['arcade_stats'], '</span>
 					<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/gold.gif" alt="" />
 				</h3>
-			</div><br />';
+			</div>';
 
 	$alternate = false;
 
@@ -30,11 +30,12 @@ function template_arcade_statistics()
 	if (!empty($context['arcade']['statistics']['play']) > 0)
 	{
 		echo '
+			<div style="padding-top: 10px;"><span></span></div>
 			<div class="', !$alternate ? 'floatleft' : 'floatright', '" style="width: 48%;">
 				<div>
 					<h3 style="border-bottom: 1px dotted;"><img src="', $settings['images_url'], '/gold.gif" class="icon" alt="" /><span style="padding: 0px 0px 7px 5px;vertical-align: middle;">', $txt['arcade_most_played'], '</span></h3>
 				</div>
-				<div class="windowbg2 smalltext" style="padding-left: 5px;padding-right: 15px;">
+				<div class="smalltext" style="padding-left: 5px;padding-right: 15px;">
 					<span class="topslice"><span></span></span>
 					<div class="content">
 						<span class="stats">';
@@ -82,7 +83,7 @@ function template_arcade_statistics()
 						<img src="', $settings['images_url'], '/gold.gif" class="icon" alt="" /><span style="padding: 0px 0px 7px 5px;vertical-align: middle;">', $txt['arcade_most_active'], '</span>
 					</h3>
 				</div>
-				<div class="windowbg2 smalltext" style="padding-left: 5px;padding-right: 15px;">
+				<div class="smalltext" style="padding-left: 5px;padding-right: 15px;">
 					<span class="topslice"><span></span></span>
 					<div class="content">
 						<span class="stats">';
@@ -131,7 +132,7 @@ function template_arcade_statistics()
 						<img src="', $settings['images_url'], '/gold.gif" class="icon" alt="" /><span style="padding: 0px 0px 7px 5px;vertical-align: middle;">', $txt['arcade_best_games'], '</span>
 					</h3>
 				</div>
-				<div class="windowbg2 smalltext" style="padding-left: 5px;padding-right: 15px;">
+				<div class="smalltext" style="padding-left: 5px;padding-right: 15px;">
 					<span class="topslice"><span></span></span>
 					<div class="content">
 						<span class="stats">';
@@ -178,7 +179,7 @@ function template_arcade_statistics()
 						<img src="', $settings['images_url'], '/gold.gif" class="icon" alt="" /><span style="padding: 0px 0px 7px 5px;vertical-align: middle;">', $txt['arcade_best_players'], '</span>
 					</h3>
 				</div>
-				<div class="windowbg2 smalltext" style="padding-left: 5px;padding-right: 15px;">
+				<div class="smalltext" style="padding-left: 5px;padding-right: 15px;">
 					<span class="topslice"><span></span></span>
 					<div class="content">
 						<span class="stats">';
@@ -224,7 +225,7 @@ function template_arcade_statistics()
 						<img src="', $settings['images_url'], '/gold.gif" class="icon" alt="" /><span style="padding: 0px 0px 7px 5px;vertical-align: middle;">', $txt['arcade_longest_champions'], '</span>
 					</h3>
 				</div>
-				<div class="windowbg2 smalltext" style="padding-left: 5px;padding-left: 15px;">
+				<div class="smalltext" style="padding-left: 5px;padding-left: 15px;">
 					<span class="topslice"><span></span></span>
 					<div class="content">
 						<span class="stats">';
@@ -266,7 +267,7 @@ function template_arcade_statistics()
 			<div class="clear"></div>';
 	echo '
 		</div>
-	</div>
+	</div>	
 	<span class="lowerframe"><span></span></span>
 	<div style="padding-top: 15px;"><span></span></div>';
 }

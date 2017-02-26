@@ -269,13 +269,15 @@ function ArcadeList()
 
 		// log the current user to the online list & then search for members in the arcade within 10 minutes
 		$log_online = arcade_online();
+		$context['arcade_online'] = array($log_online[1], $log_online[2]);
+
 		$request = $smcFunc['db_query']('', '
 			SELECT
 				id_member, online_time, show_online, online_name, online_color
 			FROM {db_prefix}arcade_member_data
 			WHERE {int:now} - online_time < 600',
 			array(
-				'now' => $log_online,
+				'now' => $log_online[0],
 			)
 		);
 

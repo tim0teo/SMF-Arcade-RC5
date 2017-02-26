@@ -310,7 +310,7 @@ function Arcade_admin_areas(&$admin_areas)
 
 function Arcade_load_theme()
 {
-	global $context, $settings, $txt;	
+	global $context, $settings, $txt;
 	$context['html_headers'] .= '
 	<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-func.js?rc4"></script>';
 
@@ -333,7 +333,7 @@ function Arcade_load_theme()
 			var arcnode6 = document.createElement("DIV");
 			var arcnode7 = document.createElement("DIV");
 			var arctextnode1 = document.createTextNode("' . $txt['arcade_email_' . $sub . '_error'] . '");
-			var arctextnode2 = document.createTextNode("' . $txt['arcade_email_' . $sub . '_error_msg'] . '");			
+			var arctextnode2 = document.createTextNode("' . $txt['arcade_email_' . $sub . '_error_msg'] . '");
 			arcnode1.appendChild(arcnode2);
 			arcnode2.appendChild(arcnode3);
 			arcnode1.appendChild(arcnode4);
@@ -341,13 +341,13 @@ function Arcade_load_theme()
 			arcnode5.appendChild(arcnode6);
 			arcnode5.appendChild(arcnode7);
 			arcnode3.appendChild(arctextnode1);
-			arcnode6.appendChild(arctextnode2);			
+			arcnode6.appendChild(arctextnode2);
 			arcnode1.style = "position: fixed;top: 66%;left: 40%;border: 1px solid;padding: 5px;border-radius: 3px;";
 			arcnode2.className = "cat_bar";
 			arcnode3.className = "catbg centertext";
 			arcnode4.className = "windowbg";
 			arcnode5.className = "padding";
-			arcnode6.className = "noticebox";			
+			arcnode6.className = "noticebox";
 		}
 	</script>';
 

@@ -151,4 +151,6 @@ If you want to, You can disable this notification from
 // General replacements
 $txt['arcade_pm_play_game'] = 'PLAY THE GAME';
 $txt['arcade_pm_join_match'] = 'PLAY THE MATCH';
+$txt['arcade_pm_profile'] = 'VIEW PROFILE';
+$txt['arcade_email_profile'] = 'You may opt to disable this notification from your profile settings.';
 ?>

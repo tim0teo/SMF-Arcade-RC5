@@ -869,6 +869,7 @@ $tables = array(
 				'name' => 'id_member',
 				'type' => 'int',
 				'unsigned' => true,
+				'auto' => false,
 			),
 			array(
 				'name' => 'online_time',
@@ -900,6 +901,36 @@ $tables = array(
 			array(
 				'type' => 'primary',
 				'columns' => array('id_member')
+			),
+		)
+	),
+	'arcade_guest_data' => array(
+		'name' => 'arcade_guest_data',
+		'columns' => array(
+			array(
+				'name' => 'online_ip',
+				'type' => 'varchar',
+				'default' => '',
+				'size' => 255,
+			),		
+			array(
+				'name' => 'online_time',
+				'type' => 'int',
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'show_online',
+				'type' => 'int',
+				'default' => 0,
+				'unsigned' => true,
+			),				
+		),
+		'indexes' => array(
+			array(
+				'type' => 'primary',
+				'columns' => array('online_ip')
 			),
 		)
 	)

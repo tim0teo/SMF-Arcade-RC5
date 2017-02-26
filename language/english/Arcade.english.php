@@ -49,6 +49,7 @@ $txt['arcade_game_of_day'] = 'Game of Day';
 $txt['arcade_latest_scores'] = 'Latest scores';
 $txt['arcade_latest_score_item'] = '%4$s scored %3$s on <a href="%1$s">%2$s</a>';
 $txt['arcade_users'] = 'Users In Arcade';
+$txt['arcade_info_who'] = 'Online: %1$d Guest%3$s, %2$d User%4$s';
 
 // Game list
 $txt['arcade_no_games'] = 'No games available for playing';
