@@ -2805,18 +2805,28 @@ function arcade_log_online()
 		)
 	);
 
-	$request = $smcFunc['db_query']('', '
-		DELETE FROM {db_prefix}arcade_guest_data
-		WHERE online_ip = {string:ip} OR {int:now} - online_time >= 600',
-		array(
-			'ip' => !in_array($checkIp, $userIp) ? $checkIp : '256.0.0.0',
-			'now' => $time
-		)
-	);
+	if (!$user_info['is_guest'])
+		$request = $smcFunc['db_query']('', '
+			DELETE FROM {db_prefix}arcade_guest_data
+			WHERE online_ip = {string:ip} OR {int:now} - online_time >= 600',
+			array(
+				'ip' => !in_array($checkIp, $userIp) ? $checkIp : '256.0.0.0',
+				'now' => $time
+			)
+		);
 
 	// insert user or guest into the online log
 	if ($user_info['is_guest'] && !empty($checkIp))
 	{
+		$request = $smcFunc['db_query']('', '
+			DELETE FROM {db_prefix}arcade_guest_data
+			WHERE online_ip = {string:ip} OR {int:now} - online_time >= 600',
+			array(
+				'ip' => $checkIp,
+				'now' => $time
+			)
+		);
+
 		list($time, $show, $ip) = array(time(), '0', $checkIp);
 
 		$smcFunc['db_insert']('insert',
