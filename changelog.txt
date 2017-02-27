@@ -9,6 +9,7 @@ February 2017
  + Main language files loaded with pre_load hook
  + Links from emails while not logged in triggers login prompt that redirects to arcade action/sa
  + Changed subroutines for arcade online data
+ + Added detailed Arcade online list with setting and permissions
  + Display amount of guests & users in the arcade
  ! Eliminated/changed deprecated css in templates
  ! Various aesthetic template fixes for light/dark themes
