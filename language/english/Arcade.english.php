@@ -254,8 +254,6 @@ $txt['pdl_download_game'] = '<img src="Themes/default/images/arc_icons/pdl_downl
 $txt['arcade_download_gameplay'] = '<img src="' . $boardurl . '/Themes/default/images/arc_icons/dl_btn.png" style="width: 70px;height: 18px;" title="Download" alt="Download"></img>';
 $txt['pdl_erroricon'] = '<a href="'.$scripturl.'?action=arcade" target="_parent"><img src="'.$boardurl.'/Themes/default/images/arc_icons/arcade_popup_error.gif" alt="SMF ARCADE" title="SMF ARCADE" /></a><br />';
 $txt['pdl_arcade_copyright'] = '<div id="arcade_bottom" class="smalltext" style="text-align: center;">Powered by: <a href="http://web-develop.ca/index.php?page=arcade_license_BSD2" target="_blank">SMF Arcade ' . $modSettings['arcadeVersion'] . '</a> &copy; 2004-2017</div>';
-$txt['permissionname_arcade_download'] = 'Download Games';
-$txt['permissionname_arcade_report'] = 'Report Game Errors';
 $txt['pdl_listplay'] = 'PLAY';
 $txt['arcade_replay'] = 'Replay';
 $txt['arcade_download_game'] = 'Download';

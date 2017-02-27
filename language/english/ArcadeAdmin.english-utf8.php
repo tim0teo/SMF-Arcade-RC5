@@ -256,8 +256,6 @@ $txt['arcadeEnableReport'] = 'Enable Reporting Game Errors';
 $txt['arcadeEnableGameDisable'] = 'Disable Games Reported With Errors';
 $txt['arcadeDownPost'] = 'Number Of Posts To Allow Downloading';
 $txt['arcadeDownloadPermission'] = 'Groups Allowed To Download Games';
-$txt['perm_arcade_download'] = 'Download Games';
-$txt['perm_arcade_report'] = 'Report Broken Games';
 $txt['arcadeDisableArchive'] = 'Disable Saving Archives In The Download Folder';
 $txt['arcadeDownPass'] = 'Prefix For Restricted Game Files';
 $txt['pdl_DownMax'] = 'Daily Download Limit';
@@ -328,7 +326,13 @@ $txt['permissionname_arcade_join_invite_match'] = 'Join match on Arena when invi
 $txt['permissionname_arcade_edit_settings'] = 'Edit Arcade Settings';
 $txt['permissionname_arcade_edit_settings_own'] = 'Own';
 $txt['permissionname_arcade_edit_settings_any'] = 'Any';
-$txt['permissionname_arcade_online'] = 'View who is in the arcade';
+$txt['permissionname_arcade_online'] = 'View Arcade Online';
+$txt['permissionname_arcade_download'] = 'Download Games';
+$txt['permissionname_arcade_report'] = 'Report Game Errors';
+$txt['perm_arcade_online'] = 'View Arcade Online';
+$txt['perm_arcade_download'] = 'Download Games';
+$txt['perm_arcade_report'] = 'Report Broken Games';
+
 
 // Simple permission gropus
 $txt['permissiongroup_simple_arcade'] = 'Use Arcade';

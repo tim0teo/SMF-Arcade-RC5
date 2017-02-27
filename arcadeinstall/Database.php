@@ -80,6 +80,9 @@ $permissions = array(
 	'arcade_join_invite_match' => array(0, 2),
 	'arcade_edit_settings_own' => array(0, 2),
 	'arcade_edit_settings_any' => array(),
+	'arcade_report' => array(0, 2),
+	'arcade_download' => array(),
+	'arcade_online' => array(0, 2),
 );
 
 // SMF 2.0 Uses lowercase names because of other database systems,
