@@ -37,6 +37,17 @@ $txt['arcadeSettings'] = 'Arcade Settings';
 $txt['arcadeStats'] = 'Arcade Statistics';
 $txt['sendArcadeChallenge'] = 'Arcade Challenge';
 
+// Arcade online and Who's online
+$txt['arcade_online_title'] = 'Arcade Online';
+$txt['arcade_online'] = 'Online';
+$txt['arcade_online_unknown'] = '???';
+$txt['arcade_info_who'] = 'Online: %1$d Guest%3$s, %2$d User%4$s';
+$txt['who_arcade'] = 'Viewing Arcade index';
+$txt['who_arcade_play'] = 'Playing <a href="' . $scripturl . '?action=arcade;sa=play;game=%d">%s</a> on Arcade';
+$txt['who_arcade_highscore'] = 'Viewing highscores of <a href="' . $scripturl . '?action=arcade;sa=highscore;game=%d">%s</a> on Arcade';
+$txt['who_arcade_match'] = 'Viewing Arcade Arena';
+$txt['who_arcade_online'] = 'Viewing Arcade Online';
+
 // Information Center
 $txt['arcade_info_center'] = 'Arcade Information';
 $txt['arcade_game_highlights'] = 'Did you know?';
@@ -49,7 +60,7 @@ $txt['arcade_game_of_day'] = 'Game of Day';
 $txt['arcade_latest_scores'] = 'Latest scores';
 $txt['arcade_latest_score_item'] = '%4$s scored %3$s on <a href="%1$s">%2$s</a>';
 $txt['arcade_users'] = 'Users In Arcade';
-$txt['arcade_info_who'] = 'Online: %1$d Guest%3$s, %2$d User%4$s';
+
 
 // Game list
 $txt['arcade_no_games'] = 'No games available for playing';
@@ -202,7 +213,7 @@ $txt['arcade_email_play_error_msg'] = 'You will be redirected to the game after 
 $txt['arcade_email_score_error'] = 'You need to log in to view high scores!';
 $txt['arcade_email_score_error_msg'] = 'You will be redirected to the highscores after logging in.';
 $txt['arcade_email_hs_error'] = 'You need to log in to view high scores because the Admin has disabled viewing scores for guests.';
-
+$txt['arcade_online_error'] = 'The Arcade Online list has been disabled by the Administrator.';
 $txt['arcade_disabled'] = 'Arcade is currently disabled by admin';
 $txt['arcade_game_update_error'] = 'Unable to update game data';
 $txt['arcade_scores_limit'] = 'Score was not saved because you already have maximum number of scores';
@@ -321,11 +332,6 @@ $txt['cannot_arcade_view'] = 'You are not allowed to access arcade.';
 $txt['cannot_arcade_comment_own'] = 'You are not allowed to comment';
 $txt['cannot_arcade_user_stats_any'] = 'You are not allowed to view statistics of any user';
 $txt['cannot_arcade_user_stats_own'] = 'You are not allowed to view your statistics';
-
-// Who's online
-$txt['who_arcade'] = 'Viewing Arcade index';
-$txt['who_arcade_play'] = 'Playing <a href="' . $scripturl . '?action=arcade;sa=play;game=%d">%s</a> on Arcade';
-$txt['who_arcade_highscore'] = 'Viewing highscores of <a href="' . $scripturl . '?action=arcade;sa=play;game=%d">%s</a> on Arcade';
 
 // Help
 $txt['arcade_max_scores_help'] = 'Maximum scores that will be stored per member. (0 means unlimited)';

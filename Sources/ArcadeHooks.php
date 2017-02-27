@@ -72,6 +72,7 @@ function Arcade_load_permissions(&$permissionGroups, &$permissionList, &$leftPer
 		'arcade_admin' => array(false, 'arcade', 'administrate'),
 		'arcade_download' => array(false, 'arcade', 'arcade'),
 		'arcade_report' => array(false, 'arcade', 'arcade'),
+		'arcade_online' => array('arcade', 'arcade'),
 	);
 
 	$context['non_guest_permissions'] = array_merge(
@@ -83,7 +84,7 @@ function Arcade_load_permissions(&$permissionGroups, &$permissionList, &$leftPer
 			'arcade_join_invite_match',
 			'arcade_comment',
 			'arcade_edit_settings',
-			'arcade_user_stats',
+			'arcade_user_stats',			
 		)
 	);
 

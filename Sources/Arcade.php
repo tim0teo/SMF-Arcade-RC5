@@ -56,6 +56,8 @@ function Arcade()
 		// ArcadeStats.php
 		'stats' => array('ArcadeStats.php', 'ArcadeStatistics'),
 		'submit' => array('ArcadeGame.php', 'ArcadeSubmit'),
+		// Arcade Online
+		'online' => array('ArcadeOnline.php', 'ArcadeOnline'),
 		// Advanced
 		'download' => array('ArcadeDownload.php', 'ArcadeDownload'),
 		'report' => array('ArcadeReport.php', 'ArcadeReport'),
@@ -127,6 +129,7 @@ function Arcade()
 	!isset($_SESSION['current_cat']) ? $_SESSION['current_cat'] = 'all' : '';
     isset($_REQUEST['category']) ? $_SESSION['current_cat'] = $_REQUEST['category'] : $_REQUEST['category'] = $_SESSION['current_cat'];
 	$_REQUEST['category'] = !empty($_REQUEST['current_cat']) ? ArcadeSpecialChars($_REQUEST['current_cat']): $_SESSION['current_cat'];
+	arcade_log_online();
 	$subActions[$_REQUEST['sa']][1]();
 }
 

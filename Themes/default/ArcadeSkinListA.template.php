@@ -168,7 +168,7 @@ function template_arcade_list()
 	}
 
 
-	if ($remainder != 0)
+	if (!empty($remainder))
 		$code .= str_repeat('<div class="windowbg" style="display: table-cell;padding: 5px;width: 25%;"></div>', $row_tally-$remainder);
 	else
 		$code .= '
@@ -249,14 +249,16 @@ function template_arcade_list()
 
 		echo '
 					</div>
-				</div>
+				</div>';
+		if (!empty($modSettings['arcadeShowOnline']))
+			echo '
 				<h4 class="smalltext" style="padding-top: 10px;text-align: left;"><span class="left"></span>
-					<span>', $txt['arcade_users'], '</span>
+					<span>' . $txt['arcade_users'] . '</span>
 				</h4>
-				<div class="smalltext">', sprintf($txt['arcade_info_who'], $context['arcade_online'][0], $context['arcade_online'][1], empty($context['arcade_online'][0]) || $context['arcade_online'][0] > 1 ? 's' : '', empty($context['arcade_online'][1]) || $context['arcade_online'][1] > 1 ? 's' : ''), '</div>
-				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">
-					', implode(', ', $context['arcade_viewing']), '
-				</div>
+				<div class="smalltext" style="padding-bottom: 3px;">' . $context['arcade_online_link'] . '</div>
+				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">' . implode(', ', $context['arcade_viewing']) . '</div>';
+
+		echo '
 			</div>
 		</div>
 		<span class="lowerframe"><span></span></span>

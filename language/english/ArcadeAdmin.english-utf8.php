@@ -267,6 +267,7 @@ $txt['pdl_reports_desc'] = 'Here you can view and edit reported game errors';
 $txt['pdl_admin_reports'] = 'Reported Game Errors';
 $txt['arcadeList'] = 'Show Default List';
 $txt['arcadeShowIC'] = 'Show Info Center';
+$txt['arcadeShowOnline'] = 'Show Arcade Online List';
 $txt['arcadeDropCat'] = 'Enable Drop Down Categories';
 $txt['arcade_catWidth'] = 'Set Category Icon Width';
 $txt['arcade_catHeight'] = 'Set Category Icon Height';
@@ -327,6 +328,7 @@ $txt['permissionname_arcade_join_invite_match'] = 'Join match on Arena when invi
 $txt['permissionname_arcade_edit_settings'] = 'Edit Arcade Settings';
 $txt['permissionname_arcade_edit_settings_own'] = 'Own';
 $txt['permissionname_arcade_edit_settings_any'] = 'Any';
+$txt['permissionname_arcade_online'] = 'View who is in the arcade';
 
 // Simple permission gropus
 $txt['permissiongroup_simple_arcade'] = 'Use Arcade';

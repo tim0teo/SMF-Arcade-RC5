@@ -2753,12 +2753,47 @@ function duration_format($seconds, $max = 2)
 	return implode(' ', $out);
 }
 
-function arcade_online()
+function arcade_log_online()
 {
 	global $smcFunc, $user_info, $context;
 	$time = time();
-	$checkIp = !empty($user_info['ip']) ? $user_info['ip'] : !empty($user_info['ip2']) ? $user_info['ip2'] : 0;
-	list($guests, $users) = array(0, 0);
+	$checkIp = !empty($user_info['ip']) ? trim($user_info['ip']) : !empty($user_info['ip2']) ? trim($user_info['ip2']) : 0;
+	list($guests, $users, $action, $userIp) = array(0, 0, 0, array());
+	$actions = array('index', 'play', 'highscore', 'arena');
+	$game = !empty($_REQUEST['game']) ? $_REQUEST['game'] : 0;
+	$sa = !empty($_REQUEST['sa']) ? $_REQUEST['sa'] : 'index';
+
+	switch ($sa)
+	{
+		case 'play':
+			$action = 1;
+			break;
+		case 'highscore':
+			$action = 2;
+			break;
+		case 'arena':
+			$action = 3;
+			break;
+		case 'online':
+			$action = 4;
+			break;
+		default:
+			$action = 0;
+	}
+
+	// count guests online for user comparison
+	$request = $smcFunc['db_query']('', '
+		SELECT online_ip, online_time
+		FROM {db_prefix}arcade_guest_data
+		WHERE online_ip = {string:ip} AND {int:now} - online_time < 600',
+		array(
+			'ip' => (string)$checkIp,
+			'now' => $time
+		)
+	);
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+		$userIp[] = $row['online_ip'];
+	$smcFunc['db_free_result']($request);
 
 	// remove user & guest values that refresh the page or are gone over 10 minutes
 	$request = $smcFunc['db_query']('', '
@@ -2774,7 +2809,7 @@ function arcade_online()
 		DELETE FROM {db_prefix}arcade_guest_data
 		WHERE online_ip = {string:ip} OR {int:now} - online_time >= 600',
 		array(
-			'ip' => trim($checkIp),
+			'ip' => !in_array($checkIp, $userIp) ? $checkIp : '256.0.0.0',
 			'now' => $time
 		)
 	);
@@ -2790,11 +2825,15 @@ function arcade_online()
 				'online_ip' => 'string',
 				'online_time' => 'int',
 				'show_online' => 'int',
+				'current_action' => 'int',
+				'current_game' => 'int',
 			),
 			array(
 				$ip,
 				$time,
 				$show,
+				$action,
+				$game,
 			),
 			array()
 		);
@@ -2826,21 +2865,32 @@ function arcade_online()
 			'{db_prefix}arcade_member_data',
 			array(
 				'id_member' => 'int',
+				'online_ip' => 'string',
 				'online_time' => 'int',
 				'show_online' => 'int',
 				'online_name' => 'string',
 				'online_color' => 'string',
+				'current_action' => 'int',
+				'current_game' => 'int',
 			),
 			array(
 				$userid,
+				$checkIp,
 				$time,
 				$show,
 				$name,
 				$color,
+				$action,
+				$game,
 			),
 			array()
 		);
 	}
+}
+
+function arcade_online()
+{
+	global $smcFunc;
 
 	// count users online
 	$request = $smcFunc['db_query']('', '

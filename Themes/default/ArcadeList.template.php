@@ -237,36 +237,40 @@ function template_arcade_list()
 					<h4 class="left clear" style="padding-top:10px;"><span class="left"></span>
 						<span>', $txt['arcade_game_highlights'], '</span>
 					</h4>
-					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">
-		';
+					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">';
 
 		if ($context['arcade']['stats']['longest_champion'] !== false)
 			echo '
-						<span>', sprintf($txt['arcade_game_with_longest_champion'], $context['arcade']['stats']['longest_champion']['member_link'], $context['arcade']['stats']['longest_champion']['game_link']), '</span><br />';
+						<div>', sprintf($txt['arcade_game_with_longest_champion'], $context['arcade']['stats']['longest_champion']['member_link'], $context['arcade']['stats']['longest_champion']['game_link']), '</div>';
 
 		if ($context['arcade']['stats']['most_played'] !== false)
 			echo '
-						<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_most_played'], $context['arcade']['stats']['most_played']['link']), '</span><br />';
+						<div style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_most_played'], $context['arcade']['stats']['most_played']['link']), '</div>';
 
 		if ($context['arcade']['stats']['best_player'] !== false)
 			echo '
-						<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_best_player'], $context['arcade']['stats']['best_player']['link']), '</span><br />';
+						<div style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_best_player'], $context['arcade']['stats']['best_player']['link']), '</div>';
 
 		if ($context['arcade']['stats']['games'] != 0)
 			echo '
-						<span style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']), '</span>';
+						<div style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']), '</div>';
 
 		echo '
-					</div>
+					</div>';
+		if (!empty($modSettings['arcadeShowOnline']))
+			echo '
 					<h4 class="left" style="padding-top: 10px;"><span class="left"></span>
-						<span>', $txt['arcade_users'], '</span>
+						<span>' . $txt['arcade_users'] . '</span>
 					</h4>
-					<div class="smalltext">', sprintf($txt['arcade_info_who'], $context['arcade_online'][0], $context['arcade_online'][1], empty($context['arcade_online'][0]) || $context['arcade_online'][0] > 1 ? 's' : '', empty($context['arcade_online'][1]) || $context['arcade_online'][1] > 1 ? 's' : ''), '</div>
-					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">', implode(', ', $context['arcade_viewing']), '</div>
+					<div class="smalltext" style="padding-bottom: 3px;">' . $context['arcade_online_link'] . '</div>
+					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">' . implode(', ', $context['arcade_viewing']) . '</div>';
+
+		echo '
 				</div>
 			</div>
 		</div>
-		<span class="lowerframe"><span></span></span>';
+		<span class="lowerframe"><span></span></span>
+		<div style="padding-bottom: 10px;"><span></span></div>';
 	}
 }
 ?>

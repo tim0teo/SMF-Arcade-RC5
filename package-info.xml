@@ -56,6 +56,7 @@
 		<require-file name="Sources/PEAR5.php" destination="$sourcedir" />
 		<require-file name="Sources/ArcadeReport.php" destination="$sourcedir" />
 		<require-file name="Sources/ArcadeDownload.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeOnline.php" destination="$sourcedir" />
 
 		<!-- These files go into the Default Theme directory -->
 		<require-file name="Themes/default/Arcade.template.php" destination="$themedir" />
@@ -74,6 +75,7 @@
 		<require-file name="Themes/default/ArcadeSkinListA.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeGamePop.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeReports.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeOnline.template.php" destination="$themedir" />
 
 		<!-- These files go into the Core Theme directory -->
 		<require-file name="core/Jeza.template.php" destination="$boarddir/Themes/core" />
@@ -164,6 +166,7 @@
 		<require-file name="Sources/PEAR5.php" destination="$sourcedir" />
 		<require-file name="Sources/ArcadeReport.php" destination="$sourcedir" />
 		<require-file name="Sources/ArcadeDownload.php" destination="$sourcedir" />
+		<require-file name="Sources/ArcadeOnline.php" destination="$sourcedir" />
 
 		<!-- These files go into the Default Theme directory -->
 		<require-file name="Themes/default/Arcade.template.php" destination="$themedir" />
@@ -182,6 +185,7 @@
 		<require-file name="Themes/default/ArcadeSkinListA.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeGamePop.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeReports.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeOnline.template.php" destination="$themedir" />
 
 		<!-- These files go into the Default Theme scripts directory -->
 		<require-file name="Themes/default/scripts/arcade.js" destination="$themedir/scripts" />
@@ -283,6 +287,7 @@
 		<remove-file name="$sourcedir/CreateZipFile.php" />
 		<remove-file name="$sourcedir/PEAR.php" />
 		<remove-file name="$sourcedir/PEAR5.php" />
+		<remove-file name="$sourcedir/ArcadeOnline.php" />
 
 		<!-- Remove these files from the Themes directory -->
 		<remove-file name="$themedir/Arcade.template.php" />
@@ -306,6 +311,7 @@
 		<remove-file name="$themedir/ArcadeSkinListA.template.php" />
 		<remove-file name="$themedir/ArcadeGamePop.template.php" />
 		<remove-file name="$themedir/ArcadeReports.template.php" />
+		<remove-file name="$themedir/ArcadeOnline.template.php" />
 		<remove-file name="$languagedir/Arcade.english.php" />
 		<remove-file name="$languagedir/ArcadeAdmin.english.php" />
 		<remove-file name="$languagedir/ArcadeEmail.english.php" />
@@ -383,6 +389,7 @@
 		<remove-file name="$sourcedir/CreateZipFile.php" />
 		<remove-file name="$sourcedir/PEAR.php" />
 		<remove-file name="$sourcedir/PEAR5.php" />
+		<remove-file name="$sourcedir/ArcadeOnline.php" />
 
 		<!-- Remove these files from the Themes directory -->
 		<remove-file name="$themedir/Arcade.template.php" />
@@ -406,6 +413,7 @@
 		<remove-file name="$themedir/ArcadeSkinListA.template.php" />
 		<remove-file name="$themedir/ArcadeGamePop.template.php" />
 		<remove-file name="$themedir/ArcadeReports.template.php" />
+		<remove-file name="$themedir/ArcadeOnline.template.php" />
 		<remove-file name="$languagedir/Arcade.english.php" />
 		<remove-file name="$languagedir/ArcadeAdmin.english.php" />
 		<remove-file name="$languagedir/ArcadeEmail.english.php" />

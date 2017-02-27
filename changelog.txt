@@ -8,7 +8,8 @@ February 2017
  + Added option to send notification Emails/PMs in bulk
  + Main language files loaded with pre_load hook
  + Links from emails while not logged in triggers login prompt that redirects to arcade action/sa
- + Changed routine for arcade online data
+ + Changed subroutines for arcade online data
+ + Display amount of guests & users in the arcade
  ! Eliminated/changed deprecated css in templates
  ! Various aesthetic template fixes for light/dark themes
  ! Fixed typing enter after save comment

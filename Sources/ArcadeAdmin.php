@@ -103,6 +103,7 @@ function ArcadeAdminSettings($return_config = false)
 		'',
 			array('check', 'arcadeList'),
 			array('check', 'arcadeShowIC'),
+			array('check', 'arcadeShowOnline'),
 		'',
 			array('select', 'arcadeSkin',
 				array(&$txt['arcade_default'], &$txt['arcade_skin_a'], &$txt['arcade_skin_b'])

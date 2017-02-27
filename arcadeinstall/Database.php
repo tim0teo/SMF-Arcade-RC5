@@ -58,6 +58,10 @@ $addSettings = array(
 	'arcadeCommentLen' => array(75, false),
 	'arcadeUploadSystem' => array($htmlUpload, false),
 	'arcadeVersion' => array($arcade_version . $rc, true),
+	'arcadeShowOnline' => array(1, false),
+	'arcadeShowIC' => array(1, false),
+	'arcadeList' => array(1, false),
+	'arcadeSkin' => array(1, false),
 );
 
 // Permissions array
@@ -872,6 +876,12 @@ $tables = array(
 				'auto' => false,
 			),
 			array(
+				'name' => 'online_ip',
+				'type' => 'varchar',
+				'default' => '',
+				'size' => 255,
+			),
+			array(
 				'name' => 'online_time',
 				'type' => 'int',
 				'default' => 0,
@@ -896,6 +906,20 @@ $tables = array(
 				'default' => '',
 				'size' => 255,
 			),
+			array(
+				'name' => 'current_action',
+				'type' => 'int',
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'current_game',
+				'type' => 'int',
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
 		),
 		'indexes' => array(
 			array(
@@ -912,7 +936,7 @@ $tables = array(
 				'type' => 'varchar',
 				'default' => '',
 				'size' => 255,
-			),		
+			),
 			array(
 				'name' => 'online_time',
 				'type' => 'int',
@@ -923,9 +947,23 @@ $tables = array(
 			array(
 				'name' => 'show_online',
 				'type' => 'int',
-				'default' => 0,
+				'default' => 1,
 				'unsigned' => true,
-			),				
+			),
+			array(
+				'name' => 'current_action',
+				'type' => 'int',
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'current_game',
+				'type' => 'int',
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
 		),
 		'indexes' => array(
 			array(

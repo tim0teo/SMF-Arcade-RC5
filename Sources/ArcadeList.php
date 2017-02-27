@@ -310,6 +310,11 @@ function ArcadeList()
 	// Layout
 	$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
 	$modSettings['arcadeList'] = !empty($modSettings['arcadeList']) ? (int)$modSettings['arcadeList'] : 0;
+	if (allowedTo('arcade_online'))
+		$context['arcade_online_link'] = '<a href="' . $scripturl . '?index.php;action=arcade;sa=online">' . sprintf($txt['arcade_info_who'], $context['arcade_online'][0], $context['arcade_online'][1], empty($context['arcade_online'][0]) || $context['arcade_online'][0] > 1 ? 's' : '', empty($context['arcade_online'][1]) || $context['arcade_online'][1] > 1 ? 's' : '') . '</a>';
+	else
+		$context['arcade_online_link'] = sprintf($txt['arcade_info_who'], $context['arcade_online'][0], $context['arcade_online'][1], empty($context['arcade_online'][0]) || $context['arcade_online'][0] > 1 ? 's' : '', empty($context['arcade_online'][1]) || $context['arcade_online'][1] > 1 ? 's' : '');
+
 	if ($modSettings['arcadeList'] == 0)
 	{
 		loadTemplate('ArcadeSkinListA');
