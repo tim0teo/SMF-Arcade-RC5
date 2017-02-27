@@ -19,10 +19,8 @@ function ArcadeOnline()
 {
 	global $context, $scripturl, $user_info, $txt, $modSettings, $memberContext, $smcFunc;
 
-	// Permissions, permissions, permissions.
 	isAllowedTo('arcade_online');
 
-	// You can't do anything if this is off.
 	if (empty($modSettings['arcadeShowOnline']))
 		fatal_lang_error('arcade_online_error', false);
 
@@ -111,23 +109,25 @@ function ArcadeOnline()
 	$smcFunc['db_free_result']($request);
 
 	// Get the total amount of guests in the arcade
-	$request = $smcFunc['db_query']('', '
-		SELECT COUNT(*)
-		FROM {db_prefix}arcade_guest_data AS lo' . (!empty($conditions) ? '
-		WHERE ' . implode(' AND ', $conditions) : ''),
-		array(
-		)
-	);
-	list ($totalGuests) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	if ((!empty($_SESSION['who_online_filter'])) && $_SESSION['who_online_filter'] !== 'members')
+	{
+		$request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}arcade_guest_data',
+			array(				
+			)
+		);
+		list ($totalGuests) = $smcFunc['db_fetch_row']($request);
+		$smcFunc['db_free_result']($request);
 
-	$totalMembers = $totalMembers + $totalGuests;
+		$totalMembers = $totalMembers + $totalGuests;
+	}
 
 	// Prepare some page index variables.
 	$context['page_index'] = constructPageIndex($scripturl . '?action=who;sort=' . $context['sort_by'] . ($context['sort_direction'] == 'up' ? ';asc' : '') . ';show=' . $context['show_by'], $_REQUEST['start'], $totalMembers, $modSettings['defaultMaxMembers']);
 	$context['start'] = $_REQUEST['start'];
 
-	// Look for users in the arcade, provided they don't mind if you see they are.
+	// Look for users in the arcade
 	$request = $smcFunc['db_query']('', '
 		SELECT
 			lo.online_time, lo.id_member, lo.online_ip, lo.online_name, lo.current_action,
@@ -162,6 +162,7 @@ function ArcadeOnline()
 			'action' => $currentAction,
 			'game' => $game,
 			'name' => $row['online_name'],
+			'user' => 0,
 			'is_guest' => false,
 			'href' => $scripturl . '?action=profile;u=' . $row['id_member'],
 		);
@@ -170,48 +171,47 @@ function ArcadeOnline()
 	}
 	$smcFunc['db_free_result']($request);
 
-	// Look for guests in the arcade, provided the admin allows it.
-	$request = $smcFunc['db_query']('', '
-		SELECT
-			lo.online_time, lo.online_ip, {string:name} as \'lo.online_name\', lo.current_action, 0 as \'id_member\',
-			lo.current_game, {string:color} as \'lo.online_color\', IFNULL(lo.show_online, 1) AS show_online
-		FROM {db_prefix}arcade_guest_data AS lo' . (!empty($conditions) ? '
-		WHERE ' . implode(' AND ', $conditions) : '') . '
-		ORDER BY online_time ASC',
-		array(
-			'regular_member' => 0,
-			'sort_method' => $sort_method,
-			'name' => $txt['guest_title'],
-			'color' => '',
-		)
-	);
-
-	while ($row = $smcFunc['db_fetch_assoc']($request))
-	{
-		// Send the information to the template.
-		$action = (empty($row['current_action'])) || $row['current_action'] > 4 ? '0' : abs($row['current_action']);
-		$game = empty($row['current_game']) ? 0 : $row['current_game'];
-		$gamename = arcade_game_name($game);
-		$gamelink = !empty($gamename['enabled']) ? sprintf($action_array[$action], $game, $gamename['game_name']) : $gamename['game_name'];
-		$currentAction = $action > 0 && $action < 3 && !empty($game) ? $gamelink : $action_array[$action];
-		$context['members'][] = array(
-			'id' => $row['id_member'],
-			'ip' => allowedTo('moderate_forum') ? $row['online_ip'] : '',
-			'time' => strtr(timeformat($row['online_time']), array($txt['today'] => '', $txt['yesterday'] => '')),
-			'timestamp' => forum_time(true, $row['online_time']),
-			'query' => empty($row['current_action']) ? 'index' : $row['current_action'],
-			'is_hidden' => $row['show_online'] == 0,
-			'color' => empty($row['online_color']) ? '' : $row['online_color'],
-			'action' => $currentAction,
-			'game' => $game,
-			'name' => $txt['guest_title'],
-			'is_guest' => true,
-			'href' => '',
+	// Look for guests in the arcade
+	if ((!empty($_SESSION['who_online_filter'])) && $_SESSION['who_online_filter'] !== 'members')
+	{	
+		$request = $smcFunc['db_query']('', '
+			SELECT
+				lo.online_time, lo.online_ip, lo.current_action,
+				lo.current_game, show_online
+			FROM {db_prefix}arcade_guest_data AS lo
+			ORDER BY online_time ASC',
+			array(
+			)
 		);
 
-		$member_ids[] = $row['id_member'];
+		while ($row = $smcFunc['db_fetch_assoc']($request))
+		{
+			// Send the information to the template.
+			$action = (empty($row['current_action'])) || $row['current_action'] > 4 ? '0' : abs($row['current_action']);
+			$game = empty($row['current_game']) ? 0 : $row['current_game'];
+			$gamename = arcade_game_name($game);
+			$gamelink = !empty($gamename['enabled']) ? sprintf($action_array[$action], $game, $gamename['game_name']) : $gamename['game_name'];
+			$currentAction = $action > 0 && $action < 3 && !empty($game) ? $gamelink : $action_array[$action];
+			$context['members'][] = array(
+				'id' => 0,
+				'ip' => allowedTo('moderate_forum') ? $row['online_ip'] : '',
+				'time' => strtr(timeformat($row['online_time']), array($txt['today'] => '', $txt['yesterday'] => '')),
+				'timestamp' => forum_time(true, $row['online_time']),
+				'query' => empty($row['current_action']) ? 'index' : $row['current_action'],
+				'is_hidden' => $row['show_online'] == 0,
+				'color' => '',
+				'action' => $currentAction,
+				'game' => $game,
+				'name' => $txt['guest_title'],
+				'user' => 0,
+				'is_guest' => true,
+				'href' => '',
+			);
+
+			$member_ids[] = '0';
+		}
+		$smcFunc['db_free_result']($request);
 	}
-	$smcFunc['db_free_result']($request);
 
 	$sort = $context['sort_direction'] == 'up' ? 'SORT_ASC' : 'SORT_DESC';
 	arcade_array_sort_by_columns($context['members'], $sort_method, $sort);
@@ -221,6 +221,7 @@ function ArcadeOnline()
 	$memberContext[0] = array(
 		'id' => 0,
 		'name' => $txt['guest_title'],
+		'user' => 0,
 		'group' => $txt['guest_title'],
 		'href' => '',
 		'link' => $txt['guest_title'],
