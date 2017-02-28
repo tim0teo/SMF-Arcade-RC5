@@ -2760,7 +2760,7 @@ function arcade_log_online()
 	$checkIp = !empty($user_info['ip']) ? trim($user_info['ip']) : !empty($user_info['ip2']) ? trim($user_info['ip2']) : 0;
 	list($guests, $users, $action, $userIp) = array(0, 0, 0, array());
 	$actions = array('index', 'play', 'highscore', 'arena');
-	$game = !empty($_REQUEST['game']) ? $_REQUEST['game'] : 0;
+	$game = isset($_REQUEST['game']) ? (int)$_REQUEST['game'] : 0;
 	$sa = !empty($_REQUEST['sa']) ? $_REQUEST['sa'] : 'index';
 
 	switch ($sa)
