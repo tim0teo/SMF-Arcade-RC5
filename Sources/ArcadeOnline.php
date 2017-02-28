@@ -98,10 +98,10 @@ function ArcadeOnline()
 		$context['show_by'] = $_SESSION['who_online_filter'] = 'all';
 
 	// join or separate members & guests
-	if (isset($_REQUEST['coalesce']))
-		$context['coalesce'] = $_SESSION['do_coalesce'] = $_REQUEST['coalesce'];
+	if (isset($_REQUEST['join']))
+		$context['join'] = $_SESSION['do_join'] = $_REQUEST['join'];
 	else
-		$context['coalesce'] = !empty($_SESSION['do_coalesce']) ? $_SESSION['do_coalesce'] : 'join';
+		$context['join'] = !empty($_SESSION['do_join']) ? $_SESSION['do_join'] : 'join';
 
 	// Get the total amount of members in the arcade
 	$request = $smcFunc['db_query']('', '
@@ -160,6 +160,7 @@ function ArcadeOnline()
 		$context['arcade_members'][] = array(
 			'id' => $row['id_member'],
 			'ip' => allowedTo('moderate_forum') ? $row['online_ip'] : '',
+			'realtime' => $row['online_time'],
 			'time' => strtr(timeformat($row['online_time']), array($txt['today'] => '', $txt['yesterday'] => '')),
 			'timestamp' => forum_time(true, $row['online_time']),
 			'query' => empty($row['current_action']) ? 'index' : $row['current_action'],
@@ -221,22 +222,22 @@ function ArcadeOnline()
 	}
 
 	$sort = $context['sort_direction'] == 'up' ? 'SORT_ASC' : 'SORT_DESC';
-	if ((!empty($context['coalesce'])) && $context['coalesce'] == 'disjoin')
+	if ((!empty($context['join'])) && $context['join'] == 'disjoin')
 	{
 		arcade_array_sort_by_columns($context['arcade_members'], $sort_method, $sort);
 		arcade_array_sort_by_columns($context['arcade_guests'], 'realtime', $sort);
-		$context['members_all'] = array_merge($context['arcade_members'], $context['arcade_guests']);		
+		$context['members_all'] = array_merge_recursive($context['arcade_members'], $context['arcade_guests']);
 	}
 	else
 	{
 		arcade_array_sort_by_columns($context['arcade_members'], $sort_method, $sort);
-		arcade_array_sort_by_columns($context['arcade_guests'], 'time', $sort);
-		
+		arcade_array_sort_by_columns($context['arcade_guests'], 'realtime', $sort);
+
 		if ($sort == 'SORT_ASC')
 			$context['members_all'] = array_merge_recursive($context['arcade_members'], $context['arcade_guests']);
 		else
 			$context['members_all'] = array_merge_recursive($context['arcade_guests'], $context['arcade_members']);
-		
+
 		//arcade_array_sort_by_columns($context['members_all'], $sort_method, $sort);
 	}
 	$context['members'] = array_slice($context['members_all'], $context['start'], $modSettings['defaultMaxMembers'], true);
@@ -279,14 +280,16 @@ function ArcadeOnline()
 
 function arcade_array_sort_by_columns(&$array, $sort, $dir = 'SORT_ASC')
 {
-	
-	foreach ($array as $key => $row) 
+	foreach ($array as $key => $row)
 		$name[$key] = $row[$sort];
 
-	if ($dir == 'SORT_ASC')
-		array_multisort($name, SORT_ASC, $array);
-	else
-		array_multisort($name, SORT_DESC, $array);	
+	if ((!empty($name)) && is_array($name))
+	{
+		if ($dir == 'SORT_ASC')
+			array_multisort($name, SORT_ASC, $array);
+		else
+			array_multisort($name, SORT_DESC, $array);
+	}
 }
 
 function arcade_game_name($id_game)
