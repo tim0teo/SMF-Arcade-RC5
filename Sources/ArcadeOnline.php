@@ -99,9 +99,9 @@ function ArcadeOnline()
 
 	// join or separate members & guests
 	if (isset($_REQUEST['join']))
-		$context['join'] = $_SESSION['do_join'] = $_REQUEST['join'];
+		$context['arcade_join'] = $_SESSION['arcade_do_join'] = $_REQUEST['join'];
 	else
-		$context['join'] = !empty($_SESSION['do_join']) ? $_SESSION['do_join'] : 'join';
+		$context['arcade_join'] = !empty($_SESSION['arcade_do_join']) ? $_SESSION['arcade_do_join'] : 'join';
 
 	// Get the total amount of members in the arcade
 	$request = $smcFunc['db_query']('', '
@@ -222,7 +222,7 @@ function ArcadeOnline()
 	}
 
 	$sort = $context['sort_direction'] == 'up' ? 'SORT_ASC' : 'SORT_DESC';
-	if ((!empty($context['join'])) && $context['join'] == 'disjoin')
+	if ((!empty($context['arcade_join'])) && $context['arcade_join'] == 'disjoin')
 	{
 		arcade_array_sort_by_columns($context['arcade_members'], $sort_method, $sort);
 		arcade_array_sort_by_columns($context['arcade_guests'], 'realtime', $sort);
