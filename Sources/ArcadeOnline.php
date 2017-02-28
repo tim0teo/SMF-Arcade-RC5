@@ -97,6 +97,12 @@ function ArcadeOnline()
 	else
 		$context['show_by'] = $_SESSION['who_online_filter'] = 'all';
 
+	// join or separate members & guests
+	if (isset($_REQUEST['coalesce']))
+		$context['coalesce'] = $_SESSION['do_coalesce'] = $_REQUEST['coalesce'];
+	else
+		$context['coalesce'] = !empty($_SESSION['do_coalesce']) ? $_SESSION['do_coalesce'] : 'join';
+
 	// Get the total amount of members in the arcade
 	$request = $smcFunc['db_query']('', '
 		SELECT COUNT(*)
@@ -114,7 +120,7 @@ function ArcadeOnline()
 		$request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
 			FROM {db_prefix}arcade_guest_data',
-			array(				
+			array(
 			)
 		);
 		list ($totalGuests) = $smcFunc['db_fetch_row']($request);
@@ -140,7 +146,7 @@ function ArcadeOnline()
 			'sort_method' => $sort_method,
 		)
 	);
-	$context['members'] = array();
+	list($context['members'], $context['arcade_members'], $context['arcade_guests']) = array(array(), array(), array());
 	$member_ids = array();
 
 	while ($row = $smcFunc['db_fetch_assoc']($request))
@@ -151,7 +157,7 @@ function ArcadeOnline()
 		$gamename = arcade_game_name($game);
 		$gamelink = !empty($gamename['enabled']) ? sprintf($action_array[$action], $game, $gamename['game_name']) : $gamename['game_name'];
 		$currentAction = $action > 0 && $action < 3 && !empty($game) ? $gamelink : $action_array[$action];
-		$context['members'][] = array(
+		$context['arcade_members'][] = array(
 			'id' => $row['id_member'],
 			'ip' => allowedTo('moderate_forum') ? $row['online_ip'] : '',
 			'time' => strtr(timeformat($row['online_time']), array($txt['today'] => '', $txt['yesterday'] => '')),
@@ -162,7 +168,7 @@ function ArcadeOnline()
 			'action' => $currentAction,
 			'game' => $game,
 			'name' => $row['online_name'],
-			'user' => 0,
+			'user' => $row['online_name'],
 			'is_guest' => false,
 			'href' => $scripturl . '?action=profile;u=' . $row['id_member'],
 		);
@@ -173,7 +179,7 @@ function ArcadeOnline()
 
 	// Look for guests in the arcade
 	if ((!empty($_SESSION['who_online_filter'])) && $_SESSION['who_online_filter'] !== 'members')
-	{	
+	{
 		$request = $smcFunc['db_query']('', '
 			SELECT
 				lo.online_time, lo.online_ip, lo.current_action,
@@ -192,9 +198,10 @@ function ArcadeOnline()
 			$gamename = arcade_game_name($game);
 			$gamelink = !empty($gamename['enabled']) ? sprintf($action_array[$action], $game, $gamename['game_name']) : $gamename['game_name'];
 			$currentAction = $action > 0 && $action < 3 && !empty($game) ? $gamelink : $action_array[$action];
-			$context['members'][] = array(
+			$context['arcade_guests'][] = array(
 				'id' => 0,
 				'ip' => allowedTo('moderate_forum') ? $row['online_ip'] : '',
+				'realtime' => $row['online_time'],
 				'time' => strtr(timeformat($row['online_time']), array($txt['today'] => '', $txt['yesterday'] => '')),
 				'timestamp' => forum_time(true, $row['online_time']),
 				'query' => empty($row['current_action']) ? 'index' : $row['current_action'],
@@ -203,7 +210,7 @@ function ArcadeOnline()
 				'action' => $currentAction,
 				'game' => $game,
 				'name' => $txt['guest_title'],
-				'user' => 0,
+				'user' => $txt['guest_title'],
 				'is_guest' => true,
 				'href' => '',
 			);
@@ -214,8 +221,25 @@ function ArcadeOnline()
 	}
 
 	$sort = $context['sort_direction'] == 'up' ? 'SORT_ASC' : 'SORT_DESC';
-	arcade_array_sort_by_columns($context['members'], $sort_method, $sort);
-	$context['members'] = array_slice($context['members'], $context['start'], $modSettings['defaultMaxMembers']);
+	if ((!empty($context['coalesce'])) && $context['coalesce'] == 'disjoin')
+	{
+		arcade_array_sort_by_columns($context['arcade_members'], $sort_method, $sort);
+		arcade_array_sort_by_columns($context['arcade_guests'], 'realtime', $sort);
+		$context['members_all'] = array_merge($context['arcade_members'], $context['arcade_guests']);		
+	}
+	else
+	{
+		arcade_array_sort_by_columns($context['arcade_members'], $sort_method, $sort);
+		arcade_array_sort_by_columns($context['arcade_guests'], 'time', $sort);
+		
+		if ($sort == 'SORT_ASC')
+			$context['members_all'] = array_merge_recursive($context['arcade_members'], $context['arcade_guests']);
+		else
+			$context['members_all'] = array_merge_recursive($context['arcade_guests'], $context['arcade_members']);
+		
+		//arcade_array_sort_by_columns($context['members_all'], $sort_method, $sort);
+	}
+	$context['members'] = array_slice($context['members_all'], $context['start'], $modSettings['defaultMaxMembers'], true);
 
 	// Load up the guest user.
 	$memberContext[0] = array(
@@ -253,17 +277,16 @@ function ArcadeOnline()
 	loadTemplate('ArcadeOnline');
 }
 
-function arcade_array_sort_by_columns(&$arr, $col, $dir = 'SORT_ASC')
+function arcade_array_sort_by_columns(&$array, $sort, $dir = 'SORT_ASC')
 {
-    $sort_col = array();
-    foreach ($arr as $key => $row) {
-        $sort_col[$key] = $row[$col];
-    }
+	
+	foreach ($array as $key => $row) 
+		$name[$key] = $row[$sort];
 
 	if ($dir == 'SORT_ASC')
-		array_multisort($sort_col, SORT_ASC, $arr);
+		array_multisort($name, SORT_ASC, $array);
 	else
-		array_multisort($sort_col, SORT_DESC, $arr);
+		array_multisort($name, SORT_DESC, $array);	
 }
 
 function arcade_game_name($id_game)

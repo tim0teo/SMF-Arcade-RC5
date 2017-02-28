@@ -47,6 +47,9 @@ $txt['who_arcade_play'] = 'Playing <a href="' . $scripturl . '?action=arcade;sa=
 $txt['who_arcade_highscore'] = 'Viewing highscores of <a href="' . $scripturl . '?action=arcade;sa=highscore;game=%d">%s</a> on Arcade';
 $txt['who_arcade_match'] = 'Viewing Arcade Arena';
 $txt['who_arcade_online'] = 'Viewing Arcade Online';
+$txt['arcade_coalesce'] = 'Coalesce';
+$txt['arcade_no_online_guests'] = 'There are currently no guests in the arcade';
+$txt['arcade_no_online_members'] = 'There are currently no members in the arcade';
 
 // Information Center
 $txt['arcade_info_center'] = 'Arcade Information';

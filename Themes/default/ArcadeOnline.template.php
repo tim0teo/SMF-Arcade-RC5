@@ -38,7 +38,12 @@ function template_arcade_online()
 				<table class="table_grid" cellspacing="0">
 					<thead>
 						<tr class="catbg">
-							<th scope="col" class="lefttext first_th" width="40%"><a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=user', $context['sort_direction'] != 'down' && $context['sort_by'] == 'user' ? '' : ';asc', '" rel="nofollow">', $txt['who_user'], ' ', $context['sort_by'] == 'user' ? '<img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+							<th scope="col" class="lefttext first_th" width="40%">
+								<a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=user', $context['sort_direction'] != 'down' && $context['sort_by'] == 'user' ? '' : ';asc', '" rel="nofollow">', $txt['who_user'], ' ', $context['sort_by'] == 'user' ? '<img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
+								<span style="padding-left: 5%;">
+									<a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=', $context['sort_by'], ';', $context['coalesce'] != 'disjoin' && $context['sort_by'] == 'user' ? 'coalesce=disjoin;' : ($context['sort_by'] == 'user' ? 'coalesce=join;' : ''), $context['sort_direction'] != 'down' && $context['sort_by'] == 'user' ? 'asc' : '', '" rel="nofollow">', $txt['arcade_coalesce'], ' ', $context['sort_by'] == 'user' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['coalesce'] != 'disjoin' ? 'up' : 'down') . '.gif" alt="" />' : '', '</a>
+								</span>
+							</th>
 							<th scope="col" class="lefttext" width="10%"><a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=time', $context['sort_direction'] == 'down' && $context['sort_by'] == 'time' ? ';asc' : '', '" rel="nofollow">', $txt['who_time'], ' ', $context['sort_by'] == 'time' ? '<img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
 							<th scope="col" class="lefttext last_th" width="50%">', $txt['who_action'], '</th>
 						</tr>
@@ -80,7 +85,7 @@ function template_arcade_online()
 		echo '
 						<tr class="windowbg2">
 							<td colspan="3" class="centertext">
-							', $txt['who_no_online_' . ($context['show_by'] == 'guests' || $context['show_by'] == 'spiders' ? $context['show_by'] : 'members')], '
+							', $txt['arcade_no_online_' . ($context['show_by'] == 'guests' ? 'guests' : 'members')], '
 							</td>
 						</tr>';
 	}
