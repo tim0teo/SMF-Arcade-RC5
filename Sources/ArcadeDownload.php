@@ -16,6 +16,9 @@ if (!defined('SMF'))
 		- Auto-zip game files
 		- Updates mysql database values for download data
 
+	void arcade_create_zip($files, $destination, $overwrite)
+		- Zip an array of files
+
 	void deleteArchives($directory, $empty = true)
 		- Purges download directory (if enabled from Arcade/Admin/Settings)
 
@@ -38,14 +41,13 @@ if (!defined('SMF'))
 
 function ArcadeDownload()
 {
-	global $db_prefix, $smcFunc, $context, $boardurl, $modSettings, $user_info, $txt;
+	global $db_prefix, $smcFunc, $context, $boardurl, $modSettings, $user_info, $txt, $boarddir;
+
 	if (empty($modSettings['gamesUrl']))
 		$main = 'Games';
 	else
-		$main = preg_replace('~'.$boardurl.'/~', '', $modSettings['gamesUrl']);
+		$main = preg_replace('~' . $boardurl . '/~', '', $modSettings['gamesUrl']);
 
-	ob_end_clean();
-	@ob_start('ob_gzhandler');
 	if (AllowedTo('arcade_download') == false)
 	{
 		fatal_lang_error('pdl_error_perm', false);
@@ -54,27 +56,17 @@ function ArcadeDownload()
 		exit();
 	}
 
-	/* edit the zip storage directory and Games folder here (only change if needed) */
-	$gamesave = 'games_download/';
-	$mygames_folder = $boardurl . '/'.$main.'/';
-
 	/*   zero out/set variables   */
-	$gamefile_name = '';
-	$gamename_name = '';
-	$gamedirectory = '';
-	$dl_count = 0;
-	$id_of_game = '';
-	$latest_day = 0;
-	$latest_year = 0;
-	$permission = 0;
-	$checkpdlgame = false;
+	list($files, $outputDir, $ct, $checkpdlgame, $arcade_amount, $gamefile_name, $gamename_name, $gamedirectory, $dl_count, $id_of_game, $latest_day, $latest_year, $permission, $checkpdlgame, $gamesave, $mygames_folder) = array(
+		array(), '', 1, true, 1, '', '', '', 0, '', 0, 0, 0, false, 'games_download/', $boardurl . '/' . $main . '/'
+	);
 	$pdl_arrayx = array('pdl_gameid', 'download_count', 'download_disable', 'latest_day', 'latest_year', 'permission', 'report_id', 'report_day', 'report_year', 'user_id');
 	if (empty($modSettings['pdl_DownMax']))
 		$modSettings['pdl_DownMax'] = 0;
 
 	$id_of_game = !empty($_REQUEST['game']) ? (int) $_REQUEST['game'] : 0;
-	$arcade_amount = 1;
 	$search1 = 'id_game ='. $id_of_game;
+
 	if ($context['user']['is_logged'])
 	{
 		$search2 = 'id_member ='. $context['user']['id'];
@@ -98,30 +90,22 @@ function ArcadeDownload()
 	if (empty($modSettings['arcadeEnableDownload']))
 		$modSettings['arcadeEnableDownload'] = false;
 
-	if (($modSettings['arcadeEnableDownload'] == false) && (AllowedTo('arcade_admin') == false))
-	{
+	if (empty($modSettings['arcadeEnableDownload']) && !allowedTo('arcade_admin'))
 		fatal_lang_error('pdl_error_disable', false);
-		exit();
-	}
 
 	/* Check number of posts */
 	if (isset($modSettings['arcadeDownPost']))
 	{
-		if (($user_info['posts'] < $modSettings['arcadeDownPost']) && (AllowedTo('arcade_admin') == false))
-		{
+		if (($user_info['posts'] < $modSettings['arcadeDownPost']) && !allowedTo('arcade_admin'))
 			$txt['pdl_error3'] = fatal_lang_error( 'pdl_error_post', false);
-			exit();
-		}
 	}
 
 	if ($id_of_game == false)
-	{
 		fatal_lang_error('pdl_error_nogame', false);
-		exit();
-	}
 
 	$request = $smcFunc['db_query']('', '
-		SELECT game.id_game, game.game_name, game.game_directory, game.game_file, pdl.latest_day, pdl.latest_year, pdl.permission, rep.report_day, rep.report_year, rep.user_id, rep.report_id, rep.download_count, rep.download_disable
+		SELECT game.id_game, game.game_name, game.game_directory, game.game_file, pdl.latest_day, pdl.latest_year, pdl.permission, rep.report_day,
+		rep.report_year, rep.user_id, rep.report_id, rep.download_count, rep.download_disable, game.thumbnail, game.thumbnail_small
 		FROM {db_prefix}arcade_games AS game
 		LEFT JOIN {db_prefix}arcade_pdl1 AS pdl ON (pdl.id_member = {int:member})
 		LEFT JOIN {db_prefix}arcade_pdl2 AS rep ON (rep.pdl_gameid = {int:search})
@@ -131,7 +115,6 @@ function ArcadeDownload()
 		array('search' => $id_of_game, 'member' => $member)
 	);
 
-	$checkpdlgame = true;
 	while ($gameInfo = $smcFunc['db_fetch_assoc']($request))
 	{
 		foreach ($pdl_arrayx as $pdlx)
@@ -140,6 +123,8 @@ function ArcadeDownload()
 				$gameInfo[$pdlx] = 0;
 		}
 
+		$thumbnail = !empty($gameinfo['thumbnail']) ? $gameinfo['thumbnail'] : '';
+		$thumbnailsmall = !empty($gameinfo['thumbnail_small']) ? $gameinfo['thumbnail_small'] : '';
 		$gamefile_name = $gameInfo['game_file'];
         $gamename_name = $gameInfo['game_name'];
         $gamedirectory = $gameInfo['game_directory'];
@@ -160,42 +145,30 @@ function ArcadeDownload()
 	$gamefile_name = str_replace (" ", "_", $gamefile_name);
 
 	if ($gamefile_name == false)
-	{
 		fatal_lang_error('pdl_error_db', false);
-		exit();
-	}
 
 	/* Check if zip or tar file already exists and if yes download - if not zip and download */
-	$url_array[1] = $gamesave . $gamefile_name . '.zip';
-	$url_array[2] = $gamesave . $gamefile_name . '.tar';
-	$url_array[3] = $gamesave . 'game_' . $gamefile_name . '.zip';
-	$url_array[4] = $gamesave . 'game_' . $gamefile_name . '.tar';
+	$url_array[1] = $boarddir . '/' . $gamesave . $gamefile_name . '.zip';
+	$url_array[2] = $boarddir . '/' . $gamesave . $gamefile_name . '.tar';
+	$url_array[3] = $boarddir . '/' . $gamesave . 'game_' . $gamefile_name . '.zip';
+	$url_array[4] = $boarddir . '/' . $gamesave . 'game_' . $gamefile_name . '.tar';
 
 	/* Check to see if admin has manually denied downloading for this game - password is the file prefix */
-	$deny = 'DENY_';
-	if (!empty($modSettings['arcadeDownPass']))
-		$deny = $modSettings['arcadeDownPass'] . '_';
+	$deny = empty($modSettings['arcadeDownPass']) ? 'DENY_' : $modSettings['arcadeDownPass'] . '_';
 
-	$url_skip[1] = $gamesave . $deny . $gamefile_name . '.zip';
-	$url_skip[2] = $gamesave . $deny . $gamefile_name . '.tar';
-	$ct = 1;
+	$url_skip[1] = $boarddir . '/' . $gamesave . $deny . $gamefile_name . '.zip';
+	$url_skip[2] = $boarddir . '/' . $gamesave . $deny . $gamefile_name . '.tar';
+
 	while ($ct < 3)
 	{
-		if ((file_exists($url_skip[$ct])) && (AllowedTo('arcade_admin') == false))
-		{
+		if ((file_exists($url_skip[$ct])) && !allowedTo('arcade_admin'))
 			fatal_lang_error('pdl_error_dl', false);
-			exit();
-		}
-
 		$ct++;
 	}
 
 	/* Check to see if downloading is denied from the games settings  */
-	if (($dl_disable > 0)  && (AllowedTo('arcade_admin') == false))
-	{
+	if ($dl_disable > 0  && !allowedTo('arcade_admin'))
 		fatal_lang_error('pdl_error_dl', false);
-		exit();
-	}
 
 	if ($context['user']['is_logged'] && $search2 !== 0 && $modSettings['pdl_DownMax'] > 0)
 	{
@@ -245,18 +218,17 @@ function ArcadeDownload()
 		if ($day == $user_info['day'] && $year == $user_info['year'])
 		{
 			if  (($user_info['count'] > $max) && (AllowedTo('arcade_admin') == false))
-			{
 				fatal_lang_error('pdl_error_max', false);
-				exit();
-			}
 			else
 				$count = (int)$user_info['count'] + 1;
 		}
 
 		$tableName = 'arcade_pdl1';
 		$userid = $context['user']['id'];
+
 		/* Update user count */
 		createxpdlval1($tableName, $userid, $count, $year, $day, $latest_year, $latest_day, $permission);
+
 		/* reset time zone back to original setting  */
 		date_default_timezone_set($myzone);
 	}
@@ -269,70 +241,166 @@ function ArcadeDownload()
 	{
 		if (file_exists($url_array[$ct]))
 		{
-			ob_start();
-			@header('Location: ' . $url_array[$ct]);
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/octet-stream');
+			header('Content-Disposition: attachment; filename="game_' . $gamefile_name . '.zip"');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize($url_array[$ct]));
 			ob_end_flush();
-			exit();
+			readfile($url_array[$ct]);
+			exit;
 		}
 		$ct++;
 	}
-	/*  It's not in your zip library, so let's add it...  */
-	$directoryToZip1= $main.'/'.$gamedirectory;
-	$directoryToZip2='arcade/gamedata/'.$gamefile_name;
-	$outputDir= '';
-	$zipName= 'game_' . $gamefile_name.'.zip';
-	if (file_exists('Sources/CreateZipFile.php'))
+	// It's not in your zip library, so let's add it...
+	$directoryToZip1 = $main . '/' . $gamedirectory;
+	$directoryToZip2 = 'arcade/gamedata/' . $gamefile_name;
+
+	list($gamefiles, $gamedatafiles, $zipName) = array(array(), array(), $boarddir . '/games_download/' . $gamefile_name);
+
+	if (is_dir($boarddir . '/' . $directoryToZip1))
 	{
-		include_once("Sources/CreateZipFile.php");
-		if (is_dir($directoryToZip1))
+		// no game directory?
+		if (empty($gamedirectory))
 		{
-			$createZipFile=new CreateZipFile;
-			/* If there is no sub-directory  */
-			if (empty($gamedirectory))
+			if ((!empty($thumbnailsmall)) && file_exists($boarddir . '/' . $main . '/' . $thumbnailsmall))
+				$gamefiles[] = $boarddir . '/' . $main . '/' . $thumbnailsmall;
+			if ((!empty($thumbnail)) && file_exists($boarddir . '/' . $main . '/' . $thumbnail))
+				$gamefiles[] = $boarddir . '/' . $main . '/' . $thumbnailsmall;
+			if ((!empty($gameInfo['game_file'])) && file_exists($boarddir . '/' . $main . '/' . $gameInfo['game_file']))
+				$gamefiles[] = $boarddir . '/' . $main . '/' . $gameInfo['game_file'];
+			// gamedata files?
+			if (is_dir($boarddir . '/' . $directoryToZip2))
+				$gamedatafiles = scandir($boarddir . '/' . $directoryToZip2);
+
+			unset($gamefiles[array_search('.', $gamefiles)]);
+			unset($gamefiles[array_search('..', $gamefiles)]);
+			unset($gamedatafiles[array_search('.', $gamedatafiles)]);
+			unset($gamedatafiles[array_search('..', $gamedatafiles)]);
+			foreach($gamefiles as $key => $value)
+				$gamefiles[$key] = $boarddir . '/' . $main . '/' . $value;
+			foreach($gamedatafiles as $key => $value)
+				$gamedatafiles[$key] = $boarddir . '/' . $directoryToZip2 . '/' . $value;
+		}
+		// inside a gamepack ?
+		elseif ($gamedirectory !== $gamefile_name)
+		{
+			if ((!empty($thumbnailsmall)) && file_exists($boarddir . '/' . $main . '/' . $gamedirectory . '/' . $thumbnailsmall))
+				$gamefiles[] = $boarddir . '/' . $main . '/' . $gamedirectory . '/' . $thumbnailsmall;
+			if ((!empty($thumbnail)) && file_exists($boarddir . '/' . $main . '/' . $gamedirectory . '/' . $thumbnail))
+				$gamefiles[] = $boarddir . '/' . $main . '/' . $gamedirectory . '/' . $thumbnailsmall;
+			if ((!empty($gameInfo['game_file'])) && file_exists($boarddir . '/' . $main . '/' . $gamedirectory . '/' . $gameInfo['game_file']))
+				$gamefiles[] = $boarddir . '/' . $main . '/' . $gamedirectory . '/' . $gameInfo['game_file'];
+			// gamedata files?
+			if (is_dir($boarddir . '/' . $directoryToZip2))
+				$gamedatafiles = scandir($boarddir . '/' . $directoryToZip2);
+
+			unset($gamefiles[array_search('.', $gamefiles)]);
+			unset($gamefiles[array_search('..', $gamefiles)]);
+			unset($gamedatafiles[array_search('.', $gamedatafiles)]);
+			unset($gamedatafiles[array_search('..', $gamedatafiles)]);
+			foreach($gamefiles as $key => $value)
+				$gamefiles[$key] = $boarddir . '/' . $main . '/' . $gamedirectory . '/' . $value;
+			foreach($gamedatafiles as $key => $value)
+				$gamedatafiles[$key] = $boarddir . '/' . $directoryToZip2 . '/' . $value;
+		}
+		// proper default subdirectory
+		else
+		{
+			// gamedata files if they are not also present in the default subdirectory else use them from the default directory
+			if (!file_exists($boarddir . '/' . $directoryToZip1 . '/gamedata/' . $gamefile_name . '/' . $gamefile_name . '.txt') && is_dir($boarddir . '/' . $directoryToZip2))
 			{
-				if (is_dir($directoryToZip2))
-					$createZipFile->zipDirectory2($directoryToZip2, $outputDir);
-
-				$createZipFile->zipDirectory4($gamefile_name, $outputDir, '');
+				$gamedatafiles = scandir($boarddir . '/' . $directoryToZip2);
+				unset($gamedatafiles[array_search('.', $gamedatafiles)]);
+				unset($gamedatafiles[array_search('..', $gamedatafiles)]);
+				foreach($gamedatafiles as $key => $value)
+					$gamedatafiles[$key] = $boarddir . '/' . $directoryToZip2 . '/' . $value;
 			}
-			/* If the gamename and filename do not match ... assume it is a sub-directory gamepack and scope out specific files */
-			elseif ($gamedirectory !== $gamefile_name)
+			elseif (file_exists($directoryToZip1 . '/gamedata/' . $gamefile_name . '/' . $gamefile_name . '.txt'))
 			{
-				if (is_dir($directoryToZip2))
-					$createZipFile->zipDirectory2($directoryToZip2, $outputDir);
-
-				$createZipFile->zipDirectory4($gamefile_name, $outputDir, $gamedirectory);
+				$gamedatafiles = scandir($boarddir . '/' . $directoryToZip1 . '/gamedata');
+				unset($gamedatafiles[array_search('.', $gamedatafiles)]);
+				unset($gamedatafiles[array_search('..', $gamedatafiles)]);
+				foreach($gamedatafiles as $key => $value)
+					$gamedatafiles[$key] = $boarddir . '/' . $directoryToZip1 . '/gamedata/' . $gamefile_name . '/' . $value;
 			}
-			/*  else create zip from default sub-directory setup  */
-			else
-			{
-				if (!file_exists($directoryToZip1 . '/gamedata/' . $gamefile_name . '/' . $gamefile_name . '.txt') && is_dir($directoryToZip2))
-					$createZipFile->zipDirectory2($directoryToZip2, $outputDir);
 
-				$createZipFile->ZipDirectory3($directoryToZip1,$outputDir, $gamedirectory);
-			}
-			/* Create gamedata folder if it exists  */
-			/* if (is_dir($directoryToZip2))
-				{$createZipFile->zipDirectory2($directoryToZip2, $outputDir);}  */
+			$gamefiles = scandir($boarddir . '/' . $directoryToZip1);
+			unset($gamefiles[array_search('.', $gamefiles)]);
+			unset($gamefiles[array_search('..', $gamefiles)]);
+			foreach($gamefiles as $key => $value)
+				$gamefiles[$key] = $boarddir . '/' . $directoryToZip1 . '/' . $value;
 
-			$zipName= 'games_download/'.$zipName;
-			$fd=fopen($zipName, "wb");
-			$out = fwrite($fd,$createZipFile->getZippedfile());
-			fclose($fd);
-			$createZipFile->forceDownload($zipName);
+
 		}
 
-		if (file_exists($zipName))
+		$files = array_merge_recursive($gamefiles, $gamedatafiles);
+		arcade_create_zip($files, $boarddir . '/' . $gamesave . 'game_' . $gamefile_name . '.zip');
+
+		if (file_exists($boarddir . '/' . $gamesave . 'game_' . $gamefile_name . '.zip'))
 		{
-			ob_start();
-			@header('Location: ' . $zipName);
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/octet-stream');
+			header('Content-Disposition: attachment; filename="game_' . $gamefile_name . '.zip"');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize($boarddir . '/' . $gamesave . 'game_' . $gamefile_name . '.zip'));
 			ob_end_flush();
-			exit();
+			readfile($boarddir . '/' . $gamesave . 'game_' . $gamefile_name . '.zip');
+			exit;
 		}
+		return true;
 	}
 
 	fatal_lang_error('pdl_error_db', false);
-	exit();
+	exit;
+}
+
+function arcade_create_zip($files = array(),$destination = '',$overwrite = false)
+{
+	if(file_exists($destination) && !$overwrite)
+		return false;
+
+	list($valid_files, $pathParts) = array(array(), array());
+
+	if(is_array($files))
+	{
+		foreach($files as $file)
+		{
+			if(file_exists($file))
+				$valid_files[] = $file;
+		}
+	}
+
+	if(count($valid_files))
+	{
+		$zip = new ZipArchive();
+		if($zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true)
+			return false;
+
+		foreach($valid_files as $file)
+		{
+			$pathinfo = pathinfo($file);
+			$pathParts = explode('/', stripslashes(rtrim($pathinfo['dirname'], '/')));
+			$count = count($pathParts);
+
+			if ((!empty($pathParts[$count-2])) && $pathParts[$count-2] == 'gamedata')
+				$newfile = $pathParts[$count-2] . '/' . $pathParts[$count-1] . '/' . basename($file);
+			else
+				$newfile = basename($file);
+
+			$zip->addFile($file, $newfile);
+		}
+
+		$zip->close();
+
+        return file_exists($destination);
+	}
+	else
+		return false;
 }
 
 /* START - Delete archives function */

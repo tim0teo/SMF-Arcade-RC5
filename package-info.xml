@@ -49,8 +49,7 @@
 		<require-file name="Sources/SWFReader.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeSkinB.php" destination="$sourcedir" />
 		<require-file name="Sources/Tar.php" destination="$sourcedir" />
-		<require-file name="Sources/TarClass.php" destination="$sourcedir" />
-		<require-file name="Sources/CreateZipFile.php" destination="$sourcedir" />
+		<require-file name="Sources/TarClass.php" destination="$sourcedir" />		
 		<require-file name="Sources/ArcadePopup-smf2.php" destination="$sourcedir" />
 		<require-file name="Sources/PEAR.php" destination="$sourcedir" />
 		<require-file name="Sources/PEAR5.php" destination="$sourcedir" />
@@ -159,8 +158,7 @@
 		<require-file name="Sources/SWFReader.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeSkinA.php" destination="$sourcedir" />
 		<require-file name="Sources/Tar.php" destination="$sourcedir" />
-		<require-file name="Sources/TarClass.php" destination="$sourcedir" />
-		<require-file name="Sources/CreateZipFile.php" destination="$sourcedir" />
+		<require-file name="Sources/TarClass.php" destination="$sourcedir" />		
 		<require-file name="Sources/ArcadePopup-smf2.php" destination="$sourcedir" />
 		<require-file name="Sources/PEAR.php" destination="$sourcedir" />
 		<require-file name="Sources/PEAR5.php" destination="$sourcedir" />
@@ -283,8 +281,7 @@
 	    <remove-file name="$sourcedir/TarClass.php" />
 		<remove-file name="$sourcedir/ArcadePopup-smf2.php" />
 		<remove-file name="$sourcedir/ArcadeReport.php" />
-		<remove-file name="$sourcedir/ArcadeDownload.php" />
-		<remove-file name="$sourcedir/CreateZipFile.php" />
+		<remove-file name="$sourcedir/ArcadeDownload.php" />		
 		<remove-file name="$sourcedir/PEAR.php" />
 		<remove-file name="$sourcedir/PEAR5.php" />
 		<remove-file name="$sourcedir/ArcadeOnline.php" />
@@ -385,8 +382,7 @@
 	    <remove-file name="$sourcedir/TarClass.php" />
 		<remove-file name="$sourcedir/ArcadePopup-smf2.php" />
 		<remove-file name="$sourcedir/ArcadeReport.php" />
-		<remove-file name="$sourcedir/ArcadeDownload.php" />
-		<remove-file name="$sourcedir/CreateZipFile.php" />
+		<remove-file name="$sourcedir/ArcadeDownload.php" />		
 		<remove-file name="$sourcedir/PEAR.php" />
 		<remove-file name="$sourcedir/PEAR5.php" />
 		<remove-file name="$sourcedir/ArcadeOnline.php" />
