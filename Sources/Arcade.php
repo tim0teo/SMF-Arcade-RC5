@@ -288,4 +288,45 @@ function loadArcade($mode = 'normal', $index = '')
 		$context['page_title'] = $txt['arcade_admin_title'];
 	}
 }
+
+function arcadeLogin()
+{
+	global $scripturl, $txt, $user_info, $context, $modSettings;
+
+	$sub_actions = array(
+		'arena',
+		'newMatch',
+		'newMatch2',
+		'viewMatch',
+		'highscore',
+		'play',
+	);
+
+	$_REQUEST['sa'] = (!empty($_REQUEST['sa'])) ? trim($_REQUEST['sa']) : '';
+	$sa = (!empty($_REQUEST['sa'])) && in_array($_REQUEST['sa'], $sub_actions) ? $_REQUEST['sa'] : '';
+	$game = isset($_REQUEST['game']) ? 'game=' . abs((int)$_REQUEST['game']) . ';' : '';
+	$match = isset($_REQUEST['match']) ? 'match=' . abs((int)$_REQUEST['match']) . ';' : '';
+	$subaction = 'sa=' . $sa . ';' . $match . $game;
+	$_SESSION['old_url'] = $scripturl . '?action=arcade;' . $subaction;
+	$context['arcade_sub'] = (isset($_REQUEST['hs'])) ? 'score' : 'play';
+	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
+
+	if (empty($match) && empty($game) && empty($sa))
+		redirectexit();
+
+	if (!$user_info['is_guest'])
+		redirectexit('action=arcade;' . $subaction);
+
+	// Create a login token for SMF 2.1.x
+	if ($context['arcade_smf_version'] == 'v2.1')
+		createToken('login');
+	
+	$context['page_title'] = $txt['arcade_login_title'];
+	$context['sub_template'] = 'arcade_login';
+	$context['linktree'][] = array(
+		'url' => $scripturl . '?action=ingressarcade;' . $subaction,
+		'name' => $txt['arcade_login_top'],
+	);
+	loadTemplate('Arcade');
+}
 ?>

@@ -110,6 +110,95 @@ function template_arcade_above()
 	}
 }
 
+function template_arcade_login()
+{
+	global $context, $scripturl, $txt, $user_info, $modSettings;
+
+	// message to tell guests that they must log in
+	if ($context['arcade_smf_version'] == 'v2.0')
+	{
+		echo '
+		<div style="padding-top: 25px;"><span></span></div>
+		<form action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '">
+			<div class="centertext" style="border: 1px solid;padding: 5px;border-radius: 3px;width: 30%">
+				<div class="cat_bar">
+					<h3 class="catbg centertext">', $txt['arcade_email_' . $context['arcade_sub'] . '_error'], '</h3>
+				</div>
+				<div class="windowbg">
+					<div class="padding">
+						<div class="noticebox">', $txt['arcade_email_' . $context['arcade_sub'] . '_error_msg'], '</div>
+						<div style="display: table;border: 0px;" class="centertext ssi_table">
+							<div style="display: table-row;">
+								<div style="display: table-cell;text-align: right;"><label for="user">', $txt['username'], ':</label>&nbsp;</div>
+								<div style="display: table-cell;"><input type="text" id="user" name="user" size="30" value="', $user_info['username'], '" class="input_text" /></div>
+							</div>
+							<div style="display: table-row;">
+								<div style="display: table-cell;text-align: right;"><label for="passwrd">', $txt['password'], ':</label>&nbsp;</div>
+								<div style="display: table-cell;"><input type="password" name="passwrd" id="passwrd" size="30" class="input_password" /></div>
+							</div>';
+
+		// Open ID?
+		if (!empty($modSettings['enableOpenID']))
+			echo '
+							<div style="display: table-row;">
+								<div class="centertext" style="display: table-cell;width: 100%;"><strong>&mdash;', $txt['or'], '&mdash;</strong></div>
+							</div>
+							<div style="display: table-row;">
+								<div style="display: table-cell;text-align: right;"><label for="openid_url">', $txt['openid'], ':</label>&nbsp;</div>
+								<div style="display: table-cell;"><input type="text" name="openid_identifier" id="openid_url" class="input_text openid_login" size="17" /></div>
+							</div>';
+
+		echo '
+							<div style="display: table-row;">
+								<div style="display: table-cell;"><input type="hidden" name="cookielength" value="-1" /></div>
+								<div class="centertext" style="display: table-cell;"><input type="submit" value="', $txt['login'], '" class="button_submit" /></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div style="padding-top: 25px;"><span></span></div>';
+	}
+	else
+	{
+		echo '
+		<div style="padding-top: 25px;"><span></span></div>
+		<form action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '">
+			<div class="centertext" style="border: 1px solid;padding: 5px;border-radius: 3px;width: 30%;">
+				<div class="cat_bar">
+					<h3 class="catbg centertext">', $txt['arcade_email_' . $context['arcade_sub'] . '_error'], '</h3>
+				</div>
+				<div class="windowbg">
+					<div class="padding">
+						<div class="noticebox">', $txt['arcade_email_' . $context['arcade_sub'] . '_error_msg'], '</div>
+						<div style="display: table;border: 0px;" class="centertext ssi_table">
+							<div style="display: table-row;">
+								<div style="display: table-cell;text-align: right; border-spacing: 1px"><label for="user">', $txt['username'], ':</label>&nbsp;</div>
+								<div style="display: table-cell;"><input type="text" id="user" name="user" size="30" value="', $user_info['username'], '" class="input_text"></div>
+							</div>
+							<div style="display: table-row;">
+								<div style="display: table-cell;text-align: right; border-spacing: 1px;"><label for="passwrd">', $txt['password'], ':</label>&nbsp;</div>
+								<div style="display: table-cell;"><input type="password" name="passwrd" id="passwrd" size="30" class="input_password"></div>
+							</div>
+							<div style="display: table-row;">
+								<div style="display: table-cell;">
+									<input type="hidden" name="cookielength" value="-1">
+									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+									<input type="hidden" name="', $context['login_token_var'], '" value="', $context['login_token'], '">
+								</div>
+								<div style="display: table-cell;"><input type="submit" value="', $txt['login'], '" class="button_submit"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+		</form>
+		<div style="padding-top: 25px;"><span></span></div>';
+	}
+}
+
+
 function template_arcade_below()
 {
 	global $arcade_version;

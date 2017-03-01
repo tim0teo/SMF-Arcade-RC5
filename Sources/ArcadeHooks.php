@@ -43,6 +43,7 @@ function Arcade_actions(&$actionArray)
 		return;
 
 	$actionArray['arcade'] = array('Arcade.php', 'Arcade');
+	$actionArray['ingressarcade'] = array('Arcade.php', 'arcadeLogin');
 }
 
 function Arcade_core_features(&$core_features)
@@ -84,7 +85,7 @@ function Arcade_load_permissions(&$permissionGroups, &$permissionList, &$leftPer
 			'arcade_join_invite_match',
 			'arcade_comment',
 			'arcade_edit_settings',
-			'arcade_user_stats',			
+			'arcade_user_stats',
 		)
 	);
 
@@ -98,7 +99,7 @@ function Arcade_load_permissions(&$permissionGroups, &$permissionList, &$leftPer
 		);
 		$permissionGroups['membergroup']['classic'] += array(
 			'arcade',
-		);		
+		);
 	}
 	else
 		$permissionGroups['membergroup'] += array(
@@ -314,43 +315,6 @@ function Arcade_load_theme()
 	global $context, $settings, $txt;
 	$context['html_headers'] .= '
 	<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-func.js?rc4"></script>';
-
-	// message to tell users they must log in
-	// some javascript to display the unique error message
-	$flag = (!empty($context['current_action'])) && !empty($_REQUEST['arcade_email']) ? true : false;
-	$sub = (!empty($_REQUEST['hs'])) ? 'score' : 'play';
-	$bodyId = !empty($context['browser_body_id']) ? $context['browser_body_id'] : 'arcadeEmail';
-	if ($context['current_action'] == 'login' && $flag)
-		$context['html_headers'] .= '
-	<script type="text/javascript">
-		window.onload = function() {
-			' . ($bodyId == 'arcadeEmail' ? 'document.body.id = "' . $bodyId . '";' : '') . '
-			var arcnode1 = document.createElement("DIV");
-			document.getElementById("' . $bodyId. '").appendChild(arcnode1);
-			var arcnode2 = document.createElement("DIV");
-			var arcnode3 = document.createElement("H3");
-			var arcnode4 = document.createElement("DIV");
-			var arcnode5 = document.createElement("DIV");
-			var arcnode6 = document.createElement("DIV");
-			var arcnode7 = document.createElement("DIV");
-			var arctextnode1 = document.createTextNode("' . $txt['arcade_email_' . $sub . '_error'] . '");
-			var arctextnode2 = document.createTextNode("' . $txt['arcade_email_' . $sub . '_error_msg'] . '");
-			arcnode1.appendChild(arcnode2);
-			arcnode2.appendChild(arcnode3);
-			arcnode1.appendChild(arcnode4);
-			arcnode4.appendChild(arcnode5);
-			arcnode5.appendChild(arcnode6);
-			arcnode5.appendChild(arcnode7);
-			arcnode3.appendChild(arctextnode1);
-			arcnode6.appendChild(arctextnode2);
-			arcnode1.style = "position: fixed;top: 66%;left: 40%;border: 1px solid;padding: 5px;border-radius: 3px;";
-			arcnode2.className = "cat_bar";
-			arcnode3.className = "catbg centertext";
-			arcnode4.className = "windowbg";
-			arcnode5.className = "padding";
-			arcnode6.className = "noticebox";
-		}
-	</script>';
 
 	return;
 }

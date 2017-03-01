@@ -35,17 +35,17 @@ function template_arcade_online()
 						</noscript>
 					</div>
 				</div>
-				<table class="table_grid" cellspacing="0">
+				<table class="table_grid" style="border-spacing: 0;border-collapse: collapse;width: 100%;">
 					<thead>
 						<tr class="catbg">
-							<th scope="col" class="lefttext first_th" width="40%">
+							<th scope="col" class="lefttext first_th" style="width: 40%;">
 								<a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=user;', $context['arcade_join'] != 'disjoin' && $context['sort_by'] == 'user' ? 'join=disjoin;' : ($context['sort_by'] == 'user' ? 'join=join;' : ''), $context['sort_direction'] != 'down' && $context['sort_by'] == 'user' ? 'asc' : '', '" rel="nofollow">', $txt['who_user'], ' ', $context['sort_by'] == 'user' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['arcade_join'] != 'disjoin' ? 'up' : 'down') . '.gif" alt="" />' : '', '</a>
 								<span style="padding-left: 5%;">
-									<a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=user', $context['sort_direction'] != 'down' && $context['sort_by'] == 'user' ? '' : ';asc', '" rel="nofollow">', $txt['arcade_coalesce'], ' ', $context['sort_by'] == 'user' ? '<img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>									
+									<a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=user', $context['sort_direction'] != 'down' && $context['sort_by'] == 'user' ? '' : ';asc', '" rel="nofollow">', $txt['arcade_coalesce'], ' ', $context['sort_by'] == 'user' ? '<img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 								</span>
 							</th>
-							<th scope="col" class="lefttext" width="10%"><a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=time', $context['sort_direction'] == 'down' && $context['sort_by'] == 'time' ? ';asc' : '', '" rel="nofollow">', $txt['who_time'], ' ', $context['sort_by'] == 'time' ? '<img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
-							<th scope="col" class="lefttext last_th" width="50%">', $txt['who_action'], '</th>
+							<th scope="col" class="lefttext" style="width: 10%;padding-left: 7px;"><a href="', $scripturl, '?action=arcade;sa=online;start=', $context['start'], ';show=', $context['show_by'], ';sort=time', $context['sort_direction'] == 'down' && $context['sort_by'] == 'time' ? ';asc' : '', '" rel="nofollow">', $txt['who_time'], ' ', $context['sort_by'] == 'time' ? '<img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+							<th scope="col" class="lefttext last_th" style="width: 50%;padding-left: 7px;">', $txt['who_arcade_action'], '</th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -58,7 +58,7 @@ function template_arcade_online()
 		// $alternate will either be true or false. If it's true, use "windowbg2" and otherwise use "windowbg".
 		echo '
 						<tr class="windowbg', $alternate ? '2' : '', '">
-							<td>';
+							<td style="width: 40%;">';
 
 		echo '
 								<span class="member', $member['is_hidden'] ? ' hidden' : '', '">
@@ -71,8 +71,8 @@ function template_arcade_online()
 
 		echo '
 							</td>
-							<td nowrap="nowrap">', $member['time'], '</td>
-							<td>', $member['action'], '</td>
+							<td style="white-space: nowrap;width: 10%;">', $member['time'], '</td>
+							<td style="width: 50%;">', $member['action'], '</td>
 						</tr>';
 
 		// Switch alternate to whatever it wasn't this time. (true -> false -> true -> false, etc.)

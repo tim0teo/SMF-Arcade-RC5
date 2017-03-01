@@ -39,6 +39,8 @@ $txt['sendArcadeChallenge'] = 'Arcade Challenge';
 
 // Arcade online and Who's online
 $txt['arcade_online_title'] = 'Arcade Online';
+$txt['arcade_login_title'] = 'Arcade Login';
+$txt['arcade_login_top'] = 'Arcade Login';
 $txt['arcade_online'] = 'Online';
 $txt['arcade_online_unknown'] = '???';
 $txt['arcade_info_who'] = 'Online: %1$d Guest%3$s, %2$d User%4$s';
@@ -47,9 +49,12 @@ $txt['who_arcade_play'] = 'Playing <a href="' . $scripturl . '?action=arcade;sa=
 $txt['who_arcade_highscore'] = 'Viewing highscores of <a href="' . $scripturl . '?action=arcade;sa=highscore;game=%d">%s</a> on Arcade';
 $txt['who_arcade_match'] = 'Viewing Arcade Arena';
 $txt['who_arcade_online'] = 'Viewing Arcade Online';
+$txt['who_arcade_view_match'] = 'Viewing a match in the arena';
+$txt['who_arcade_new_match'] = 'Starting a new match in the arena';
 $txt['arcade_coalesce'] = 'Sort';
 $txt['arcade_no_online_guests'] = 'There are currently no guests in the arcade';
 $txt['arcade_no_online_members'] = 'There are currently no members in the arcade';
+$txt['who_arcade_action'] = 'Arcade Action';
 
 // Information Center
 $txt['arcade_info_center'] = 'Arcade Information';
@@ -211,8 +216,8 @@ $txt['arcade_submit_adjust_configure_log'] = 'Error while saving score for game 
 $txt['pdl_zipfile1'] = 'The download file was NOT SPECIFIED.';
 $txt['pdl_zipfile2'] = 'File not found.';
 $txt['pdl_zipfile3'] = 'Could not locate the specified directory - ';
-$txt['arcade_email_play_error'] = 'You need to log in to save a new score!';
-$txt['arcade_email_play_error_msg'] = 'You will be redirected to the game after logging in.';
+$txt['arcade_email_play_error'] = 'You need to log in for the arcade!';
+$txt['arcade_email_play_error_msg'] = 'You will be redirected to the arcade after logging in.';
 $txt['arcade_email_score_error'] = 'You need to log in to view high scores!';
 $txt['arcade_email_score_error_msg'] = 'You will be redirected to the highscores after logging in.';
 $txt['arcade_email_hs_error'] = 'You need to log in to view high scores because the Admin has disabled viewing scores for guests.';

@@ -29,7 +29,7 @@ function ArcadeOnline()
 	$context['sub_template'] = 'arcade_online';
 	$context['members'] = array();
 	$context['arcade_selected'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? ' selected="selected"' : ' selected';
-	$action_array = array($txt['who_arcade'], $txt['who_arcade_play'], $txt['who_arcade_highscore'], $txt['who_arcade_match'], $txt['who_arcade_online']);
+	$action_array = array($txt['who_arcade'], $txt['who_arcade_play'], $txt['who_arcade_highscore'], $txt['who_arcade_match'], $txt['who_arcade_online'], $txt['who_arcade_view_match'], $txt['who_arcade_new_match']);
 
 	// Sort out... the column sorting.
 	$sort_methods = array(

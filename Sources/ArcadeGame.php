@@ -38,14 +38,6 @@ function ArcadePlay()
 	global $sourcedir, $scripturl, $txt, $db_prefix, $context, $smcFunc, $user_info, $modSettings, $context;
 	$context['arcade']['popupscore'] = false;
 
-	// if they were directed from an email link but are not logged in then show them the login input
-	if (!empty($_REQUEST['game']) && $context['user']['is_guest'] && !empty($_REQUEST['arcade_email']))
-	{
-		$vars = (!empty($_REQUEST['sa'])) && $_REQUEST['sa'] == 'highscore' ? 'sa=highscore;game=' . abs((int)$_REQUEST['game']) : 'game=' . abs((int)$_REQUEST['game']);
-		$_SESSION['old_url'] = $scripturl . '?action=arcade;' . $vars;
-		redirectexit('action=login;arcade_email=1');
-	}
-
 	if (!$context['arcade']['can_play'])
 		fatal_lang_error('cannot_arcade_play', false);
 
@@ -530,13 +522,6 @@ function ArcadeHighscore()
 {
 	global $scripturl, $txt, $db_prefix, $modSettings, $context, $smcFunc, $user_info, $sourcedir;
 
-	// if they were directed from an email link but are not logged in then show them the login input
-	if (!empty($_REQUEST['game']) && $context['user']['is_guest'] && !empty($_REQUEST['arcade_email']))
-	{
-		$_SESSION['old_url'] = $scripturl . '?action=arcade;' . (!empty($_REQUEST['sa'])) && $_REQUEST['sa'] == 'highscore' ? 'sa=highscore;game=' . abs((int)$_REQUEST['game']) : 'game=' . abs((int)$_REQUEST['game']);
-		redirectexit('action=login;arcade_email=1;hs=1');
-	}
-	
 	// Is game set
 	if (!isset($_REQUEST['game']))
 		fatal_lang_error('arcade_game_not_found', false);
