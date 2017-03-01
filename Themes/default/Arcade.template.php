@@ -127,21 +127,22 @@ function template_arcade_login()
 				<div class="windowbg">
 					<div class="padding">
 						<div class="noticebox">', $txt['arcade_email_' . $context['arcade_sub'] . '_error_msg'], '</div>
+						<div style="padding-top: 15px;"><span></span></div>
 						<div style="display: table;border: 0px;" class="centertext ssi_table">
 							<div style="display: table-row;">
 								<div style="display: table-cell;text-align: right;"><label for="user">', $txt['username'], ':</label>&nbsp;</div>
 								<div style="display: table-cell;"><input type="text" id="user" name="user" size="30" value="', $user_info['username'], '" class="input_text" /></div>
 							</div>
 							<div style="display: table-row;">
-								<div style="display: table-cell;text-align: right;"><label for="passwrd">', $txt['password'], ':</label>&nbsp;</div>
-								<div style="display: table-cell;"><input type="password" name="passwrd" id="passwrd" size="30" class="input_password" /></div>
+								<div style="display: table-cell;text-align: right;padding-top: 5px;"><label for="passwrd">', $txt['password'], ':</label>&nbsp;</div>
+								<div style="display: table-cell;padding-top: 5px;"><input type="password" name="passwrd" id="passwrd" size="30" class="input_password" /></div>
 							</div>';
 
 		// Open ID?
 		if (!empty($modSettings['enableOpenID']))
 			echo '
 							<div style="display: table-row;">
-								<div class="centertext" style="display: table-cell;width: 100%;"><strong>&mdash;', $txt['or'], '&mdash;</strong></div>
+								<div class="centertext" style="display: table-cell;width: 100%;padding-top: 5px;"><strong>&mdash;', $txt['or'], '&mdash;</strong></div>
 							</div>
 							<div style="display: table-row;">
 								<div style="display: table-cell;text-align: right;"><label for="openid_url">', $txt['openid'], ':</label>&nbsp;</div>
@@ -151,7 +152,7 @@ function template_arcade_login()
 		echo '
 							<div style="display: table-row;">
 								<div style="display: table-cell;"><input type="hidden" name="cookielength" value="-1" /></div>
-								<div class="centertext" style="display: table-cell;"><input type="submit" value="', $txt['login'], '" class="button_submit" /></div>
+								<div class="centertext" style="display: table-cell;padding-top: 5px;"><input type="submit" value="', $txt['login'], '" class="button_submit" /></div>
 							</div>
 						</div>
 					</div>
@@ -172,14 +173,15 @@ function template_arcade_login()
 				<div class="windowbg">
 					<div class="padding">
 						<div class="noticebox">', $txt['arcade_email_' . $context['arcade_sub'] . '_error_msg'], '</div>
+						<div style="padding-top: 15px;"><span></span></div>
 						<div style="display: table;border: 0px;" class="centertext ssi_table">
 							<div style="display: table-row;">
 								<div style="display: table-cell;text-align: right; border-spacing: 1px"><label for="user">', $txt['username'], ':</label>&nbsp;</div>
 								<div style="display: table-cell;"><input type="text" id="user" name="user" size="30" value="', $user_info['username'], '" class="input_text"></div>
 							</div>
 							<div style="display: table-row;">
-								<div style="display: table-cell;text-align: right; border-spacing: 1px;"><label for="passwrd">', $txt['password'], ':</label>&nbsp;</div>
-								<div style="display: table-cell;"><input type="password" name="passwrd" id="passwrd" size="30" class="input_password"></div>
+								<div style="display: table-cell;text-align: right; border-spacing: 1px;padding-top: 5px;"><label for="passwrd">', $txt['password'], ':</label>&nbsp;</div>
+								<div style="display: table-cell;padding-top: 5px;"><input type="password" name="passwrd" id="passwrd" size="30" class="input_password"></div>
 							</div>
 							<div style="display: table-row;">
 								<div style="display: table-cell;">
@@ -187,7 +189,7 @@ function template_arcade_login()
 									<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 									<input type="hidden" name="', $context['login_token_var'], '" value="', $context['login_token'], '">
 								</div>
-								<div style="display: table-cell;"><input type="submit" value="', $txt['login'], '" class="button_submit"></div>
+								<div style="display: table-cell;padding-top: 5px;"><input type="submit" value="', $txt['login'], '" class="button_submit"></div>
 							</div>
 						</div>
 					</div>
