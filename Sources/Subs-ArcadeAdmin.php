@@ -320,7 +320,7 @@ function installGames($games, $move_games = false)
 	// SWF Reader will be needed
 	require_once($sourcedir . '/SWFReader.php');
 	$swf = new SWFReader();
-
+	$masterGameinfo = array();
 	$status = array();
 
 	$request = $smcFunc['db_query']('', '
@@ -346,6 +346,15 @@ function installGames($games, $move_games = false)
 		// Search for thumbnails
 		chdir($directory);
 
+		if (basename(dirname($directory)) !== basename($modSettings['gamesDirectory']) && file_exists(dirname($directory) . '/master-info.xml'))
+		{
+			$masterGameinfo = array();
+			$masterGameinfo = readGameInfo(dirname($directory) . '/master-info.xml');
+
+			if (!isset($gameinfo['submit']))
+				unset($gameinfo);
+		}
+
 		if (file_exists($directory . '/game-info.xml'))
 		{
 			$gameinfo = readGameInfo($directory . '/game-info.xml');
@@ -353,6 +362,17 @@ function installGames($games, $move_games = false)
 			if (!isset($gameinfo['id']))
 				unset($gameinfo);
 		}
+		elseif (file_exists($directory . '/' . $internal_name . '-game-info.xml'))
+		{
+			$gameinfo = readGameInfo($directory . '/' . $internal_name . '-game-info.xml');
+
+			if (!isset($gameinfo['id']))
+				unset($gameinfo);
+		}
+
+		foreach ($masterGameinfo as $key => $masterSetting)
+			if (!empty($masterGameinfo[$key]))
+				$gameinfo[$key] = $masterGameinfo[$key];
 
 		$thumbnail = glob($internal_name . '1.{png,gif,jpg}', GLOB_BRACE);
 		if (empty($thumbnail))
@@ -416,7 +436,7 @@ function installGames($games, $move_games = false)
 		// Detect submit system
 		if (empty($row['submit_system']))
 		{
-			if (isset($gameinfo))
+			if (isset($gameinfo['submit']))
 				$row['submit_system'] = $gameinfo['submit'];
 			elseif (substr($row['game_file'], -3) == 'php')
 				$row['submit_system'] = 'custom_game';
@@ -453,7 +473,7 @@ function installGames($games, $move_games = false)
 
 		$game_directory = $game['directory'];
 
-		// Move files if necassary
+		// Move files if necessary
 		if ($game_directory != $internal_name && $move_games)
 		{
 			if (!is_dir($modSettings['gamesDirectory'] . '/' . $internal_name) &&
@@ -501,13 +521,13 @@ function installGames($games, $move_games = false)
 		}
 
 
-		if(@file_exists($modSettings['gamesDirectory'] . '/' .$game_directory . '/game-info.xml'))
+		if(file_exists($modSettings['gamesDirectory'] . '/' .$game_directory . '/game-info.xml'))
 		{
 			$gameinfo = readGameInfo($modSettings['gamesDirectory'] . '/' .$game_directory . '/game-info.xml');
-			$game['description'] = !empty($gameinfo['description']) ? $gameinfo['description'] : false;
+			$game['description'] = !empty($gameinfo['description']) ? $gameinfo['description'] : '';
 		}
 
-		// override some settings if the configuration file is available
+		// override some settings if the php configuration file is available
 		if(file_exists($modSettings['gamesDirectory'] . '/' . $game_directory . '/' . $game['internal_name'] . '.php'))
 		{
 			@require_once($modSettings['gamesDirectory'] . '/' . $game_directory . '/' . $game['internal_name'] . '.php');
@@ -596,7 +616,7 @@ function unpackGames($games, $move_games = false)
 	{
 		$from = $modSettings['gamesDirectory'] . '/' . (!empty($row['game_directory']) ? $row['game_directory'] . '/' : '') . $row['game_file'];
 		$target = substr($row['game_file'], 0, strpos($row['game_file'], '.'));
-		$target = strlen(mb_substr($target, 6)) > 1 && mb_substr($target, 0, 5) == 'game_' ? mb_substr($target, 5) : $target;
+		$target = strlen(mb_substr($target, 6)) > 0 && mb_substr($target, 0, 5) == 'game_' ? mb_substr($target, 5) : $target;
 		$targetb = $target;
 
 		$i = 1;
@@ -619,7 +639,7 @@ function unpackGames($games, $move_games = false)
 		{
 			$buffer_size = 4096; // read 4kb at a time
 			$output = substr($row['game_file'], 0, -3);
-			$output = strlen(mb_substr($output, 6)) > 1 && mb_substr($output, 0, 5) == 'game_' ? mb_substr($output, 5) : $output;
+			$output = strlen(mb_substr($output, 6)) > 0 && mb_substr($output, 0, 5) == 'game_' ? mb_substr($output, 5) : $output;
 			$file = gzopen($modSettings['gamesDirectory'] . '/' . $row['game_file'], 'rb');
 			$out_file = fopen($modSettings['gamesDirectory'] . '/' . $output, 'wb');
 
@@ -637,7 +657,7 @@ function unpackGames($games, $move_games = false)
 
 		if (substr($row['game_file'] , -3) == 'zip')
 		{
-			$target = strlen(mb_substr($target, 6)) > 1 && mb_substr($target, 0, 5) == 'game_' ? mb_substr($target, 5) : $target;
+			$target = strlen(mb_substr($target, 6)) > 0 && mb_substr($target, 0, 5) == 'game_' ? mb_substr($target, 5) : $target;
 			if ($smfVersion === 'v2.1')
 				$files = arcadeUnzip($from, $modSettings['gamesDirectory'] . '/' . $target . '/', true, false);
 			else
@@ -703,21 +723,40 @@ function uninstallGames($games, $delete_files = false)
 	{
 		if ($delete_files)
 		{
-			if (basename($row['game_directory']) == $row['internal_name'])
+			if (basename(dirname($row['game_directory'])) !== basename($modSettings['gamesDirectory']) && basename(dirname($row['game_directory'])) !== basename($row['game_directory']))
 			{
 				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) || file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
 				{
-					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
+					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
+					foreach ($files as $file)
+						unlink($file);
+					rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
+				}
+				$check = ArcadeAdminScanDir(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']), '');
+				if (empty($check))
+					rmdir(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']));
+				elseif (count($check) == 1 && $check[0] == dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']) . '/master-info.xml')
+				{
+					unlink(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']) . '/master-info.xml');
+					rmdir(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']));
+				}
+
+			}
+			elseif (basename($row['game_directory']) == $row['internal_name'])
+			{
+				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) || file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
+				{
+					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
 					foreach ($files as $file)
 						unlink($file);
 					rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
 				}
 			}
-			elseif ($row['game_directory'] == 'game_' . $row['internal_name'])
+			elseif ($row['game_directory'] == $row['internal_name'])
 			{
 				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) || file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
 				{
-					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
+					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
 					foreach ($files as $file)
 						unlink($file);
 					rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
@@ -736,7 +775,7 @@ function uninstallGames($games, $delete_files = false)
 
 			if (is_dir($boarddir . '/arcade/gamedata/' . $row['internal_name']) || file_exists($boarddir . '/arcade/gamedata/' . $row['internal_name']))
 			{
-				$gdfiles = ArcadeAdminScanDir($boarddir . '/arcade/gamedata/' . $row['internal_name']);
+				$gdfiles = ArcadeAdminScanDir($boarddir . '/arcade/gamedata/' . $row['internal_name'], '');
 				foreach ($gdfiles as $file)
 					unlink($file);
 				rmdir($boarddir . '/arcade/gamedata/' . $row['internal_name']);
@@ -1147,6 +1186,7 @@ function gameCacheInsertGames($games, $return = false)
 	// Last step
 	foreach ($games as $id => $game)
 	{
+		$masterInfo = array();
 		if (!empty($game['directory']))
 		{
 			$game_directory = $modSettings['gamesDirectory'] . '/' . $game['directory'];
@@ -1462,7 +1502,7 @@ function deleteArcadeArchives($directory)
 	return true;
 }
 
-function ArcadeAdminScanDir($dir)
+function ArcadeAdminScanDir($dir, $ignore = '')
 {
 	$arrfiles = array();
 	if (is_dir($dir))
@@ -1476,12 +1516,14 @@ function ArcadeAdminScanDir($dir)
 				{
 					if (is_dir($file))
 					{
-						$arr = arcade_scan_dir($file);
+						$arr = ArcadeAdminScanDir($file, '');
 						foreach ($arr as $value)
 							$arrfiles[] = $dir . '/' . $value;
                     }
+					elseif ((!empty($ignore)) && $file == $ignore)
+                        continue;
 					else
-                        $arrfiles[] = $dir . '/' . $file;
+						$arrfiles[] = $dir . '/' . $file;
 				}
 			}
 			chdir("../");
