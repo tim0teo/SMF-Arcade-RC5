@@ -148,6 +148,7 @@ $txt['arcade_maintain_done'] = 'Maintenance finished!';
 $txt['arcade_maintenance_fixScores'] = 'Check and repair any errors on score tables';
 $txt['arcade_maintenance_updateGamecache'] = 'Update GameCache';
 $txt['arcade_maintenance_onlinePurge'] = 'Purge Online Arcade Log';
+$txt['arcade_maintenance_downloadPurge'] = 'Purge Download Directory';
 $txt['arcade_maintenance_main'] = 'Main';
 $txt['arcade_maintenance_highscore'] = 'Highscore';
 $txt['arcade_maintenance_category'] = 'Categories';

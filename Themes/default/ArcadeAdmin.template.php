@@ -93,6 +93,7 @@ function template_arcade_admin_maintenance()
 					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=fixScores;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_fixScores'], '</a></li>
 					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=updateGamecache;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_updateGamecache'], '</a></li>
 					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=onlinePurge;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_onlinePurge'], '</a></li>
+					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=downloadPurge;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_downloadPurge'], '</a></li>
 				</ul>
 			</div>
 		<span class="botslice"><span></span></span>

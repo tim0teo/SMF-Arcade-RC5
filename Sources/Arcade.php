@@ -18,6 +18,11 @@ if (!defined('SMF'))
 	void loadArcade([mode = normal])
 		- Initializes Arcade
 		- Called by Arcade() and Arcade Admin functions
+
+	void arcadeLogin()
+		- Shows a login prompt for guests
+		- Redirects to arcade with specific action and/or subActions
+
 */
 
 function Arcade()
@@ -320,7 +325,7 @@ function arcadeLogin()
 	// Create a login token for SMF 2.1.x
 	if ($context['arcade_smf_version'] == 'v2.1')
 		createToken('login');
-	
+
 	$context['page_title'] = $txt['arcade_login_title'];
 	$context['sub_template'] = 'arcade_login';
 	$context['linktree'][] = array(

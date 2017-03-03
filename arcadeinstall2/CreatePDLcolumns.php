@@ -6,6 +6,8 @@
  * @version 2.5
  * @license http://web-develop.ca/index.php?page=arcade_license_BSD2 BSD 2
  */
+
+db_extend('packages');
 addPDLcolumn1();
 addPDLcolumn2();
 deleteFile();
@@ -15,17 +17,10 @@ return;
 /* Check if the column exists */
 function checkFieldPDL($tableName,$columnName)
 {
-	$checkTable = false;
-	$checkTable = check_table_existsPDL($tableName);
-	if ($checkTable == true)
+	if (check_table_existsPDL($tableName))
 	{
-		global $db_prefix, $smcFunc;
-		$check = false;
-		$checkval = false;
-		$check = $smcFunc['db_query']('', "DESCRIBE {$db_prefix}$tableName $columnName");
-		$checkval = $smcFunc['db_num_rows']($check);
-		$smcFunc['db_free_result']($check);
-		if ($checkval > 0)
+		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, array());
+		if (in_array($columnName, $check))
 			return true;
 	}
 
@@ -35,20 +30,13 @@ function checkFieldPDL($tableName,$columnName)
 /*  Returns amount of columns in a table  */
 function checkTablePDL($tableName)
 {
-	$checkTable = false;
-	$checkTable = check_table_existsPDL($tableName);
-	if ($checkTable == true)
-	{
-		global $db_prefix, $smcFunc;
-		$check = false;
-		$checkval = false;
-		$check = $smcFunc['db_query']('', "DESCRIBE {$db_prefix}$tableName");
-		$checkval = $smcFunc['db_num_rows']($check);
-		$smcFunc['db_free_result']($check);
-		if ($checkval > 0)
-			return $checkval;
-	}
+	global $smcFunc;
 
+	if (check_table_existsPDL($tableName))
+	{
+		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, array());
+		return !empty($check) ? count($check) : false;
+	}
 	return false;
 }
 
@@ -56,78 +44,170 @@ function checkTablePDL($tableName)
 function check_table_existsPDL($table)
 {
 	global $db_prefix, $smcFunc;
-	$check = false;
-	$checkval = false;
-	$check = $smcFunc['db_query']('', "SHOW TABLES LIKE '{$db_prefix}$table'");
-	$checkval = $smcFunc['db_num_rows']($check);
-	$smcFunc['db_free_result']($check);
-	if ($checkval >0)
+
+	if ($smcFunc['db_list_tables'](false, $db_prefix . $table))
 		return true;
 
 	return false;
 }
 
-/* Add extra needed tables/columns if they do not exist */
+// Add extra needed tables/columns if they do not exist
 function addPDLcolumn1()
 {
-	global $smcFunc, $db_prefix;
-	$table = 'arcade_pdl1';
-	$z = check_table_existsPDL($table);
-	if ($z == false)
-	{
-		$result = $smcFunc['db_query']('', "CREATE TABLE {$db_prefix}{$table}
-			(`id_member` int(11) NOT NULL, `count` int(11) NOT NULL, `year` varchar(255) NOT NULL, `day` varchar(255) NOT NULL, `latest_year` varchar(255) NOT NULL, `latest_day` varchar(255) NOT NULL, `permission` int(11) NOT NULL, PRIMARY KEY (`id_member`))");
-	}
-	else
-	{
-		$columns = array('id_member', 'count', 'year', 'day', 'latest_year', 'latest_day', 'permission');
-		$types = array('int(11) NOT NULL', 'int(11) NOT NULL', 'varchar(255) NOT NULL', 'varchar(255) NOT NULL' , 'varchar(255) NOT NULL', 'varchar(255) NOT NULL', 'int(11) NOT NULL');
-		$table = 'arcade_pdl1';
-		$count = 0;
-		foreach ($columns as $column)
-		{
-			$a = checkFieldPDL($table,$column);
-			$type = $types[$count];
-			    if ($a == false)
-				{
-					$request = $smcFunc['db_query']('', "ALTER TABLE {$db_prefix}$table
-						ADD $column $type");
-				}
-			$count++;
+	global $smcFunc;
 
-		}
+	$columns = array(
+		array(
+			'name' => 'id_member',
+			'type' => 'int',
+			'size' => 10,
+			'unsigned' => true,
+			'auto' => false,
+		),
+		array(
+			'name' => 'count',
+			'type' => 'int',
+			'size' => 10,
+			'unsigned' => true,
+		),
+		array(
+			'name' => 'year',
+			'type' => 'varchar',
+			'default' => '',
+			'size' => 255,
+		),
+		array(
+			'name' => 'day',
+			'type' => 'varchar',
+			'default' => '',
+			'size' => 255,
+		),
+		array(
+			'name' => 'latest_year',
+			'type' => 'varchar',
+			'default' => '',
+			'size' => 255,
+		),
+		array(
+			'name' => 'latest_day',
+			'type' => 'varchar',
+			'default' => '',
+			'size' => 255,
+		),
+		array(
+			'name' => 'permission',
+			'type' => 'int',
+			'size' => 10,
+			'unsigned' => true,
+		),
+	);
+
+	$indexes = array(
+		array(
+			'type' => 'primary',
+			'columns' => array('id_member')
+		),
+	);
+
+	if (!check_table_existsPDL('arcade_pdl1'))
+	{
+		$smcFunc['db_create_table']('{db_prefix}arcade_pdl1', $columns, $indexes, array(), 'ignore');
+		return true;
+	}
+
+	$check = $smcFunc['db_list_columns'] ('{db_prefix}arcade_pdl1', false, array());
+	$columns_ref = array('id_member', 'count', 'year', 'day', 'latest_year', 'latest_day', 'permission');
+	$compare = array_diff($columns_ref, $check);
+	foreach ($compare as $key => $add)
+	{
+		$smcFunc['db_add_column'](
+			'{db_prefix}arcade_pdl1',
+			$column[$key]
+		);
 	}
 }
 
 function addPDLcolumn2()
 {
-	global $smcFunc, $db_prefix, $boarddir;
-	$table = 'arcade_pdl2';
-	$z = check_table_existsPDL($table);
-	if ($z == false)
-	{
-		$result = $smcFunc['db_query']('', "CREATE TABLE {$db_prefix}{$table}
-			(`pdl_gameid` int(11) NOT NULL, `game_name` varchar(255) NOT NULL, `report_day` varchar(255) NOT NULL, `report_year` varchar(255) NOT NULL, `user_id` int(11) NOT NULL, `report_id` int(11) NOT NULL, `download_count` int(11) NOT NULL, `download_disable` int(11) NOT NULL, PRIMARY KEY (`pdl_gameid`))");
-	}
-	else
-	{
-		$columns = array('pdl_gameid', 'game_name', 'report_day', 'report_year', 'user_id', 'report_id', 'download_count', 'download_disable');
-		$types = array('int(11) NOT NULL', 'varchar(255) NOT NULL', 'varchar(255) NOT NULL', 'varchar(255) NOT NULL' ,'int(11) NOT NULL', 'int(11) NOT NULL', 'int(11) NOT NULL', 'int(11) NOT NULL');
-		$table = 'arcade_pdl2';
-		$count = 0;
-		foreach ($columns as $column)
-		{
-			$a = checkFieldPDL($table,$column);
-			$type = $types[$count];
-			    if ($a == false)
-				{
-                    $request = $smcFunc['db_query']('', "ALTER TABLE {$db_prefix}$table
-                    ADD $column $type");
-				}
-			$count++;
+	global $smcFunc;
 
-		}
+	$columns = array(
+		array(
+			'name' => 'pdl_gameid',
+			'type' => 'int',
+			'size' => 10,
+			'unsigned' => true,
+			'auto' => false,
+		),
+		array(
+			'name' => 'gamename',
+			'type' => 'varchar',
+			'default' => '',
+			'size' => 255,
+		),
+		array(
+			'name' => 'report_day',
+			'type' => 'varchar',
+			'default' => '',
+			'size' => 255,
+		),
+		array(
+			'name' => 'report_year',
+			'type' => 'varchar',
+			'default' => '',
+			'size' => 255,
+		),
+		array(
+			'name' => 'user_id',
+			'type' => 'int',
+			'size' => 10,
+			'unsigned' => true,
+		),
+		array(
+			'name' => 'report_id',
+			'type' => 'int',
+			'size' => 10,
+			'unsigned' => true,
+		),
+		array(
+			'name' => 'download_count',
+			'type' => 'int',
+			'size' => 10,
+			'unsigned' => true,
+		),
+		array(
+			'name' => 'download_disable',
+			'type' => 'int',
+			'size' => 10,
+			'unsigned' => true,
+		),
+	);
+
+	$indexes = array(
+		array(
+			'type' => 'primary',
+			'columns' => array('pdl_gameid')
+		),
+	);
+
+	if (!check_table_existsPDL('arcade_pdl2'))
+	{
+		$smcFunc['db_create_table']('{db_prefix}arcade_pdl2', $columns, $indexes, array(), 'ignore');
+		return true;
 	}
+
+	$check = $smcFunc['db_list_columns'] ('{db_prefix}arcade_pdl2', false, array());
+	$columns_ref = array('pdl_gameid', 'game_name', 'report_day', 'report_year', 'user_id', 'report_id', 'download_count', 'download_disable');
+	$compare = array_diff($columns_ref, $check);
+	foreach ($compare as $key => $add)
+	{
+		$smcFunc['db_add_column'](
+			'{db_prefix}arcade_pdl2',
+			$column[$key]
+		);
+	}
+
+	return true;
 }
 
 function deleteFile()

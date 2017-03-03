@@ -261,12 +261,9 @@ function updateAdminFeatures($item, $enabled = false)
 
 function checkTableExistsArcade($table)
 {
-	global $smcFunc;
-	list($check, $checkval) = array(false, false);
-	$check = $smcFunc['db_query']('', "SHOW TABLES LIKE '{db_prefix}$table'");
-	$checkval = $smcFunc['db_num_rows']($check);
-	$smcFunc['db_free_result']($check);
-	if ($checkval > 0)
+	global $db_prefix, $smcFunc;
+
+	if ($smcFunc['db_list_tables'](false, $db_prefix . $table))
 		return true;
 
 	return false;

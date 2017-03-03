@@ -25,6 +25,18 @@ if (!defined('SMF'))
 
 	void fixCategories()
 		- ???
+
+	void ArcadeMaintenanceCategory()
+		- ???
+
+	void ArcadeMaintenanceOnline()
+		- ???
+
+	void ArcadeMaintenanceDownload()
+		- ???
+
+	void ArcadeScanDir()
+		- ???
 */
 
 function ArcadeMaintenance()
@@ -45,7 +57,7 @@ function ArcadeMaintenance()
 	$subActions = array(
 		'main' => array('ArcadeMaintenanceActions'),
 		'highscore' =>  array('ArcadeMaintenanceHighscore'),
-		'category' => array('ArcadeMaintenanceCategory'),		
+		'category' => array('ArcadeMaintenanceCategory'),
 	);
 
 	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'main';
@@ -61,6 +73,7 @@ function ArcadeMaintenanceActions()
 		'fixScores' => array('MaintenanceFixScores'),
 		'updateGamecache' => array('MaintenanceGameCache'),
 		'onlinePurge' => array('ArcadeMaintenanceOnline'),
+		'downloadPurge' => array('ArcadeMaintenanceDownload'),
 	);
 
 	$context['maintenance_finished'] = false;
@@ -429,7 +442,7 @@ function ArcadeMaintenanceCategory()
 
 	$context['maintenance_finished'] = false;
 	$modSettings['arcadeDefaultCategory'] = !empty($modSettings['arcadeDefaultCategory']) ? (int)$modSettings['arcadeDefaultCategory'] : 0;
-	
+
 	if ((isset($_REQUEST['cat_default'])) && $modSettings['arcadeDefaultCategory'] != (int)$_REQUEST['cat_default'])
 	{
 		checkSession('request');
@@ -459,14 +472,52 @@ function ArcadeMaintenanceOnline()
 {
 	global $smcFunc;
 	$time = time();
-	
+
 	// Just check we haven't ended up with something theme exclusive somehow.
 	$smcFunc['db_query']('', '
 		DELETE FROM {db_prefix}arcade_member_data
 		WHERE {int:now} - online_time > 600',
 		array(
-			'now' => $time,			
+			'now' => $time,
 		)
 	);
+}
+
+function ArcadeMaintenanceDownload()
+{
+	global $boarddir;
+	$files = ArcadeScanDir($boarddir . '/games_download', 'index.php');
+
+	array_map('unlink', $files);
+}
+
+function ArcadeScanDir($dir, $indexphp = 'index.php')
+{
+	$arrfiles = array();
+	if (is_dir($dir))
+	{
+		if ($handle = opendir($dir))
+		{
+			chdir($dir);
+			while (false !== ($file = readdir($handle)))
+			{
+				if ($file != "." && $file != ".." && substr($file, -1) !== '~' && $file !== $indexphp)
+				{
+					if (is_dir($file))
+					{
+						$arr = ArcadeScanDir($file, 'index.php');
+						foreach ($arr as $value)
+							$arrfiles[] = $dir . '/' . $value;
+                    }
+					else
+                        $arrfiles[] = $dir . '/' . $file;
+				}
+			}
+			chdir("../");
+		}
+		closedir($handle);
+	}
+
+	return $arrfiles;
 }
 ?>

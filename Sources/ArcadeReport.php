@@ -130,14 +130,12 @@ function ArcadeReport()
 /* Check if the column exists */
 function checkFieldPDLReport($tableName,$columnName)
 {
-	global $db_prefix, $smcFunc;
-	$check = false;
-	$checkval = false;
-	$check = $smcFunc['db_query']('', "DESCRIBE {$db_prefix}$tableName $columnName");
-	$checkval = $smcFunc['db_num_rows']($check);
-	$smcFunc['db_free_result']($check);
-	if ($checkval > 0)
-		return true;
+	if (check_table_existsPDLReport($tableName))
+	{
+		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, array());
+		if (in_array($columnName, $check))
+			return true;
+	}
 
 	return false;
 }
@@ -145,15 +143,13 @@ function checkFieldPDLReport($tableName,$columnName)
 /*  Returns amount of columns in a table  */
 function checkTablePDLReport($tableName)
 {
-	global $db_prefix, $smcFunc;
-	$check = false;
-	$checkval = false;
-	$check = $smcFunc['db_query']('', "DESCRIBE {$db_prefix}$tableName");
-	$checkval = $smcFunc['db_num_rows']($check);
-	$smcFunc['db_free_result']($check);
-	if ($checkval > 0)
-		return $checkval;
+	global $smcFunc;
 
+	if (check_table_existsPDLReport($tableName))
+	{
+		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, array());
+		return !empty($check) ? count($check) : false;
+	}
 	return false;
 }
 
@@ -161,12 +157,8 @@ function checkTablePDLReport($tableName)
 function check_table_existsPDLReport($table)
 {
 	global $db_prefix, $smcFunc;
-	$check = false;
-	$checkval = false;
-	$check = $smcFunc['db_query']('', "SHOW TABLES LIKE '{$db_prefix}$table'");
-	$checkval = $smcFunc['db_num_rows']($check);
-	$smcFunc['db_free_result']($check);
-	if ($checkval >0)
+
+	if ($smcFunc['db_list_tables'](false, $db_prefix . $table))
 		return true;
 
 	return false;
@@ -175,22 +167,52 @@ function check_table_existsPDLReport($table)
 /*  Update arcade_pdl1 values  */
 function createpdlval1($userid, $count, $year, $day, $latest_year, $latest_day, $permission)
 {
-	global $smcFunc, $db_prefix, $db_name;
-	$tableName = 'arcade_pdl1';
-	$request = false;
-	$request = $smcFunc['db_query']('', "DELETE FROM `{db_prefix}$tableName` WHERE `{db_prefix}$tableName`.`id_member` = '$userid'");
-	$request = $smcFunc['db_query']('', "INSERT INTO `{db_prefix}$tableName` (`id_member` , `count` ,`year` ,`day` ,`latest_year` ,`latest_day` ,`permission`)
-               VALUES ('$userid', '$count', '$year', '$day', '$latest_year', '$latest_day', '$permission')");
+	global $smcFunc;
+
+	$request = $smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}arcade_pdl1
+		WHERE id_member = {int:userid}',
+		array('userid' => $userid,
+		)
+	);
+
+	$smcFunc['db_insert']('replace',
+		'{db_prefix}arcade_pdl1',
+		array(
+			'id_member' => 'int', 'count' => 'int', 'year' => 'string', 'day' => 'string', 'latest_year' => 'string', 'latest_day' => 'string', 'permission' => 'int',
+		),
+		array(
+			$userid, $count, $year, $day, $latest_year, $latest_day, $permission,
+		),
+		array('id_member',
+		)
+	);
 }
 
 /*  Update arcade_pdl2 values  */
 function createpdlval2($gameid, $gamename, $repday, $repyear, $repuser, $repid, $dl_count, $dl_disable)
 {
-	global $smcFunc, $db_prefix, $db_name;
-	$tableName = 'arcade_pdl2';
-	$request = $smcFunc['db_query']('', "DELETE FROM `{db_prefix}$tableName` WHERE `{db_prefix}$tableName`.`pdl_gameid` = '$gameid'");
-	$request = $smcFunc['db_query']('', "INSERT INTO `{db_prefix}$tableName` (`pdl_gameid`, `game_name`, `report_day`, `report_year`, `user_id`, `report_id`, `download_count`, `download_disable`)
-				VALUES ('$gameid', '$gamename', '$repday', '$repyear', '$repuser', '$repid', '$dl_count', '$dl_disable')");
+	global $smcFunc;
+	$game_name = str_replace(array('\\', "\0", "\n", "\r", "'", '"', "\x1a"), array('\\\\', '\\0', '\\n', '\\r', "\\'", '\\"', '\\Z'), $gamename);
+
+	$request = $smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}arcade_pdl2
+		WHERE id_member = {int:userid}',
+		array('pdl_gameid' => $gameid,
+		)
+	);
+
+	$smcFunc['db_insert']('replace',
+		'{db_prefix}arcade_pdl2',
+		array(
+			'pdl_gameid' => 'int', 'game_name' => 'string', 'report_day' => 'string', 'report_year' => 'string', 'user_id' => 'int', 'report_id' => 'int', 'download_count' => 'int', 'download_disable' => 'int',
+		),
+		array(
+			$gameid, $game_name, $repday, $repyear, $repuser, $repid, $dl_count, $dl_disable,
+		),
+		array('pdl_gameid',
+		)
+	);
 }
 
 /* Disable the game */
