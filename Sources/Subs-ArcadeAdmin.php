@@ -55,6 +55,22 @@ if (!defined('SMF'))
 
 	void deleteArcadeArchives()
 		- ???
+
+	void ArcadeAdminScanDir()
+		- ???
+
+	void ArcadeAdminCategoryDropdown()
+		- ???
+
+	void return_bytes()
+		- ???
+
+	void arcadeUnzip()
+		- ???
+
+	void arcadeCreateDirs()
+		- ???
+
 */
 
 function list_getNumGamesInstalled($filter)
@@ -687,12 +703,11 @@ function uninstallGames($games, $delete_files = false)
 	{
 		if ($delete_files)
 		{
-			if ($row['game_directory'] == $row['internal_name'])
+			if (basename($row['game_directory']) == $row['internal_name'])
 			{
 				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) || file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
 				{
 					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
-					//deltree($modSettings['gamesDirectory'] . '/' . $row['game_directory'], true);
 					foreach ($files as $file)
 						unlink($file);
 					rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
@@ -703,7 +718,6 @@ function uninstallGames($games, $delete_files = false)
 				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) || file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
 				{
 					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
-					//deltree($modSettings['gamesDirectory'] . '/' . $row['game_directory'], true);
 					foreach ($files as $file)
 						unlink($file);
 					rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
@@ -711,7 +725,7 @@ function uninstallGames($games, $delete_files = false)
 			}
 			else
 			{
-				$files = array_unique(array($row['game_file'], $row['thumbnail'], $row['thumbnail_small']));
+				$files = array_unique(array($row['game_file'], $row['thumbnail'], $row['thumbnail_small'], mb_substr($row['game_file'], 0, -4) . '.php'));
 
 				foreach ($files as $f)
 				{
@@ -887,8 +901,7 @@ function isGame($file, $directory)
 	// Is single file which is game?
 	if (!is_dir($directory . '/' . $file) && substr($file, -3) == 'swf')
 		return array(true, $directory, array('file' => $file));
-	/*elseif (substr($file, -3) == 'php' && $file != 'index.php')
-		return array(true, $directory, array('file' => $file));*/
+
 	// Is game directory?
 	elseif (is_dir($directory . '/' . $file))
 	{
