@@ -417,7 +417,7 @@ function ManageGamesInstall2()
 	else
 	{
 		$location = rtrim($modSettings['gamesDirectory'], '/');
-		list($id_games, $id_files) = array(array(), array());
+		list($id_games, $id_files, $id_game_files) = array(array(), array(), array());
 
 		foreach ($games as $game)
 			$id_files[] = $game;
@@ -437,18 +437,66 @@ function ManageGamesInstall2()
 			while ($row = $smcFunc['db_fetch_assoc']($request))
 			{
 				$id_games[] = !empty($row['id_game']) ? (int)$row['id_game'] : 0;
+				$id_game_files[] = !empty($row['id_file']) ? $row['id_file'] : 0;
+				$files = array_unique(
+					array(
+						$row['game_file'],
+						mb_substr($row['game_file'], 0, -4) . '.png',
+						mb_substr($row['game_file'], 0, -4) . '.gif',
+						mb_substr($row['game_file'], 0, -4) . '.jpg',
+						mb_substr($row['game_file'], 0, -4) . '.php',
+						mb_substr($row['game_file'], 0, -4) . '-game-info.xml',
+						mb_substr($row['game_file'], 0, -4) . '.xap',
+						mb_substr($row['game_file'], 0, -4) . '.ini',
+					)
+				);
+				$dest = $location . '/' . basename($row['game_directory']);
+				$ibp = (strlen($row['game_file']) > 4) && substr($row['game_file'], -4) == '.php' ? basename($game['game_file']) : '';
+				if ((!empty($row['game_directory'])) && $dest !== $location)
+				{
+					foreach ($files as $file)
+						if (file_exists($dest . '/' . $file))
+							unlink($dest . '/' . $file);
+					$gfiles = ArcadeAdminScanDir($dest, '');
+					if (empty($gfiles))
+						rmdir($dest);
+					elseif ((count($gfiles) == 1) && $gfiles[0] == 'master-info.xml')
+					{
+						unlink($dest . '/master-info.xml');
+						rmdir($dest);
+					}
+				}
+				if((!empty($row['game_file'])))
+				{
+					foreach ($files as $file)
+						if (file_exists($location . '/' . $file))
+							unlink($location . '/' . $file);
+				}
 
-				if (!empty($row['game_directory']))
-					deleteArcadeArchives($location . '/' . rtrim($row['game_directory'], '/'));
-
-				if((!empty($row['game_file'])) && file_exists($location . '/' . $row['game_file']))
-					unlink($location . '/' . $row['game_file']);
+				if ((!empty($ibp)) && is_dir($boarddir . '/arcade/gamedata/' . $ibp))
+				{
+					$gdfiles = ArcadeAdminScanDir($boarddir . '/arcade/gamedata/' . $ibp, '');
+					foreach ($gdfiles as $file)
+						unlink($file);
+					rmdir($boarddir . '/arcade/gamedata/' . $ibp);
+				}
 			}
 
 			$smcFunc['db_free_result']($request);
 
 			if (!empty($id_games))
 				uninstallGames($id_games, true);
+
+			foreach ($id_game_files as $id)
+			{
+				$smcFunc['db_query']('', '
+					DELETE FROM {db_prefix}arcade_files
+					WHERE id_file = {int:file}',
+					array(
+						'file' => $id,
+					)
+				);
+			}
 		}
 
 		redirectexit('action=admin;area=managegames;sa=install;sesc=' . $context['session_id']);
@@ -612,6 +660,7 @@ function ManageGamesUpload()
 	// css & js implementation
 	if (!empty($modSettings['arcadeUploadSystem']))
 		$context['html_headers'] .= '
+	<link href="' . $settings['default_theme_url'] . '/css/arcade-upload.css?rc4" rel="stylesheet" type="text/css" />' . ($smfVersion !== 'v2.1' ? '
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>' : '') . '
 	<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-uploader-html5.js?ac55"></script>
 	<script type="text/javascript">

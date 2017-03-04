@@ -15,6 +15,7 @@ function template_manage_games_list()
 	{
 		echo '
 		<div id="arcade_message">
+			<div class="windowbg" style="margin: 1ex; padding: 1ex 2ex 0px 2ex; border: 1px dashed green; color: green;">
 				<div style="text-decoration: underline;" id="arcade_message_title">', $context['qaction_title'], '</div>
 				<div id="arcade_message_text">', $context['qaction_text'], ':
 					<ul>';
