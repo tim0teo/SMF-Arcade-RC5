@@ -22,7 +22,8 @@ February 2017
  & New strings for profile changes
  ! Fixed SMF 2.1 installation for profile area hook changes 
  ! Fixed guest permissions for games with no opted category
- + Added custom php/xml file generation for game downloads 
+ + Added custom php/xml file generation for game downloads
+ + Added additional custom install data as xml file(s) (visit WebDev for support)  
  ! Fixed/changed download subroutine (+ one file removed)
  + New maintenance feature to manually purge Arcade download directory
  ! Fixed database installation subroutine to conform to SMF standard

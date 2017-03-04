@@ -45,7 +45,6 @@ function template_arcade_game_above()
 			'lang' => true
 		);
 
-
 	/* Download Link if it is supported */
 	if (empty($modSettings['arcadeEnableDownload']))
 		$modSettings['arcadeEnableDownload'] = false;
@@ -407,7 +406,7 @@ function template_arcade_game_below()
 		', template_button_strip($context['arcade']['buttons'], 'right'), '
 	</div>
 	<div class="plainbox" id="arcadebox" style="display: none; position: fixed; left: 0px; top: 0px; width: 33%;">
-		<div id="arcadebox_html" style=""></div>
+		<div id="arcadebox_html" style="display: inline;"></div>
 	</div>';
 }
 ?>

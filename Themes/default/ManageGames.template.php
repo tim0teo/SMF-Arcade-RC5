@@ -15,7 +15,6 @@ function template_manage_games_list()
 	{
 		echo '
 		<div id="arcade_message">
-			<div class="windowbg" style="margin: 1ex; padding: 1ex 2ex; border: 1px dashed green; color: green;">
 				<div style="text-decoration: underline;" id="arcade_message_title">', $context['qaction_title'], '</div>
 				<div id="arcade_message_text">', $context['qaction_text'], ':
 					<ul>';
@@ -33,7 +32,7 @@ function template_manage_games_list()
 					</ul>
 				</div>
 			</div>
-		</div><br />
+		</div>
 		<form enctype="multipart/form-data" id="upload_form" action="', $scripturl, '?action=admin;area=managegames;sesc=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
 			<input type="hidden" name="sesc" value="', $context['session_id'], '" />
 		</form>';
@@ -98,7 +97,7 @@ function template_manage_games_uninstall_confirm()
 function template_manage_games_upload()
 {
 	global $scripturl, $context, $txt, $boardurl, $boarddir, $modSettings, $settings;
-	// "' . rtrim($modSettings['gamesUrl'], '/') . '/"
+
 	echo '
 	<link href="' . $settings['default_theme_url'] . '/css/arcade-upload.css?rc4" rel="stylesheet" type="text/css" />
 	<form id="upload_form" action="', $scripturl, '?action=admin;area=managegames;sa=upload2" method="post" accept-charset="', $context['character_set'], '" enctype="multipart/form-data">

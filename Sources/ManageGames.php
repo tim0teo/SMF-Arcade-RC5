@@ -577,20 +577,18 @@ function ManageGamesUpload()
 
 	isAllowedTo('arcade_admin');
 
-	if ($smfVersion === 'v2.1')
+	if ($smfVersion == 'v2.1')
+	{
+		$modSettings['cookieTime'] = 3153600;
 		createToken('admin', 'post');
+	}
 	else
 		require_once($sourcedir . '/Subs-Auth.php');
 
 	// this is done so we are not logged-out whilst using the container
 	if (!empty($modSettings['arcadeUploadSystem']))
 	{
-		if ($smfVersion === 'v2.1')
-		{
-			$_SESSION['login_' . $cookiename][2] = time() + 3600;
-			setLoginCookie(60 * $modSettings['cookieTime'], $user_settings['id_member'], hash_salt($user_settings['passwd'], $user_settings['password_salt']));
-		}
-		else
+		if ($smfVersion !== 'v2.1')
 		{
 			$cookie_state = (empty($modSettings['localCookies']) ? 0 : 1) | (empty($modSettings['globalCookies']) ? 0 : 2);
 			$data = serialize(array($user_info['id'], sha1($user_settings['passwd'] . $user_settings['password_salt']), time() + (60 * $modSettings['cookieTime']), $cookie_state));
@@ -614,9 +612,8 @@ function ManageGamesUpload()
 	// css & js implementation
 	if (!empty($modSettings['arcadeUploadSystem']))
 		$context['html_headers'] .= '
-	<link href="' . $settings['default_theme_url'] . '/css/arcade-upload.css?rc4" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-uploader-html5.js?rc4"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>' : '') . '
+	<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-uploader-html5.js?ac55"></script>
 	<script type="text/javascript">
 		// common variables for arcade upload
 		var uploadScript = "' . $scripturl . '?action=admin;area=managegames;sa=upload2";

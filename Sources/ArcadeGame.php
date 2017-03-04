@@ -689,7 +689,7 @@ function ArcadeHighscore()
 
 	// Template
 	$popScore = !empty($scoreId) ? (int)$scoreId : -1;
-	$context['html_headers'] = '
+	$context['html_headers'] .= '
 		<script type="text/javascript">
 			var highUrl = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';edit;score=' . $popScore . '";
 			window.opener.location.href = highUrl;
