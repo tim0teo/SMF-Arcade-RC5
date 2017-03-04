@@ -721,11 +721,22 @@ function uninstallGames($games, $delete_files = false)
 
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
+		$files = array_unique(
+			array(
+				$row['game_file'],
+				$row['thumbnail'],
+				$row['thumbnail_small'],
+				mb_substr($row['game_file'], 0, -4) . '.php',
+				mb_substr($row['game_file'], 0, -4) . '-game-info.xml',
+				mb_substr($row['game_file'], 0, -4) . '.xap',
+				mb_substr($row['game_file'], 0, -4) . '.ini',
+			)
+		);
 		if ($delete_files)
 		{
-			if (basename(dirname($row['game_directory'])) !== basename($modSettings['gamesDirectory']) && basename(dirname($row['game_directory'])) !== basename($row['game_directory']))
+			if (basename(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory'])) !== basename($modSettings['gamesDirectory']) && basename($modSettings['gamesDirectory'] . '/' . $row['game_directory']) !== basename($modSettings['gamesDirectory']))
 			{
-				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) || file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
+				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
 				{
 					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
 					foreach ($files as $file)
@@ -742,19 +753,9 @@ function uninstallGames($games, $delete_files = false)
 				}
 
 			}
-			elseif (basename($row['game_directory']) == $row['internal_name'])
+			elseif (basename($row['game_directory']) == $row['internal_name'] && $row['internal_name'] !== basename($modSettings['gamesDirectory']))
 			{
-				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) || file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
-				{
-					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
-					foreach ($files as $file)
-						unlink($file);
-					rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
-				}
-			}
-			elseif ($row['game_directory'] == $row['internal_name'])
-			{
-				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) || file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
+				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) && basename($modSettings['gamesDirectory'] . '/' . $row['game_directory']) !== $modSettings['gamesDirectory'])
 				{
 					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
 					foreach ($files as $file)
@@ -764,12 +765,26 @@ function uninstallGames($games, $delete_files = false)
 			}
 			else
 			{
-				$files = array_unique(array($row['game_file'], $row['thumbnail'], $row['thumbnail_small'], mb_substr($row['game_file'], 0, -4) . '.php'));
-
 				foreach ($files as $f)
 				{
-					if (!empty($f) && file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/' . $f))
+					if ((!empty($f)) && file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/' . $f))
 						unlink($modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/' . $f);
+					/*
+					if (!empty($row['game_directory']) && file_exists(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']) . '/' . $f))
+						unlink(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']) . '/' . $f);
+					*/
+				}
+
+				if (basename($modSettings['gamesDirectory'] . '/' . $row['game_directory']) !== basename($modSettings['gamesDirectory']))
+				{
+					$check = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
+					if (empty($check))
+						rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
+					elseif (count($check) == 1 && $check[0] == $modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/master-info.xml')
+					{
+						unlink($modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/master-info.xml');
+						rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
+					}
 				}
 			}
 
