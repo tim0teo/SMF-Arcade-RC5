@@ -451,7 +451,7 @@ function ManageGamesInstall2()
 					)
 				);
 				$dest = $location . '/' . basename($row['game_directory']);
-				$ibp = (strlen($row['game_file']) > 4) && substr($row['game_file'], -4) == '.php' ? basename($game['game_file']) : '';
+				$ibp = (strlen($row['game_file']) > 4) && mb_substr($row['game_file'], -4) == '.php' ? basename($game['game_file']) : '';
 				if ((!empty($row['game_directory'])) && $dest !== $location)
 				{
 					foreach ($files as $file)
