@@ -564,9 +564,45 @@ function installGames($games, $move_games = false)
 			$success = true;
 		else
 		{
+			$files = array_unique(
+				array(
+					$row['file'],
+					$row['thumbnail'],
+					$row['thumbnail_small'],
+					mb_substr($row['game_file'], 0, -4) . '.php',
+					mb_substr($row['game_file'], 0, -4) . '-game-info.xml',
+					mb_substr($row['game_file'], 0, -4) . '.xap',
+					mb_substr($row['game_file'], 0, -4) . '.ini',
+				)
+			);
+			$dest = rtrim($modSettings['gamesDirectory'] . '/' . $game_directory, '/');
+			foreach ($files as $key => $data)
+			{
+				if ((!empty($game[$key])) && file_exists($dest . '/' . $game[$key]))
+					unlink($dest . '/' . $game[$key]);
+			}
+			
+			if ($dest !== $modSettings['gamesDirectory'])
+			{
+				$gfiles = ArcadeAdminScanDir($dest, '');
+				if (empty($gfiles))
+					rmdir($dest);
+				elseif ((count($gfiles) == 1) && $gfiles[0] == 'master-info.xml')
+				{
+					unlink($dest . '/master-info.xml');
+					rmdir($dest);
+				}
+			}
+			
+			if (is_dir($boarddir . '/arcade/gamedata/' . $game['internal_name']))
+			{
+				$gdfiles = ArcadeAdminScanDir($boarddir . '/arcade/gamedata/' . $game['internal_name'], '');
+				foreach ($gdfiles as $file)
+					unlink($file);
+				rmdir($boarddir . '/arcade/gamedata/' . $row['internal_name']);
+			}
+			$smcFunc['db_free_result']($request);
 			$game['error'] = array('arcade_install_general_fail', array('path', $game_directory));
-			// The line below will not work well with gamepacks .. use only on individual games or if your install is overloaded
-			//deleteArcadeArchives($boarddir . '/' . $modSettings['gamesDirectory'] . '/' . $game_directory);
 		}
 
 		$smcFunc['db_query']('', '
@@ -1498,7 +1534,7 @@ function deleteArcadeArchives($directory)
 		if($contents != '.' && $contents != '..')
 		{
 			$path = $directory . "/" . $contents;
-			if (@is_dir($path))
+			if (is_dir($path))
 				deleteArcadeArchives($path);
 
 			@unlink($path);
