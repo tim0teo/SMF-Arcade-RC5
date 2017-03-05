@@ -40,6 +40,7 @@ if (!defined('SMF'))
 function ArcadeReport()
 {
 	global $txt, $context, $db_prefix, $smcFunc, $modSettings, $scripturl;
+	db_extend('packages');
 	$gameid = !empty($_REQUEST['game']) ? (int) $_REQUEST['game'] : 0;
 	$repid = 1;
 	$url = 'action=arcade;';
@@ -197,7 +198,7 @@ function createpdlval2($gameid, $gamename, $repday, $repyear, $repuser, $repid, 
 
 	$request = $smcFunc['db_query']('', '
 		DELETE FROM {db_prefix}arcade_pdl2
-		WHERE id_member = {int:userid}',
+		WHERE pdl_gameid = {int:pdl_gameid}',
 		array('pdl_gameid' => $gameid,
 		)
 	);
