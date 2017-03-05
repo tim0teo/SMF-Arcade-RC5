@@ -172,7 +172,7 @@ function template_arcade_list()
 		$code .= str_repeat('<div class="windowbg" style="display: table-cell;padding: 5px;width: 25%;"></div>', $row_tally-$remainder);
 	else
 		$code .= '
-							</div>';
+							<div>';
 
 	echo '
 							<div style="display: table;width: 100%;">', $code, '</div>
