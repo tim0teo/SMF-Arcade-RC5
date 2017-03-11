@@ -33,37 +33,66 @@ function ArcadeRandomGameBlock()
 {
 	global $context, $txt, $modSettings, $settings;
 
-	$condition = 'ORDER BY RAND() LIMIT 0,1';
-	$gamex = small_game_query($condition);
+	$gamex = small_game_query('ORDER BY RAND() LIMIT 0,1');
 	foreach($gamex as $game)
 	{
-	$ratecode = '';
-	$rating = $game['rating'];
+		$ratecode = '';
+		$rating = $game['rating'];
 
-	if ($rating > 0)
-	{
-		$ratecode = str_repeat('<img src="' . $settings['images_url'] . '/arc_icons/star.gif" alt="*" />' , $rating);
-		$ratecode .= str_repeat('<img src="' . $settings['images_url'] . '/arc_icons/star2.gif" alt="*" />' , 5 - $rating);
-	}
+		if ($rating > 0)
+		{
+			$ratecode = str_repeat('<img src="' . $settings['images_url'] . '/arc_icons/star.gif" alt="*" />' , $rating);
+			$ratecode .= str_repeat('<img src="' . $settings['images_url'] . '/arc_icons/star2.gif" alt="*" />' , 5 - $rating);
+		}
 
-	$content ='<div class="centertext"><table style="width: 100%;border: 0px;border-collapse: collapse;"><tr><td style="padding: 1px;" colspan="2"><div class="centertext"><i><b>' . $txt['arcade_random_game'] . '</b></i></div></td></tr>';
-	$content .='<tr><td class="centertext" style="padding: 1px;"><div><span></span></div><a href="' . $game['url']['play'] . '"><img style="width: 80px;height: 80px;" src="' . $game['thumbnail'] . '" alt="ico" title="' . $txt['arcade_play'] . '&nbsp;' . $game['name'] . '"/></a><div><span></span></div><div class="middletext"><a href="' . $game['url']['play'] . '">' . $game['name'] . '</a></div></td></tr>';
+		$content = '
+			<div class="centertext">
+				<table style="width: 100%;border: 0px;border-collapse: collapse;">
+					<tr>
+						<td style="padding: 1px;" colspan="2">
+							<div class="centertext"><i><b>' . $txt['arcade_random_game'] . '</b></i></div>
+						</td>
+					</tr>
+					<tr>
+						<td class="centertext" style="padding: 1px;">
+							<div><span></span></div>
+							<a href="' . $game['url']['play'] . '">
+								<img style="width: 80px;height: 80px;" src="' . $game['thumbnail'] . '" alt="ico" title="' . $txt['arcade_play'] . '&nbsp;' . $game['name'] . '"/>
+							</a>
+							<div><span></span></div>
+							<div class="middletext">
+								<a href="' . $game['url']['play'] . '">' . $game['name'] . '</a>
+							</div>
+						</td>
+					</tr>';
 
-	//echo $content;
-	if ($rating > 0)
-		$content .='<tr><td class="centertext" style="padding: 1px;">'.$ratecode.'</td></tr>';
 
-	$content .='<tr><td class="centertext" style="padding: 1px;"><div class="middletext">';
+		if ($rating > 0)
+			$content .= '
+					<tr>
+						<td class="centertext" style="padding: 1px;">'.$ratecode.'</td>
+					</tr>';
 
-	if ($game['isChampion'])
-		$content .='<strong>'.$txt['arcade_champion'].':</strong> '.$game['champion']['memberLink'].' - '.$game['champion']['score'].'</div>';
+		$content .= '
+					<tr>
+						<td class="centertext" style="padding: 1px;">
+							<div class="middletext">';
 
-	else
-		$content .=$txt['arcade_no_scores'];
+		if ($game['isChampion'])
+			$content .= '
+								<strong>' . $txt['arcade_champion'] . ':</strong>&nbsp;'.$game['champion']['memberLink'].'&nbsp;-&nbsp;' . $game['champion']['score'];
 
-	$content .='</div></td></tr></table></div>';
+		else
+			$content .=$txt['arcade_no_scores'];
 
-	return $content;
+		$content .='
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>';
+
+		return $content;
 	}
 }
 
