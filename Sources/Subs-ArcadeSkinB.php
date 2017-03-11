@@ -280,7 +280,7 @@ function category_games()
 		if (empty($cat['cat_icon']) && !empty($cat['cat_name']))
 			$cat['cat_icon'] = ArcadeSpecialChars(trim($cat['cat_name'])) . '.gif';
 
-		$cats[$cat['id_category']] = $cat;
+		$cats[$cat['id_cat']] = $cat;
 	}
 	return $cats;
 }

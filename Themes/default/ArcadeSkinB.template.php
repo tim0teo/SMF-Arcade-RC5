@@ -276,26 +276,20 @@ function template_arcade_above()
 									<td style="padding: 3px;width: 275px;" class="centertext">
 										<div id="quick_div" class="smalltext">Search by name or List games</div>
 									</td>
-									<td style="padding: 3px;text-align: left;">
-										<script type="text/javascript">
-											function go()
-											{
-												location = document.cmform.gowhere.value;
-											}
-										</script>
-										<form name="cmform" action="">
-											<select id="gowhere" onchange="go()">
+									<td style="padding: 3px;text-align: left;">										
+										<form action="', $scripturl, '?action=arcade;sa=list" method="post">
+											<select name="sortby" onchange="submit();">
 												<option>', $txt['arcade_list_games'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=name;">', $txt['arcade_nameAZ'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=name;desc=DESC">', $txt['arcade_nameZA'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=id;desc=DESC">', $txt['arcade_LatestList'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=plays;desc=DESC">', $txt['arcade_g_i_b_3'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=champs;desc=DESC">', $txt['arcade_g_i_b_8'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=plays">', $txt['arcade_LeastPlayed'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=category">', $txt['arcade_category'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=rating;desc=DESC">', $txt['arcade_rating_sort'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=myscore;desc=DESC">', $txt['arcade_personal_best'], '</option>
-												<option value="', $scripturl, '?action=arcade;sort=champion">', $txt['arcade_champion'], '</option>
+												<option value="a2z">', $txt['arcade_nameAZ'], '</option>
+												<option value="z2a">', $txt['arcade_nameZA'], '</option>
+												<option value="age">', $txt['arcade_LatestList'], '</option>
+												<option value="plays">', $txt['arcade_g_i_b_3'], '</option>
+												<option value="champs">', $txt['arcade_g_i_b_8'], '</option>
+												<option value="play_reverse">', $txt['arcade_LeastPlayed'], '</option>
+												<option value="cats">', $txt['arcade_category'], '</option>
+												<option value="rating">', $txt['arcade_rating_sort'], '</option>
+												<option value="favorites">', $txt['arcade_personal_best'], '</option>
+												<option value="champion">', $txt['arcade_champion'], '</option>
 											</select>
 										</form>
 									</td>
@@ -315,7 +309,7 @@ function template_arcade_above()
 			$cats = category_games();
 			echo '
 									<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
-										<a href="', $scripturl, '?action=arcade;sort=idr;desc=DESC">
+										<a href="', $scripturl, '?action=arcade;sa=list;sortby=age;desc=DESC">
 											<img class="icon" style="vertical-align: middle;border: 0px;width: ', $context['arcade_defiant']['cat_width'],'px;height: ', $context['arcade_defiant']['cat_height'], 'px;" src="', $settings['images_url'], '/arc_icons/cat_new.gif" alt="ico" title="', $txt['arcade_info_showlate'], '"/>
 											<span>&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')</span>
 										</a>
@@ -347,7 +341,7 @@ function template_arcade_above()
 		{
 			echo '
 									<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
-										<a href="',$scripturl,'?action=arcade;sort=idr;desc=DESC">
+										<a href="',$scripturl,'?action=arcade;sa=list;sortby=age;desc=DESC">
 											<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="', $settings['images_url'], '/arc_icons/cat_new.gif" alt="ico" title="', $txt['arcade_info_showlate'], '"/>
 											&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')
 										</a>
@@ -380,8 +374,8 @@ function template_arcade_above()
 		$cats = category_games();
 		echo '
 									<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
-										<a href="',$scripturl,'?action=arcade;sort=idr;desc=DESC">
-											<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['images_url'],'/arc_icons/cat_new.gif" alt="ico" title="', $txt['arcade_info_showlate'], '"/>
+										<a href="',$scripturl,'?action=arcade;sa=list;sortby=age;desc=DESC">
+											<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['images_url'],'/arc_icons/cat_new.gif" alt="" title="', $txt['arcade_info_showlate'], '"/>
 											&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')
 										</a>
 									</td>';
@@ -395,9 +389,9 @@ function template_arcade_above()
 			}
 			echo'
 									<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
-										<a href="', $scripturl, '?action=arcade;category=', $tmp['id_category'], '">
-											<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['images_url'], '/arc_icons/', $tmp['category_icon'], '" alt="ico" title="', sprintf($txt['arcade_info_showcat'], $tmp['category_name']), '" />
-												&nbsp;', $tmp['category_name'], '&nbsp;(', $tmp['games'], ')
+										<a href="', $scripturl, '?action=arcade;category=', $tmp['id_cat'], '">
+											<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['images_url'], '/arc_icons/', $tmp['cat_icon'], '" alt="" title="', sprintf($txt['arcade_info_showcat'], $tmp['cat_name']), '" />
+												&nbsp;', $tmp['cat_name'], '&nbsp;(', $tmp['games'], ')
 										</a>
 									</td>';
 			$curr++;
