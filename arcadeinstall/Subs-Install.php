@@ -244,13 +244,17 @@ function updateAdminFeatures($item, $enabled = false)
 {
 	global $modSettings;
 
-	$admin_features = isset($modSettings['admin_features']) ? explode(',', $modSettings['admin_features']) : array('cd,cp,k,w,rg,ml,pm');
+	$admin_features = isset($modSettings['admin_features']) ? explode(',', $modSettings['admin_features']) : array();
 
 	if (!is_array($item))
 		$item = array($item);
 
 	if ($enabled)
-		$admin_features = array_merge($admin_features, $item);
+	{
+		foreach ($item as $spec)
+			if (!in_array($spec, $admin_features))
+				$admin_features[] = $spec;
+	}
 	else
 		$admin_features = array_diff($admin_features, $item);
 

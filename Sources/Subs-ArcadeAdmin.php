@@ -319,9 +319,19 @@ function installGames($games, $move_games = false)
 
 	// SWF Reader will be needed
 	require_once($sourcedir . '/SWFReader.php');
-	$swf = new SWFReader();
-	$masterGameinfo = array();
-	$status = array();
+	list($swf, $masterGameinfo, $status, $directories) = array(new SWFReader(), array(), array(), array());
+
+	$request = $smcFunc['db_query']('', '
+		SELECT game_directory
+		FROM {db_prefix}arcade_games
+		WHERE id_game > 0',
+		array(
+		)
+	);
+
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+		$directories[] = !empty($row['game_directory']) ? $row['game_directory'] : '';
+	$smcFunc['db_free_result']($request);
 
 	$request = $smcFunc['db_query']('', '
 		SELECT f.id_file, f.game_name, f.status, f.game_file, f.game_directory
@@ -335,12 +345,11 @@ function installGames($games, $move_games = false)
 
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
-		$errors = array();
-		$failed = true;
-		$moveFail = false;
+		list($errors, $failed, $moveFail, $exists) = array(array(), true, false, false);
 
+		// sanitize some stuff
 		$directory = $modSettings['gamesDirectory'] . (!empty($row['game_directory']) ? '/' . $row['game_directory'] : '');
-
+		$directory = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $directory)))));
 		$internal_name = getInternalName($row['game_file'], $directory);
 
 		// Search for thumbnails
@@ -382,9 +391,9 @@ function installGames($games, $move_games = false)
 		$game = array(
 			'id_file' => $row['id_file'],
 			'name' => $row['game_name'],
-			'directory' => $row['game_directory'],
+			'directory' => !empty($row['game_directory']) ? preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $row['game_directory']))))) : '',
 			'file' => $row['game_file'],
-			'internal_name' => $internal_name,
+			'internal_name' => str_replace(array('/', '\\'), array('', ''), trim($internal_name, '.')),
 			'thumbnail' => isset($thumbnail[0]) ? $thumbnail[0] : '',
 			'thumbnail_small' => isset($thumbnailSmall[0]) ? $thumbnailSmall[0] : '',
 			'extra_data' => array(),
@@ -476,8 +485,7 @@ function installGames($games, $move_games = false)
 		// Move files if necessary
 		if ($game_directory != $internal_name && $move_games)
 		{
-			if (!is_dir($modSettings['gamesDirectory'] . '/' . $internal_name) &&
-				!mkdir($modSettings['gamesDirectory'] . '/' . $internal_name, 0755))
+			if (!is_dir($modSettings['gamesDirectory'] . '/' . $internal_name) && !mkdir($modSettings['gamesDirectory'] . '/' . $internal_name, 0755))
 			{
 				$moveFail = true;
 				$game['error'] = array('directory_make_failed', array($modSettings['gamesDirectory'] . '/' . $internal_name));
@@ -562,28 +570,37 @@ function installGames($games, $move_games = false)
 		$success = false;
 		if (!isset($game['error']) && $id_game = createGame($gameOptions))
 			$success = true;
-		else
+		elseif (!in_array($game_directory, $directories))
 		{
 			$files = array_unique(
 				array(
-					$row['file'],
-					$row['thumbnail'],
-					$row['thumbnail_small'],
-					mb_substr($row['game_file'], 0, -4) . '.php',
-					mb_substr($row['game_file'], 0, -4) . '-game-info.xml',
-					mb_substr($row['game_file'], 0, -4) . '.xap',
-					mb_substr($row['game_file'], 0, -4) . '.ini',
+					$game['file'],
+					!empty($game['thumbnail']) ? $game['thumbnail'] : '',
+					!empty($game['thumbnail_small']) ? $game['thumbnail_small'] : '',
+					mb_substr($game['file'], 0, -4) . '.php',
+					mb_substr($game['file'], 0, -4) . '-game-info.xml',
+					mb_substr($game['file'], 0, -4) . '.xap',
+					mb_substr($game['file'], 0, -4) . '.ini',
+					mb_substr($game['file'], 0, -4) . '.gif',
+					mb_substr($game['file'], 0, -4) . '.png',
+					mb_substr($game['file'], 0, -4) . '.jpg',
 				)
 			);
 			$dest = rtrim($modSettings['gamesDirectory'] . '/' . $game_directory, '/');
 			foreach ($files as $key => $data)
 			{
-				if ((!empty($game[$key])) && file_exists($dest . '/' . $game[$key]))
-					unlink($dest . '/' . $game[$key]);
+				if ((!empty($files[$key])) && file_exists($dest . '/' . $files[$key]))
+					unlink($dest . '/' . $files[$key]);
 			}
-			
-			if ($dest !== $modSettings['gamesDirectory'])
+
+			if ((!empty($dest)) && $dest !== $modSettings['gamesDirectory'] && $dest !== $boarddir)
 			{
+				if (dirname($dest) !== $modSettings['gamesDirectory'])
+				{
+					$gfiles = ArcadeAdminScanDir($dest, '');
+					foreach ($gfiles as $delete)
+						deleteArcadeArchives($delete);
+				}
 				$gfiles = ArcadeAdminScanDir($dest, '');
 				if (empty($gfiles))
 					rmdir($dest);
@@ -593,29 +610,38 @@ function installGames($games, $move_games = false)
 					rmdir($dest);
 				}
 			}
-			
+
 			if (is_dir($boarddir . '/arcade/gamedata/' . $game['internal_name']))
 			{
 				$gdfiles = ArcadeAdminScanDir($boarddir . '/arcade/gamedata/' . $game['internal_name'], '');
 				foreach ($gdfiles as $file)
 					unlink($file);
-				rmdir($boarddir . '/arcade/gamedata/' . $row['internal_name']);
+
+				deleteArcadeArchives($boarddir . '/arcade/gamedata/' . $game['internal_name']);
 			}
-			$smcFunc['db_free_result']($request);
+
 			$game['error'] = array('arcade_install_general_fail', array('path', $game_directory));
 		}
+		else
+		{
+			$exists = true;
+			$game['error'] = array('arcade_install_exists_fail', array('path', $game_directory));
+		}
 
-		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}arcade_files
-			SET id_game = {int:game}, status = {int:status}, game_directory = {string:directory}
-			WHERE id_file = {int:file}',
-			array(
-				'game' => empty($success) ? 0 : $id_game,
-				'status' => empty($success) ? 10 : 1,
-				'file' => $game['id_file'],
-				'directory' => $game_directory,
-			)
-		);
+		if (empty($exists))
+		{
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}arcade_files
+				SET id_game = {int:game}, status = {int:status}, game_directory = {string:directory}
+				WHERE id_file = {int:file}',
+				array(
+					'game' => empty($success) ? 0 : $id_game,
+					'status' => empty($success) ? 10 : 1,
+					'file' => $game['id_file'],
+					'directory' => $game_directory,
+				)
+			);
+		}
 
 		$status[] = array(
 			'id' => $id_game,
@@ -743,9 +769,10 @@ function uninstallGames($games, $delete_files = false)
 	global $smcFunc, $modSettings, $sourcedir, $boarddir;
 
 	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/RemoveTopic.php');
 
 	$request = $smcFunc['db_query']('', '
-		SELECT id_game, internal_name, game_name, game_file, thumbnail, thumbnail_small, game_directory
+		SELECT id_game, internal_name, game_name, game_file, thumbnail, thumbnail_small, game_directory, id_topic
 		FROM {db_prefix}arcade_games
 		WHERE id_game IN({array_int:games})',
 		array(
@@ -753,10 +780,18 @@ function uninstallGames($games, $delete_files = false)
 		)
 	);
 
-	$status = array();
+	list($status, $topics) = array(array(), array());
 
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
+		$directory = $modSettings['gamesDirectory'] . (!empty($row['game_directory']) ? '/' . $row['game_directory'] : '');
+		$directory = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $directory)))));
+		$gamedir = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $row['game_directory'])))));
+		$internal_name = str_replace(array('/', '\\'), array('', ''), trim($row['internal_name'], '.'));
+		
+		if (!empty($row['id_topic']))
+			$topics[] = $row['id_topic'];
+
 		$files = array_unique(
 			array(
 				$row['game_file'],
@@ -770,66 +805,66 @@ function uninstallGames($games, $delete_files = false)
 		);
 		if ($delete_files)
 		{
-			if (basename(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory'])) !== basename($modSettings['gamesDirectory']) && basename($modSettings['gamesDirectory'] . '/' . $row['game_directory']) !== basename($modSettings['gamesDirectory']))
+			if (basename(dirname($directory)) !== basename($modSettings['gamesDirectory']) && basename($directory) !== basename($modSettings['gamesDirectory']))
 			{
-				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']))
+				if (is_dir($directory))
 				{
-					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
+					$files = ArcadeAdminScanDir($directory, '');
 					foreach ($files as $file)
 						unlink($file);
-					rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
+					rmdir($directory);
 				}
-				$check = ArcadeAdminScanDir(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']), '');
+				$check = ArcadeAdminScanDir(dirname($directory), '');
 				if (empty($check))
-					rmdir(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']));
-				elseif (count($check) == 1 && $check[0] == dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']) . '/master-info.xml')
+					rmdir(dirname($directory));
+				elseif (count($check) == 1 && $check[0] == dirname($directory) . '/master-info.xml')
 				{
-					unlink(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']) . '/master-info.xml');
-					rmdir(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']));
+					unlink(dirname($directory) . '/master-info.xml');
+					rmdir(dirname($directory));
 				}
 
 			}
-			elseif (basename($row['game_directory']) == $row['internal_name'] && $row['internal_name'] !== basename($modSettings['gamesDirectory']))
+			elseif (basename($gamedir) == $internal_name && $internal_name !== basename($modSettings['gamesDirectory']))
 			{
-				if (is_dir($modSettings['gamesDirectory'] . '/' . $row['game_directory']) && basename($modSettings['gamesDirectory'] . '/' . $row['game_directory']) !== $modSettings['gamesDirectory'])
+				if (is_dir($directory) && basename($directory) !== $modSettings['gamesDirectory'])
 				{
-					$files = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
+					$files = ArcadeAdminScanDir($directory, '');
 					foreach ($files as $file)
 						unlink($file);
-					rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
+					rmdir($directory);
 				}
 			}
 			else
 			{
 				foreach ($files as $f)
 				{
-					if ((!empty($f)) && file_exists($modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/' . $f))
-						unlink($modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/' . $f);
+					if ((!empty($f)) && file_exists($directory . '/' . $f))
+						unlink($directory . '/' . $f);
 					/*
 					if (!empty($row['game_directory']) && file_exists(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']) . '/' . $f))
 						unlink(dirname($modSettings['gamesDirectory'] . '/' . $row['game_directory']) . '/' . $f);
 					*/
 				}
 
-				if (basename($modSettings['gamesDirectory'] . '/' . $row['game_directory']) !== basename($modSettings['gamesDirectory']))
+				if (basename($directory) !== basename($modSettings['gamesDirectory']))
 				{
-					$check = ArcadeAdminScanDir($modSettings['gamesDirectory'] . '/' . $row['game_directory'], '');
+					$check = ArcadeAdminScanDir($directory, '');
 					if (empty($check))
-						rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
-					elseif (count($check) == 1 && $check[0] == $modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/master-info.xml')
+						rmdir($directory);
+					elseif (count($check) == 1 && $check[0] == $directory . '/master-info.xml')
 					{
-						unlink($modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/master-info.xml');
-						rmdir($modSettings['gamesDirectory'] . '/' . $row['game_directory']);
+						unlink($directory . '/master-info.xml');
+						rmdir($directory);
 					}
 				}
 			}
 
-			if (is_dir($boarddir . '/arcade/gamedata/' . $row['internal_name']) || file_exists($boarddir . '/arcade/gamedata/' . $row['internal_name']))
+			if (is_dir($boarddir . '/arcade/gamedata/' . $internal_name) || file_exists($boarddir . '/arcade/gamedata/' . $internal_name))
 			{
-				$gdfiles = ArcadeAdminScanDir($boarddir . '/arcade/gamedata/' . $row['internal_name'], '');
+				$gdfiles = ArcadeAdminScanDir($boarddir . '/arcade/gamedata/' . $internal_name, '');
 				foreach ($gdfiles as $file)
 					unlink($file);
-				rmdir($boarddir . '/arcade/gamedata/' . $row['internal_name']);
+				rmdir($boarddir . '/arcade/gamedata/' . $internal_name);
 			}
 		}
 
@@ -842,6 +877,11 @@ function uninstallGames($games, $delete_files = false)
 	}
 
 	$smcFunc['db_free_result']($request);
+
+	// remove related topics if they exist
+	if (!empty($topics))
+		removeTopics($topics, false, false);
+
 	return $status;
 }
 
@@ -859,7 +899,8 @@ function moveGames()
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
 		$from = $modSettings['gamesDirectory']  . '/' . (!empty($row['game_directory']) ? $row['game_directory'] . '/' : '');
-		$to = $modSettings['gamesDirectory'] . '/' . $row['internal_name'] . '/';
+		$to = $modSettings['gamesDirectory'] . '/' . str_replace(array('/', '\\'), array('', ''), trim($row['internal_name'], '.')) . '/';
+		$to = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $to)))));
 
 		if ($from == $to)
 			continue;
@@ -960,8 +1001,7 @@ function getGameName($internal_name)
 	elseif (strtolower(substr($internal_name, -2)) == 'v2')
 		$internal_name = substr($internal_name, 0, strlen($internal_name) - 2) . ' v2';
 
-	$internal_name = trim($internal_name);
-
+	$internal_name = trim(str_replace(array('/', '\\'), array('', ''), trim($internal_name, '.')));
 	return ucwords($internal_name);
 }
 
@@ -1149,8 +1189,8 @@ function gameCacheInsertGames($games, $return = false)
 		{
 			if (!empty($game['directory']))
 			{
-				$game_directory = $modSettings['gamesDirectory'] . '/' . $game['directory'];
-				$game_file = $modSettings['gamesDirectory'] . '/' . $game['directory'] . '/' . $game['filename'];
+				$game_directory = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $modSettings['gamesDirectory'] . '/' . $game['directory'])))));
+				$game_file = $game_directory . '/' . $game['filename'];
 			}
 			else
 			{
@@ -1199,7 +1239,7 @@ function gameCacheInsertGames($games, $return = false)
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
 		if (!empty($row['game_directory']))
-			$game_file = $modSettings['gamesDirectory'] . '/' . $row['game_directory'] . '/' . $row['game_file'];
+			$game_file = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $modSettings['gamesDirectory'] . '/' . $row['game_directory']))))) . '/' . $row['game_file'];
 		else
 			$game_file = $modSettings['gamesDirectory'] . '/' . $row['game_file'];
 
@@ -1240,7 +1280,7 @@ function gameCacheInsertGames($games, $return = false)
 		$masterInfo = array();
 		if (!empty($game['directory']))
 		{
-			$game_directory = $modSettings['gamesDirectory'] . '/' . $game['directory'];
+			$game_directory = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $modSettings['gamesDirectory'] . '/' . $game['directory'])))));
 			$game_file = $modSettings['gamesDirectory'] . '/' . $game['directory'] . '/' . $game['filename'];
 		}
 		else
@@ -1386,7 +1426,7 @@ function arcadeGetGroups($selected = array())
 
 function postArcadeGames($game, $gameid)
 {
-	global $user_info, $arcSettings, $scripturl, $sourcedir, $modSettings, $boardurl, $txt, $settings;
+	global $user_info, $arcSettings, $scripturl, $sourcedir, $modSettings, $boardurl, $txt, $settings, $smcFunc;
 
 	loadLanguage('Arcade');
 	$ranum = (RAND(1,1255));
@@ -1480,8 +1520,20 @@ function postArcadeGames($game, $gameid)
 	createPost($msgOptions, $topicOptions, $posterOptions);
 
 	if (isset($topicOptions['id']))
+	{
 		$topicid = $topicOptions['id'];
-      return $topicid;
+		$smcFunc['db_query']('', '
+			UPDATE {db_prefix}arcade_games
+			SET id_topic = {int:id_topic}
+			WHERE id_game = {int:gameid}',
+			array(
+				'gameid' => $gameid,
+				'id_topic' => $topicid,
+			)
+		);
+	}
+
+	return $topicid;
 }
 
 function copyArcadeDirectory($source, $destination)
@@ -1520,33 +1572,27 @@ function copyArcadeDirectory($source, $destination)
 function deleteArcadeArchives($directory)
 {
 	global $boardurl, $boarddir;
-	if(substr($directory,-1) == "/")
-		$directory = substr($directory,0,-1);
+	$directory = substr($directory,-1) == "/" ? substr($directory,0,-1) : $directory;
 
-	if (!file_exists($directory) || !is_dir($directory))
-		return false;
-	elseif (!@is_readable($directory))
-		return false;
-
-	$directoryHandle = opendir($directory);
-	while ($contents = @readdir($directoryHandle))
+	if (is_dir($directory))
 	{
-		if($contents != '.' && $contents != '..')
+		$directoryHandle = opendir($directory);
+		while ($contents = readdir($directoryHandle))
 		{
-			$path = $directory . "/" . $contents;
-			if (is_dir($path))
-				deleteArcadeArchives($path);
-
-			@unlink($path);
-
+			if($contents != '.' && $contents != '..')
+			{
+				$path = $directory . "/" . $contents;
+				if (is_dir($path))
+					deleteArcadeArchives($path);
+				elseif (file_exists($path))
+					unlink($path);
+			}
 		}
+		closedir($directoryHandle);
+		rmdir($directory);
 	}
-
-	@closedir($directoryHandle);
-	if (@is_dir($directory))
-		@rmdir($directory);
-	elseif (@file_exists($directory))
-		@unlink($directory);
+	elseif (file_exists($directory))
+		unlink($directory);
 	else
 		return false;
 

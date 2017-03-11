@@ -32,7 +32,10 @@ $txt['arcade_installed_version'] = 'Installed version';
 $txt['arcade_latest_version'] = 'Latest version';
 
 // Arcade Settings
-$txt['arcadeList'] = 'Show Default List';
+$txt['arcadeList'] = 'Select List Type';
+$txt['arcade_list0'] = 'Generic';
+$txt['arcade_list1'] = 'Retro';
+$txt['arcade_list2'] = 'Vintage';
 $txt['arcadeDropCat'] = 'Enable Drop Down Categories';
 $txt['arcade_catWidth'] = 'Set Category Icon Width';
 $txt['arcade_catHeight'] = 'Set Category Icon Height';
@@ -264,7 +267,6 @@ $txt['pdl_settings_desc'] = 'Here you can edit SMF Arcade advanced settings.';
 $txt['pdl_admin_settings'] = 'SMF Arcade Advanced Settings';
 $txt['pdl_reports_desc'] = 'Here you can view and edit reported game errors';
 $txt['pdl_admin_reports'] = 'Reported Game Errors';
-$txt['arcadeList'] = 'Show Default List';
 $txt['arcadeShowIC'] = 'Show Info Center';
 $txt['arcadeShowOnline'] = 'Show Arcade Online List';
 $txt['arcadeDropCat'] = 'Enable Drop Down Categories';
@@ -295,7 +297,8 @@ $txt['arcade_not_writable'] = 'Directory %s is not writable and chmod didn\'t su
 $txt['arcade_unable_to_move'] = 'Unable to move %s from %s to %s, please do it manually and reload!';
 $txt['arcade_upload_file'] = 'Uploading file failed!';
 $txt['arcade_upload_tar'] = 'php.ini settings for upload_max_filesize and/or post_max_size not enough: %s';
-
+$txt['arcade_install_general_fail'] = 'Game installation failed!';
+$txt['arcade_install_exists_fail'] = 'Game directory already exists for another game in the database ~ Game installation failed!';
 $txt['unable_to_make'] = 'Unable to make directory "%s". Please do it manually!';
 $txt['unable_to_chmod'] = 'Directory "%s" is not writable and chmod failed, please use FTP client to make it writable';
 $txt['unable_to_move'] = 'Unable to move directories from "%s" to "%s". Please do it manually!';

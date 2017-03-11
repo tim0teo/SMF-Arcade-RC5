@@ -69,6 +69,7 @@ function ArcadeList()
 	$_REQUEST['sortby'] = !empty($_REQUEST['sortby']) ? $_REQUEST['sortby'] : (!empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] :'a2z');
 	$context['sort_by'] = !empty($sort_methods[$_REQUEST['sortby']]) ? $_REQUEST['sortby'] : (!empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] :'a2z');
 	$context['sort_direction'] = !empty($sort_direction[$context['sort_by']]) ? $sort_direction[$context['sort_by']] : 'asc';
+	$context['arcade']['games'] = array();
 	$_SESSION['arcade_sortby'] = $context['sort_by'];
 	$_SESSION['current_cat'] = $context['arcade_category'];
 	$sortby = $sort_methods[$context['sort_by']];
@@ -145,14 +146,26 @@ function ArcadeList()
 	$request = $smcFunc['db_query']('', '
 		SELECT
 			game.id_game, game.game_name, game.description, game.game_rating, game.num_plays, pdl.download_count, pdl.report_id, game.extra_data,
-			game.score_type, game.thumbnail, game.game_directory, score.champion_from,
-			game.thumbnail_small, game.help, game.extra_data,
+			game.score_type, game.thumbnail, game.game_directory, game.id_topic, score.champion_from,
+			game.thumbnail_small, game.help, game.extra_data, IFNULL(s1.id_member, 0) AS id_member_first, IFNULL(s2.id_member, 0) AS id_member_second, IFNULL(s3.id_member,0) AS id_member_third,
+			IFNULL(m1.real_name, 0) AS real_name1,
+			IFNULL(m2.real_name, 0) AS real_name2,
+			IFNULL(m3.real_name, 0) AS real_name3,
+			IFNULL(s1.score, 0) AS gold_score,
+			IFNULL(s2.score, 0) AS silver_score,
+			IFNULL(s3.score, 0) AS bronze_score,
 			IFNULL(mem.id_member, 0) AS id_member, IFNULL(score.id_score, 0) AS id_score,
 			IFNULL(score.score, 0) AS champ_score, IFNULL(mem.real_name, score.player_name) AS real_name,
 			IFNULL(score.end_time, 0) AS champion_time, IFNULL(category.id_cat, 0) AS id_cat,
 			IFNULL(category.cat_name, {string:empty_string}) AS cat_name' . $select_rows . '
 		FROM {db_prefix}arcade_games AS game
 			LEFT JOIN {db_prefix}arcade_scores AS score ON (score.id_score = game.id_champion_score)
+			LEFT JOIN {db_prefix}arcade_scores AS s1 ON (s1.id_game = game.id_game AND s1.position = {int:first})
+			LEFT JOIN {db_prefix}arcade_scores AS s2 ON (s2.id_game = game.id_game AND s2.position = {int:second})
+			LEFT JOIN {db_prefix}arcade_scores AS s3 ON (s3.id_game = game.id_game AND s3.position = {int:third})
+			LEFT JOIN {db_prefix}members AS m1 ON (m1.id_member = s1.id_member)
+			LEFT JOIN {db_prefix}members AS m2 ON (m2.id_member = s2.id_member)
+			LEFT JOIN {db_prefix}members AS m3 ON (m3.id_member = s3.id_member)
 			LEFT JOIN {db_prefix}arcade_pdl2 AS pdl ON (pdl.pdl_gameid = game.id_game)
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = game.id_champion)
 			LEFT JOIN {db_prefix}arcade_categories AS category ON (category.id_cat = game.id_cat)' . $select_tables . '
@@ -167,7 +180,10 @@ function ArcadeList()
 			'games_per_page' => $context['games_per_page'],
 			'member' => $user_info['id'],
 			'category' => $context['arcade_category'],
-			'query_see_game' => $user_info['query_see_game']
+			'query_see_game' => $user_info['query_see_game'],
+			'first' => 1,
+			'second' => 2,
+			'third' => 3,
 		)
 	);
 
@@ -215,16 +231,28 @@ function ArcadeList()
 			'champion' => array(
 				'member_id' => $row['id_member'],
 				'score_id' => $row['id_score'],
-				'member_link' =>  !empty($row['id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['real_name'] . '</a>' : $row['real_name'],
+				'member_link' =>  !empty($row['id_member']) ? '<a href="' . $scripturl . '?action=profile;area=arcadeStats;u=' . $row['id_member'] . '">' . $row['real_name'] . '</a>' : $row['real_name'],
 				'score' => comma_format($row['champ_score']),
 				'time' => $row['champion_time'],
+			),
+			'second_place' => array(
+				'member_id' => !empty($row['id_member_second']) ? $row['id_member_second'] : 0,
+				'score_id' => !empty($game['id_score_second']) ? $game['id_score_second'] : 0,
+				'member_link' =>  !empty($game['real_name2']) ? '<a href="' . $scripturl . '?action=profile;area=arcadeStats;u=' . $game['id_member_second'] . '">' . $game['real_name2'] . '</a>' : $txt['arcade_is_guest'],
+				'score' => !empty($game['silver_score']) ? round($game['silver_score'], 3) : 0,
+			),
+			'third_place' => array(
+				'member_id' => !empty($row['id_member_third']) ? $row['id_member_third'] : 0,
+				'score_id' => !empty($game['id_score_third']) ? $game['id_score_third'] : 0,
+				'member_link' =>  !empty($game['real_name3']) ? '<a href="' . $scripturl . '?action=profile;area=arcadeStats;u=' . $game['id_member_third'] . '">' . $game['real_name3'] . '</a>' : $txt['arcade_is_guest'],
+				'score' => !empty($game['bronze_score']) ? round($game['bronze_score'], 3) : 0,
 			),
 			'is_personal_best' => !$user_info['is_guest'] && $row['id_pb'] > 0,
 			'personal_best' => !$user_info['is_guest'] ? comma_format($row['personal_best']) : 0,
 			'personal_best_score' => !$user_info['is_guest'] ? $row['personal_best'] : 0,
 			'highscore_support' => $row['score_type'] != 2,
 			'is_favorite' => $context['arcade']['can_favorite'] ? $row['is_favorite'] > 0 : false,
-			'rating' => $row['game_rating'],
+			'rating' => !empty($row['game_rating']) ? $row['game_rating'] : 0,
 			'width' => !empty($extra['width']) ? (int) $extra['width'] : 400,
 			'height' => !empty($extra['height']) ? (int) $extra['height'] :600,
 			'pdl_count' => $row['download_count'],
@@ -232,16 +260,18 @@ function ArcadeList()
 			'rating2' => round($row['game_rating']),
 			'thumbnail' => !empty($row['thumbnail']) ? $gameurl . $row['thumbnail'] : '',
 			'thumbnail_small' => !empty($row['thumbnail_small']) ? $gameurl . $row['thumbnail_small'] : '',
+			'id_topic' => !empty($row['id_topic']) ? $row['id_topic'] : 0,
 		);
 	}
 	$smcFunc['db_free_result']($request);
 
 	if (!empty($modSettings['arcadeShowInfoCenter']))
 	{
+		$context['arcade']['latest_scores'] = ArcadeLatestScores(5, 0);
+
 		if (($context['arcade']['stats'] = cache_get_data('arcade-stats', 180)) == null)
 		{
 			$context['arcade']['stats'] = array();
-
 			// How many games?
 			$result = $smcFunc['db_query']('', '
 				SELECT COUNT(*) AS games
@@ -251,7 +281,6 @@ function ArcadeList()
 			);
 			$context['arcade']['stats'] += $smcFunc['db_fetch_assoc']($result);
 			$smcFunc['db_free_result']($result);
-
 			require_once($sourcedir . '/ArcadeStats.php');
 
 			$context['arcade']['stats']['best_player'] = ArcadeStats_BestPlayers(1);
@@ -260,9 +289,6 @@ function ArcadeList()
 
 			cache_put_data('arcade-stats', $context['arcade']['stats'], 180);
 		}
-
-		$context['arcade']['latest_scores'] = ArcadeLatestScores(5, 0);
-
 
 		$context['arcade_viewing'] = array();
 		$context['arcade_num_viewing'] = array('member' => 0, 'guest' => 0, 'hidden' => 0);
@@ -315,23 +341,22 @@ function ArcadeList()
 	else
 		$context['arcade_online_link'] = sprintf($txt['arcade_info_who'], $context['arcade_online'][0], $context['arcade_online'][1], empty($context['arcade_online'][0]) || $context['arcade_online'][0] > 1 ? 's' : '', empty($context['arcade_online'][1]) || $context['arcade_online'][1] > 1 ? 's' : '');
 
-	if ($modSettings['arcadeList'] == 0)
+	switch ($modSettings['arcadeList'])
 	{
-		loadTemplate('ArcadeSkinListA');
-		$context['sub_template'] = 'arcade_list';
-		$context['page_title'] = $txt['arcade_game_list'];
-	}
-	elseif ($modSettings['arcadeList'] == 2)
-	{
-		loadTemplate('ArcadeSkinListB');
-		$context['sub_template'] = 'arcade_list';
-		$context['page_title'] = $txt['arcade_game_list'];
-	}
-	else
-	{
-		loadTemplate('ArcadeList');
-		$context['sub_template'] = 'arcade_list';
-		$context['page_title'] = $txt['arcade_game_list'];
+		case 2:
+			loadTemplate('ArcadeSkinListA');
+			$context['sub_template'] = 'arcade_list';
+			$context['page_title'] = $txt['arcade_game_list'];
+			break;
+		case 1:
+			loadTemplate('ArcadeSkinListB');
+			$context['sub_template'] = 'arcade_list';
+			$context['page_title'] = $txt['arcade_game_list'];
+			break;
+		default:
+			loadTemplate('ArcadeList');
+			$context['sub_template'] = 'arcade_list';
+			$context['page_title'] = $txt['arcade_game_list'];
 	}
 
 	return;

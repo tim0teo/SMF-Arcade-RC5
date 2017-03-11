@@ -56,11 +56,11 @@ function ArcadeStatistics()
 
 function ArcadeStats_MostPlayed($count = 10)
 {
-	// Returns most playd games
+	// Returns most played games
 	global $db_prefix, $scripturl, $smcFunc;
 
 	$request = $smcFunc['db_query']('', '
-		SELECT game.id_game, game.game_name, game.game_rating, game.num_plays
+		SELECT game.id_game, game.game_name, game.game_rating, game.num_plays, game.thumbnail, game.game_directory
 		FROM {db_prefix}arcade_games AS game
 		WHERE game.num_plays > 0
 		ORDER BY game.num_plays DESC
@@ -79,10 +79,12 @@ function ArcadeStats_MostPlayed($count = 10)
 		if ($max == -1)
 			$max = $score['num_plays'];
 		if ($max == 0)
-			return false; // No one has played games yet0
+			return array(); // No one has played games yet0
 
 		$top[] = array(
 			'id' => $score['id_game'],
+			'thumbnail' => !empty($score['thumbnail']) ? $score['thumbnail'] : '',
+			'game_directory' => !empty($score['game_directory']) ? $score['game_directory'] : '',
 			'name' => $score['game_name'],
 			'link' => '<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $score['id_game'] . '">' .  $score['game_name'] . '</a>',
 			'rating' => $score['game_rating'],
@@ -93,7 +95,7 @@ function ArcadeStats_MostPlayed($count = 10)
 	$smcFunc['db_free_result']($request);
 
 	if (count($top) == 0)
-		return false;
+		return array();
 	elseif ($count > 1)
 		return $top;
 	else
@@ -251,7 +253,7 @@ function ArcadeStats_LongestChampions($count = 10, $time = - 1, $where = false)
 	}
 
 	$request = $smcFunc['db_query']('', '
-		SELECT game.id_game, game.game_name,
+		SELECT game.id_game, game.game_name, game.thumbnail, game.game_directory,
 			CASE WHEN champion_from > 0 THEN (CASE WHEN champion_to = 0 THEN UNIX_TIMESTAMP() ELSE champion_to END - champion_from) ELSE 0 END AS champion_duration,
 			IFNULL(mem.id_member, 0) AS id_member, IFNULL(mem.real_name, {string:empty}) AS real_name, CASE WHEN champion_to = 0 THEN 1 ELSE 0 END AS current
 		FROM {db_prefix}arcade_scores AS score
@@ -277,6 +279,9 @@ function ArcadeStats_LongestChampions($count = 10, $time = - 1, $where = false)
 			$max = $score['champion_duration'];
 
 		$top[] = array(
+			'id' => $score['id_game'],
+			'game_directory' => !empty($score['game_directory']) ? $score['game_directory'] : '',
+			'thumbnail' => !empty($score['thumbnail']) ? $score['thumbnail'] : '',
 			'game_name' => $score['game_name'],
 			'game_link' => '<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $score['id_game'] . '">' .  $score['game_name'] . '</a>',
 			'member_name' => $score['real_name'],

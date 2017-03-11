@@ -15,6 +15,7 @@ if (!defined('SMF'))
 
 $forced = false;
 $version = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
+db_extend('packages');
 
 // Step 1: Rename E-Arcade tables if needed
 doRenameTables();
@@ -72,8 +73,8 @@ if ($count == 0 || $forced)
 {
 	$smcFunc['db_insert']('insert',
 		'{db_prefix}arcade_categories',
-		array('cat_name' => 'string', 'member_groups' => 'string', 'cat_order' => 'int',),
-		array('Default', '-2,-1,0,1,2', 1),
+		array('cat_name' => 'string', 'member_groups' => 'string', 'cat_order' => 'int', 'cat_icon' => 'string'),
+		array('Default', '-2,-1,0,1,2', 1, ''),
 		array('id_cat')
 	);
 }
@@ -106,7 +107,7 @@ function doRenameTables()
 	$tables = $smcFunc['db_list_tables']();
 
 	// Detect eeks mod from unique table name
-	if (in_array($db_prefix . 'arcade_shouts', $tables))
+	if (in_array($db_prefix . 'arcade_v3temp', $tables))
 	{
 		$tables = array(
 			'arcade_games' => 'earcade_games',
@@ -127,21 +128,28 @@ function doRenameTables()
 		foreach ($tables as $old => $new)
 		{
 			// Drop old copies of earcade tables if exists
-			$smcFunc['db_query']('', '
-				DROP TABLE IF EXISTS {db_prefix}{raw:new}',
-				array(
-					'old' => $old,
-					'new' => $new,
-				)
-			);
-			$smcFunc['db_query']('', '
-				RENAME TABLE {db_prefix}{raw:old} TO {db_prefix}{raw:new}',
-				array(
-					'old' => $old,
-					'new' => $new,
-				)
-			);
+			if (check_table_existsInstall($new))
+				$smcFunc['db_drop_table']($new);
+
+			if (check_table_existsInstall($old))
+				$smcFunc['db_query']('', '
+					ALTER TABLE {db_prefix}{raw:old} RENAME {db_prefix}{raw:new}',
+					array(
+						'old' => $old,
+						'new' => $new,
+					)
+				);
 		}
 	}
+}
+
+function check_table_existsInstall($table)
+{
+	global $db_prefix, $smcFunc;
+
+	if ($smcFunc['db_list_tables'](false, $db_prefix . $table))
+		return true;
+
+	return false;
 }
 ?>

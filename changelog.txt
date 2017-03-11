@@ -4,6 +4,11 @@ Changelog started February 25, 2007.
 SMF Arcade 2.5 RC5                                                    xx.02.2017
 ================================================================================
 February 2017
+ + Added Defiant theme (E-Arcade clone)
+ & Language added for Defiant theme
+ + Three list types now available
+ & Language added for list types
+ + Added additional filtering of directory structure concerning game deletions 
  + Added specific user settings for PM and/or EMail notifications
  + Added option to send notification Emails/PMs in bulk
  + Links from emails while not logged in triggers login prompt that redirects to arcade action/sa
@@ -29,6 +34,8 @@ February 2017
  ! Fixed database installation subroutine to conform to SMF standard
  ! Fixed database routines in reports source file
  ! Fixed deletion of unique game directories when games are uninstalled
+ ! Fixed installation issue for when E-Arcade was previously installed
+ + Uninstalling games now deletes game topics if applicable
  
 SMF Arcade 2.5 RC4                                                    xx.12.2015
 ================================================================================

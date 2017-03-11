@@ -1,25 +1,9 @@
 <?php
-/* This file is here to protect the current directory */
-foreach (explode('/', dirname(!empty($_SERVER['SCRIPT_FILENAME']) ? $_SERVER['SCRIPT_FILENAME'] : str_replace('\\','/',__FILE__))) as $sub_directory)
-{
-	if (empty($directoryA))
-		$directoryA = $sub_directory .'/';
-	else
-		$directoryA .= $sub_directory .'/';
-		
-	$directoryX[] = $directoryA;
-}
 
-$directories = array_reverse($directoryX);
+// Try to handle it with the upper level index.php. (it should know what to do.)
+if (file_exists(dirname(dirname(__FILE__)) . '/index.php'))
+	include (dirname(dirname(__FILE__)) . '/index.php');
+else
+	exit;
 
-foreach ($directories as $directory)
-{	
-	if (@file_exists($directory . 'Settings.php'))
-	{	
-		@require($directory . 'Settings.php');
-		if (!empty($boardurl))
-			@header('Location: ' . $boardurl);
-	}	
-}
-exit;
 ?>

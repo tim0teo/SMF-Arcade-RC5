@@ -691,8 +691,11 @@ function ManageGamesUpload2()
 	isAllowedTo('arcade_admin');
 	checkSession('post');
 
-	if ($smfVersion === 'v2.1')
-		validateToken('admin', 'post', false);
+	if ($smfVersion == 'v2.1')
+	{
+		$modSettings['cookieTime'] = 3153600;
+		createToken('admin', 'post');
+	}
 
 	if (empty($postVar) && empty($modSettings['arcadeUploadSystem']))
 		redirectexit('action=admin;area=managegames;sa=install');
@@ -705,11 +708,11 @@ function ManageGamesUpload2()
 			continue;
 
 		$postVar['name'][$n] = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $postVar['name'][$n]);
-		$newname = trim(strtolower(basename($postVar['name'][$n])));
+		$newname = trim(basename($postVar['name'][$n]));
 		$target = $modSettings['gamesDirectory'];
 		$tmp_name = $postVar['tmp_name'][$n];
 
-		if (substr($newname, -2) !== 'gz' && substr($newname, -3) !== 'tar' && substr($newname, -3) !== 'zip')
+		if (mb_substr($newname, -3) !== '.gz' && mb_substr($newname, -4) !== '.tar' && mb_substr($newname, -4) !== '.zip')
 			continue;
 
 		if ($target != $modSettings['gamesDirectory'])
@@ -736,7 +739,7 @@ function ManageGamesUpload2()
 				while ($buff = fread($in, 1048576))
 				{
 					fwrite($com, $buff);
-					sleep(2);
+					sleep(3);
 				}
 				fclose($in);
 			}
@@ -775,8 +778,11 @@ function EditGame()
 
 	isAllowedTo('arcade_admin');
 
-	if ($smfVersion === 'v2.1')
+	if ($smfVersion == 'v2.1')
+	{
+		$modSettings['cookieTime'] = 3153600;
 		createToken('admin', 'post');
+	}
 
 	// Load game data unless it has been loaded by EditGame2
 	if (!isset($context['game']))
@@ -1015,10 +1021,10 @@ function EditGame2()
 				$extra_data[$item] = $value;
 		}
 
-		$gameOptions['internal_name'] = $_POST['internal_name'];
+		$gameOptions['internal_name'] = str_replace(array('/', '\\'), array('', ''), trim($_POST['internal_name'], '.'));
 		$gameOptions['submit_system'] = $_POST['submit_system'];
-		$gameOptions['game_directory'] = $_POST['game_directory'];
-		$gameOptions['game_file'] = $_POST['game_file'];
+		$gameOptions['game_directory'] = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $_POST['game_directory'])))));
+		$gameOptions['game_file'] = str_replace(array('/', '\\'), array('', ''), trim($_POST['game_file'], '.'));
 		$gameOptions['score_type'] = (int) $_POST['score_type'];
 		$gameOptions['extra_data'] = $extra_data;
 	}

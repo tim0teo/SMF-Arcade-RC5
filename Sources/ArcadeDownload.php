@@ -16,7 +16,7 @@ if (!defined('SMF'))
 		- Updates mysql database values for download data
 
 	void arcade_game_down($data, $filepath)
-		- creates php file containing game information
+		- creates php/xml file containing game information
 
 	void arcade_scan_dir($files, $destination, $overwrite)
 		- returns all files including subfolder paths
@@ -157,7 +157,7 @@ function ArcadeDownload()
 	}
 	$smcFunc['db_free_result']($request);
 
-	if (!$gameData['gamefile_name'])
+	if (empty($gameData['gamefile_name']))
 		fatal_lang_error('pdl_error_db', false);
 
 	/* Check if zip or tar file already exists and if yes download - if not zip and download */
@@ -336,7 +336,7 @@ function ArcadeDownload()
 
 function arcade_game_down($data, $filepath)
 {
-	global $smcFunc;
+	global $arcade_version;
 	$word = preg_split('//', 'abcdefghijklmnopqrstuvwxyz_1234567890', -1);
 	shuffle($word);
 	$file = implode('', array_slice($word, 0, 16));
@@ -368,7 +368,7 @@ function arcade_game_down($data, $filepath)
 	{
 		$infofile = '<?php
 /*--------------------------------------------------*/
-/* File Created by SMF Arcade 2.55					*/
+/* File Created by SMF Arcade ' . $arcade_version . '					*/
 /* File Generated: ' . $gameinfo['date'] . '	*/
 /*--------------------------------------------------*/
 
@@ -391,7 +391,7 @@ $config = array(
 	}
 	else
 	{
-		$infofile ='<!-- 	File Created by SMF Arcade 2.55					-->
+		$infofile ='<!-- 	File Created by SMF Arcade ' . $arcade_version . '					-->
 <!-- 	File Generated: ' . $gameinfo['date'] . '	-->
 <game-info>
 	<id>' . $gameinfo['gname'] . '</id>

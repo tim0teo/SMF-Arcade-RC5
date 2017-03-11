@@ -22,36 +22,34 @@ function template_arcade_arena_matches()
 		);
 
 	echo '
-	<div class="pagesection">
-		<div class="align_left">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#bot"><b>' . $txt['go_down'] . '</b></a>' : '', '</div>
-		', template_button_strip($buttons, 'right'), '
-	</div>	
-	<div class="game_table">
-		<table cellspacing="0" class="table_grid">
-			<thead>
-				<tr class="catbg">';
+	<div class="pagesection">', template_button_strip($buttons, 'right'), '</div>
+	<div style="padding-top: 15px;" class="game_table">';
 
-	if (!empty($context['matches']))
+	if (empty($context['matches']))
 		echo '
+		<div class="cat_bar">
+			<h3 class="catbg centertext" style="vertical-align: middle;">
+				<strong>', $txt['arcade_no_matches'], '</strong>
+			</h3>
+		</div>';
+	else
+	{
+		echo '
+		<table style="border-collapse: collapse;" class="table_grid">
+			<thead>
+				<tr class="catbg">
 					<th scope="col" class="first_th"></th>
 					<th scope="col">', $txt['match_name'], '</th>
 					<th scope="col">', $txt['match_status'], '</th>
 					<th scope="col">', $txt['match_players'], '</th>
-					<th scope="col" class="smallext last_th">', $txt['match_round'], '</th>';
-	else
-		echo '
-					<th scope="col" class="first_th" width="8%">&nbsp;</th>
-					<th class="smalltext" colspan="2"><strong>', $txt['arcade_no_matches'], '</strong></th>
-					<th scope="col" class="last_th" width="8%">&nbsp;</th>';
-
-	echo '
+					<th scope="col" class="smallext last_th">', $txt['match_round'], '</th>
 				</tr>
 			</thead>
 			<tbody>';
 
-	foreach ($context['matches'] as $match)
-	{
-		echo '
+		foreach ($context['matches'] as $match)
+		{
+			echo '
 				<tr class="windowbg">
 					<td></td>
 					<td class="windowbg2">', $match['link'], '<br >', $match['starter']['link'], '</td>
@@ -59,15 +57,17 @@ function template_arcade_arena_matches()
 					<td>', $match['players'], ' / ', $match['players_limit'], '</td>
 					<td>', $match['round'], ' / ', $match['rounds'], '</td>
 				</tr>';
+		}
+
+		echo '
+			</tbody>
+		</table>';
 	}
 
 	echo '
-			</tbody>
-		</table>
 	</div>
-	<div class="pagesection">
+	<div class="pagesection" style="padding-top: 5px;">
 		<div class="align_left">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#top"><b>' . $txt['go_up'] . '</b></a>' : '', '</div>
-		', template_button_strip($buttons, 'right'), '
 	</div>';
 }
 
@@ -76,85 +76,174 @@ function template_arcade_arena_view_match_above()
 	global $scripturl, $txt, $context, $settings, $user_info, $modSettings;
 
 	echo '
-	<div class="cat_bar">
-		<h3 class="catbg">
-			<span class="floatleft">', $context['match']['name'], '</span>
-			<img id="arena_panel_toggle" class="floatright" src="', $settings['images_url'], '/collapse.gif', '" alt="*" title="', $txt['upshrink_description'], '" align="bottom" style="margin: 0 1ex; display: none;" />
-		</h3>
-	</div>
-	<div id="arena_panel" style="', empty($options['game_panel_collapse']) ? '' : ' display: none;', '" class="windowbg2">
-		<span class="topslice"><span></span></span>
-		<div style="padding: 0 0.5em">
-			<div class="floatleft">
-				<strong>', $txt['match_status'], '</strong>: ', $txt[$context['match']['status']], '<br />
-				<strong>', $txt['match_players'], '</strong>: ', $context['match']['num_players'], ' / ', $context['match']['players_limit'], '<br />
-				<strong>', $txt['match_round'], '</strong>: ', $context['match']['round'], ' / ', $context['match']['num_rounds'], '
+	<div style="padding-top: 15px;"><span></span></div>
+	<span class="clear upperframe"><span></span></span>
+	<div class="roundframe" style="border-radius: 3px;">
+		<div class="innerframe" style="border-radius: 5px;">
+			<div class="cat_bar">
+				<h3 class="catbg centertext" style="vertical-align: middle;">
+					<span class="floatleft">', $context['match']['name'], '</span>
+				</h3>
 			</div>
-			<div class="floatright">';
+			<div style="padding-top: 10px;"><span></span></div>
+			<div style="padding: 0 0.5em;display: table;border-collapse:separate;border-spacing:5px;width: 100%;">
+				<div style="display: table-row;width: 100%;">
+					<span class="clear" style="display: table-cell;position: absolute;padding-left: 5px;margin-right: 10px;padding-top: 5px;">
+						<span style="display: table;">
+							<span style="display: table-row;">
+								<span style="display: table-cell"><strong>', $txt['match_status'], '</strong>:</span><span style="display: table-cell">', $txt[$context['match']['status']], '</span>
+							</span>
+							<span style="display: table-row;">
+								<span style="display: table-cell"><strong>', $txt['match_players'], '</strong>:</span><span style="display: table-cell">', $context['match']['num_players'], ' / ', $context['match']['players_limit'], '</span>
+							</span>
+							<span style="display: table-row;">
+								<span style="display: table-cell"><strong>', $txt['match_round'], '</strong>:</span><span style="display: table-cell">', $context['match']['round'], ' / ', $context['match']['num_rounds'], '</span>
+							</span>
+						</span>
+					</span>';
 
 	if ($context['can_start_match'])
 	{
 		echo '
-				<a href="', $scripturl, '?action=arcade;sa=viewMatch;start;match=', $context['match']['id'], ';' . $context['session_var'] . '=' . $context['session_id'], '" class="arc_button floatleft clearfix">
-					<span class="floatleft">', $txt['arcade_startMatch'], '</span>
-					<img src="', $settings['images_url'], '/arena_accept.png" class="floatright" alt="" />
-				</a><br />';
+					<span class="clear" style="display: table-cell;float: right;padding-left: 5px;margin-right: 10px;padding-top: 5px;">
+						<span style="display: table;">
+							<span style="display: table-row;">								
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;start;match=', $context['match']['id'], ';' . $context['session_var'] . '=' . $context['session_id'], '" class="arc_button floatleft clearfix">
+										', $txt['arcade_startMatch'], '
+									</a>
+								</span>
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;start;match=', $context['match']['id'], ';' . $context['session_var'] . '=' . $context['session_id'], '" class="arc_button floatleft clearfix">
+										<img class="icon" src="', $settings['images_url'], '/arena_accept.png" alt="" />
+									</a>
+								</span>
+							</span>
+						</span>
+					</span>';
 	}
-	
+
 	if ($context['can_play_match'])
 	{
 		echo '
-				<a href="', $scripturl, '?action=arcade;sa=play;match=', $context['match']['id'], '" class="arc_button floatleft clearfix">
-					<span class="floatleft">', $txt['arcade_play'], '</span>
-					<img src="', $settings['images_url'], '/arena_accept.png" class="floatright" alt="" />
-				</a><br />';
+					<span class="clear" style="display: table-cell;float: right;padding-left: 5px;margin-right: 10px;padding-top: 5px;">
+						<span style="display: table;">
+							<span style="display: table-row;">								
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=play;match=', $context['match']['id'], '" class="arc_button floatleft clearfix">
+										', $txt['arcade_play'], '
+									</a>
+								</span>
+								<span style="display: table-cell">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=play;match=', $context['match']['id'], '" class="arc_button floatleft clearfix">
+										<img class="icon" src="', $settings['images_url'], '/arena_accept.png" alt="" />
+									</a>
+								</span>
+							</span>
+						</span>
+					</span>';
 	}
 
 	if ($context['can_edit_match'])
 	{
 		echo '
-				<a href="', $scripturl, '?action=arcade;sa=viewMatch;delete;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
-					<span class="floatleft">', $txt['arcade_cancelMatch'], '</span>
-					<img src="', $settings['images_url'], '/arena_decline.png" class="floatright" alt="" />
-				</a><br />';
+					<span class="clear" style="display: table-cell;float: right;padding-left: 5px;margin-right: 10px;padding-top: 5px;">						
+						<span style="display: table;">
+							<span style="display: table-row;">								
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;delete;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										', $txt['arcade_cancelMatch'], '
+									</a>
+								</span>
+								<span style="display: table-cell">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;delete;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										<img class="icon" src="', $settings['images_url'], '/arena_decline.png" alt="" />
+									</a>
+								</span>
+							</span>
+						</span>
+					</span>';
 	}
 
 	if ($context['can_join_match'])
 	{
 		echo '
-				<a href="', $scripturl, '?action=arcade;sa=viewMatch;join;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
-					<span class="floatleft">', $txt['arcade_joinMatch'], '</span>
-					<img src="', $settings['images_url'], '/arena_accept.png" class="floatright" alt="" />
-				</a><br />';
+					<span class="clear" style="display: table-cell;float: right;padding-left: 5px;margin-right: 10px;padding-top: 5px;">
+						<span style="display: table;">
+							<span style="display: table-row;">								
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;join;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										', $txt['arcade_joinMatch'], '
+									</a>
+								</span>
+								<span style="display: table-cell">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;join;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										<img class="icon" src="', $settings['images_url'], '/arena_accept.png" alt="" />
+									</a>
+								</span>
+							</span>
+						</span>
+					</span>';
 	}
 	elseif ($context['can_leave'])
 	{
 		echo '
-				<a href="', $scripturl, '?action=arcade;sa=viewMatch;leave;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
-					<span class="floatleft">', $txt['arcade_leaveMatch'], '</span>
-					<img src="', $settings['images_url'], '/arena_decline.png" class="floatright" alt="" />
-				</a><br />';
+					<span class="clear" style="display: table-cell;float: right;padding-left: 5px;margin-right: 10px;padding-top: 5px;">
+						<span style="display: table;">
+							<span style="display:table-row;">								
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;leave;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										', $txt['arcade_leaveMatch'], '
+									</a>
+								</span>
+								<span style="display: table-cell">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;leave;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										<img class="icon" src="', $settings['images_url'], '/arena_decline.png" alt="" />
+									</a>
+								</span>
+							</span>
+						</span>
+					</span>';
 	}
 	elseif ($context['can_accept'])
 	{
 		echo '
-				<a href="', $scripturl, '?action=arcade;sa=viewMatch;join;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
-					<span class="floatleft">', $txt['arcade_accept'], '</span>
-					<img src="', $settings['images_url'], '/arena_accept.png" class="floatright" alt="" />
-				</a><br />
-				<a href="', $scripturl, '?action=arcade;sa=viewMatch;leave;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
-					<span class="floatleft">', $txt['arcade_decline'], '</span>
-					<img src="', $settings['images_url'], '/arena_decline.png" class="floatright" alt="" />
-				</a><br />';
+					<span class="clear" style="display: table-cell;float: right;padding-left: 5px;margin-right: 10px;padding-top: 5px;">
+						<span style="display: table;">
+							<span style="display: table-row;">								
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;join;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										', $txt['arcade_accept'], '
+									</a>
+								</span>
+								<span style="display: table-cell">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;join;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										<img class="icon" src="', $settings['images_url'], '/arena_accept.png" alt="" />
+									</a>
+								</span>
+							</span>
+							<span style="display: table-row;">								
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;leave;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										', $txt['arcade_decline'], '
+									</a>
+								</span>
+								<span style="display: table-cell;">
+									<a style="text-decoration: none;" href="', $scripturl, '?action=arcade;sa=viewMatch;leave;match=', $context['match']['id'], ';' . $context['session_var'] . '=', $context['session_id'], '" class="arc_button floatleft clearfix">
+										<img class="icon" src="', $settings['images_url'], '/arena_decline.png" alt="" />
+									</a>
+								</span>
+							</span>
+						</span>
+					</span>';
 	}
 
 	echo '
+				</div>
 			</div>
-			<br class="clear" />
-		</div>
-		<span class="botslice"><span></span></span>
-	</div>';
-	
+			<div class="clear" style="padding-top: 35px;"><span></span></div>
+		</div>';
+
 	echo '
 	<script type="text/javascript"><!-- // --><![CDATA[
 		var oArenaPanelToggle = new smc_Toggle({
@@ -191,7 +280,7 @@ function template_arcade_arena_view_match()
 	global $scripturl, $txt, $context, $settings, $user_info, $modSettings;
 
 	echo '
-	<div class="floatleft" style="width: 48%">
+	<div class="floatleft" style="width: 48%;padding: 0 0.5em;">
 		<table cellspacing="1" class="playerlist">
 			<tr class="catbg">
 				<th class="first_th">', $txt['arcade_position'], '</th>
@@ -225,11 +314,11 @@ function template_arcade_arena_view_match()
 		</table>
 	</div>
 
-	<div class="floatright" style="width: 48%">
+	<div class="floatright" style="width: 48%;padding: 0 0.5em;">
 		<table cellspacing="1" class="gameslist">
 			<tr class="catbg">
 				<th class="first_th">', $txt['arcade_rounds'], '</th>
-				<th class="last_Th">', $txt['game'], '</th>
+				<th class="last_th">', $txt['arcade_game_name'], '</th>
 			</tr>';
 
 	foreach ($context['match']['rounds'] as $round)
@@ -264,6 +353,10 @@ function template_arcade_arena_view_match()
 function template_arcade_arena_view_match_below()
 {
 	global $scripturl, $txt, $context, $settings, $user_info, $modSettings;
+	echo '
+		<div style="padding-top: 45px;"><span></span></div>
+	</div>	
+	<span class="lowerframe"><span></span></span>';
 
 }
 

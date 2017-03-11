@@ -60,7 +60,7 @@ $addSettings = array(
 	'arcadeVersion' => array($arcade_version . $rc, true),
 	'arcadeShowOnline' => array(1, false),
 	'arcadeShowIC' => array(1, false),
-	'arcadeList' => array(1, false),
+	'arcadeList' => array(2, false),
 	'arcadeSkin' => array(1, false),
 );
 
@@ -260,6 +260,13 @@ $tables = array(
 				'default' => 0,
 				'unsigned' => true,
 			),
+			array(
+				'name' => 'id_topic',
+				'type' => 'int',
+				'size' => 10,
+				'default' => 0,
+				'unsigned' => true,
+			),
 		),
 		'indexes' => array(
 			array(
@@ -436,6 +443,12 @@ $tables = array(
 				'name' => 'member_groups',
 				'type' => 'varchar',
 				'default' => '-2,-1,0,2',
+				'size' => 255,
+			),
+			array(
+				'name' => 'cat_icon',
+				'type' => 'varchar',
+				'default' => '',
 				'size' => 255,
 			),
 		),
@@ -972,6 +985,40 @@ $tables = array(
 			array(
 				'type' => 'primary',
 				'columns' => array('online_ip')
+			),
+		)
+	),
+	// arcade shouts
+	'arcade_newshouts' => array(
+		'name' => 'arcade_newshouts',
+		'columns' => array(
+			array(
+				'name' => 'id_shout',
+				'type' => 'int',
+				'null' => false,
+				'auto' => true
+			),
+			array(
+				'name' => 'id_member',
+				'type' => 'int',
+				'null' => false,
+			),
+			array(
+				'name' => 'content',
+				'type' => 'varchar',
+				'size' => 255,
+				'null' => false
+			),
+			array(
+				'name' => 'time',
+				'type' => 'int',
+				'null' => false
+			),
+		),
+		'indexes' => array(
+			array(
+				'type' => 'primary',
+				'columns' => array('id_shout')
 			),
 		)
 	)

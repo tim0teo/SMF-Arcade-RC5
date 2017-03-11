@@ -66,6 +66,7 @@ function Arcade()
 		// Advanced
 		'download' => array('ArcadeDownload.php', 'ArcadeDownload'),
 		'report' => array('ArcadeReport.php', 'ArcadeReport'),
+		'shout' => array('Subs-ArcadeSkinB.php', 'ArcadeShout'),
 		// IBP Submit
 		'ibpverify' => array('Submit-ibp.php', 'ArcadeVerifyIBP'),
 		'ibpsubmit2' => array('ArcadeGame.php', 'ArcadeSubmit'),
@@ -105,7 +106,7 @@ function Arcade()
 			array(
 				'href' => $scripturl . '?action=arcade',
 				'title' => $txt['arcade'],
-				'is_selected' => in_array($_REQUEST['sa'], array('play', 'list', 'highscore', 'submit', 'search')),
+				'is_selected' => in_array($_REQUEST['sa'], array('play', 'list', 'highscore', 'submit', 'search', 'admin')),
 			),
 		),
 	);
@@ -121,6 +122,13 @@ function Arcade()
 		'href' => $scripturl . '?action=arcade;sa=stats',
 		'title' => $txt['arcade_stats'],
 		'is_selected' => in_array($_REQUEST['sa'], array('stats')),
+	);
+
+	if (allowedTo('arcade_admin'))
+		$context['arcade_tabs']['tabs'][] = array(
+		'href' => $scripturl . '?action=admin;area=arcade',
+		'title' => $txt['arcade_administrator'],
+		'is_selected' => in_array($_REQUEST['sa'], array('admin')),
 	);
 
 	if (!in_array($_REQUEST['sa'], array('highscore', 'comment')) && isset($_SESSION['arcade']['highscore']))
@@ -165,11 +173,37 @@ function loadArcade($mode = 'normal', $index = '')
 
 	$arcade_version = $modSettings['arcadeVersion'];
 	$arcade_lang_version = '2.5';
-
 	$context['arcade'] = array();
+	$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
+	require_once($sourcedir . '/Subs-ArcadePlus.php');
 	require_once($sourcedir . '/Subs-Arcade.php');
-	require_once($sourcedir . '/Subs-ArcadeSkinA.php');
-	require_once($sourcedir . '/Subs-ArcadeSkinB.php');
+
+	switch ($modSettings['arcadeSkin'])
+	{
+		case 2:
+			require_once($sourcedir . '/Subs-ArcadeSkinB.php');
+			require_once($sourcedir . '/ArcadeStats.php');
+			$context['html_headers'] .= '<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-skin-b.js?rc4"></script>';
+			if ($mode == 'normal' || $mode == 'arena')
+			{
+
+				$context['arcade_defiant']['per_line'] = 4;
+				$context['arcade_defiant']['cat_width'] = 20;
+				$context['arcade_defiant']['cat_height'] = 20;				
+				$context['page_title'] = $txt['arcade_game_list'];
+				loadTemplate('ArcadeSkinB');
+			}
+			break;
+		case 1:
+			require_once($sourcedir . '/Subs-ArcadeSkinA.php');
+			if ($mode == 'normal' || $mode == 'arena')
+				loadTemplate('ArcadeSkinA');
+			break;
+		default:
+			require_once($sourcedir . '/Subs-ArcadeSkinA.php');
+			if ($mode == 'normal' || $mode == 'arena')
+				loadTemplate('Arcade');
+	}
 
 	// Load language
 	loadLanguage('Arcade');
@@ -184,18 +218,6 @@ function loadArcade($mode = 'normal', $index = '')
 		if (empty($modSettings['arcadeEnabled']))
 			return false;
 
-		$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? $modSettings['arcadeSkin'] : false;
-
-		// add new skins to this array
-		$current_skin = array(
-			'Arcade',
-			'ArcadeSkinA',
-			'ArcadeSkinB'
-		);
-
-		$skinId = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
-		$skinId = !empty($current_skin[$skinId]) ? $skinId : 0;
-		loadTemplate($current_skin[$skinId], array('forum', 'arcade'));
 		$user_info['arcade_settings'] = loadArcadeSettings($user_info['id']);
 		$context['games_per_page'] = !empty($user_info['arcade_settings']['gamesPerPage']) ? $user_info['arcade_settings']['gamesPerPage'] : $modSettings['gamesPerPage'];
 		$context['scores_per_page'] = !empty($user_info['arcade_settings']['scoresPerPage']) ? $user_info['arcade_settings']['scoresPerPage'] : $modSettings['scoresPerPage'];
@@ -240,6 +262,7 @@ function loadArcade($mode = 'normal', $index = '')
 	{
 		loadTemplate('ArcadeAdmin');
 		loadLanguage('ArcadeAdmin');
+		isAllowedTo('arcade_admin');
 
 		$context['html_headers'] .= '
 		<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade.js?rc4"></script>';
@@ -333,5 +356,158 @@ function arcadeLogin()
 		'name' => $txt['arcade_login_top'],
 	);
 	loadTemplate('Arcade');
+}
+
+function arcade_log_online()
+{
+	global $smcFunc, $user_info, $context;
+	$time = time();
+	$checkIp = !empty($user_info['ip']) ? trim($user_info['ip']) : !empty($user_info['ip2']) ? trim($user_info['ip2']) : 0;
+	list($guests, $users, $action, $userIp) = array(0, 0, 0, array());
+	$game = isset($_REQUEST['game']) ? (int)$_REQUEST['game'] : 0;
+	$sa = !empty($_REQUEST['sa']) ? trim($_REQUEST['sa']) : 'index';
+
+	switch ($sa)
+	{
+		case 'play':
+			$action = 1;
+			break;
+		case 'highscore':
+			$action = 2;
+			break;
+		case 'arena':
+			$action = 3;
+			break;
+		case 'online':
+			$action = 4;
+			break;
+		case 'viewMatch':
+			$action = 5;
+			break;
+		case 'newMatch':
+			$action = 6;
+			break;
+		case 'newMatch2':
+			$action = 6;
+			break;
+		default:
+			$action = 0;
+	}
+
+	// count guests online for user comparison
+	$request = $smcFunc['db_query']('', '
+		SELECT online_ip, online_time
+		FROM {db_prefix}arcade_guest_data
+		WHERE online_ip = {string:ip} AND {int:now} - online_time < 600',
+		array(
+			'ip' => (string)$checkIp,
+			'now' => $time
+		)
+	);
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+		$userIp[] = $row['online_ip'];
+	$smcFunc['db_free_result']($request);
+
+	// remove user & guest values that refresh the page or are gone over 10 minutes
+	$request = $smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}arcade_member_data
+		WHERE id_member = {int:member} OR {int:now} - online_time >= 600',
+		array(
+			'member' => $user_info['id'],
+			'now' => $time
+		)
+	);
+
+	if (!$user_info['is_guest'])
+		$request = $smcFunc['db_query']('', '
+			DELETE FROM {db_prefix}arcade_guest_data
+			WHERE online_ip = {string:ip} OR {int:now} - online_time >= 600',
+			array(
+				'ip' => !in_array($checkIp, $userIp) ? $checkIp : '256.0.0.0',
+				'now' => $time
+			)
+		);
+
+	// insert user or guest into the online log
+	if ($user_info['is_guest'] && !empty($checkIp))
+	{
+		$request = $smcFunc['db_query']('', '
+			DELETE FROM {db_prefix}arcade_guest_data
+			WHERE online_ip = {string:ip} OR {int:now} - online_time >= 600',
+			array(
+				'ip' => $checkIp,
+				'now' => $time
+			)
+		);
+
+		list($time, $show, $ip) = array(time(), '0', $checkIp);
+
+		$smcFunc['db_insert']('insert',
+			'{db_prefix}arcade_guest_data',
+			array(
+				'online_ip' => 'string',
+				'online_time' => 'int',
+				'show_online' => 'int',
+				'current_action' => 'int',
+				'current_game' => 'int',
+			),
+			array(
+				$ip,
+				$time,
+				$show,
+				$action,
+				$game,
+			),
+			array()
+		);
+	}
+	else
+	{
+		list($userid, $time, $show, $name, $color) = array($user_info['id'], time(), '0', $user_info['name'], '');
+
+		$request = $smcFunc['db_query']('', '
+			SELECT
+				mem.id_member, mem.real_name, mem.member_name, mem.show_online,
+				mg.online_color, mg.id_group, mg.group_name
+			FROM {db_prefix}members AS mem
+				LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = 0 THEN mem.id_post_group ELSE mem.id_group END)
+			WHERE mem.id_member = {int:member}',
+			array(
+				'member' => $user_info['id'],
+			)
+		);
+
+		while ($row = $smcFunc['db_fetch_assoc']($request))
+		{
+			$color = !empty($row['online_color']) ? $row['online_color'] : '';
+			$show = !empty($row['show_online']) ? 1 : 0;
+		}
+		$smcFunc['db_free_result']($request);
+
+		$smcFunc['db_insert']('insert',
+			'{db_prefix}arcade_member_data',
+			array(
+				'id_member' => 'int',
+				'online_ip' => 'string',
+				'online_time' => 'int',
+				'show_online' => 'int',
+				'online_name' => 'string',
+				'online_color' => 'string',
+				'current_action' => 'int',
+				'current_game' => 'int',
+			),
+			array(
+				$userid,
+				$checkIp,
+				$time,
+				$show,
+				$name,
+				$color,
+				$action,
+				$game,
+			),
+			array()
+		);
+	}
 }
 ?>

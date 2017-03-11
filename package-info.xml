@@ -42,6 +42,7 @@
 		<require-file name="Sources/Submit-v2game.php" destination="$sourcedir" />
 		<require-file name="Sources/Submit-v3arcade.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-Arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadePlus.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeAdmin.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeClass.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeSkinA.php" destination="$sourcedir" />
@@ -72,6 +73,7 @@
 		<require-file name="Themes/default/css/arcade-skin-b.css" destination="$themedir/css" />
 		<require-file name="Themes/default/ArcadeSkinA.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeSkinListA.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeSkinListB.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeGamePop.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeReports.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeOnline.template.php" destination="$themedir" />
@@ -85,6 +87,7 @@
 		<require-file name="Themes/default/scripts/arcade-func.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/swfobject.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/arcade-skin-a.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/arcade-skin-b.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/arcade-uploader-html5.js" destination="$themedir/scripts" />
 
 		<!-- These images go into the Default Theme images directory -->
@@ -151,6 +154,7 @@
 		<require-file name="Sources/Submit-v2game.php" destination="$sourcedir" />
 		<require-file name="Sources/Submit-v3arcade.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-Arcade.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-ArcadePlus.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeAdmin.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeClass.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeSkinB.php" destination="$sourcedir" />
@@ -181,6 +185,7 @@
 		<require-file name="Themes/default/css/arcade-skin-b.css" destination="$themedir/css" />
 		<require-file name="Themes/default/ArcadeSkinA.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeSkinListA.template.php" destination="$themedir" />
+		<require-file name="Themes/default/ArcadeSkinListB.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeGamePop.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeReports.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeOnline.template.php" destination="$themedir" />
@@ -190,6 +195,7 @@
 		<require-file name="Themes/default/scripts/arcade-func.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/swfobject.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/arcade-skin-a.js" destination="$themedir/scripts" />
+		<require-file name="Themes/default/scripts/arcade-skin-b.js" destination="$themedir/scripts" />
 		<require-file name="Themes/default/scripts/arcade-uploader-html5.js" destination="$themedir/scripts" />
 
 		<!-- These images go into the Default Theme images directory -->
@@ -271,6 +277,7 @@
 		<remove-file name="$sourcedir/Submit-v2game.php" />
 		<remove-file name="$sourcedir/Submit-v3arcade.php" />
 		<remove-file name="$sourcedir/Subs-Arcade.php" />
+		<remove-file name="$sourcedir/Subs-ArcadePlus.php" />
 		<remove-file name="$sourcedir/Subs-ArcadeAdmin.php" />
 		<remove-file name="$sourcedir/Subs-ArcadeClass.php" />
 		<remove-file name="$sourcedir/Subs-ArcadeSkinA.php" />
@@ -303,9 +310,11 @@
 		<remove-file name="$themedir/scripts/arcade-func.js" />
 		<remove-file name="$themedir/scripts/swfobject.js" />
 		<remove-file name="$themedir/scripts/arcade-skin-a.js" />
+		<remove-file name="$themedir/scripts/arcade-skin-b.js" />
 		<remove-file name="$themedir/scripts/arcade-uploader-html5.js" />
 		<remove-file name="$themedir/ArcadeSkinA.template.php" />
 		<remove-file name="$themedir/ArcadeSkinListA.template.php" />
+		<remove-file name="$themedir/ArcadeSkinListB.template.php" />
 		<remove-file name="$themedir/ArcadeGamePop.template.php" />
 		<remove-file name="$themedir/ArcadeReports.template.php" />
 		<remove-file name="$themedir/ArcadeOnline.template.php" />
@@ -372,6 +381,7 @@
 		<remove-file name="$sourcedir/Submit-v2game.php" />
 		<remove-file name="$sourcedir/Submit-v3arcade.php" />
 		<remove-file name="$sourcedir/Subs-Arcade.php" />
+		<remove-file name="$sourcedir/Subs-ArcadePlus.php" />
 		<remove-file name="$sourcedir/Subs-ArcadeAdmin.php" />
 		<remove-file name="$sourcedir/Subs-ArcadeClass.php" />
 		<remove-file name="$sourcedir/Subs-ArcadeSkinB.php" />
@@ -404,9 +414,11 @@
 		<remove-file name="$themedir/scripts/arcade-func.js" />
 		<remove-file name="$themedir/scripts/swfobject.js" />
 		<remove-file name="$themedir/scripts/arcade-skin-a.js" />
+		<remove-file name="$themedir/scripts/arcade-skin-b.js" />
 		<remove-file name="$themedir/scripts/arcade-uploader-html5.js" />
 		<remove-file name="$themedir/ArcadeSkinA.template.php" />
 		<remove-file name="$themedir/ArcadeSkinListA.template.php" />
+		<remove-file name="$themedir/ArcadeSkinListB.template.php" />
 		<remove-file name="$themedir/ArcadeGamePop.template.php" />
 		<remove-file name="$themedir/ArcadeReports.template.php" />
 		<remove-file name="$themedir/ArcadeOnline.template.php" />
