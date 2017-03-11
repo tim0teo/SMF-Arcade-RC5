@@ -892,18 +892,17 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
     	'lang' => true,
     );
 
-    $context['arcade']['buttons_set']['stats'] =  array(
-    	'text' => 'arcade_stats',
-    	'url' => $scripturl . '?action=arcade;sa=stats',
-    	'lang' => true,
-    );
-
     $context['arcade']['buttons_set']['tour'] =  array(
     	'text' => 'arcade_arena',
     	'url' => $scripturl . '?action=arcade;sa=arena',
     	'lang' => true,
     );
 
+	$context['arcade']['buttons_set']['stats'] =  array(
+    	'text' => 'arcade_stats',
+    	'url' => $scripturl . '?action=arcade;sa=stats',
+    	'lang' => true,
+    );
 
     if (allowedTo('admin_arcade'))
        	$context['arcade']['buttons_set']['arcadeadmin'] =  array(
@@ -1042,7 +1041,7 @@ function small_game_query($condition)
 		$gameUrl = $boardurl . '/' . basename($modSettings['gamesUrl']);
 		$gameico = empty($game['game_directory']) ? $gameUrl . '/' . $game['thumbnail'] : $gameUrl . '/' . $game['game_directory'] . '/' . $game['thumbnail'];
 		$gameicosmall = empty($game['thumbnail_small']) ? $gameico : (empty($game['game_directory']) ? $gameUrl . '/' . $game['thumbnail_small'] : $gameUrl . '/' . $game['game_directory'] . '/' . $game['thumbnail_small']);
-		
+
 		//build and return an arry of whats needed
 		$games[$game['game_name']] = array(
 			'id' => $game['id_game'],
