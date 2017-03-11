@@ -25,6 +25,7 @@ function template_arcade_above()
 	</table>';
 
 	$curr = 1;
+	$selected = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? ' selected="selected"' : ' selected';
 	echo '
 	<table class="bordercolor"  style="border: 0px;width: 100%;border-spacing: 1px;border-collapse: separate;">', (!empty($context['arcade']['notice']) ? '
 		<tr class="windowbg2">
@@ -40,7 +41,7 @@ function template_arcade_above()
 			echo'
 		<tr>
 			<td style="height: 50px;padding: 5px;" class="windowbg2" colspan = "3">
-				<div style="display: none;">', $cacheFader, '			
+				<div style="display: none;">', $cacheFader, '
 				<div class="centertext">
 					<script type="text/javascript"><!-- // --><![CDATA[
 						var delay = 5000;
@@ -104,7 +105,7 @@ function template_arcade_above()
 									<div id="pausecontent4">', ArcadeInfoLongestChamps(5), '</div>
 									<div id="pausecontent5">', ArcadeGOTDBlock(), '</div>
 									<div id="pausecontent6">', ArcadeRandomGameBlock(), '</div>
-								</div>	
+								</div>
 								<script type="text/javascript">
 									var pausecontent=new Array();
 									', ArcadeInfoPanelBlock(), '
@@ -269,27 +270,27 @@ function template_arcade_above()
 								</tr>
 								<tr>
 									<td style="padding: 3px;text-align: right;">
-										<form action="', $scripturl, '?action=arcade" onsubmit="ArcadeQuickSearch(); return false;" method="post">
-											<input id="quick_name" type="text" value="" name="name[', mt_rand(0, 1000), ']" onkeyup="ArcadeQuickSearch();" />
+										<form name="search" action="', $scripturl, '?action=arcade;sa=search" method="post" onsubmit="return empty();">
+											<input id="gamesearch" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" />
 										</form>
 									</td>
 									<td style="padding: 3px;width: 275px;" class="centertext">
 										<div id="quick_div" class="smalltext">Search by name or List games</div>
 									</td>
-									<td style="padding: 3px;text-align: left;">										
-										<form action="', $scripturl, '?action=arcade;sa=list" method="post">
-											<select name="sortby" onchange="submit();">
+									<td style="padding: 3px;text-align: left;">
+										<form action="', $scripturl, '?action=arcade;sa=list" method="post" id="sortgames">
+											<select name="sortby" onchange="submit();" form="sortgames">
 												<option>', $txt['arcade_list_games'], '</option>
-												<option value="a2z">', $txt['arcade_nameAZ'], '</option>
-												<option value="z2a">', $txt['arcade_nameZA'], '</option>
-												<option value="age">', $txt['arcade_LatestList'], '</option>
-												<option value="plays">', $txt['arcade_g_i_b_3'], '</option>
-												<option value="champs">', $txt['arcade_g_i_b_8'], '</option>
-												<option value="play_reverse">', $txt['arcade_LeastPlayed'], '</option>
-												<option value="cats">', $txt['arcade_category'], '</option>
-												<option value="rating">', $txt['arcade_rating_sort'], '</option>
-												<option value="favorites">', $txt['arcade_personal_best'], '</option>
-												<option value="champion">', $txt['arcade_champion'], '</option>
+												<option value="a2z"' . ($_SESSION['arcade_sortby'] === 'a2z' ? $selected : '') . '>', $txt['arcade_nameAZ'], '</option>
+												<option value="z2a"' . ($_SESSION['arcade_sortby'] === 'z2a' ? $selected : '') . '>', $txt['arcade_nameZA'], '</option>
+												<option value="age"' . ($_SESSION['arcade_sortby'] === 'age' ? $selected : '') . '>', $txt['arcade_LatestList'], '</option>
+												<option value="plays"' . ($_SESSION['arcade_sortby'] === 'plays' ? $selected : '') . '>', $txt['arcade_g_i_b_3'], '</option>
+												<option value="champs"' . ($_SESSION['arcade_sortby'] === 'champs' ? $selected : '') . '>', $txt['arcade_g_i_b_8'], '</option>
+												<option value="plays_reverse"' . ($_SESSION['arcade_sortby'] === 'plays_reverse' ? $selected : '') . '>', $txt['arcade_LeastPlayed'], '</option>
+												<option value="cats"' . ($_SESSION['arcade_sortby'] === 'cats' ? $selected : '') . '>', $txt['arcade_category'], '</option>
+												<option value="rating"' . ($_SESSION['arcade_sortby'] === 'rating' ? $selected : '') . '>', $txt['arcade_rating_sort'], '</option>
+												<option value="favorites"' . ($_SESSION['arcade_sortby'] === 'favorites' ? $selected : '') . '>', $txt['arcade_personal_best'], '</option>
+												<option value="champion"' . ($_SESSION['arcade_sortby'] === 'champion' ? $selected : '') . '>', $txt['arcade_champion'], '</option>
 											</select>
 										</form>
 									</td>
@@ -309,7 +310,7 @@ function template_arcade_above()
 			$cats = category_games();
 			echo '
 									<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
-										<a href="', $scripturl, '?action=arcade;sa=list;sortby=age;desc=DESC">
+										<a href="', $scripturl, '?action=arcade;sa=list;sortby=age;">
 											<img class="icon" style="vertical-align: middle;border: 0px;width: ', $context['arcade_defiant']['cat_width'],'px;height: ', $context['arcade_defiant']['cat_height'], 'px;" src="', $settings['images_url'], '/arc_icons/cat_new.gif" alt="ico" title="', $txt['arcade_info_showlate'], '"/>
 											<span>&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')</span>
 										</a>
@@ -341,7 +342,7 @@ function template_arcade_above()
 		{
 			echo '
 									<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
-										<a href="',$scripturl,'?action=arcade;sa=list;sortby=age;desc=DESC">
+										<a href="',$scripturl,'?action=arcade;sa=list;sortby=age;">
 											<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="', $settings['images_url'], '/arc_icons/cat_new.gif" alt="ico" title="', $txt['arcade_info_showlate'], '"/>
 											&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')
 										</a>
@@ -374,7 +375,7 @@ function template_arcade_above()
 		$cats = category_games();
 		echo '
 									<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
-										<a href="',$scripturl,'?action=arcade;sa=list;sortby=age;desc=DESC">
+										<a href="',$scripturl,'?action=arcade;sa=list;sortby=age;">
 											<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['images_url'],'/arc_icons/cat_new.gif" alt="" title="', $txt['arcade_info_showlate'], '"/>
 											&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')
 										</a>

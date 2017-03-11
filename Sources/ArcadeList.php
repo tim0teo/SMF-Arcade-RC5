@@ -50,7 +50,8 @@ function ArcadeList()
 		'myscore' => 'IFNULL(pb.score, 0)',
 		'rating' => 'game.game_rating',
 		'champs' => 'score.champion_from',
-		'favorites' => 'favorite.id_game'
+		'favorites' => 'favorite.id_game',
+		'cats' => 'category.cat_name',
 	);
 
 	$sort_direction = array(
@@ -64,6 +65,7 @@ function ArcadeList()
 		'rating' => 'desc',
 		'champs' => 'desc',
 		'favorites' => 'desc',
+		'cats' => 'asc',
 	);
 
 	$_REQUEST['sortby'] = !empty($_REQUEST['sortby']) ? $_REQUEST['sortby'] : (!empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] :'a2z');
@@ -146,7 +148,7 @@ function ArcadeList()
 	$request = $smcFunc['db_query']('', '
 		SELECT
 			game.id_game, game.game_name, game.description, game.game_rating, game.num_plays, pdl.download_count, pdl.report_id, game.extra_data,
-			game.score_type, game.thumbnail, game.game_directory, game.id_topic, score.champion_from,
+			game.score_type, game.thumbnail, game.game_directory, game.id_topic, score.champion_from, game.id_cat, category.cat_name,
 			game.thumbnail_small, game.help, game.extra_data, IFNULL(s1.id_member, 0) AS id_member_first, IFNULL(s2.id_member, 0) AS id_member_second, IFNULL(s3.id_member,0) AS id_member_third,
 			IFNULL(m1.real_name, 0) AS real_name1,
 			IFNULL(m2.real_name, 0) AS real_name2,
