@@ -280,7 +280,7 @@ function template_arcade_above()
 									<td style="padding: 3px;text-align: left;">
 										<form action="', $scripturl, '?action=arcade;sa=list" method="post" id="sortgames">
 											<select name="sortby" onchange="submit();" form="sortgames">
-												<option>', $txt['arcade_list_games'], '</option>
+												<option value="reset">', $txt['arcade_list_games'], '</option>
 												<option value="a2z"' . ($_SESSION['arcade_sortby'] === 'a2z' ? $selected : '') . '>', $txt['arcade_nameAZ'], '</option>
 												<option value="z2a"' . ($_SESSION['arcade_sortby'] === 'z2a' ? $selected : '') . '>', $txt['arcade_nameZA'], '</option>
 												<option value="age"' . ($_SESSION['arcade_sortby'] === 'age' ? $selected : '') . '>', $txt['arcade_LatestList'], '</option>

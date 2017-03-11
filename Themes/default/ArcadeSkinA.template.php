@@ -49,7 +49,7 @@ function template_arcade_above()
 						<div class="centertext smalltext" style="padding:5px;margin:10px;font-size:1.0em;">
 							<form action="', $scripturl, '?action=arcade;sa=list" method="post">
 								<select name="sortby" onchange="submit();">
-									<option value="0">', $txt['arcade_sort_by'], '</option>
+									<option value="reset">', $txt['arcade_sort_by'], '</option>
 									<option value="age"' . ($_SESSION['arcade_sortby'] === 'age' ? $selected : '') . '>', $txt['arcade_age'], '</option>
 									<option value="a2z"' . ($_SESSION['arcade_sortby'] === 'a2z' ? $selected : '') . '>', $txt['arcade_a2z'], '</option>
 									<option value="z2a"' . ($_SESSION['arcade_sortby'] === 'z2a' ? $selected : '') . '>', $txt['arcade_z2a'], '</option>

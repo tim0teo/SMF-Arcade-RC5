@@ -34,6 +34,7 @@ function ArcadeList()
 	$_SESSION['arcade']['gamepopup'] = false;
 	$_SESSION['arcade']['pop'] = false;
 	$context['arcade_category'] = !empty($_REQUEST['category']) ? ArcadeSpecialChars($_REQUEST['category']) : (!empty($_SESSION['current_cat']) ? ArcadeSpecialChars($_SESSION['current_cat']) : 'all');
+	$context['arcade_category'] = (!empty($_REQUEST['sortby'])) && $_REQUEST['sortby'] == 'reset' ? 0 : $context['arcade_category'];
 	/*
 	if ($context['arcade_category'] == 1)
 		$_REQUEST['sortby'] = 'age';
