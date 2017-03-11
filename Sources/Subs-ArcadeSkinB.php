@@ -218,8 +218,8 @@ function ArcadeShout()
 	}
 	elseif (!$user_info['is_guest'])
 	{
-		$shout = strlen($shout) > 100 ? mb_substr($shout, 0, 100) . '...' : $shout;
-		$shout = $txt['arcade_shouted'] . $smcFunc['htmlspecialchars']($_REQUEST['the_shout'], ENT_QUOTES);
+		$shout = strlen($_REQUEST['the_shout']) > 100 ? mb_substr($_REQUEST['the_shout'], 0, 100) . '...' : $_REQUEST['the_shout'];
+		$shout = $txt['arcade_shouted'] . $smcFunc['htmlspecialchars']($shout, ENT_QUOTES);
 		add_to_arcade_shoutbox($shout);
 	}
 
