@@ -36,6 +36,8 @@ $txt['arcade'] = 'Arcade';
 $txt['arcadeSettings'] = 'Arcade Settings';
 $txt['arcadeStats'] = 'Arcade Statistics';
 $txt['sendArcadeChallenge'] = 'Arcade Challenge';
+$txt['arcade_list_sort'] = 'Ascend / Descend';
+$txt['arcade_list_popularity'] = 'Popularity';
 
 // Arcade online and Who's online
 $txt['arcade_online_title'] = 'Arcade Online';

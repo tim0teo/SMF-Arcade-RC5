@@ -41,19 +41,19 @@ function template_arcade_list()
 			', template_button_strip($arcade_buttons, 'right'), '
 		</div>
 		<div class="game_table">
-			<table style="border-collapse: collapse;" class="table_grid">
+			<table style="border-collapse: collapse;width: 100%;" class="table_grid">
 				<thead>
-					<tr  class="catbg">';
+					<tr class="catbg">';
 
 	// Is there games?
 	if (!empty($context['arcade']['games']))
 	{
 		echo '
 
-						<th scope="col" class="first_th"></th>
-						<th scope="col"><a href="', $scripturl, '?action=arcade;sort=name', $context['sort_by'] == 'name' && $context['sort_direction'] == 'desc' ? ';dir=desc' : '', '">', $txt['arcade_game_name'], $context['sort_by'] == 'name' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>', !$user_info['is_guest'] ? '
-						<th scope="col"><a href="' . $scripturl . '?action=arcade;sort=myscore' . ($context['sort_by'] == 'myscore' && $context['sort_direction'] == 'desc' ? ';dir=desc' : '') . '">' . $txt['arcade_personal_best'] . ($context['sort_by'] == 'myscore' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '') . '</a></th>' : '', '
-						<th scope="col" class="last_th"><a href="', $scripturl, '?action=arcade;sort=champion', $context['sort_by'] == 'champion' && $context['sort_direction'] == 'desc' ? ';dir=desc' : '', '">', $txt['arcade_champion'], $context['sort_by'] == 'champion' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
+						<th scope="col" class="first_th">', $context['sort_arrow'], '</th>
+						<th scope="col"><a href="', $scripturl, '?action=arcade;sa=list;sortby=', ($context['arcade']['games'][0]['sort_by'] == 'a2z' ? 'z2a;#arctoplist' : 'a2z;#arctoplist'), '">', $txt['arcade_game_name'], '</a></th>', !$user_info['is_guest'] ? '
+						<th scope="col"><a href="' . $scripturl . '?action=arcade;sa=list;sortby=myscore' . ($context['arcade']['games'][0]['sort_by'] == 'myscore' ? $context['changedir'] : ';dir=desc;#arctoplist') . '">' . $txt['arcade_personal_best'] . '</a></th>' : '<th scope="col">&nbsp;</th>', '
+						<th scope="col" class="last_th"><a href="', $scripturl, '?action=arcade;sa=list;sortby=champs', ($context['arcade']['games'][0]['sort_by'] == 'champs' ? $context['changedir'] : ';dir=desc;#arctoplist'), '">', $txt['arcade_champion'], '</a></th>';
 	}
 	else
 	{

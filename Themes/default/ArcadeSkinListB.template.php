@@ -22,10 +22,10 @@ function template_arcade_list()
 	{
 		echo '
 		<tr>
-			<td class="catbg3"></td>
-			<td class="catbg3">', $txt['arcade_game_name'], '</td>
+			<td class="catbg3">', $context['sort_arrow'], '</td>
+			<td class="catbg3"><a href="', $context['sort_link'], '">', $txt['arcade_game_name'], '</a></td>
 			<td class="catbg3" colspan="2">', $txt['arcade_defdescript'], '</td>
-			<td class="catbg3" style="width: 5%; text-align: center;">', $txt['arcade_plays'], '</td>
+			<td class="catbg3" style="width: 5%; text-align: center;">', $txt['arcade_list_popularity'], '</td>
 			<td nowrap="nowrap" class="catbg3" style="width: 5%; text-align: center;">', $txt['arcade_personal_best'],'</td>
 			<td class="catbg3" style="width: 5%; text-align: center;">', $txt['arcade_champion'],'</td>
 		</tr>';

@@ -46,7 +46,7 @@ function template_arcade_list()
 			<div class="innerframe">
 				<div class="cat_bar">
 					<h3 class="catbg centertext" style="vertical-align: middle;">
-						<span style="clear: right;">', $txt['arcade_game_list'], '</span>
+						', $context['sort_arrow'], '<span style="clear: right;"><a href="', $context['sort_link'], '">', $txt['arcade_game_list'], '</a></span>
 					</h3>
 				</div>';
 	$tally = 0;

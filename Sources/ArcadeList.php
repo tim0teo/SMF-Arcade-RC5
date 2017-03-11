@@ -28,7 +28,7 @@ if (!defined('SMF'))
 
 function ArcadeList()
 {
- 	global $scripturl, $txt, $db_prefix, $modSettings, $context, $user_info, $smcFunc, $sourcedir;
+ 	global $scripturl, $txt, $db_prefix, $modSettings, $context, $user_info, $smcFunc, $sourcedir, $settings;
 
 
 	$_SESSION['arcade']['gamepopup'] = false;
@@ -69,14 +69,18 @@ function ArcadeList()
 		'cats' => 'asc',
 	);
 
-	$_REQUEST['sortby'] = !empty($_REQUEST['sortby']) ? $_REQUEST['sortby'] : (!empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] :'a2z');
+	$_REQUEST['sortby'] = !empty($_REQUEST['sortby']) ? ArcadeSpecialChars($_REQUEST['sortby']) : (!empty($_SESSION['arcade_sortby']) ? ArcadeSpecialChars($_SESSION['arcade_sortby']) :'a2z');
 	$context['sort_by'] = !empty($sort_methods[$_REQUEST['sortby']]) ? $_REQUEST['sortby'] : (!empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] :'a2z');
 	$context['sort_direction'] = !empty($sort_direction[$context['sort_by']]) ? $sort_direction[$context['sort_by']] : 'asc';
+	$context['sort_direction'] = (isset($_REQUEST['dir'])) && in_array(strtolower(ArcadeSpecialChars($_REQUEST['dir'])), array('asc', 'desc')) ? strtolower(ArcadeSpecialChars($_REQUEST['dir'])) : $context['sort_direction'];
+	$context['sort_link'] = $context['sort_direction'] == 'asc' ? $scripturl . '?action=arcade;sa=list;sortby=' . $context['sort_by'] . ';dir=desc;#arctoplist' : $scripturl . '?action=arcade;sa=list;sortby=' . $context['sort_by'] . ';dir=asc;#arctoplist';
+	$context['changedir'] = $context['sort_direction'] == 'desc' ? ';dir=asc' : ';dir=desc';
+	$context['sort_arrow'] = '<span id="arctoplist" title="' . $txt['arcade_list_sort'] . '" class="floatleft">&nbsp;<a href="' . $context['sort_link'] . '"><img style="vertical-align: middle;" class="icon" src="' . $settings['images_url'] . '/' . ($context['sort_direction'] == 'desc' ? 'sort_up.gif' : 'sort_down.gif') . '" alt="" /></a></span>';
 	$context['arcade']['games'] = array();
 	$_SESSION['arcade_sortby'] = $context['sort_by'];
 	$_SESSION['current_cat'] = $context['arcade_category'];
 	$sortby = $sort_methods[$context['sort_by']];
-	$ascending = $sort_direction[$context['sort_by']];
+	$ascending = $context['sort_direction'];
 	$select_rows = '';
 	$select_tables = '';
 	$where = '';
@@ -264,6 +268,7 @@ function ArcadeList()
 			'thumbnail' => !empty($row['thumbnail']) ? $gameurl . $row['thumbnail'] : '',
 			'thumbnail_small' => !empty($row['thumbnail_small']) ? $gameurl . $row['thumbnail_small'] : '',
 			'id_topic' => !empty($row['id_topic']) ? $row['id_topic'] : 0,
+			'sort_by' => $context['sort_by'],
 		);
 	}
 	$smcFunc['db_free_result']($request);
