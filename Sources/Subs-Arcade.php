@@ -715,7 +715,7 @@ function arcadeEventNewChampion($event, &$replaces, &$pms, $data)
 		'champion.score' => comma_format($data['score']['score']),
 		'champion.url' => $scripturl . '?action=profile;u=' . $data['member']['id'],
 		'GAMENAME' => $data['game']['name'],
-		'GAMEURL' => $scripturl . '?action=arcade;game=' . $data['game']['id'],
+		'GAMEURL' => $scripturl . '?action=arcade;game=' . $data['game']['id'] . ';#playgame',
 	);
 
 	if ($data['game']['is_champion'])

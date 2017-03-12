@@ -16,7 +16,7 @@ function template_arcade_game_above()
 	$context['arcade']['buttons']['play'] =  array(
 		'text' => 'arcade_play',
 		'image' => 'arcade_play.gif', // Theres no image for this included (yet)
-		'url' => !empty($context['arcade']['play']) ? $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . '" onclick="arcadeRestart(); return false;' : $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'],
+		'url' => !empty($context['arcade']['play']) ? $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame" onclick="arcadeRestart(); return false;' : $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
 		'lang' => true
 	);
 
@@ -25,7 +25,7 @@ function template_arcade_game_above()
 		$context['arcade']['buttons']['score'] =  array(
 			'text' => 'arcade_viewscore',
 			'image' => 'arcade_viewscore.gif', // Theres no image for this included (yet)
-			'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $context['game']['id'],
+			'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $context['game']['id'] . ';#commentform3',
 			'lang' => true
 		);
 
@@ -33,7 +33,7 @@ function template_arcade_game_above()
 	$context['arcade']['buttons']['random'] =  array(
 		'text' => 'arcade_random_game',
 		'image' => 'arcade_random.gif', // Theres no image for this included (yet)
-		'url' => $scripturl . '?action=arcade;sa=play;random',
+		'url' => $scripturl . '?action=arcade;sa=play;random;#playgame',
 		'lang' => true
 	);
 

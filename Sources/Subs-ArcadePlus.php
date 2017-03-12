@@ -494,9 +494,9 @@ function getGameInfo($id_game = 0, $raw = false)
 	return array(
 		'id' => $game['id_game'],
 		'url' => array(
-			'play' => $scripturl . '?action=arcade;sa=play;game=' . $game['id_game'],
+			'play' => $scripturl . '?action=arcade;sa=play;game=' . $game['id_game'] . ';#playgame',
 			'base_url' => $gameurl,
-			'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id_game'],
+			'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id_game'] . ';#commentform3',
 			'flash' => $gameurl . $game['game_file'],
 			'favorite' => $context['arcade']['can_favorite'] ? $game['is_favorite'] == 0 ? $scripturl . '?action=arcade;sa=favorite;game=' . $game['id_game'] : $scripturl . '?action=arcade;sa=favorite;remove;game=' . $game['id_game'] : '#',
 		),
@@ -1045,7 +1045,7 @@ function small_game_query($condition)
 		$games[$game['game_name']] = array(
 			'id' => $game['id_game'],
 			'url' => array(
-				'play' => $scripturl . '?action=arcade;sa=play;game=' . $game['id_game'],
+				'play' => $scripturl . '?action=arcade;sa=play;game=' . $game['id_game'] . ';#playgame',
 				),
 			'name' => $game['game_name'],
 			'rating' => $game['game_rating'],

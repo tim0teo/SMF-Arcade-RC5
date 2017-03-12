@@ -336,6 +336,7 @@ function arcadeLogin()
 	$game = isset($_REQUEST['game']) ? 'game=' . abs((int)$_REQUEST['game']) . ';' : '';
 	$match = isset($_REQUEST['match']) ? 'match=' . abs((int)$_REQUEST['match']) . ';' : '';
 	$subaction = 'sa=' . $sa . ';' . $match . $game;
+	$anchor = in_array($sa, array('play', 'highscore')) && $sa == 'play' ? ';#playgame' : in_array($sa, array('play', 'highscore')) && $sa == 'highscore' ? ';#highscore' : ''; 
 	$_SESSION['old_url'] = $scripturl . '?action=arcade;' . $subaction;
 	$context['arcade_sub'] = (isset($_REQUEST['hs'])) ? 'score' : 'play';
 	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
@@ -344,7 +345,7 @@ function arcadeLogin()
 		redirectexit();
 
 	if (!$user_info['is_guest'])
-		redirectexit('action=arcade;' . $subaction);
+		redirectexit('action=arcade;' . $subaction . $anchor);
 
 	// Create a login token for SMF 2.1.x
 	if ($context['arcade_smf_version'] == 'v2.1')

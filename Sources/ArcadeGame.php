@@ -404,7 +404,7 @@ function ArcadeSubmit()
 			'error' => 'arcade_no_permission'
 		);
 
-		redirectexit('action=arcade;sa=highscore;game=' . $context['game']['id']);
+		redirectexit('action=arcade;sa=highscore;game=' . $context['game']['id'] . ';#commentform3');
 	}
 	elseif ($user_info['is_guest'])
 	{
@@ -705,7 +705,7 @@ function ArcadeHighscore()
 		'name' => $game['name'],
 	);
 	$context['linktree'][] = array(
-		'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'],
+		'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';#commentform3',
 		'name' => $txt['arcade_viewscore'],
 	);
 
