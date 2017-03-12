@@ -212,15 +212,15 @@ function template_arcade_list()
 
 		if (!empty($context['arcade']['stats']['most_played']))
 			echo '
-						<div style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_most_played'], $context['arcade']['stats']['most_played']['link']), '</div>';
+						<div style="padding-top: 2px;">', sprintf($txt['arcade_game_most_played'], $context['arcade']['stats']['most_played']['link']), '</div>';
 
 		if (!empty($context['arcade']['stats']['best_player']))
 			echo '
-						<div style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_best_player'], $context['arcade']['stats']['best_player']['link']), '</div>';
+						<div style="padding-top: 2px;">', sprintf($txt['arcade_game_best_player'], $context['arcade']['stats']['best_player']['link']), '</div>';
 
 		if (!empty($context['arcade']['stats']['games']))
 			echo '
-						<div style="text-indent: 1.5em;padding-top: 2px;">', sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']), '</div>';
+						<div style="padding-top: 2px;">', sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']), '</div>';
 
 		echo '
 					</div>';
@@ -240,23 +240,25 @@ function template_arcade_list()
 		<div style="padding-bottom: 10px;"><span></span></div>';
 	}
 	elseif (!empty($modSettings['arcadeShowOnline']))
-	{
 		echo'
-		<table class="bordercolor" style="border: 0px;width: 100%;border-spacing: 1px;border-collapse: separate;">
-			<tr>
-				<td class="catbg centertext" style="padding: 5px;" colspan="0">', $txt['arcade_users'], '</td>
-			</tr>
-			<tr>
-				<td class="windowbg2">
-					<div class="smalltext" style="display: inline;padding-bottom: 3px;">' . $context['arcade_online_link'] . '</div>
-				</td>
-			</tr>
-			<tr>
-				<td class="windowbg2" style="vertical-align: bottom;">
-					<div class="smalltext" style="display: inline;padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">' . implode(', ', $context['arcade_viewing']) . '</div>
-				</td>
-			</tr>
-		</table>';
-	}
+		<div style="padding-top: 15px;"><span></span></div>
+		<span class="clear upperframe"><span></span></span>
+		<div class="roundframe" style="border-radius: 3px;">
+			<div class="innerframe" style="border-radius: 5px;">
+				<div class="cat_bar">
+					<h3 class="catbg" style="vertical-align: middle;">
+						<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/icons/online.gif" alt="" />
+						<span class="mediumtext" style="padding: 0px 6px 0px 0px;vertical-align: middle;">', $txt['arcade_users'], '</span>
+					</h3>
+				</div>
+				<div class="smalltext" style="padding-bottom: 3px;border: 0px;">' . $context['arcade_online_link'] . '</div>
+				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;border: 0px;">' . implode(', ', $context['arcade_viewing']) . '</div>
+			</div>
+		</div>
+		<span class="lowerframe"><span></span></span>
+		<div style="padding-bottom: 10px;"><span></span></div>';
+	else
+		echo '
+		<div style="padding-bottom: 10px;"><span></span></div>';
 }
 ?>

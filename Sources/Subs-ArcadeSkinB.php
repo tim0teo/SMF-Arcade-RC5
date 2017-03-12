@@ -218,6 +218,7 @@ function ArcadeShout()
 	}
 	elseif (!$user_info['is_guest'])
 	{
+		$_REQUEST['the_shout'] = isset($_REQUEST['the_shout']) ? $_REQUEST['the_shout'] : '';
 		$shout = strlen($_REQUEST['the_shout']) > 100 ? mb_substr($_REQUEST['the_shout'], 0, 100) . '...' : $_REQUEST['the_shout'];
 		$shout = $txt['arcade_shouted'] . $smcFunc['htmlspecialchars']($shout, ENT_QUOTES);
 		add_to_arcade_shoutbox($shout);
