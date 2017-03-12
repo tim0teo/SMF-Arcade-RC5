@@ -53,7 +53,7 @@ $txt['skin_latest_games'] = 'Set Latest Games';
 $txt['skin_most_popular'] = 'Set Most Played';
 $txt['skin_avatar_size'] = 'Set Skin Avatar Size';
 $txt['avsize_recommend'] = 'Recommend (65) don\'t overdo it';
-
+$txt['arcade_rec_val'] = 'Recommended Value: %s';
 $txt['arcade_admin_settings'] = 'Arcade Settings';
 $txt['arcade_settings_desc'] = 'Here you can edit settings of arcade';
 $txt['arcadeEnabled'] = 'Arcade Enabled';

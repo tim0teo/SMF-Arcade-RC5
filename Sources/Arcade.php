@@ -181,13 +181,12 @@ function loadArcade($mode = 'normal', $index = '')
 
 	switch ($modSettings['arcadeSkin'])
 	{
-		case 2:
+		case 2:		
 			require_once($sourcedir . '/Subs-ArcadeSkinB.php');
 			require_once($sourcedir . '/ArcadeStats.php');
 			$context['html_headers'] .= '<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-skin-b.js?rc4"></script>';
 			if ($mode == 'normal' || $mode == 'arena')
-			{
-
+			{				
 				$context['arcade_defiant']['per_line'] = 4;
 				$context['arcade_defiant']['cat_width'] = 20;
 				$context['arcade_defiant']['cat_height'] = 20;				

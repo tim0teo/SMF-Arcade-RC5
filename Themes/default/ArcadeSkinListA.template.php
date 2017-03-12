@@ -285,4 +285,9 @@ function template_arcade_list()
 		echo '
 		<div style="padding-bottom: 10px;"><span></span></div>';
 }
+
+function Arcade_below()
+{
+	
+}
 ?>

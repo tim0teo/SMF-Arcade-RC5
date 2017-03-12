@@ -72,7 +72,15 @@ function ArcadeAdminMain()
 
 function ArcadeAdminSettings($return_config = false)
 {
-	global $scripturl, $txt, $modSettings, $context, $settings, $sourcedir;
+	global $scripturl, $txt, $modSettings, $context, $settings, $sourcedir, $boardurl, $boarddir;
+
+	$context['html_headers'] .= '<script type="text/javascript">
+		window.onload = function() {
+			document.getElementById("changeUrl").onclick = function(valid, value){document.getElementById(valid).innerHTML="\' + value + \'"; return false;};
+			document.getElementById("changePath").onclick = function(valid, value){document.getElementById(valid).innerHTML="\' + value + \'"; return false;};
+			document.getElementById("arcadeSkin").onchange = function(){document.getElementById("arcadeSkin").form.submit(); return false;};
+		};	
+	</script>';
 
 	if ($return_config)
 		require_once($sourcedir . '/Subs-Arcade.php');
@@ -84,8 +92,8 @@ function ArcadeAdminSettings($return_config = false)
 			array('check', 'arcadeEnableFavorites'),
 			array('check', 'arcadeEnableRatings'),
 		'',
-			array('text', 'gamesUrl'),
-			array('text', 'gamesDirectory'),
+			array('text', 'gamesUrl', 'subtext' => '<a id="changeUrl" href="" onclick="changeVal(\'gamesUrl\', \'' .  sprintf($txt['arcade_rec_val'], $boardurl . '/Games') . '\'); return false;">' .  sprintf($txt['arcade_rec_val'], $boardurl . '/Games') . '</a>'),
+			array('text', 'gamesDirectory', 'subtext' => '<a id="changePath" href="" onclick="changeVal(\'gamesDirectory\', \'' .  sprintf($txt['arcade_rec_val'], $boarddir . '/Games') . '\'); return false;">' .  sprintf($txt['arcade_rec_val'], $boarddir . '/Games') . '</a>'),
 			array('check', 'arcadeGamecacheUpdate'),
 			array('check', 'arcadeUploadSystem'),
 		'',
@@ -100,11 +108,11 @@ function ArcadeAdminSettings($return_config = false)
 			),
 		'',
 			array('int', 'arcadeMaxScores'),
-		'',			
+		'',
 			array('select', 'arcadeList',
 				array($txt['arcade_list0'], $txt['arcade_list1'], $txt['arcade_list2'])
 			),
-		'',	
+		'',
 			array('check', 'arcadeShowIC'),
 			array('check', 'arcadeShowOnline'),
 		'',
@@ -120,7 +128,7 @@ function ArcadeAdminSettings($return_config = false)
 		$a_skin_vars = array(
 			array('check', 'arcadeDropCat'),
 			array('int', 'arcade_catWidth'),
-			array('int', 'arcade_catHeight'),			
+			array('int', 'arcade_catHeight'),
 			array('check', 'arcadeDropCat'),
 			array('int', 'arcade_catWidth'),
 			array('int', 'arcade_catHeight'),
@@ -142,7 +150,7 @@ function ArcadeAdminSettings($return_config = false)
 			array('check', 'arcadeTabs'),
 			array('check', 'arcadeDropCat'),
 			array('int', 'arcade_catWidth'),
-			array('int', 'arcade_catHeight'),			
+			array('int', 'arcade_catHeight'),
 			array('check', 'arcadeDropCat'),
 			array('int', 'arcade_catWidth'),
 			array('int', 'arcade_catHeight'),
@@ -188,9 +196,7 @@ function ArcadeAdminSettings($return_config = false)
 
 	$context['post_url'] = $scripturl . '?action=admin;area=arcade;sa=settings;save';
 	$context['settings_title'] = $txt['arcade_admin_settings'];
-	$context['sub_template'] = 'show_settings';
-	$context['html_headers'] .= '
-	<script type="text/javascript">window.onload = function() {submitArcadeSkin();};</script>';
+	$context['sub_template'] = 'show_settings';	
 
 	prepareDBSettingContext($config_vars);
 }
