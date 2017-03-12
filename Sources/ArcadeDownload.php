@@ -340,7 +340,7 @@ function arcade_game_down($data, $filepath)
 	$word = preg_split('//', 'abcdefghijklmnopqrstuvwxyz_1234567890', -1);
 	shuffle($word);
 	$file = implode('', array_slice($word, 0, 16));
-	$stype = array('auto', 'v1game', 'pnflash', 'silver', 'custom_game', 'ibp', 'ibp3', 'ibp32');
+	$stype = array('auto', 'v1game', 'pnflash', 'silver', 'custom_game', 'phpbb', 'ibp', 'ibp3', 'ibp32');
 	$savetype = !empty($data['submit_system']) && in_array($data['submit_system'], $stype) ? $data['submit_system'] : 'v1game';
 
 	$gameinfo = array(

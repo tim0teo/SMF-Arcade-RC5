@@ -99,7 +99,7 @@ function template_arcade_game_above()
 	<span class="clear upperframe"><span></span></span>
 	<div class="roundframe">
 		<div class="innerframe">
-			<div class="cat_bar" >
+			<div class="cat_bar">
 				<h3 class="catbg" style="vertical-align: middle;">
 					<a href="', $scripturl, '?index.php;action=arcade;sa=play;game=', $context['game']['id'], '" title="', $txt['arcade_play'],' ', $context['game']['name'], '">
 						<span class="clear: right;" style="font-size: 0.8em;">', $context['game']['name'], '</span>
@@ -193,7 +193,7 @@ function template_arcade_game_play()
 	global $scripturl, $txt, $context, $settings, $modSettings;
 
 	echo '
-			<div class="windowbg2">
+			<div class="windowbg2" id="playgame">
 				<span class="topslice"><span></span></span>
 				<div id="gamearea">
 					', $context['game']['html']($context['game'], true), '
@@ -216,7 +216,7 @@ function template_arcade_game_highscore()
 			$score = &$context['arcade']['new_score'];
 
 			echo '
-			<div class="cat_bar">
+			<div class="cat_bar" id="submitscore">
 				<h3 class="catbg">
 					', $txt['arcade_submit_score'], '
 				</h3>
@@ -292,7 +292,7 @@ function template_arcade_game_highscore()
 				</h3>
 			</div>
 			<div class="score_table smalltext">
-				<table style="border-collapse: collapse;width: 100%;" class="table_grid">
+				<table style="border-collapse: collapse;width: 100%;" class="table_grid" id="">
 					<tr class="windowbg2">';
 
 	// Is there games?

@@ -103,37 +103,37 @@ function template_arcade_list()
 
 				if (!empty($game['personal_best']) && $user_info['id'] == $game['champion']['member_id'])
 					echo'
-				<img src="' . $settings['default_images_url'] . '/arc_icons/cup_g.gif" border="0" alt="cup_g" title="' . $txt['arcade_you_are_first'] . '&nbsp;' . $game['name'] . '"/><br />';
+				<img class="icon" style="border: 0px;vertical-align: middle;" src="' . $settings['default_images_url'] . '/arc_icons/cup_g.gif" alt="cup_g" title="' . $txt['arcade_you_are_first'] . '&nbsp;' . $game['name'] . '"/><br />';
 				elseif ($game['personal_best'] > 0 && $user_info['id'] == $game['second_place']['member_id'])
 					echo'
-				<img src="' . $settings['default_images_url'] . '/arc_icons/cup_s.gif" border="0" alt="cup_s" title="' . $txt['arcade_you_are_second'].'&nbsp;' . $game['name'] . '" /><br />';
+				<img class="icon" style="border: 0px;vertical-align: middle;" src="' . $settings['default_images_url'] . '/arc_icons/cup_s.gif" alt="cup_s" title="' . $txt['arcade_you_are_second'].'&nbsp;' . $game['name'] . '" /><br />';
 				elseif ($game['personal_best'] > 0 && $user_info['id'] == $game['third_place']['member_id'])
 					echo'
-				<img src="' . $settings['default_images_url'] . '/arc_icons/cup_b.gif" border="0" alt="cup_b" title="' . $txt['arcade_you_are_third'] . '&nbsp;' . $game['name'] . '"/><br />';
+				<img class="icon" style="border: 0px;vertical-align: middle;" src="' . $settings['default_images_url'] . '/arc_icons/cup_b.gif" alt="cup_b" title="' . $txt['arcade_you_are_third'] . '&nbsp;' . $game['name'] . '"/><br />';
 
 				echo ($game['is_personal_best'] ? $game['personal_best'] :  $txt['arcade_no_scores']), '
 			</td>
 			<td class="windowbg2" style="width: 15%; text-align: center;">
 				<table style="width: 100%;">
 					<tr>
-						<td style="width: 10%; text-align: left;"><img src="' . $settings['default_images_url'] . '/arc_icons/cup_g.gif" border="0" alt="gold" title="' . $txt['arcade_first'] . '"/></td>
+						<td style="width: 10%; text-align: center;"><img style="border: 0px;vertical-align: middle;" class="icon" src="' . $settings['default_images_url'] . '/arc_icons/cup_g.gif" alt="gold" title="' . $txt['arcade_first'] . '"/></td>
 						<td style=" text-align: center;">', $game['champion']['member_link'], ' </td>
-						<td style="width: 15%; text-align: right;">', $game['champion']['score'], '</td>
+						<td style="width: 15%; text-align: center;">', $game['champion']['score'], '</td>
 					</tr>';
 				if ($game['second_place']['score'] > 0)
 					echo'
 					<tr>
-						<td style="width: 10%; text-align: left;"><img src="'. $settings['default_images_url']. '/arc_icons/cup_s.gif" border="0" alt="silver" title="' . $txt['arcade_second'].'"/></td>
+						<td style="width: 10%; text-align: center;"><img style="border: 0px;vertical-align: middle;" class="icon" src="'. $settings['default_images_url']. '/arc_icons/cup_s.gif" alt="silver" title="' . $txt['arcade_second'].'"/></td>
 						<td>', $game['second_place']['member_link'], ' </td>
-						<td style="width: 15%; text-align: right;">', $game['second_place']['score'], '</td>
+						<td style="width: 15%; text-align: center;">', $game['second_place']['score'], '</td>
 					</tr>';
 
 				if ($game['third_place']['score'] > 0)
 					echo'
 					<tr>
-						<td style="width: 10%; text-align: left;"><img src="'. $settings['default_images_url']. '/arc_icons/cup_b.gif" border="0" alt="bronze" title="'.$txt['arcade_third'].'"/></td>
+						<td style="width: 10%; text-align: center;"><img style="border: 0px;vertical-align: middle;" class="icon" src="'. $settings['default_images_url']. '/arc_icons/cup_b.gif" alt="bronze" title="'.$txt['arcade_third'].'"/></td>
 						<td>', $game['third_place']['member_link'], ' </td>
-						<td style="width: 15%; text-align: right;">', $game['third_place']['score'], '</td>
+						<td style="width: 15%; text-align: center;">', $game['third_place']['score'], '</td>
 					</tr>';
 
 				echo'

@@ -33,6 +33,7 @@ function ArcadeList()
 
 	$_SESSION['arcade']['gamepopup'] = false;
 	$_SESSION['arcade']['pop'] = false;
+	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : '';
 	$context['arcade_category'] = !empty($_REQUEST['category']) ? ArcadeSpecialChars($_REQUEST['category']) : (!empty($_SESSION['current_cat']) ? ArcadeSpecialChars($_SESSION['current_cat']) : 'all');
 	$context['arcade_category'] = (!empty($_REQUEST['sortby'])) && $_REQUEST['sortby'] == 'reset' ? 0 : $context['arcade_category'];
 	/*
@@ -131,7 +132,7 @@ function ArcadeList()
 		$baseurl .= ';category=' . $_REQUEST['category'];
 
 	$result = $smcFunc['db_query']('', '
-		SELECT COUNT(*)
+		SELECT COUNT(*), game.id_cat
 		FROM {db_prefix}arcade_games AS game
 			LEFT JOIN {db_prefix}arcade_categories AS category ON (category.id_cat = game.id_cat)'. (isset($_REQUEST['favorites']) ? '
 			INNER JOIN {db_prefix}arcade_favorite AS favorite ON (favorite.id_game = game.id_game
@@ -219,9 +220,9 @@ function ArcadeList()
 		$context['arcade']['games'][] = array(
 			'id' => $row['id_game'],
 			'url' => array(
-				'play' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'],
-				'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $row['id_game'],
-				'edit' => $scripturl . '?action=managegames;sa=edit;game=' . $row['id_game'],
+				'play' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'] . ';#playgame',
+				'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $row['id_game'] . ';#highscore',
+				'edit' => $scripturl . '?action=admin;area=managegames;sa=edit;game=' . $row['id_game'],
 				'favorite' => $context['arcade']['can_favorite'] ? $row['is_favorite'] == 0 ? $scripturl . '?action=arcade;sa=favorite;game=' . $row['id_game'] : $scripturl . '?action=arcade;sa=favorite;remove;game=' . $row['id_game'] : '#',
 			),
 			'category' => array(
@@ -379,7 +380,7 @@ function ArcadeXMLSuggest()
 
 	// Find the Game
 	$request = $smcFunc['db_query']('', '
-		SELECT game.id_game, game.game_name
+		SELECT game.id_game, game.game_name, game.id_cat
 		FROM {db_prefix}arcade_games AS game
 			LEFT JOIN {db_prefix}arcade_categories AS category ON (category.id_cat = game.id_cat)
 		WHERE ' . (isset($_REQUEST['textid']) && $_REQUEST['textid'] == 'arenagame' ? '{string:query_arena_game}' : '{string:query_see_game}') . '

@@ -606,7 +606,7 @@ function getRecommendedGames($id_game)
 		return false;
 
 	$request = $smcFunc['db_query']('', '
-		SELECT sc.id_game, COUNT(*) AS plays
+		SELECT sc.id_game, COUNT(*) AS plays, game.id_cat
 		FROM {db_prefix}arcade_scores AS sc
 			LEFT JOIN {db_prefix}arcade_games AS game ON (game.id_game = sc.id_game)
 			LEFT JOIN {db_prefix}arcade_categories AS category ON (category.id_cat = game.id_cat)
@@ -1022,14 +1022,13 @@ function small_game_query($condition)
 
 	$games = array();
 	$request = $smcFunc['db_query']('', '
-		SELECT
-		g.id_game, g.game_name, g.game_rating, g.game_directory, g.thumbnail, g.member_groups, g.thumbnail_small,
+		SELECT game.id_game, game.game_name, game.game_rating, game.game_directory, game.thumbnail, game.member_groups, game.thumbnail_small, game.id_cat,
 		IFNULL(score.id_score,0) AS id_score, IFNULL(score.score,0) AS champScore,IFNULL(mem.id_member,0) AS id_member,
 		IFNULL(mem.real_name,0) AS real_name
-		FROM {db_prefix}arcade_games AS g
-		  LEFT JOIN {db_prefix}arcade_scores AS score ON (score.id_score = g.id_champion_score)
-		  LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = g.id_champion)
-		  LEFT JOIN {db_prefix}arcade_categories AS c ON (c.id_cat = g.id_cat)
+		FROM {db_prefix}arcade_games AS game
+		  LEFT JOIN {db_prefix}arcade_scores AS score ON (score.id_score = game.id_champion_score)
+		  LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = game.id_champion)
+		  LEFT JOIN {db_prefix}arcade_categories AS category ON (category.id_cat = game.id_cat)
 		WHERE '.$user_info['query_see_game'].' AND enabled = {int:enabled} '. $condition,
 		array(
 		  'enabled' => 1,
