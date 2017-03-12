@@ -170,7 +170,7 @@ function ArcadePlay()
 			$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
 			$context['arcade']['play'] = true;
 			$context['linktree'][] = array(
-				'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'],
+				'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
 				'name' => $context['game']['name'],
 			);
 
@@ -200,7 +200,7 @@ function ArcadePlay()
 				$_REQUEST['game'] = $context['game']['id'];
 				$context['arcade']['play'] = true;
 				$context['linktree'][] = array(
-					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'],
+					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
 					'name' => $context['game']['name'],
 				);
 
@@ -223,7 +223,7 @@ function ArcadePlay()
 				$_REQUEST['game'] = $context['game']['id'];
 				$context['arcade']['play'] = true;
 				$context['linktree'][] = array(
-					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'],
+					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
 					'name' => $context['game']['name'],
 				);
 
@@ -474,7 +474,7 @@ function ArcadeSubmit()
 		);
 
 	if (!isset($_REQUEST['xml']))
-		redirectexit('action=arcade;sa=highscore;game=' . $context['game']['id'] . ';start=' . $_SESSION['arcade']['highscore']['start']);
+		redirectexit('action=arcade;sa=highscore;game=' . $context['game']['id'] . ';start=' . $_SESSION['arcade']['highscore']['start']) . ';#commentform3';
 }
 
 function ArcadeSave_Guest()
@@ -514,7 +514,7 @@ function ArcadeSave_Guest()
 		SaveScore($_SESSION['save_score'][0], $_SESSION['save_score'][1], $_SESSION['save_score'][2]);
 
 		unset($_SESSION['save_score']);
-		redirectexit('action=arcade;sa=highscore;game=' . $_REQUEST['game']);
+		redirectexit('action=arcade;sa=highscore;game=' . $_REQUEST['game'] . ';#commentform3');
 	}
 }
 
@@ -602,7 +602,7 @@ function ArcadeHighscore()
 				null
 			);
 		}
-		redirectexit('action=arcade;sa=highscore;game=' . $game['id']);
+		redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';#commentform3');
 	}
 	// Quick Management
 	elseif ($context['arcade']['can_admin_arcade'] && isset($_REQUEST['qaction']))
@@ -612,7 +612,7 @@ function ArcadeHighscore()
 		if ($_REQUEST['qaction'] == 'delete' && !empty($_REQUEST['scores']))
 			deleteScores($game, $_REQUEST['scores']);
 
-		redirectexit('action=arcade;sa=highscore;game=' . $game['id']);
+		redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';#commentform3');
 	}
 
 	// How many scores there are
@@ -627,7 +627,7 @@ function ArcadeHighscore()
 	list ($scoreCount) = $smcFunc['db_fetch_row']($result);
 	$smcFunc['db_free_result']($result);
 
-	$context['page_index'] = constructPageIndex($scripturl .'?action=arcade;sa=highscore;game=' . $game['id'], $_REQUEST['start'], $scoreCount, $context['scores_per_page'], false);
+	$context['page_index'] = constructPageIndex($scripturl .'?action=arcade;sa=highscore;game=' . $game['id'] . ';#commentform3', $_REQUEST['start'], $scoreCount, $context['scores_per_page'], false);
 
 	// Actual query
 	$result = $smcFunc['db_query']('', '
@@ -691,7 +691,7 @@ function ArcadeHighscore()
 	$popScore = !empty($scoreId) ? (int)$scoreId : -1;
 	$context['html_headers'] .= '
 		<script type="text/javascript">
-			var highUrl = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';edit;score=' . $popScore . '";
+			var highUrl = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';edit;score=' . $popScore . ';#commentform3";
 			window.opener.location.href = highUrl;
 			window.self.close();
 		</script>';
@@ -701,7 +701,7 @@ function ArcadeHighscore()
 	$context['sub_template'] = 'arcade_game_highscore';
 	$context['page_title'] = sprintf($txt['arcade_view_highscore'], $game['name']);
 	$context['linktree'][] = array(
-		'url' => $scripturl . '?action=arcade;sa=play;game=' . $game['id'],
+		'url' => $scripturl . '?action=arcade;sa=play;game=' . $game['id'] . ';#playgame',
 		'name' => $game['name'],
 	);
 	$context['linktree'][] = array(

@@ -246,7 +246,7 @@ function template_arcade_game_highscore()
 					echo '
 					</div>
 					<div>
-						<form id="commentform1" action="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';score=',  $score['id'], '" method="post" onsubmit="myformxyz(\'commentform1\')">
+						<form id="commentform1" action="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';score=',  $score['id'], ';#commentform3" method="post" onsubmit="myformxyz(\'commentform1\')">
 							<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 							<input type="text" id="new_comment" name="new_comment" style="width: 95%;" />
 							<input class="button_submit" type="submit" name="csave" value="', $txt['arcade_save'], '" />
@@ -270,7 +270,7 @@ function template_arcade_game_highscore()
 			<div class="windowbg2 smalltext">
 				<span class="topslice"><span></span></span>
 				<div style="padding: 0 0.5em">
-					<form id="commentform2" action="', $scripturl, '?action=arcade;sa=save" method="post" onsubmit="myformxyz(\'commentform2\')">
+					<form id="commentform2" action="', $scripturl, '?action=arcade;sa=save;#commentform3" method="post" onsubmit="myformxyz(\'commentform2\')">
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 						<input type="text" name="name" style="width: 95%;" />
 						<input class="button_submit" type="submit" value="', $txt['arcade_save'], '" />
@@ -282,7 +282,7 @@ function template_arcade_game_highscore()
 	echo '
 		</div>';
 	echo '
-		<form id="commentform3" name="score" action="', $scripturl, '?action=arcade;sa=highscore;" method="post" onsubmit="myformxyz(\'commentform3\')">
+		<form id="commentform3" name="score" action="', $scripturl, '?action=arcade;sa=highscore;#commentform3" method="post" onsubmit="myformxyz(\'commentform3\')">
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 			<input type="hidden" name="game" value="', $context['game']['id'], '" />
 			<div style="padding-top: 10px;"><span></span></div>
@@ -292,7 +292,7 @@ function template_arcade_game_highscore()
 				</h3>
 			</div>
 			<div class="score_table smalltext">
-				<table style="border-collapse: collapse;width: 100%;" class="table_grid" id="">
+				<table style="border-collapse: collapse;width: 100%;" class="table_grid" id="arccomments">
 					<tr class="windowbg2">';
 
 	// Is there games?
@@ -341,7 +341,7 @@ function template_arcade_game_highscore()
 								<input type="text" id="c', $score['id'], '" value="', $score['raw_comment'], '" style="width: 95%;"  />
 								<input type="button" onclick="arcadeCommentEdit(', $score['id'], ', ', $context['game']['id'], ', 1); return false;" name="csave" value="', $txt['arcade_save'], '" />
 							</div>
-								<a id="editlink', $score['id'], '" onclick="arcadeCommentEdit(', $score['id'], ', ', $context['game']['id'], ', 0); return false;" href="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';edit;score=', $score['id'], '" class="floatright">', $edit_button, '</a>';
+								<a id="editlink', $score['id'], '" onclick="arcadeCommentEdit(', $score['id'], ', ', $context['game']['id'], ', 0); return false;" href="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';edit;score=', $score['id'], ';#commentform3" class="floatright">', $edit_button, '</a>';
 		elseif ($score['can_edit'] && !empty($score['edit']))
 		{
 			echo '
