@@ -172,6 +172,7 @@ function loadArcade($mode = 'normal', $index = '')
 		return;
 
 	$arcade_version = $modSettings['arcadeVersion'];
+	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : '';
 	$arcade_lang_version = '2.5';
 	$context['arcade'] = array();
 	$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
