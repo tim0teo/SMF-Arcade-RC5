@@ -21,14 +21,14 @@ function template_arcade_above()
 		$spanbg = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? '' : ' class="titlebg"';
 
 		echo '
+	<div class="cat_bar">
+		<h3 class="catbg centertext" style="vertical-align: middle;">
+			<span style="clear: right;">', $txt['arcade_title'], '</span>
+		</h3>
+	</div>
 	<span class="clear upperframe"><span></span></span>
 	<div class="roundframe">
 		<div class="innerframe">
-			<div class="cat_bar">
-				<h3 class="catbg centertext" style="vertical-align: middle;">
-					<span style="clear: right;">', $txt['arcade_title'], '</span>
-				</h3>
-			</div>
 			<table style="border-collapse: collapse;width: 100%;" class="tborder table_grid">
 				<tr>
 					<td class="windowbg smalltext" style="vertical-align: top;width: 24%;padding: 5px;font-size:0.85em;">

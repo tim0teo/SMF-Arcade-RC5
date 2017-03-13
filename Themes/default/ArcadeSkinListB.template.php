@@ -15,20 +15,20 @@ function template_arcade_list()
 	<div style="padding-top: 10px;"><span></span></div>
 	<span style="vertical-align: middle;font-size: x-small;padding: 8px;">', $txt['pages'], ': ', $context['page_index'], '   &nbsp;&nbsp;<a href="#bot"><b>', $txt['go_down'], '</b></a></span>
 	<div style="padding-top: 5px;"><span></span></div>
+	<div class="cat_bar">
+		<h3 class="catbg smalltext">
+			<span style="display: table;width: 100%;border: 0px;border-collapse: collapse;">
+				<span style="display: table-row;">
+					<span class="clear" style="display: table-cell;vertical-align: middle;width: 33.3%;">&nbsp;</span>
+					<span style="display: table-cell;vertical-align: middle;width: 33.3%;text-align: center;"><a href="', $context['sort_link'], '">', $txt['arcade_game_list'], '</a></span>
+					<span class="icon" style="display: table-cell;float: right;">', $context['sort_arrow'], '</span>
+				</span>
+			</span>
+		</h3>
+	</div>
 	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe" style="border-radius: 3px;">
+	<div class="roundframe">
 		<div class="innerframe">
-			<div class="cat_bar">
-				<h3 class="catbg smalltext">
-					<span style="display: table;width: 100%;border: 0px;border-collapse: collapse;">
-						<span style="display: table-row;">
-							<span class="clear" style="display: table-cell;vertical-align: middle;width: 33.3%;">&nbsp;</span>
-							<span style="display: table-cell;vertical-align: middle;width: 33.3%;text-align: center;"><a href="', $context['sort_link'], '">', $txt['arcade_game_list'], '</a></span>
-							<span class="icon" style="display: table-cell;float: right;">', $context['sort_arrow'], '</span>
-						</span>
-					</span>
-				</h3>
-			</div>
 			<table class="bordercolor" style="width: 100%;border: 0px;border-spacing: 1px;border-collapse: separate;">';
 
 	// Is there games?
@@ -172,7 +172,7 @@ function template_arcade_list()
 				</tr>';
 
 	echo '
-			</table>			
+			</table>
 		</div>
 	</div>
 	<span class="lowerframe"><span></span></span>

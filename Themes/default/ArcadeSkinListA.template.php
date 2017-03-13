@@ -41,14 +41,14 @@ function template_arcade_list()
 	// Header for Game listing
 	echo '
 		<div style="padding: 15px;"><span></span></div>
+		<div class="cat_bar">
+			<h3 class="catbg centertext" style="vertical-align: middle;">
+				', $context['sort_arrow'], '<span style="clear: right;"><a href="', $context['sort_link'], '">', $txt['arcade_game_list'], '</a></span>
+			</h3>
+		</div>
 		<span class="clear upperframe"><span></span></span>
 		<div class="game_table roundframe">
-			<div class="innerframe">
-				<div class="cat_bar">
-					<h3 class="catbg centertext" style="vertical-align: middle;">
-						', $context['sort_arrow'], '<span style="clear: right;"><a href="', $context['sort_link'], '">', $txt['arcade_game_list'], '</a></span>
-					</h3>
-				</div>';
+			<div class="innerframe">';
 	$tally = 0;
 	$code = '';
 
@@ -284,10 +284,5 @@ function template_arcade_list()
 	else
 		echo '
 		<div style="padding-bottom: 10px;"><span></span></div>';
-}
-
-function Arcade_below()
-{
-	
 }
 ?>

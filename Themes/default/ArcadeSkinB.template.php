@@ -17,15 +17,15 @@ function template_arcade_above()
 	<a href="" name="top"></a>
 	<div id="moderationbuttons" class="margintop" style="padding-bottom: 2px;">
 		', Arcade_DoToolBarStrip('index', 'bottom', ''), '
+	</div>	
+	<div class="cat_bar">
+		<h3 class="catbg centertext">
+			<span style="width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
+		</h3>
 	</div>
 	<span class="clear upperframe"><span></span></span>
 	<div class="roundframe" style="border-radius: 3px;">
-		<div class="innerframe">
-			<div class="cat_bar">
-				<h3 class="catbg centertext">
-					<span style="width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
-				</h3>
-			</div>';
+		<div class="innerframe">';
 
 	$curr = 1;
 	$selected = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? ' selected="selected"' : ' selected';
