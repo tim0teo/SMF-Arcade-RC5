@@ -263,7 +263,7 @@ function template_arcade_list()
 						<span>' . $txt['arcade_users'] . '</span>
 					</h4>
 					<div class="smalltext" style="padding-bottom: 3px;">' . $context['arcade_online_link'] . '</div>
-					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">' . implode(', ', $context['arcade_viewing']) . '</div>';
+					<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: keep-all;overflow: auto;">' . implode(', ', $context['arcade_viewing']) . '</div>';
 
 		echo '
 				</div>
@@ -285,7 +285,7 @@ function template_arcade_list()
 					</h3>
 				</div>
 				<div class="smalltext" style="padding-bottom: 3px;border: 0px;">' . $context['arcade_online_link'] . '</div>
-				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;border: 0px;">' . implode(', ', $context['arcade_viewing']) . '</div>
+				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: keep-all;overflow: auto;border: 0px;">' . implode(', ', $context['arcade_viewing']) . '</div>
 			</div>
 		</div>
 		<span class="lowerframe"><span></span></span>
