@@ -67,7 +67,7 @@ function template_arcade_admin_main()
 			setInnerHTML(document.getElementById("arcade_latest_version"), window.arcadeCurrentVersion);
 		}
 	// ]]></script>
-	<script type="text/javascript" src="http://web-develop.ca/Themes/default/scripts/arcade_news.js?v=', urlencode($arcade_version), '" defer="defer"></script>';
+	<script type="text/javascript" src="https://web-develop.ca/Themes/default/scripts/arcade_news.js?v=', urlencode($arcade_version), '" defer="defer"></script>';
 }
 
 function template_arcade_admin_maintenance()
