@@ -30,17 +30,6 @@ function ArcadeList()
 {
  	global $scripturl, $txt, $db_prefix, $modSettings, $context, $user_info, $smcFunc, $sourcedir, $settings;
 
-
-	$_SESSION['arcade']['gamepopup'] = false;
-	$_SESSION['arcade']['pop'] = false;
-	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : '';
-	$context['arcade_category'] = !empty($_REQUEST['category']) ? ArcadeSpecialChars($_REQUEST['category']) : (!empty($_SESSION['current_cat']) ? ArcadeSpecialChars($_SESSION['current_cat']) : 'all');
-	$context['arcade_category'] = (!empty($_REQUEST['sortby'])) && $_REQUEST['sortby'] == 'reset' ? 0 : $context['arcade_category'];
-	/*
-	if ($context['arcade_category'] == 1)
-		$_REQUEST['sortby'] = 'age';
-	*/
-
 	// Sorting methods
 	$sort_methods = array(
 		'age' => 'game.id_game',
@@ -70,6 +59,12 @@ function ArcadeList()
 		'cats' => 'asc',
 	);
 
+	// the mess of variables to set...
+	$_SESSION['arcade']['gamepopup'] = false;
+	$_SESSION['arcade']['pop'] = false;
+	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : '';
+	$context['arcade_category'] = !empty($_REQUEST['category']) ? ArcadeSpecialChars($_REQUEST['category']) : (!empty($_SESSION['current_cat']) ? ArcadeSpecialChars($_SESSION['current_cat']) : 'all');
+	$context['arcade_category'] = (!empty($_REQUEST['sortby'])) && $_REQUEST['sortby'] == 'reset' ? 0 : $context['arcade_category'];
 	$_REQUEST['sortby'] = !empty($_REQUEST['sortby']) ? ArcadeSpecialChars($_REQUEST['sortby']) : (!empty($_SESSION['arcade_sortby']) ? ArcadeSpecialChars($_SESSION['arcade_sortby']) :'a2z');
 	$context['sort_by'] = !empty($sort_methods[$_REQUEST['sortby']]) ? $_REQUEST['sortby'] : (!empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] :'a2z');
 	$context['sort_direction'] = !empty($sort_direction[$context['sort_by']]) ? $sort_direction[$context['sort_by']] : 'asc';
@@ -276,29 +271,8 @@ function ArcadeList()
 
 	if (!empty($modSettings['arcadeShowInfoCenter']))
 	{
+		require_once($sourcedir . '/ArcadeStats.php');
 		$context['arcade']['latest_scores'] = ArcadeLatestScores(5, 0);
-
-		if (($context['arcade']['stats'] = cache_get_data('arcade-stats', 180)) == null)
-		{
-			$context['arcade']['stats'] = array();
-			// How many games?
-			$result = $smcFunc['db_query']('', '
-				SELECT COUNT(*) AS games
-				FROM {db_prefix}arcade_games
-				WHERE enabled = 1',
-				array()
-			);
-			$context['arcade']['stats'] += $smcFunc['db_fetch_assoc']($result);
-			$smcFunc['db_free_result']($result);
-			require_once($sourcedir . '/ArcadeStats.php');
-
-			$context['arcade']['stats']['best_player'] = ArcadeStats_BestPlayers(1);
-			$context['arcade']['stats']['longest_champion'] = ArcadeStats_LongestChampions(1, null, 'current');
-			$context['arcade']['stats']['most_played'] = ArcadeStats_MostPlayed(1);
-
-			cache_put_data('arcade-stats', $context['arcade']['stats'], 180);
-		}
-
 		$context['arcade_viewing'] = array();
 		$context['arcade_num_viewing'] = array('member' => 0, 'guest' => 0, 'hidden' => 0);
 

@@ -12,9 +12,9 @@ function template_arcade_list()
 	global $sourcedir, $scripturl, $txt, $boardurl, $context, $settings, $modSettings, $user_info;
 
 	echo'
-	<div style="padding-top: 10px;"><span></span></div>
-	<span style="vertical-align: middle;font-size: x-small;padding: 8px;">', $txt['pages'], ': ', $context['page_index'], '   &nbsp;&nbsp;<a href="#bot"><b>', $txt['go_down'], '</b></a></span>
-	<div style="padding-top: 5px;"><span></span></div>
+	<div style="padding-top: 10px;"><span style="display: none;">&nbsp;</span></div>
+	<span style="vertical-align: middle;font-size: x-small;padding: 8px;">', $context['page_index'], '   &nbsp;&nbsp;<a href="#bot"><b>', $txt['go_down'], '</b></a></span>
+	<div style="padding-top: 5px;"><span style="display: none;">&nbsp;</span></div>
 	<div class="cat_bar">
 		<h3 class="catbg smalltext">
 			<span style="display: table;width: 100%;border: 0px;border-collapse: collapse;">
@@ -26,9 +26,11 @@ function template_arcade_list()
 			</span>
 		</h3>
 	</div>
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe">
-		<div class="innerframe">
+	', $context['arcade_smf_version'] == 'v2.1' ? '
+	<div class="up_contain">' :
+	'<span class="clear upperframe"><span>&nbsp;</span></span>
+	<div class="roundframe">', '
+		<div class="', ($context['arcade_smf_version'] == 'v2.1' ? 'inline' : 'innerframe'), '">
 			<table class="bordercolor" style="width: 100%;border: 0px;border-spacing: 1px;border-collapse: separate;">';
 
 	// Is there games?
@@ -40,7 +42,7 @@ function template_arcade_list()
 					<td class="catbg3"><a href="', $context['sort_link'], '">', $txt['arcade_game_name'], '</a></td>
 					<td class="catbg3" colspan="2">', $txt['arcade_defdescript'], '</td>
 					<td class="catbg3" style="width: 5%; text-align: center;">', $txt['arcade_list_popularity'], '</td>
-					<td nowrap="nowrap" class="catbg3" style="width: 5%; text-align: center;">', $txt['arcade_personal_best'],'</td>
+					<td class="catbg3" style="width: 5%; text-align: center;white-space: nowrap;">', $txt['arcade_personal_best'],'</td>
 					<td class="catbg3" style="width: 5%; text-align: center;">', $txt['arcade_champion'],'</td>
 				</tr>';
 
@@ -50,7 +52,7 @@ function template_arcade_list()
 			// Print out game information
 			echo '
 				<tr>
-					<td class="windowbg2" style="width: 70px;" align="center">', $game['thumbnail'] != '' ? '
+					<td class="windowbg2 centertext" style="width: 70px;">', $game['thumbnail'] != '' ? '
 						<a href="' . $game['url']['play'] . '"><img style="width: 70px;height: 70px" src="' . $game['thumbnail'] . '" alt="'.$game['name'].'" title="'.$txt['arcade_play'].' '.$game['name'].'"/></a>' : '', '
 					</td>
 					<td class="windowbg" style="position: relative;padding-left: 5px;">
@@ -60,7 +62,7 @@ function template_arcade_list()
 						</div>
 					</td>
 					<td class="windowbg" style="padding-left: 5px;">
-						', !empty($game['description']) ? '<div class="smalltext" style="max-width:87%;word-wrap:break-word;">' . $game['description'] . '</div>' : '<div><span></span></div>', '
+						', !empty($game['description']) ? '<div class="smalltext" style="max-width:87%;word-wrap:break-word;">' . $game['description'] . '</div>' : '<div><span style="display: none;">&nbsp;</span></div>', '
 					</td>
 					<td class="windowbg" style="width: 10%;">';
 
@@ -93,7 +95,7 @@ function template_arcade_list()
 
 			if (allowedTo('arcade_admin'))
 				echo '
-							<a href="', $game['url']['edit'], '"><img style="padding-top: 2px;" src="' . $settings['default_images_url'] . '/arc_icons/modify.png" border="0" alt="' . $txt['arcade_edit'] . '" title="' . $txt['pdl_edit'] . '&nbsp;' . $game['name'] . '"/></a><br />';
+							<a href="', $game['url']['edit'], '"><img style="padding-top: 2px;border: 0px;" src="' . $settings['default_images_url'] . '/arc_icons/modify.png" alt="' . $txt['arcade_edit'] . '" title="' . $txt['pdl_edit'] . '&nbsp;' . $game['name'] . '"/></a><br />';
 
 			// Favorite link (if can favorite)
 			if (allowedTo('arcade_submit'))
@@ -125,7 +127,7 @@ function template_arcade_list()
 					echo'
 						<img class="icon" style="border: 0px;vertical-align: middle;" src="' . $settings['default_images_url'] . '/arc_icons/cup_b.gif" alt="cup_b" title="' . $txt['arcade_you_are_third'] . '&nbsp;' . $game['name'] . '"/><br />';
 
-				echo ($game['is_personal_best'] ? $game['personal_best'] :  $txt['arcade_no_scores']), '
+				echo ($game['is_personal_best'] ? $game['personal_best'] : (!$user_info['is_guest'] ? $txt['arcade_no_scores'] : '<img alt="' . $txt['arcade_guest_na'] . '" title ="' . $txt['arcade_guest_na'] . '" src="' . $settings['images_url'] . '/warning_mute.gif" style="vertical-align: middle;width: 16px;height: 16px;" class="icon" />')), '
 					</td>
 					<td class="windowbg2" style="width: 15%; text-align: center;">
 						<table style="width: 100%;">
@@ -175,31 +177,32 @@ function template_arcade_list()
 			</table>
 		</div>
 	</div>
-	<span class="lowerframe"><span></span></span>
-	<div style="vertical-align: middle;padding:8px;font-size: x-small;">', $txt['arcade_dpages'], ': ', $context['page_index'], '   &nbsp;&nbsp;<a href="#top"><strong>', $txt['arcade_dgo_up'], '</strong></a></div>';
+	<span class="lowerframe"><span>&nbsp;</span></span>
+	<div style="vertical-align: middle;padding:8px;font-size: x-small;">', $context['page_index'], '   &nbsp;&nbsp;<a href="#top"><strong>', $txt['arcade_dgo_up'], '</strong></a></div>';
 
 	if (!empty($modSettings['arcadeShowIC']))
 	{
 		echo '
-	<div style="padding-top: 20px;"><span></span></div>
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe" style="border-radius: 3px;">
-		<div class="innerframe">
-			<div class="centertext" style="opacity: 0.7;">
-				<h3 class="centertext" style="opacity: 0.7;">
-					<img class="icon" id="upshrink_arcade_ic" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />
-					', $txt['arcade_info_center'], '
-				</h3>
-			</div>
-			<div id="upshrinkHeaderArcadeIC"', empty($options['collapse_header_arcade_ic']) ? '' : ' style="display: none;"', '>
-				<h4 class="left"><span class="left"></span>
+	<div style="padding-top: 20px;"><span style="display: none;">&nbsp;</span></div>
+	<div class="cat_bar centertext">
+		<h3 class="catbg centertext">
+			', $txt['arcade_info_center'], '
+		</h3>
+	</div>
+	', $context['arcade_smf_version'] == 'v2.1' ? '
+	<div class="up_contain windowbg">' :
+	'<span class="clear upperframe"><span>&nbsp;</span></span>
+	<div class="roundframe">', '
+		<div class="', ($context['arcade_smf_version'] == 'v2.1' ? 'inline' : 'innerframe'), '">
+			<div id="upshrinkHeaderArcadeIC">
+				<h4 class="left">
 					<span>', $txt['arcade_latest_scores'], '</span>
 				</h4>';
 
 		if (!empty($context['arcade']['latest_scores']))
 		{
 			echo '
-				<div class="smalltext" style="padding-left: 15px;word-wrap: break-word;word-break: hyphenate;overflow: hidden;">';
+				<div class="smalltext" style="padding-left: 15px;word-wrap: break-word;word-break: keep-all;overflow: hidden;">';
 
 			foreach ($context['arcade']['latest_scores'] as $score)
 				echo '
@@ -214,10 +217,10 @@ function template_arcade_list()
 				<div class="smalltext" style="padding-left:15px;">', $txt['arcade_no_scores'], '</div>';
 
 		echo '
-				<h4 class="left clear" style="padding-top:10px;"><span class="left"></span>
-					<span>', $txt['arcade_game_highlights'], '</span>
+				<h4 class="left clear" style="padding-top:10px;">
+					<span style="padding-left: 5px;">', $txt['arcade_game_highlights'], '</span>
 				</h4>
-				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: keep-all;overflow: auto;">';
+				<div class="smalltext" style="padding-left:10px;word-wrap: break-word;word-break: keep-all;overflow: auto;">';
 
 		if (!empty($context['arcade']['stats']['longest_champion']))
 			echo '
@@ -237,41 +240,50 @@ function template_arcade_list()
 
 		echo '
 				</div>';
+
 		if (!empty($modSettings['arcadeShowOnline']))
 			echo '
-				<h4 class="left" style="padding-top: 10px;"><span class="left"></span>
-					<span>' . $txt['arcade_users'] . '</span>
-				</h4>
-				<div class="smalltext" style="padding-bottom: 3px;">' . $context['arcade_online_link'] . '</div>
-				<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: hyphenate;overflow: auto;">' . implode(', ', $context['arcade_viewing']) . '</div>';
+					<div style="padding-top: 10px;"><span style="display: none;">&nbsp;</span></div>
+					<div class="title_barIC smalltext">
+						<h4 class="titlebg left">
+							<span style="vertical-align: middle;"><img class="icon" src="', $settings['images_url'], '/icons/online.gif" alt="" /></span>
+							<span>' . $txt['arcade_users'] . '</span>
+						</h4>
+					</div>
+					<div>
+						<div class="smalltext" style="padding-bottom: 3px;padding-left: 5px;">' . $context['arcade_online_link'] . '</div>
+						<div class="smalltext" style="padding-left:15px;word-wrap: break-word;keep-all: keep-all;overflow: auto;">' . implode(', ', $context['arcade_viewing']) . '</div>
+					</div>';
 
 		echo '
 			</div>
 		</div>
 	</div>
-	<span class="lowerframe"><span></span></span>
-	<div style="padding-bottom: 10px;"><span></span></div>';
+	<span class="lowerframe"><span>&nbsp;</span></span>
+	<div style="padding-bottom: 10px;"><span style="display: none;">&nbsp;</span></div>';
 	}
 	elseif (!empty($modSettings['arcadeShowOnline']))
 		echo'
-	<div style="padding-top: 15px;"><span></span></div>
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe" style="border-radius: 3px;">
+	<div style="padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>
+	<div class="cat_bar">
+		<h3 class="catbg" style="vertical-align: middle;">
+			<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/icons/online.gif" alt="" />
+			<span class="mediumtext" style="padding: 0px 6px 0px 0px;vertical-align: middle;">', $txt['arcade_users'], '</span>
+		</h3>
+	</div>
+	', $context['arcade_smf_version'] == 'v2.1' ? '
+	<div class="up_contain windowbg">' :
+	'<span class="clear upperframe"><span>&nbsp;</span></span>
+	<div class="roundframe">', '
 		<div class="innerframe" style="border-radius: 5px;">
-			<div class="cat_bar">
-				<h3 class="catbg" style="vertical-align: middle;">
-					<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/icons/online.gif" alt="" />
-					<span class="mediumtext" style="padding: 0px 6px 0px 0px;vertical-align: middle;">', $txt['arcade_users'], '</span>
-				</h3>
-			</div>
-			<div class="smalltext" style="padding-bottom: 3px;border: 0px;">' . $context['arcade_online_link'] . '</div>
-			<div class="smalltext" style="padding-left:15px;word-wrap: break-word;word-break: keep-all;overflow: auto;border: 0px;">' . implode(', ', $context['arcade_viewing']) . '</div>
+			<div class="smalltext" style="padding-left: 5px;padding-bottom: 3px;border: 0px;">' . $context['arcade_online_link'] . '</div>
+			<div class="smalltext" style="padding-left:20px;word-wrap: break-word;word-break: keep-all;overflow: auto;border: 0px;">' . implode(', ', $context['arcade_viewing']) . '</div>
 		</div>
 	</div>
-	<span class="lowerframe"><span></span></span>
-	<div style="padding-bottom: 10px;"><span></span></div>';
+	<span class="lowerframe"><span>&nbsp;</span></span>
+	<div style="padding-bottom: 10px;"><span style="display: none;">&nbsp;</span></div>';
 	else
 		echo '
-	<div style="padding-bottom: 10px;"><span></span></div>';
+	<div style="padding-bottom: 10px;"><span style="display: none;">&nbsp;</span></div>';
 }
 ?>

@@ -861,8 +861,7 @@ function arcade_online()
 function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content = '')
 {
 	global $modSettings, $txt, $context, $scripturl, $db_count;
-	$context['arcade']['buttons_set'] = array();
-	$context['arcade']['tour']['show'] = !empty($context['arcade']['tour']['show']) ? (int)$context['arcade']['tour']['show'] : 0;
+	list($content, $context['arcade']['buttons_set'], $currentSubAction, $context['arcade']['tour']['show']) = array('', array(), !empty($_REQUEST['sa']) ? $_REQUEST['sa'] : 'list', !empty($context['arcade']['tour']['show']) ? (int)$context['arcade']['tour']['show'] : 0);
 
 	if ($context['arcade']['tour']['show'] != 0)
         $context['arcadetour']['buttons_set']['newtour'] =  array(
@@ -888,25 +887,33 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
 
 	$context['arcade']['buttons_set']['arcade'] =  array(
     	'text' => 'arcade',
+		'image' => 'arcade.gif',
     	'url' => $scripturl . '?action=arcade',
+		'active' => $currentSubAction == 'list' ? true : false,
     	'lang' => true,
     );
 
-    $context['arcade']['buttons_set']['tour'] =  array(
-    	'text' => 'arcade_arena',
-    	'url' => $scripturl . '?action=arcade;sa=arena',
-    	'lang' => true,
-    );
+	if (!empty($modSettings['arcadeArenaEnabled']))
+		$context['arcade']['buttons_set']['tour'] =  array(
+			'text' => 'arcade_arena',
+			'image' => 'arcade_arena.gif',
+			'url' => $scripturl . '?action=arcade;sa=arena',
+			'active' => in_array($currentSubAction, array('arena', 'newMatch', 'newMatch2', 'viewMatch')),
+			'lang' => true,
+		);
 
 	$context['arcade']['buttons_set']['stats'] =  array(
     	'text' => 'arcade_stats',
+		'image' => 'arcade_stats.gif',
     	'url' => $scripturl . '?action=arcade;sa=stats',
+		'active' => in_array($currentSubAction, array('stats')),
     	'lang' => true,
     );
 
     if (allowedTo('admin_arcade'))
        	$context['arcade']['buttons_set']['arcadeadmin'] =  array(
     		'text' => 'arcade_administrator',
+			'image' => 'arcade_administrator.gif',
     		'url' => $scripturl . '?action=admin;area=arcade',
     		'lang' => true,
 			'is_last' => true,

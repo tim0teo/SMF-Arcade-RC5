@@ -94,24 +94,11 @@ function template_arcade_online()
 					</tbody>
 				</table>
 			</div>
-			<div class="pagesection">
-				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>';
-
-	echo '
-				<div class="selectbox floatright" style="padding-top: 8px;">', $txt['who_show1'], '
-					<select name="show" onchange="document.forms.whoFilter.submit();">';
-
-	foreach ($context['show_methods'] as $value => $label)
-		echo '
-						<option value="', $value, '" ', $value == $context['show_by'] ? $context['arcade_selected'] : '', '>', $label, '</option>';
-	echo '
-					</select>
-					<noscript>
-						<input type="submit" value="', $txt['go'], '" class="button_submit" />
-					</noscript>
-				</div>
+			<div class="pagesection" style="clear: both;">
+				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>
 			</div>
 		</form>
-	</div>';
+	</div>
+	<div style="clear: both;padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>';
 }
 ?>

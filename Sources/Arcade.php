@@ -100,36 +100,41 @@ function Arcade()
 	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'list';
 
 	$context['curved'] = strpos($modSettings['smfVersion'], '2.1') !== false ? true : $context['curved'];
-	$context['arcade_tabs'] = array(
-		'title' =>  $txt['arcade'],
-		'tabs' => array(
-			array(
-				'href' => $scripturl . '?action=arcade',
-				'title' => $txt['arcade'],
-				'is_selected' => in_array($_REQUEST['sa'], array('play', 'list', 'highscore', 'submit', 'search', 'admin')),
-			),
-		),
+	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
+	$context['current_arcade_sa'] = !empty($_REQUEST['sa']) ? $_REQUEST['sa'] : 'list';
+
+	$context['arcade_tabs']['arcade'] = array(
+		'text' => 'arcade',
+		'image' => 'arcade.gif',
+		'url' => $scripturl . '?action=arcade',
+		'active' => in_array($context['current_arcade_sa'], array('list', 'online', 'highscore', 'play')) ? true : null,
+		'lang' => true
 	);
 
 	if (!empty($modSettings['arcadeArenaEnabled']))
-		$context['arcade_tabs']['tabs'][] = array(
-			'href' => $scripturl . '?action=arcade;sa=arena',
-			'title' => $txt['arcade_arena'],
-			'is_selected' => in_array($_REQUEST['sa'], array('arena', 'newMatch', 'newMatch2', 'viewMatch')),
+		$context['arcade_tabs']['arcade_arena'] = array(
+			'text' => 'arcade_arena',
+			'image' => 'arcade_arena.gif',
+			'url' => $scripturl . '?action=arcade;sa=arena',
+			'active' => in_array($context['current_arcade_sa'], array('arena', 'newMatch', 'newMatch2', 'viewMatch')) ? true : null,
+			'lang' => true
 		);
 
-	$context['arcade_tabs']['tabs'][] = array(
-		'href' => $scripturl . '?action=arcade;sa=stats',
-		'title' => $txt['arcade_stats'],
-		'is_selected' => in_array($_REQUEST['sa'], array('stats')),
+	$context['arcade_tabs']['arcade_stats'] = array(
+		'text' => 'arcade_stats',
+		'image' => 'arcade_stats.gif',
+		'url' => $scripturl . '?action=arcade;sa=stats',
+		'active' => in_array($context['current_arcade_sa'], array('stats')) ? true : null,
+		'lang' => true
 	);
 
 	if (allowedTo('arcade_admin'))
-		$context['arcade_tabs']['tabs'][] = array(
-		'href' => $scripturl . '?action=admin;area=arcade',
-		'title' => $txt['arcade_administrator'],
-		'is_selected' => in_array($_REQUEST['sa'], array('admin')),
-	);
+		$context['arcade_tabs']['arcade_administrator'] = array(
+			'text' => 'arcade_administrator',
+			'image' => 'arcade_administrator.gif',
+			'url' => $scripturl . '?action=admin;area=arcade',
+			'lang' => true
+		);
 
 	if (!in_array($_REQUEST['sa'], array('highscore', 'comment')) && isset($_SESSION['arcade']['highscore']))
 		unset($_SESSION['arcade']['highscore']);
@@ -175,21 +180,46 @@ function loadArcade($mode = 'normal', $index = '')
 	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : '';
 	$arcade_lang_version = '2.5';
 	$context['arcade'] = array();
+	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 	$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
 	require_once($sourcedir . '/Subs-ArcadePlus.php');
 	require_once($sourcedir . '/Subs-Arcade.php');
 
+	if (($context['arcade']['stats'] = cache_get_data('arcade-stats', 180)) == null)
+	{
+		$context['arcade']['stats'] = array();
+		// How many games?
+		$result = $smcFunc['db_query']('', '
+			SELECT COUNT(*) AS games
+			FROM {db_prefix}arcade_games
+			WHERE enabled = 1',
+			array()
+		);
+		$context['arcade']['stats'] += $smcFunc['db_fetch_assoc']($result);
+		$smcFunc['db_free_result']($result);
+
+		if (!empty($modSettings['arcadeShowInfoCenter']))
+		{
+			require_once($sourcedir . '/ArcadeStats.php');
+			$context['arcade']['stats']['best_player'] = ArcadeStats_BestPlayers(1);
+			$context['arcade']['stats']['longest_champion'] = ArcadeStats_LongestChampions(1, null, 'current');
+			$context['arcade']['stats']['most_played'] = ArcadeStats_MostPlayed(1);
+		}
+
+		cache_put_data('arcade-stats', $context['arcade']['stats'], 180);
+	}
+
 	switch ($modSettings['arcadeSkin'])
 	{
-		case 2:		
+		case 2:
 			require_once($sourcedir . '/Subs-ArcadeSkinB.php');
 			require_once($sourcedir . '/ArcadeStats.php');
 			$context['html_headers'] .= '<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/arcade-skin-b.js?rc4"></script>';
 			if ($mode == 'normal' || $mode == 'arena')
-			{				
+			{
 				$context['arcade_defiant']['per_line'] = 4;
 				$context['arcade_defiant']['cat_width'] = 20;
-				$context['arcade_defiant']['cat_height'] = 20;				
+				$context['arcade_defiant']['cat_height'] = 20;
 				$context['page_title'] = $txt['arcade_game_list'];
 				loadTemplate('ArcadeSkinB');
 			}
@@ -335,7 +365,7 @@ function arcadeLogin()
 	$game = isset($_REQUEST['game']) ? 'game=' . abs((int)$_REQUEST['game']) . ';' : '';
 	$match = isset($_REQUEST['match']) ? 'match=' . abs((int)$_REQUEST['match']) . ';' : '';
 	$subaction = 'sa=' . $sa . ';' . $match . $game;
-	$anchor = in_array($sa, array('play', 'highscore')) && $sa == 'play' ? ';#playgame' : in_array($sa, array('play', 'highscore')) && $sa == 'highscore' ? ';#highscore' : ''; 
+	$anchor = in_array($sa, array('play', 'highscore')) && $sa == 'play' ? ';#playgame' : in_array($sa, array('play', 'highscore')) && $sa == 'highscore' ? ';#highscore' : '';
 	$_SESSION['old_url'] = $scripturl . '?action=arcade;' . $subaction;
 	$context['arcade_sub'] = (isset($_REQUEST['hs'])) ? 'score' : 'play';
 	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';

@@ -413,4 +413,5 @@ $txt['arcade_info_fav'] = 'Show favorites';
 $txt['arcade_info_showlate'] = 'Show Latest';
 $txt['arcade_info_defavatar'] = 'Default Avatar';
 $txt['arcade_info_showcat'] = 'Show %s';
+$txt['arcade_guest_na'] = 'N/A';
 ?>

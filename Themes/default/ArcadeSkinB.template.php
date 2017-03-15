@@ -14,17 +14,16 @@ function template_arcade_above()
 	global $settings, $context, $txt, $modSettings, $scripturl, $db_count, $user_info;
 
 	echo '
-	<a href="" name="top"></a>
-	<div id="moderationbuttons" class="margintop" style="padding-bottom: 2px;">
-		', Arcade_DoToolBarStrip('index', 'bottom', ''), '
-	</div>	
+	<div><span style="display: none;">&nbsp;</span></div>
 	<div class="cat_bar">
 		<h3 class="catbg centertext">
-			<span style="width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
+			<span class="centertext" style="clear: left;width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
 		</h3>
 	</div>
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe" style="border-radius: 3px;">
+	', $context['arcade_smf_version'] == 'v2.1' ? '
+	<div class="up_contain windowbg">' :
+	'<span class="clear upperframe"><span>&nbsp;</span></span>
+	<div class="roundframe">', '
 		<div class="innerframe">';
 
 	$curr = 1;
@@ -93,7 +92,7 @@ function template_arcade_above()
 					<td class="windowbg2" style="padding: 5px;vertical-align: top;width: 275px;">
 						<table style="border-collapse: collapse;width: 100%;border: 0px;">
 							<tr>
-								<td colspan="2" style="padding: 1px;">
+								<td style="padding: 1px;">
 									<div class="centertext"><span style="font-style: italic;"><strong>', $txt['arcade_info'], '</strong></span></div>
 								</td>
 							</tr>
@@ -197,7 +196,7 @@ function template_arcade_above()
 											document.getElementById("pescroller1").style = "height: 220px;border: 0px solid black;padding: 5px;position: relative;overflow: hidden;";
 											document.getElementById("pescroller1").className = "someclass";
 										</script>
-										<div><span></span></div>
+										<div><span style="display: none;">&nbsp;</span></div>
 									</div>
 								</td>
 							</tr>
@@ -207,35 +206,35 @@ function template_arcade_above()
 						<div class="centertext">
 							<table style="border: 0px;width: 100%;border-collapse: collapse;">
 								<tr>
-									<td colspan="2" style="padding: 1px;">
+									<td style="padding: 1px;">
 										<div class="centertext"><span style="font-style: italic;"><strong>', $txt['arcade_u_b_1'], '&nbsp;', $user_info['name'], '</strong></span></div>
 									</td>
 								</tr>
 								<tr>
 									<td style="padding: 1px;height: 155px;">
 										<div class="centertext">
-											', (!empty($context['user']['avatar']['image']) ? $context['user']['avatar']['image'] : '<img border="0" src="' . $settings['images_url'] . '/icons/online.gif" alt="ico" width="50" height="50" title="' . $txt['arcade_info_defavatar'] . '"/>') , '
-											<div><span></span></div>
-											<div><span></span></div>
+											', (!empty($context['user']['avatar']['image']) ? $context['user']['avatar']['image'] : '<img style="border: 0px;width: 50px;height: 50px;" src="' . $settings['images_url'] . '/icons/online.gif" alt="ico" title="' . $txt['arcade_info_defavatar'] . '"/>') , '
+											<div><span style="display: none;">&nbsp;</span></div>
+											<div><span style="display: none;">&nbsp;</span></div>
 											<div class="smalltext">
 												<a href="', $scripturl, '?action=arcade;favorites">
 													<img style="border: 0px;width: 15px;height: 15px;" src="', $settings['images_url'], '/arc_icons/arcade_cat1.gif" alt="ico" title="' . $txt['arcade_info_fav'] . '" /> ', $txt['arcade_u_b_2'], '
-													<img border="0" src="' . $settings['images_url'] . '/arc_icons/arcade_cat1.gif" alt="ico" width="15" height="15" title="' . $txt['arcade_info_fav'] . '" />
+													<img style="border: 0px;width: 15px;height: 15px;" src="' . $settings['images_url'] . '/arc_icons/arcade_cat1.gif" alt="ico" title="' . $txt['arcade_info_fav'] . '" />
 												</a>
 											</div>
 										</div>
 									</td>
 								</tr>
 								<tr>
-									<td style="padding: 1px;" colspan="2" class="smalltext">
-										<div class="centertext">', (!empty($context['arcade']['stats']['games']) ? sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']) : ''), '</div>
+									<td style="padding: 1px;" class="smalltext">
+										<div class="centertext">', (!empty($context['arcade']['stats']['games']) && $context['current_arcade_sa'] == 'list' ? sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']) : '<span style="display: none;">&nbsp;</span>'), '</div>
 									</td>
 								</tr>
 								<tr>
 									<td style="padding: 1px;">
 										<form accept-charset="', $context['character_set'], '" class="smalltext" style="padding: 0; margin: 0; margin-top: 5px; text-align: center;" name="arcade_shout" action="', $scripturl, '?action=arcade;sa=shout" method="post">
 											<input size="105" maxlength="100" onkeypress="submitShoutOnEnter(this, event);" class="largetext" name="the_shout" style="width: 80%;margin-top: 1ex; height: 25px;" />
-											<div><span></span></div>
+											<div><span style="display: none;">&nbsp;</span></div>
 											<input style="margin-top: 4px;" class="mediumtext" type="submit" name="shout" value="', $txt['arcade_shout'], '" />
 										</form>
 									</td>
@@ -410,9 +409,21 @@ function template_arcade_above()
 			}
 			</script>
 		</div>
-	</div>
-	<span class="lowerframe"><span></span></span>
-	<div style="padding-bottom: 10px;"><span></span></div>';
+	</div>', ($context['arcade_smf_version'] !== 'v2.1' ? '
+	<span class="lowerframe"><span>&nbsp;</span></span>' : ''), '
+	<div style="clear: both;display: inline;width: 100%;">
+		<div style="display: inline;">
+			', Arcade_DoToolBarStrip('index', 'left', ''), '
+		</div>';
+
+	if ($context['arcade']['stats']['games'] != 0)
+			echo '
+			<span class="smalltext" style="clear: right;padding:8px 7px 0px 0px;float: right;">', sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']), '</span>';
+
+	echo '
+	</div>', ($context['arcade_smf_version'] == 'v2.1' ? '
+	<span class="lowerframe"><span>&nbsp;</span></span>' : ''), '
+	<div style="clear: both;padding-bottom: 10px;"><span style="display: none;">&nbsp;</span></div>';
 }
 
 function template_arcade_below()
@@ -420,6 +431,6 @@ function template_arcade_below()
 	global $txt;
 	// Print out copyright and version. Removing copyright is not allowed by license
 	echo '
-	<a name="bot"></a>', $txt['pdl_arcade_copyright'];
+	<a id="bot"></a>', $txt['pdl_arcade_copyright'];
 }
 ?>

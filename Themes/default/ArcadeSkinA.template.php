@@ -21,18 +21,22 @@ function template_arcade_above()
 		$spanbg = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? '' : ' class="titlebg"';
 
 		echo '
-	<div class="cat_bar">
+	<div class="clear cat_bar">
 		<h3 class="catbg centertext" style="vertical-align: middle;">
 			<span style="clear: right;">', $txt['arcade_title'], '</span>
 		</h3>
 	</div>
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe">
+	', $context['arcade_smf_version'] == 'v2.1' ? '
+	<div class="up_contain windowbg">' :
+	'<span class="clear upperframe""><span>&nbsp;</span></span>
+	<div class="roundframe">', '
 		<div class="innerframe">
 			<table style="border-collapse: collapse;width: 100%;" class="tborder table_grid">
 				<tr>
 					<td class="windowbg smalltext" style="vertical-align: top;width: 24%;padding: 5px;font-size:0.85em;">
-						<div class="' . $divbg . ' centertext" style="font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['latest_games'] ,'</span></div>
+						<div class="' . $divbg . ' centertext" style="font-size:1.3em;border-radius: 3px;overflow: hidden;">
+							<span'. $spanbg . '>', $txt['latest_games'] ,'</span>
+						</div>
 						',  ArcadeNewestGames($modSettings['skin_latest_games']), '
 						<div class="' . $divbg . ' centertext" style="margin-bottom:10px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['arcade_game_search'] ,'</span></div>
 						<div class="centertext smalltext" style="margin-bottom:15px;font-size:1.0em;">
@@ -111,13 +115,11 @@ function template_arcade_above()
 						<div class="' . $divbg . ' centertext" style="margin-bottom:4px;font-size:1.3em;border-radius: 3px;overflow: hidden;"><span'. $spanbg . '>', $txt['arcade_daily'], '</span></div>';
 
 		$game = getGameOfDay();
-		strlen($game['name']) >= 23 ? $game['name'] = substr($game['name'],0,22) . '...' : '';
-
 		if (!empty($game['url']['play']))
 		{
 			echo '
 						<div class="smalltext" style="padding: 0px 5px 0px 5px">
-							<div class="titlebg centertext" style="margin:4px 0px 5px 0px;border-bottom:1px solid #808080;font-size:1.1em;">', $game['name'], '</div><br />
+							<div class="titlebg centertext" style="margin:4px 0px 5px 0px;border-bottom:1px solid #808080;font-size:1.1em;">', (strlen($game['name']) >= 23 ? substr($game['name'],0,22) . '...' : $game['name']), '</div><br />
 							<div style="float: left; margin: 0px 5px 0px 0px;height:55px;">
 								<a href="', $game['url']['play'], '">
 									<img style="width: 40px;height: 40px;" class="imgBorder" src="', $game['thumbnail'], '" alt="' . $txt['alt_play'] . '" title="' . $txt['alt_play'] . '"/>
@@ -152,55 +154,36 @@ function template_arcade_above()
 		echo '
 					</td>
 				</tr>
-			</table>
-		</div>
-	</div>
-	<span class="lowerframe"><span></span></span>
-	<div style="width:100%;">
-		<div style="text-align:left;padding:6px 0px 3px 4px;">
-			<ul class="dropmenu">';
-
-		// Print out all the items in this tab.
-		foreach ($context['arcade_tabs']['tabs'] as $tab)
-		{
-			echo '
-				<li>
-					<a href="', $tab['href'], '" class="', (!empty($tab['is_selected']) ? 'active ' : ''), 'firstlevel">
-						<span class="firstlevel">', $tab['title'], '</span>
-					</a>
-				</li>';
-		}
-
-		echo '
-			</ul>
-		</div>
-		<div class="smalltext" style="padding:0px 4px 3px 4px;text-align:right;">';
-
-		if ($context['arcade']['stats']['games'] != 0)
-			echo sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']);
-
-		echo '
-		</div>
-	</div><br style="clear: both;" />
-	<div style="height:10px;">
-		<span>&nbsp;</span>
-	</div>';
+			</table>';
 
 		if (empty($modSettings['arcadeDropCat']))
 		{
 			echo '
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe">
-		<div class="innerframe">
-			<div class="cat_bar">
-				<h3 class="catbg centertext" style="vertical-align: middle;">
+			<div>
+				<h4 class="titlebg centertext" style="vertical-align: middle;">
 					<span style="clear: right;"><a title="', $txt['arcade_defcat'], '" href="', $scripturl, '?action=arcade;category=0">', $txt['arcade_game_cats'], '</a></span>
-				</h3>
-			</div>', $categories, '
-		</div>
-	</div>
-	<span class="lowerframe"><span></span></span>';
+				</h4>
+			</div>', $categories;
 		}
+
+		echo '
+		</div>
+	</div>', ($context['arcade_smf_version'] !== 'v2.1' ? '
+	<span class="lowerframe"><span>&nbsp;</span></span>' : ''), '
+	<div style="width:100%;display: inline;" class="smalltext">
+		<div style="display: inline;">', template_button_strip($context['arcade_tabs'], 'left', array()), '</div>';
+
+		if ($context['arcade']['stats']['games'] != 0)
+			echo '
+		<div class="smalltext" style="clear: right;padding:8px 7px 0px 0px;float: right;display: inline;">', (!empty($context['arcade']['stats']['games']) && $context['current_arcade_sa'] == 'list' ? sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']) : '<span style="display: none;">&nbsp;</span>'), '</div>';
+
+		echo '
+	</div>', ($context['arcade_smf_version'] == 'v2.1' ? '
+	<span class="lowerframe"><span>&nbsp;</span></span>' : ''), '
+	<div><span style="display: none;">&nbsp;</span></div>
+	<div style="height: 10px;clear: both;">
+		<span style="display: none;">&nbsp;</span>
+	</div>';
 	}
 }
 

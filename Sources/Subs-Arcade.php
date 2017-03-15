@@ -477,15 +477,16 @@ function arcadeEvent($id_event, $data = array())
 	}
 	$smcFunc['db_free_result']($request);
 
-	$request = $smcFunc['db_query']('', '
-		SELECT mem.id_member, mem.email_address, mem.lngfile, mem.pm_email_notify
-		FROM {db_prefix}members AS mem
-		WHERE mem.id_member IN({array_int:members})
-		ORDER BY mem.lngfile',
-		array(
-			'members' => array_keys($arcadeSettings),
-		)
-	);
+	if (!empty($arcadeSettings))
+		$request = $smcFunc['db_query']('', '
+			SELECT mem.id_member, mem.email_address, mem.lngfile, mem.pm_email_notify
+			FROM {db_prefix}members AS mem
+			WHERE mem.id_member IN({array_int:members})
+			ORDER BY mem.lngfile',
+			array(
+				'members' => array_keys($arcadeSettings),
+			)
+		);
 
 	while ($rowmember = $smcFunc['db_fetch_assoc']($request))
 	{

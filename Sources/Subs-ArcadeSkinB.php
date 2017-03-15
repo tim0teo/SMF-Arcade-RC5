@@ -16,15 +16,36 @@ function Arcade3champsBlock($no)
 	global $scripturl, $txt, $settings;
 
 	$top_player = ArcadeLatestChamps($no);
-	$content = '<div class="centertext"><table style="width: 100%;border: 0px;border-collapse: collapse;"><tr><td style="padding: 1px;" colspan="2"><div class="centertext"><i><b>' . $no . '&nbsp;' . $txt['arcade_g_i_b_8'] . '</b></i></div></td></tr>';
+	$content = '
+												<div class="centertext">
+													<table style="width: 100%;border: 0px;border-collapse: collapse;">
+														<tr>
+															<td style="padding: 1px;" colspan="2">
+																<div class="centertext"><i><strong>' . $no . '&nbsp;' . $txt['arcade_g_i_b_8'] . '</strong></i></div>
+															</td>
+														</tr>';
 	if ($top_player != false)
 	{
 		foreach ($top_player as $row)
 		{
-			$content.= '<tr><td style="height: 25px;padding: 1px;"><div style="text-align: right;"><img src="' . $settings['images_url'] . '/arc_icons/cup_g.gif" alt="ico"/></div></td><td style="padding: 1px;"><div class="middletext"><div style="text-align: left;">&nbsp;-&nbsp;' . $row['member_link'] . '&nbsp;' . $txt['is_champ_of'] . '&nbsp;' . $row['game_link'] . '</div></div></td></tr>';
+			$content.= '
+														<tr>
+															<td style="height: 25px;padding: 1px;">
+																<div style="text-align: right;">
+																	<img src="' . $settings['images_url'] . '/arc_icons/cup_g.gif" alt="ico"/>
+																</div>
+															</td>
+															<td style="padding: 1px;">
+																<div class="middletext">
+																	<div style="text-align: left;">&nbsp;-&nbsp;' . $row['member_link'] . '&nbsp;' . $txt['is_champ_of'] . '&nbsp;' . $row['game_link'] . '</div>
+																</div>
+															</td>
+														</tr>';
 		}
 	}
-	$content.='</table></div>';
+	$content.='
+													</table>
+												</div>';
 
 	return $content;
 }
@@ -49,17 +70,17 @@ function ArcadeRandomGameBlock()
 			<div class="centertext">
 				<table style="width: 100%;border: 0px;border-collapse: collapse;">
 					<tr>
-						<td style="padding: 1px;" colspan="2">
+						<td style="padding: 1px;">
 							<div class="centertext"><i><b>' . $txt['arcade_random_game'] . '</b></i></div>
 						</td>
 					</tr>
 					<tr>
 						<td class="centertext" style="padding: 1px;">
-							<div><span></span></div>
+							<div><span style="display: none;">&nbsp;</span></div>
 							<a href="' . $game['url']['play'] . '">
 								<img style="width: 80px;height: 80px;" src="' . $game['thumbnail'] . '" alt="ico" title="' . $txt['arcade_play'] . '&nbsp;' . $game['name'] . '"/>
 							</a>
-							<div><span></span></div>
+							<div><span style="display: none;">&nbsp;</span></div>
 							<div class="middletext">
 								<a href="' . $game['url']['play'] . '">' . $game['name'] . '</a>
 							</div>
@@ -111,15 +132,38 @@ function ArcadeInfoNewestGames($no)
 		'limit' => $no,
 		)
 	);
-	$content = '<div class="centertext"><table style="width: 100%;border: 0px;border-collapse: collapse;"><tr><td style="padding: 3px;" colspan="2"><div class="centertext"><i><b>' . $no . '&nbsp;'.$txt['arcade_LatestGames'] . '</b></i></div></td></tr>';
+	$content = '
+												<div class="centertext">
+													<table style="width: 100%;border: 0px;border-collapse: collapse;">
+														<tr>
+															<td style="padding: 3px;" colspan="2">
+																<div class="centertext"><i><strong>' . $no . '&nbsp;' . $txt['arcade_LatestGames'] . '</strong></i></div>
+															</td>
+														</tr>';
 	while ($popgame = $smcFunc['db_fetch_assoc']($result))
 	{
 		$gamesUrl = $boardurl . '/' . basename($modSettings['gamesUrl']);
 		$popgameico = empty($popgame['game_directory']) ?	$gamesUrl . '/' . $popgame['thumbnail'] : $gamesUrl . '/' . $popgame['game_directory'] . '/' . $popgame['thumbnail'];
-		$content .='<tr><td style="padding: 3px;"><div style="text-align: right;"><a href="' . $scripturl . '?action=arcade;sa=play;game=' . $popgame['id_game'] . '"><img style="border: 0px;width: 25px;height: 25px;" src="' . $popgameico. '" alt="ico" title="'.$txt['arcade_champions_play'].' '. $popgame['game_name'].'"/></a></div></td><td style="padding: 3px;" class="middletext"><div class="centertext"><a href="' . $scripturl . '?action=arcade;sa=play;game=' . $popgame['id_game'] . '">' . $popgame['game_name'] . '</a></div></td></tr>';
+		$content .='
+														<tr>
+															<td style="padding: 3px;">
+																<div style="text-align: right;">
+																	<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $popgame['id_game'] . '">
+																		<img style="border: 0px;width: 25px;height: 25px;" src="' . $popgameico. '" alt="ico" title="'.$txt['arcade_champions_play'].' '. $popgame['game_name'].'"/>
+																	</a>
+																</div>
+															</td>
+															<td style="padding: 3px;" class="middletext">
+																<div class="centertext">
+																	<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $popgame['id_game'] . '">' . $popgame['game_name'] . '</a>
+																</div>
+															</td>
+														</tr>';
 	}
 
-	$content .='</table></div>' ;
+	$content .='
+													</table>
+												</div>' ;
 
 	return $content;
 }
@@ -130,15 +174,34 @@ function ArcadeInfoLongestChamps($no)
 
 	$mostgame = ArcadeStats_LongestChampions($no);
 
-	$content = '<div class="centertext"><table style="width: 100%;border: 0px;border-collapse: collapse;"><tr><td style="padding: 3px;" colspan="3"><div class="centertext"><i><b>' . $no . '&nbsp;' . $txt['arcade_g_i_b_11'] . '</b></i></div></td></tr>';
+	$content = '
+												<div class="centertext">
+													<table style="width: 100%;border: 0px;border-collapse: collapse;">
+														<tr>
+															<td style="padding: 3px;" colspan="2">
+																<div class="centertext"><i><strong>' . $no . '&nbsp;' . $txt['arcade_g_i_b_11'] . '</strong></i></div>
+															</td>
+														</tr>';
 	foreach($mostgame as $popgame)
 	{
 		$gamesUrl = $boardurl . '/' . basename($modSettings['gamesUrl']);
 		$popgameico = empty($popgame['game_directory']) ?	$gamesUrl . '/' . $popgame['thumbnail'] : $gamesUrl . '/' . $popgame['game_directory'] . '/' . $popgame['thumbnail'];
-		$content .=	'<tr><td style="padding: 3px;width: 25px;"><a href="' . $scripturl.'?action=arcade;sa=play;game=' . $popgame['id'] . '"><img style="border: 0px;width: 25px;height: 25px;" src="' . $popgameico . '" alt="ico" title="'.$txt['arcade_champions_play'].' '. $popgame['game_name'].'"/></a></td><td style="padding: 3px;" class="middletext"><div style="text-align: left;">' . $popgame['member_link'] . '&nbsp;' . $txt['arcade_g_i_b_9'] . '&nbsp;' . $popgame['game_name'] . '&nbsp;' . $txt['arcade_g_i_b_5'] . '&nbsp;' . $popgame['duration'] . '</div></td></tr>';
+		$content .=	'
+														<tr>
+															<td style="padding: 3px;width: 25px;">
+																<a href="' . $scripturl.'?action=arcade;sa=play;game=' . $popgame['id'] . '">
+																	<img style="border: 0px;width: 25px;height: 25px;" src="' . $popgameico . '" alt="ico" title="' . $txt['arcade_champions_play'] . '&nbsp;' . $popgame['game_name'] . '"/>
+																</a>
+															</td>
+															<td style="padding: 3px;" class="middletext">
+																<div style="text-align: left;">' . $popgame['member_link'] . '&nbsp;' . $txt['arcade_g_i_b_9'] . '&nbsp;' . $popgame['game_name'] . '&nbsp;' . $txt['arcade_g_i_b_5'] . '&nbsp;' . $popgame['duration'] . '</div>
+															</td>
+														</tr>';
 	}
 
-	$content .='</table></div>' ;
+	$content .='
+													</table>
+												</div>' ;
 
 	return $content;
 }
@@ -149,15 +212,32 @@ function ArcadeInfoMostPlayed($no)
 
 	$mostgame = ArcadeStats_MostPlayed($no);
 
-	$content = '<div class="centertext"><table style="width: 100%;border: 0px;border-collapse: collapse;"><tr><td style="padding: 3px;" colspan="3"><div class="centertext"><i><b>'.$no.' '.$txt['arcade_g_i_b_10'].'</b></i></div></td></tr>';
+	$content = '
+												<div class="centertext">
+													<table style="width: 100%;border: 0px;border-collapse: collapse;">
+														<tr>
+															<td style="padding: 3px;" colspan="2">
+																<div class="centertext"><i><strong>' . $no . '&nbsp;' . $txt['arcade_g_i_b_10'] . '</strong></i></div>
+															</td>
+														</tr>';
 	foreach($mostgame as $popgame)
 	{
 		$gamesUrl = $boardurl . '/' . basename($modSettings['gamesUrl']);
 		$popgameico = empty($popgame['game_directory']) ?	$gamesUrl . '/' . $popgame['thumbnail'] : $gamesUrl . '/' . $popgame['game_directory'] . '/' . $popgame['thumbnail'];
-		$content .='<tr><td style="width: 25px;padding: 3px;"><a href="' . $scripturl . '?action=arcade;sa=play;game=' . $popgame['id'] . '"><img style="border: 0px;width: 25px;height: 25px;" src="' . $popgameico . '" alt="ico" title="' . $txt['arcade_champions_play'] . '&nbsp;' . $popgame['name'] . '"/></a></td><td style="padding: 3px;" class="middletext"><div style="text-align: left;">' . $popgame['link'] . '&nbsp;' . $txt['arcade_g_i_b_6'] . '&nbsp;' . $popgame['plays'] . '&nbsp;' . $txt['arcade_g_i_b_7'] . '</div></td></tr>';
+		$content .= '
+														<tr>
+															<td style="width: 25px;padding: 3px;">
+																<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $popgame['id'] . '"><img style="border: 0px;width: 25px;height: 25px;" src="' . $popgameico . '" alt="ico" title="' . $txt['arcade_champions_play'] . '&nbsp;' . $popgame['name'] . '"/></a>
+															</td>
+															<td style="padding: 3px;" class="middletext">
+																<div style="text-align: left;">' . $popgame['link'] . '&nbsp;' . $txt['arcade_g_i_b_6'] . '&nbsp;' . $popgame['plays'] . '&nbsp;' . $txt['arcade_g_i_b_7'] . '</div>
+															</td>
+														</tr>';
 	}
 
-	$content .='</table></div>' ;
+	$content .='
+													</table>
+												</div>' ;
 
 	return $content;
 }
@@ -172,13 +252,32 @@ function ArcadeInfoBestPlayers($no)
 	//array for icons
 	$poz = array('/first.gif','/second.gif','/third.gif',);
 
-	$content = '<div class="centertext"><table style="width: 100%;border: 0px;border-collapse: collapse;"><tr><td style="padding: 1px;" colspan="2"><div class="centertext"><i><b>' . $no . '&nbsp;' . $txt['arcade_b3pb_1'] . '</b></i></div></td></tr>';
+	$content = '
+												<div class="centertext">
+													<table style="width: 100%;border: 0px;border-collapse: collapse;">
+														<tr>
+															<td style="padding: 1px;" colspan="2">
+																<div class="centertext"><i><b>' . $no . '&nbsp;' . $txt['arcade_b3pb_1'] . '</b></i></div>
+															</td>
+														</tr>';
 
 	if ($top_player != false)
 	{
 		foreach ($top_player as $row)
 		{
-			$content.= '<tr><td style="height: 25px;padding: 3px;"><div style="text-align: right;"><img src="' . $settings['default_images_url'] . '/arc_icons' . $poz[$i] . '" alt="ico"/></div></td><td style="padding: 1px;"><div class="middletext"><div style="text-align: left;">&nbsp;-&nbsp;' . $row['link'] . '&nbsp;' . $txt['arcade_b3pb_2'] . '&nbsp;' . $row['champions'] . '&nbsp;' . $txt['arcade_b3pb_3'] . '</div></div></td></tr>';
+			$content.= '
+														<tr>
+															<td style="height: 25px;padding: 3px;">
+																<div style="text-align: right;">
+																	<img src="' . $settings['default_images_url'] . '/arc_icons' . $poz[$i] . '" alt="ico"/>
+																</div>
+															</td>
+															<td style="padding: 1px;">
+																<div class="middletext">
+																	<div style="text-align: left;">&nbsp;-&nbsp;' . $row['link'] . '&nbsp;' . $txt['arcade_b3pb_2'] . '&nbsp;' . $row['champions'] . '&nbsp;' . $txt['arcade_b3pb_3'] . '</div>
+																</div>
+															</td>
+														</tr>';
 			$i++;
 			if ($i > 2)
 			{
@@ -186,7 +285,9 @@ function ArcadeInfoBestPlayers($no)
 			}
 		}
 	}
-	$content.='</table></div>';
+	$content.='
+													</table>
+												</div>';
 
 	return $content;
 
@@ -393,12 +494,12 @@ function ArcadeGOTDBlock()
 
 	if (!empty($game['thumbnail']))
 		$content .= '
-																	<div><span></span></div>
-																	<a href="' . $game['url']['play'] . ';#playgame">
+																	<div><span style="display: none;">&nbsp;</span></div>
+																	<a href="' . $game['url']['play'] . '">
 																		<img style="width: 80px;height: 80px;" src="' . $game['thumbnail'] . '" alt="ico" title="'.$txt['arcade_play'].' '.$game['name'].'" />
 																	</a>
-																	<div><span></span></div>
-																	<div><span></span></div>';
+																	<div><span style="display: none;">&nbsp;</span></div>
+																	<div><span style="display: none;">&nbsp;</span></div>';
 
 	$content .= '
 																	<div class="middletext"><a href="'. $game['url']['play']. '">'. $game['name']. '</a></div>
@@ -558,7 +659,9 @@ function ArcadeInfoShouts()
 
 		if (allowedTo('arcade_admin'))
 			$content .= '
-							<a href="' . $scripturl.'?action=arcade;sa=shout;del=' . $shout['id_shout'] . '"><img style="border: 0px;" src="' . $settings['images_url'] . '/arc_icons/del1.png" alt="X"  title="' . $txt['arcade_shout_del'] . '"/></a>&nbsp;';
+							<a href="' . $scripturl.'?action=arcade;sa=shout;del=' . $shout['id_shout'] . '">
+								<img style="border: 0px;" src="' . $settings['images_url'] . '/arc_icons/del1.png" alt="X"  title="' . $txt['arcade_shout_del'] . '"/>
+							</a>&nbsp;';
 
 		$content .= '
 							<b>' . $shout['real_name'] . '</b>
