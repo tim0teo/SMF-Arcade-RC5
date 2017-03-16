@@ -38,7 +38,7 @@ function ArcadeList()
 		'plays' => 'game.num_plays',
 		'plays_reverse' => 'game.num_plays',
 		'champion' => 'mem.member_name',
-		'myscore' => 'IFNULL(pb.score, 0)',
+		'myscore' => !$user_info['is_guest'] ? 'IFNULL(pb.score, 0)' : 'score.score',
 		'rating' => 'game.game_rating',
 		'champs' => 'score.champion_from',
 		'favorites' => 'favorite.id_game',
