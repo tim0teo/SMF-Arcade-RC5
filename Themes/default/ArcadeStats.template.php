@@ -12,17 +12,19 @@ function template_arcade_statistics()
 	global $scripturl, $txt, $context, $settings;
 
 	echo '
-	<div style="padding-top: 15px;"><span></span></div>
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe" style="border-radius: 3px;">
-		<div class="innerframe" style="border-radius: 5px;">
-			<div class="cat_bar">
-				<h3 class="catbg centertext" style="vertical-align: middle;">
-					<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/gold.gif" alt="" />
-					<span class="mediumtext" style="padding: 0px 6px 0px 0px;vertical-align: middle;">', $txt['arcade_stats'], '</span>
-					<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/gold.gif" alt="" />
-				</h3>
-			</div>';
+	<div style="padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>
+	<div class="cat_bar">
+		<h3 class="catbg centertext" style="vertical-align: middle;">
+			<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/gold.gif" alt="" />
+			<span class="mediumtext" style="padding: 0px 6px 0px 0px;vertical-align: middle;">', $txt['arcade_stats'], '</span>
+			<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/gold.gif" alt="" />
+		</h3>
+	</div>
+	', $context['arcade_smf_version'] == 'v2.1' ? '
+	<div class="game_table up_contain windowbg">' :
+	'<span class="clear upperframe"><span>&nbsp;</span></span>
+	<div class="roundframe">', '
+		<div class="innerframe" style="border-radius: 5px;">';
 
 	$alternate = false;
 
@@ -267,7 +269,7 @@ function template_arcade_statistics()
 			<div class="clear"></div>';
 	echo '
 		</div>
-	</div>	
+	</div>
 	<span class="lowerframe"><span></span></span>
 	<div style="padding-top: 15px;"><span></span></div>';
 }
