@@ -98,7 +98,7 @@ function template_arcade_above()
 
 	echo '
 				<tr>
-					<td class="windowbg2" style="padding: 5px;vertical-align: top;width: 275px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
+					<td class="windowbg2" style="padding: 5px;vertical-align: top;width: 17%;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
 						<table style="border-collapse: collapse;width: 100%;border: 0px;">
 							<tr>
 								<td style="padding: 1px;">
@@ -242,7 +242,7 @@ function template_arcade_above()
 							</table>
 						</div>
 					</td>
-					<td class="windowbg2" style="padding: 5px;vertical-align: top;width: 275px;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
+					<td class="windowbg2" style="padding: 5px;vertical-align: top;width: 17%;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;">
 						<table class="centertext" style="table-layout: fixed;width: 100%;border-collapse: collapse;">
 							<tr>
 								<td class="centertext" style="padding: 0px;">
@@ -268,31 +268,33 @@ function template_arcade_above()
 								</td>
 							</tr>
 							<tr>
-								<td style="padding: 3px;text-align: right;">
-									<form name="search" action="', $scripturl, '?action=arcade;sa=search" method="post" onsubmit="return empty();">
-										<input id="gamesearch" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" />
-									</form>
+								<td style="width: 17%;"><span style="display: none;"></span></td>
+								<td style="padding: 3px;" class="centertext">
+									<div style="clear: both;display: inline;float: left;padding-left: 30px;">
+										<form name="search" action="', $scripturl, '?action=arcade;sa=search" method="post" onsubmit="return empty();">
+											<input maxlength="100" style="width: 180px;" id="gamesearch" type="text" name="name" value="', isset($context['arcade_search']['name']) ? $context['arcade_search']['name'] : '', '" />
+										</form>
+									</div>
+									<div id="quick_div" class="smalltext centertext" style="display: inline;">', $txt['arcade_search_text'], '</div>
+									<div style="clear: right;display: inline;float: right;padding-right: 30px;">									
+										<form action="', $scripturl, '?action=arcade;sa=list" method="post" id="sortgames">
+											<select style="width: 180px;" name="sortby" onchange="this.form.submit();">
+												<option value="reset">', $txt['arcade_list_games'], '</option>
+												<option value="a2z"' . ($_SESSION['arcade_sortby'] === 'a2z' ? $selected : '') . '>', $txt['arcade_nameAZ'], '</option>
+												<option value="z2a"' . ($_SESSION['arcade_sortby'] === 'z2a' ? $selected : '') . '>', $txt['arcade_nameZA'], '</option>
+												<option value="age"' . ($_SESSION['arcade_sortby'] === 'age' ? $selected : '') . '>', $txt['arcade_LatestList'], '</option>
+												<option value="plays"' . ($_SESSION['arcade_sortby'] === 'plays' ? $selected : '') . '>', $txt['arcade_g_i_b_3'], '</option>
+												<option value="champs"' . ($_SESSION['arcade_sortby'] === 'champs' ? $selected : '') . '>', $txt['arcade_g_i_b_8'], '</option>
+												<option value="plays_reverse"' . ($_SESSION['arcade_sortby'] === 'plays_reverse' ? $selected : '') . '>', $txt['arcade_LeastPlayed'], '</option>
+												<option value="cats"' . ($_SESSION['arcade_sortby'] === 'cats' ? $selected : '') . '>', $txt['arcade_category'], '</option>
+												<option value="rating"' . ($_SESSION['arcade_sortby'] === 'rating' ? $selected : '') . '>', $txt['arcade_rating_sort'], '</option>
+												<option value="favorites"' . ($_SESSION['arcade_sortby'] === 'favorites' ? $selected : '') . '>', $txt['arcade_personal_best'], '</option>
+												<option value="champion"' . ($_SESSION['arcade_sortby'] === 'champion' ? $selected : '') . '>', $txt['arcade_champion'], '</option>
+											</select>
+										</form>
+									</div>
 								</td>
-								<td style="padding: 3px;width: 275px;" class="centertext">
-									<div id="quick_div" class="smalltext">Search by name or List games</div>
-								</td>
-								<td style="padding: 3px;text-align: left;">
-									<form action="', $scripturl, '?action=arcade;sa=list" method="post" id="sortgames">
-										<select name="sortby" onchange="this.form.submit();">
-											<option value="reset">', $txt['arcade_list_games'], '</option>
-											<option value="a2z"' . ($_SESSION['arcade_sortby'] === 'a2z' ? $selected : '') . '>', $txt['arcade_nameAZ'], '</option>
-											<option value="z2a"' . ($_SESSION['arcade_sortby'] === 'z2a' ? $selected : '') . '>', $txt['arcade_nameZA'], '</option>
-											<option value="age"' . ($_SESSION['arcade_sortby'] === 'age' ? $selected : '') . '>', $txt['arcade_LatestList'], '</option>
-											<option value="plays"' . ($_SESSION['arcade_sortby'] === 'plays' ? $selected : '') . '>', $txt['arcade_g_i_b_3'], '</option>
-											<option value="champs"' . ($_SESSION['arcade_sortby'] === 'champs' ? $selected : '') . '>', $txt['arcade_g_i_b_8'], '</option>
-											<option value="plays_reverse"' . ($_SESSION['arcade_sortby'] === 'plays_reverse' ? $selected : '') . '>', $txt['arcade_LeastPlayed'], '</option>
-											<option value="cats"' . ($_SESSION['arcade_sortby'] === 'cats' ? $selected : '') . '>', $txt['arcade_category'], '</option>
-											<option value="rating"' . ($_SESSION['arcade_sortby'] === 'rating' ? $selected : '') . '>', $txt['arcade_rating_sort'], '</option>
-											<option value="favorites"' . ($_SESSION['arcade_sortby'] === 'favorites' ? $selected : '') . '>', $txt['arcade_personal_best'], '</option>
-											<option value="champion"' . ($_SESSION['arcade_sortby'] === 'champion' ? $selected : '') . '>', $txt['arcade_champion'], '</option>
-										</select>
-									</form>
-								</td>
+								<td style="width: 17%;"><span style="display: none;"></span></td>
 							</tr>
 							<tr>
 								<td class="centertext" style="padding: 3px;" colspan="3"><hr /></td>
@@ -417,7 +419,7 @@ function template_arcade_above()
 
 	if ($context['arcade']['stats']['games'] != 0)
 			echo '
-			<span class="smalltext" style="clear: right;padding:8px 7px 0px 0px;float: right;">', sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']), '</span>';
+			<span class="smalltext" style="clear: right;padding:8px 7px 0px 0px;float: right;">', (!empty($context['arcade']['stats']['games']) && $context['current_arcade_sa'] == 'list' ? sprintf($txt['arcade_game_we_have_games'], $context['arcade']['stats']['games']) : '<span style="display: none;">&nbsp;</span>'), '</span>';
 
 	echo '
 	</div>', ($context['arcade_smf_version'] == 'v2.1' ? '

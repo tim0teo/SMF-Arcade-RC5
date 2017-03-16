@@ -861,7 +861,7 @@ function arcade_online()
 function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content = '')
 {
 	global $modSettings, $txt, $context, $scripturl, $db_count;
-	list($content, $context['arcade']['buttons_set'], $currentSubAction, $context['arcade']['tour']['show']) = array('', array(), !empty($_REQUEST['sa']) ? $_REQUEST['sa'] : 'list', !empty($context['arcade']['tour']['show']) ? (int)$context['arcade']['tour']['show'] : 0);
+	list($content, $context['arcade']['buttons_set'], $context['current_arcade_sa'], $context['arcade']['tour']['show']) = array('', array(), !empty($_REQUEST['sa']) ? $_REQUEST['sa'] : 'list', !empty($context['arcade']['tour']['show']) ? (int)$context['arcade']['tour']['show'] : 0);
 
 	if ($context['arcade']['tour']['show'] != 0)
         $context['arcadetour']['buttons_set']['newtour'] =  array(
@@ -889,7 +889,7 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
     	'text' => 'arcade',
 		'image' => 'arcade.gif',
     	'url' => $scripturl . '?action=arcade',
-		'active' => $currentSubAction == 'list' ? true : false,
+		'active' => in_array($context['current_arcade_sa'], array('list', 'highscore', 'online', 'play')) ? true : null,
     	'lang' => true,
     );
 
@@ -898,7 +898,7 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
 			'text' => 'arcade_arena',
 			'image' => 'arcade_arena.gif',
 			'url' => $scripturl . '?action=arcade;sa=arena',
-			'active' => in_array($currentSubAction, array('arena', 'newMatch', 'newMatch2', 'viewMatch')),
+			'active' => in_array($context['current_arcade_sa'], array('arena', 'newMatch', 'newMatch2', 'viewMatch')) ? true : null,
 			'lang' => true,
 		);
 
@@ -906,7 +906,7 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
     	'text' => 'arcade_stats',
 		'image' => 'arcade_stats.gif',
     	'url' => $scripturl . '?action=arcade;sa=stats',
-		'active' => in_array($currentSubAction, array('stats')),
+		'active' => in_array($context['current_arcade_sa'], array('stats')) ? true : null,
     	'lang' => true,
     );
 

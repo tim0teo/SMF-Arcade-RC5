@@ -64,11 +64,11 @@ function template_arcade_list()
 					<td class="windowbg" style="padding-left: 5px;">
 						', !empty($game['description']) ? '<div class="smalltext" style="max-width:87%;word-wrap:break-word;">' . $game['description'] . '</div>' : '<div><span style="display: none;">&nbsp;</span></div>', '
 					</td>
-					<td class="windowbg" style="width: 10%;">';
+					<td class="windowbg" style="position: relative;width: 10%;">';
 
 			if ($game['highscore_support']) // Does this game support highscores?
 				echo '
-						<div title="' . $txt['arcade_dviewscore'] . '" class="smalltext" style="text-align: right;">
+						<div title="' . $txt['arcade_dviewscore'] . '" class="smalltext" style="text-align: right;clear: both;position: relative;padding: 2px 4px 2px 0px;">
 							<a href="' . $game['url']['highscore'] . '">
 								<img style="width: 32px;height: 13px;" alt="' . $txt['arcade_dviewscore'] . '" src="' . $settings['default_images_url'] . '/arc_icons/medals.png" />
 							</a>
@@ -76,35 +76,37 @@ function template_arcade_list()
 
 			if (!empty($game['topic_id']) && !empty($modSettings['arcadeEnablePosting']))
 				echo '
-						<div class="smalltext"><a href="', $scripturl, '?topic=', $game['id_topic'], '">', $txt['arcade_topic_talk'],'</a></div>';
+						<div class="smalltext" style="clear: both;position: relative;padding: 2px 4px 2px 0px;"><a href="', $scripturl, '?topic=', $game['id_topic'], '">', $txt['arcade_topic_talk'],'</a></div>';
 
 			echo '
-						<div style="float: right; text-align: right;" class="smalltext">';
+						<div style="float: right; text-align: right;clear: both;position: relative;padding: 2px 4px 2px 0px;" class="smalltext">';
 
 			if ($game['rating2'] > 0)
 				echo '
 							<div>',
-								str_repeat('<img style="padding-top: 2px;padding-bottom: 2px;" src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']),
-								str_repeat('<img style="padding-top: 2px;padding-bottom: 2px;" src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']), '
+								str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']),
+								str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']), '
 							</div>';
 
 			// Category
 			if ($game['category']['name'])
 				echo '
-							<a href="', $game['category']['link'], '">', $game['category']['name'], '</a><br />';
+							<div style="clear: both;position: relative;padding: 2px 4px 2px 0px;"><a href="', $game['category']['link'], '">', $game['category']['name'], '</a></div>';
 
 			if (allowedTo('arcade_admin'))
 				echo '
-							<a href="', $game['url']['edit'], '"><img style="padding-top: 2px;border: 0px;" src="' . $settings['default_images_url'] . '/arc_icons/modify.png" alt="' . $txt['arcade_edit'] . '" title="' . $txt['pdl_edit'] . '&nbsp;' . $game['name'] . '"/></a><br />';
+							<div style="clear: both;position: relative;padding: 2px 4px 2px 0px;"><a href="', $game['url']['edit'], '"><img style="border: 0px;" src="' . $settings['default_images_url'] . '/arc_icons/modify.png" alt="' . $txt['arcade_edit'] . '" title="' . $txt['pdl_edit'] . '&nbsp;' . $game['name'] . '"/></a></div>';
 
 			// Favorite link (if can favorite)
 			if (allowedTo('arcade_submit'))
 				echo '
-							<a href="', $game['url']['favorite'], '" onclick="arcade_favorite(', $game['id'] , '); return false;">
-								', !$game['is_favorite'] ?
-								'<img style="padding-top: 2px;" id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite.gif" alt="' . $txt['arcade_add_favorites'] . '" title="' . $txt['arcade_add_favorites'] . '"/>' :
-								'<img style="padding-top: 2px;" id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite2.gif" alt="' . $txt['arcade_remove_favorite'] .'" title="' . $txt['arcade_remove_favorite'] . '" />', '
-							</a>';
+							<div style="clear: both;position: relative;padding: 2px 4px 2px 0px;">
+								<a href="', $game['url']['favorite'], '" onclick="arcade_favorite(', $game['id'] , '); return false;">
+									', !$game['is_favorite'] ?
+									'<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite.gif" alt="' . $txt['arcade_add_favorites'] . '" title="' . $txt['arcade_add_favorites'] . '"/>' :
+									'<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite2.gif" alt="' . $txt['arcade_remove_favorite'] .'" title="' . $txt['arcade_remove_favorite'] . '" />', '
+								</a>
+							</div>';
 
 			echo '
 						</div>
