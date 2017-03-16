@@ -415,4 +415,5 @@ $txt['arcade_info_defavatar'] = 'Default Avatar';
 $txt['arcade_info_showcat'] = 'Show %s';
 $txt['arcade_guest_na'] = 'N/A';
 $txt['arcade_search_text'] = 'Search by name or list games';
+$txt['arcade_no_links'] = '********';
 ?>

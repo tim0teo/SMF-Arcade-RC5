@@ -146,7 +146,7 @@ function Arcade()
 	require_once($sourcedir . '/' . $subActions[$_REQUEST['sa']][0]);
 	!isset($_SESSION['current_cat']) ? $_SESSION['current_cat'] = 'all' : '';
     isset($_REQUEST['category']) ? $_SESSION['current_cat'] = $_REQUEST['category'] : $_REQUEST['category'] = $_SESSION['current_cat'];
-	$_REQUEST['category'] = !empty($_REQUEST['current_cat']) ? ArcadeSpecialChars($_REQUEST['current_cat']): $_SESSION['current_cat'];
+	$_REQUEST['category'] = !empty($_REQUEST['current_cat']) ? ArcadeSpecialChars($_REQUEST['current_cat'], 'cat'): $_SESSION['current_cat'];
 	arcade_log_online();
 	$subActions[$_REQUEST['sa']][1]();
 }

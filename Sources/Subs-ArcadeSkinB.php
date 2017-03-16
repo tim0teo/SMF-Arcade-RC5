@@ -380,7 +380,7 @@ function category_games()
 	while ($cat = $smcFunc['db_fetch_assoc']($result))
 	{
 		if (empty($cat['cat_icon']) && !empty($cat['cat_name']))
-			$cat['cat_icon'] = ArcadeSpecialChars(trim($cat['cat_name'])) . '.gif';
+			$cat['cat_icon'] = ArcadeSpecialChars(trim($cat['cat_name']), 'image') . '.gif';
 
 		$cats[$cat['id_cat']] = $cat;
 	}
@@ -594,6 +594,7 @@ function ArcadeInfoShouts()
     global $smcFunc, $scripturl, $settings, $txt, $sourcedir, $modSettings;
 	require_once($sourcedir . '/Subs.php');
 	list($content, $shouts) = array('', array());
+	$version = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 
 	if (!empty($modSettings['enable_arcade_cache']))
 	{
@@ -615,7 +616,7 @@ function ArcadeInfoShouts()
 				$shouts[] = array(
 					'id_shout' => $shout['id_shout'],
 					'id_member' => $shout['id_member'],
-					'content' => $shout['content'],
+					'content' => str_replace(array("\n", "\t", "\r"), '', $shout['content']),
 					'time' => $shout['time'],
 					'real_name' => $shout['real_name'],
 				);
@@ -642,7 +643,7 @@ function ArcadeInfoShouts()
 			$shouts[] = array(
 				'id_shout' => $shout['id_shout'],
 				'id_member' => $shout['id_member'],
-				'content' => $shout['content'],
+				'content' => str_replace(array("\n", "\t", "\r"), '', $shout['content']),
 				'time' => $shout['time'],
 				'real_name' => $shout['real_name'],
 			);
@@ -667,13 +668,48 @@ function ArcadeInfoShouts()
 							<b>' . $shout['real_name'] . '</b>
 						</div>
 						<div style="padding: 2px;">' . timeformat($shout['time']) . '</div>
-						<div style="padding: 4px;">' . wordwrap(parse_bbc(censorText($shout['content'])), 34, "\n", true) . '</div>
+						<div style="padding: 4px;">' . arcade_shout_parser(wordwrap(parse_bbc(censorText($shout['content'])), 34, "\n", true), $version) . '</div>
 					</div>';
 
 
 	}
 
 	return $content;
+}
+
+
+
+function arcade_shout_parser($img_tag, $version = 'v2.0')
+{
+	global $txt;
+	// shoutbox wordwrap messes up the img src... so fix it
+	$result = '';
+    $doc = new DOMDocument();
+    $doc->loadHTML($img_tag, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+	$tags = $doc->getElementsByTagName('img');
+    foreach ($tags as $tag)
+	{
+        $old_src = $tag->getAttribute('src');
+        $new_src_url = preg_replace('/\v(?:[\v\h]+)/', '', $old_src);
+        $tag->setAttribute('src', $new_src_url);
+    }
+
+	// ... remove any links for non arcade admins
+	if (!allowedTo('arcade_admin'))
+	{
+		$tags = $doc->getElementsByTagName('a');
+		foreach ($tags as $tag)
+			$tag->parentNode->removeChild($tag);
+	}
+
+	foreach($doc->childNodes as $node)
+		$result .= $doc->saveHTML($node);
+
+	if ($version !== 'v2.1')
+		$result = preg_replace('/<img([^>]*)>/i', "<img $1 />", $result);
+
+	return !empty($result) ? $result : $txt['arcade_no_links'];
 }
 
 function add_to_arcade_shoutbox($shout)

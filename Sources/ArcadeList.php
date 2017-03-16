@@ -63,12 +63,12 @@ function ArcadeList()
 	$_SESSION['arcade']['gamepopup'] = false;
 	$_SESSION['arcade']['pop'] = false;
 	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : '';
-	$context['arcade_category'] = !empty($_REQUEST['category']) ? ArcadeSpecialChars($_REQUEST['category']) : (!empty($_SESSION['current_cat']) ? ArcadeSpecialChars($_SESSION['current_cat']) : 'all');
+	$context['arcade_category'] = !empty($_REQUEST['category']) ? ArcadeSpecialChars($_REQUEST['category'], 'name') : (!empty($_SESSION['current_cat']) ? ArcadeSpecialChars($_SESSION['current_cat'], 'name') : 'all');
 	$context['arcade_category'] = (!empty($_REQUEST['sortby'])) && $_REQUEST['sortby'] == 'reset' ? 0 : $context['arcade_category'];
-	$_REQUEST['sortby'] = !empty($_REQUEST['sortby']) ? ArcadeSpecialChars($_REQUEST['sortby']) : (!empty($_SESSION['arcade_sortby']) ? ArcadeSpecialChars($_SESSION['arcade_sortby']) :'a2z');
+	$_REQUEST['sortby'] = !empty($_REQUEST['sortby']) ? ArcadeSpecialChars($_REQUEST['sortby'], 'name') : (!empty($_SESSION['arcade_sortby']) ? ArcadeSpecialChars($_SESSION['arcade_sortby'], 'name') :'a2z');
 	$context['sort_by'] = !empty($sort_methods[$_REQUEST['sortby']]) ? $_REQUEST['sortby'] : (!empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] :'a2z');
 	$context['sort_direction'] = !empty($sort_direction[$context['sort_by']]) ? $sort_direction[$context['sort_by']] : 'asc';
-	$context['sort_direction'] = (isset($_REQUEST['dir'])) && in_array(strtolower(ArcadeSpecialChars($_REQUEST['dir'])), array('asc', 'desc')) ? strtolower(ArcadeSpecialChars($_REQUEST['dir'])) : $context['sort_direction'];
+	$context['sort_direction'] = (isset($_REQUEST['dir'])) && in_array(strtolower(ArcadeSpecialChars($_REQUEST['dir'], 'name')), array('asc', 'desc')) ? strtolower(ArcadeSpecialChars($_REQUEST['dir'], 'name')) : $context['sort_direction'];
 	$context['sort_link'] = $context['sort_direction'] == 'asc' ? $scripturl . '?action=arcade;sa=list;sortby=' . $context['sort_by'] . ';dir=desc;#arctoplist' : $scripturl . '?action=arcade;sa=list;sortby=' . $context['sort_by'] . ';dir=asc;#arctoplist';
 	$context['changedir'] = $context['sort_direction'] == 'desc' ? ';dir=asc' : ';dir=desc';
 	$context['sort_arrow'] = '<span id="arctoplist" title="' . $txt['arcade_list_sort'] . '" class="floatleft">&nbsp;<a href="' . $context['sort_link'] . '"><img style="vertical-align: middle;" class="icon" src="' . $settings['images_url'] . '/' . ($context['sort_direction'] == 'desc' ? 'sort_up.gif' : 'sort_down.gif') . '" alt="" /></a></span>';

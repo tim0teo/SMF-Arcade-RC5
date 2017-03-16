@@ -268,7 +268,7 @@ function template_arcade_above()
 								</td>
 							</tr>
 							<tr>
-								<td style="width: 17%;"><span style="display: none;"></span></td>
+								<td style="width: 17%;"><span style="display: none;">&nbsp;</span></td>
 								<td style="padding: 3px;" class="centertext">
 									<div style="clear: both;display: inline;float: left;padding-left: 30px;">
 										<form name="search" action="', $scripturl, '?action=arcade;sa=search" method="post" onsubmit="return empty();">
@@ -294,7 +294,7 @@ function template_arcade_above()
 										</form>
 									</div>
 								</td>
-								<td style="width: 17%;"><span style="display: none;"></span></td>
+								<td style="width: 17%;"><span style="display: none;">&nbsp;</span></td>
 							</tr>
 							<tr>
 								<td class="centertext" style="padding: 3px;" colspan="3"><hr /></td>

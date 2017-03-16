@@ -939,14 +939,14 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
 	return $content;
 }
 
-function ArcadeSpecialChars($var)
+function ArcadeSpecialChars($var, $type = 'name')
 {
 	$pattern = '/&(#)?[a-zA-Z0-9]{0,};/';
 	if (is_array($var))
 	{
 		$out = array();
 	    foreach ($var as $key => $v)
-			$out[$key] = ArcadeSpecialChars($v);
+			$out[$key] = ArcadeSpecialChars($v, '');
     }
 	else
 	{
@@ -956,6 +956,9 @@ function ArcadeSpecialChars($var)
 
 	    $out = htmlspecialchars(stripslashes(trim($out)), ENT_QUOTES, 'UTF-8', true);
 	}
+
+	if ($type == 'image')
+		return str_replace(' ', '_', $out);
 
 	return $out;
 }
@@ -1143,7 +1146,7 @@ function ArcadeCats($highlight='')
 		foreach ($context['arcade']['cats'] as $cat)
 		{
 			$var = $cat[1];
-			$gamepic_name = ArcadeSpecialChars($var);
+			$gamepic_name = ArcadeSpecialChars($var, 'image');
 			$filter = array(' ','--','&quot;','!','@','#','$','%','^','&','*','(',')','_','+','{','}','|',':','"','<','>','?','[',']','\\',';',"'",',','.','/','*','+','~','`','=');
 			$gamepic_name = str_replace("&#039;", "_", $gamepic_name);
 			$gamepic_name = str_replace($filter, "_", $gamepic_name);
