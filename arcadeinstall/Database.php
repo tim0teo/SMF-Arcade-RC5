@@ -747,37 +747,7 @@ $tables = array(
 				'ID_RATE' => 'drop',
 			),
 		),
-	),
-	// Settings
-	'arcade_settings' => array(
-		'name' => 'arcade_settings',
-		'columns' => array(
-			array(
-				'name' => 'id_member',
-				'type' => 'int',
-			),
-			array(
-				'name' => 'variable',
-				'type' => 'varchar',
-				'size' => 30,
-			),
-			array(
-				'name' => 'value',
-				'type' => 'text',
-			),
-		),
-		'indexes' => array(
-			array(
-				'type' => 'primary',
-				'columns' => array('id_member', 'variable')
-			),
-			array(
-				'name' => 'id_member',
-				'type' => 'index',
-				'columns' => array('id_member')
-			),
-		)
-	),
+	),	
 	// Game info database
 	'arcade_game_info' => array(
 		'name' => 'arcade_game_info',
@@ -1019,6 +989,115 @@ $tables = array(
 			array(
 				'type' => 'primary',
 				'columns' => array('id_shout')
+			),
+		)
+	),
+	// arcade members
+	'arcade_members' => array(
+		'name' => 'arcade_members',
+		'columns' => array(
+			array(
+				'name' => 'id_member',
+				'type' => 'int',
+				'null' => false,
+				'auto' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'arena_invite',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'arena_match_end',
+				'type' => 'int',				
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'arena_new_round',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'champion_email',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'champion_pm',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'games_per_page',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'new_champion_any',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'new_champion_own',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'scores_per_page',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'skin',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+			array(
+				'name' => 'list',
+				'type' => 'int',
+				'null' => false,
+				'default' => 0,
+				'size' => 10,
+				'unsigned' => true,
+			),
+		),
+		'indexes' => array(
+			array(
+				'type' => 'primary',
+				'columns' => array('id_member')
 			),
 		)
 	)

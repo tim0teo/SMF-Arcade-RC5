@@ -234,7 +234,7 @@ function arcadeSettings($memID)
 			'type' => 'callback',
 			'callback_func' => 'arcade_notification',
 		),
-		'gamesPerPage' => array(
+		'games_per_page' => array(
 			'label' => $txt['arcade_user_gamesPerPage'],
 			'type' => 'select',
 			'options' => array(
@@ -247,9 +247,9 @@ function arcadeSettings($memID)
 			),
 			'cast' => 'int',
 			'validate' => 'int',
-			'value' => isset($arcadeSettings['gamesPerPage']) ? $arcadeSettings['gamesPerPage'] : 0,
+			'value' => isset($arcadeSettings['games_per_page']) ? $arcadeSettings['games_per_page'] : 0,
 		),
-		'scoresPerPage' => array(
+		'scores_per_page' => array(
 			'label' => $txt['arcade_user_scoresPerPage'],
 			'type' => 'select',
 			'options' => array(
@@ -262,14 +262,14 @@ function arcadeSettings($memID)
 			),
 			'cast' => 'int',
 			'validate' => 'int',
-			'value' => isset($arcadeSettings['scoresPerPage']) ? $arcadeSettings['scoresPerPage'] : 0,
+			'value' => isset($arcadeSettings['scores_per_page']) ? $arcadeSettings['scores_per_page'] : 0,
 		)
 	);
 
 	if (!empty($modSettings['disableCustomPerPage']))
 	{
-		unset($context['profile_fields']['gamesPerPage']);
-		unset($context['profile_fields']['scoresPerPage']);
+		unset($context['profile_fields']['games_per_page']);
+		unset($context['profile_fields']['scores_per_page']);
 	}
 
 	if (isset($_REQUEST['save']))
@@ -308,12 +308,82 @@ function arcadeSettings($memID)
 
 		if (!$errors)
 		{
-			$smcFunc['db_insert']('replace',
-				'{db_prefix}arcade_settings',
-				array('id_member' => 'int', 'variable' => 'string-255', 'value' => 'string'),
-				$updates,
-				array('id_member', 'variable')
+			$request = $smcFunc['db_query']('', '
+				SELECT id_member
+				FROM {db_prefix}arcade_members
+				WHERE id_member = {int:member}
+				LIMIT 1',
+				array(
+					'member' => $memID == 0 ? $user_info['id'] : $memID,
+				)
 			);
+			$row = $smcFunc['db_fetch_row']($request);
+			$smcFunc['db_free_result']($request);
+
+			if (!empty($row))
+			{
+				foreach ($updates as $update)
+				{
+					$smcFunc['db_query']('', '
+						UPDATE {db_prefix}arcade_members
+						SET {raw:variable} = {int:value}
+						WHERE id_member = {int:member}',
+						array(
+							'member' => $update[0],
+							'variable' => $update[1],
+							'value' => $update[2],
+						)
+					);
+				}
+			}
+			else
+			{
+				$member = $memID == 0 ? $user_info['id'] : $memID;
+				$variables = array('id_member', 'arena_invite', 'arena_match_end', 'arena_new_round', 'champion_email', 'champion_pm', 'games_per_page', 'new_champion_any', 'new_champion_own', 'scores_per_page', 'skin', 'list');
+				foreach ($updates as $update)
+					$new[$update[1]] = $update[2];
+
+				foreach ($variables as $variable)
+				{
+					if ($variable == 'id_member')
+						$new['id_member'] = $member;					
+					elseif (empty($new[$variable]))
+						$new[$variable] = 0;
+				}
+
+				$smcFunc['db_insert']('replace',
+					'{db_prefix}arcade_members',
+					array(
+						'id_member' => 'int',
+						'arena_invite' => 'int',
+						'arena_match_end' => 'int',
+						'arena_new_round' => 'int',
+						'champion_email' => 'int',
+						'champion_pm' => 'int',
+						'games_per_page' => 'int',
+						'new_champion_any' => 'int',
+						'new_champion_own' => 'int',
+						'scores_per_page' => 'int',
+						'skin' => 'int',
+						'list' => 'int'
+					),
+					array(
+						(int)$member,
+						(int)$new['arena_invite'],
+						(int)$new['arena_match_end'],
+						(int)$new['arena_new_round'],
+						(int)$new['champion_email'],
+						(int)$new['champion_pm'],
+						(int)$new['games_per_page'],
+						(int)$new['new_champion_any'],
+						(int)$new['new_champion_own'],
+						(int)$new['scores_per_page'],
+						(int)$new['skin'],
+						(int)$new['list']
+					),
+					array('id_member')
+				);
+			}
 
 			redirectexit('action=profile;u=' . $memID . ';sa=arcadeSettings');
 		}
@@ -339,5 +409,4 @@ function arcadeSettings($memID)
 	$context['page_desc'] = $txt['arcade_usersettings_desc'];
 	$context['sub_template'] = 'edit_options';
 }
-
 ?>

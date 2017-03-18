@@ -38,7 +38,7 @@ function template_arcade_list()
 	echo '
 		<div style="width: 100%;position: relative;clear: left;">
 			<div class="pagesection" style="display: inline;">
-				<div style="display: inline;padding-top: 15px;float: left;">', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#bot"><b>' . $txt['go_down'] . '</b></a>' : '', '</div>
+				<div style="display: inline;padding-top: 15px;float: left;">', ($context['arcade_smf_version'] == 'v2.1' ? '' : $txt['arcade_number_pages'] . '&nbsp;'), $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#bot"><b>' . $txt['go_down'] . '</b></a>' : '', '</div>
 				<div style="display: inline;clear: right;float: right;">', template_button_strip($arcade_buttons, 'right'), '</div>
 			</div>
 		</div>
@@ -192,7 +192,7 @@ function template_arcade_list()
 			</table>
 		</div>
 		<div class="pagesection" style="display: inline;width: 100%;">
-			<div style="text-align:left;display: inline;">', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#top"><b>' . $txt['go_up'] . '</b></a>' : '', '</div>
+			<div style="text-align:left;display: inline;">', ($context['arcade_smf_version'] == 'v2.1' ? '' : $txt['arcade_number_pages'] . '&nbsp;'), $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#top"><b>' . $txt['go_up'] . '</b></a>' : '', '</div>
 		</div>
 		<div style="clear: both;padding-top: 25px;"><span style="display: none;">&nbsp;</span></div>';
 
@@ -200,7 +200,7 @@ function template_arcade_list()
 	{
 		echo '
 		<div class="cat_bar centertext">
-			<h3 class="catbg centertext">				
+			<h3 class="catbg centertext">
 				', $txt['arcade_info_center'], '
 			</h3>
 		</div>

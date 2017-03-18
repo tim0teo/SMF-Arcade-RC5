@@ -13,7 +13,7 @@ function template_arcade_list()
 
 	echo'
 	<div style="padding-top: 10px;"><span style="display: none;">&nbsp;</span></div>
-	<span style="vertical-align: middle;font-size: x-small;padding: 8px;">', $context['page_index'], '   &nbsp;&nbsp;<a href="#bot"><b>', $txt['go_down'], '</b></a></span>
+	<span style="vertical-align: middle;font-size: x-small;padding: 8px;">', ($context['arcade_smf_version'] == 'v2.1' ? '' : $txt['arcade_number_pages'] . '&nbsp;'), $context['page_index'], '&nbsp;&nbsp;<a href="#bot"><b>', $txt['go_down'], '</b></a></span>
 	<div style="padding-top: 5px;"><span style="display: none;">&nbsp;</span></div>
 	<div class="cat_bar">
 		<h3 class="catbg smalltext">
@@ -180,7 +180,7 @@ function template_arcade_list()
 		</div>
 	</div>
 	<span class="lowerframe"><span>&nbsp;</span></span>
-	<div style="vertical-align: middle;padding:8px;font-size: x-small;">', $context['page_index'], '   &nbsp;&nbsp;<a href="#top"><strong>', $txt['arcade_dgo_up'], '</strong></a></div>';
+	<div style="vertical-align: middle;padding:8px;font-size: x-small;">', ($context['arcade_smf_version'] == 'v2.1' ? '' : $txt['arcade_number_pages'] . '&nbsp;'), $context['page_index'], '&nbsp;&nbsp;<a href="#top"><strong>', $txt['arcade_dgo_up'], '</strong></a></div>';
 
 	if (!empty($modSettings['arcadeShowIC']))
 	{

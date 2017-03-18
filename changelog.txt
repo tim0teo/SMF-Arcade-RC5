@@ -8,27 +8,27 @@ March 2017
  & Language added for Defiant theme
  + Three list types now available
  & Language added for list types
- + Added additional filtering of directory structure concerning game deletions 
+ + Added additional filtering of directory structure concerning game deletions
  + Added specific user settings for PM and/or EMail notifications
  + Added option to send notification Emails/PMs in bulk
  + Links from emails while not logged in triggers login prompt that redirects to arcade action/sa
  ! Fixed PM, EMail & Arena/Match notifications
  & New language strings added for PM/Email changes
- + Main language files loaded with pre_load hook 
+ + Main language files loaded with pre_load hook
  + Changed subroutines for arcade online data in arcade info centre
  + Display amount of guests & users in the arcade
  + Added detailed Arcade online list with setting and permissions
  + New maintenance feature to manually purge online log
- & New language strings added for arcade online (admin & user) 
+ & New language strings added for arcade online (admin & user)
  * Eliminated/changed deprecated css in templates
  * Various aesthetic template fixes for light/dark themes
  ! Fixed typing enter after save comment
  ! Fixed profile area to show users top 10 - 1st, 2nd & 3rd high score placements
  & New strings for profile changes
- ! Fixed SMF 2.1 installation for profile area hook changes 
+ ! Fixed SMF 2.1 installation for profile area hook changes
  ! Fixed guest permissions for games with no opted category
  + Added custom php/xml file generation for game downloads
- + Added additional custom install data as xml file(s) (visit WebDev for support)  
+ + Added additional custom install data as xml file(s) (visit WebDev for support)
  ! Fixed/changed download subroutine (+ one file removed)
  + New maintenance feature to manually purge Arcade download directory
  ! Fixed database installation subroutine to conform to SMF standard
@@ -40,8 +40,9 @@ March 2017
  + Option to upload image files for categories (jpg, gif, png ~ auto resizing to selected default dimensions)
  + Maintenance option to purge unused arcade icons from the arc_icons directory (deletes files not currently used by the arcade)
  & New language for all icon related changes
- 
- 
+ * Removed arcade_settings table & added arcade_members table (improved format & more settings)
+
+
 SMF Arcade 2.5 RC4                                                    xx.12.2015
 ================================================================================
 December 2015

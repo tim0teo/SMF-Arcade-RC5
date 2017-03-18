@@ -279,5 +279,74 @@ function arcadeChangeOld()
 
 	$smcFunc['db_remove_index'] ('{db_prefix}package_servers', 'SMF Arcade Package Server', array(), false);
 	$smcFunc['db_remove_index'] ('{db_prefix}settings', 'skin_avatar_size', array(), false);
+
+	// redo member settings
+	if (checkTableExistsArcade('arcade_settings') && checkTableExistsArcade('arcade_members'))
+	{
+		$arcadeSettings = array();
+		$request = $smcFunc['db_query']('', '
+			SELECT id_member, variable, value
+			FROM {db_prefix}arcade_settings
+			ORDER BY id_member ASC',
+			array(
+			)
+		);
+
+		while ($row = $smcFunc['db_fetch_row']($request))
+		{
+			if (empty($arcadeSettings[$row[0]]))
+				$arcadeSettings[$row[0]] = array($row[1] => $row[2]);
+			else
+				$arcadeSettings[$row[0]] += array($row[1] => $row[2]);
+		}
+		$smcFunc['db_free_result']($request);
+
+		foreach ($arcadeSettings as $member => $value)
+		{
+			$request = $smcFunc['db_query']('', '
+				DELETE FROM {db_prefix}arcade_members
+				WHERE id_member = {int:user}',
+				array(
+					'user' => $member,
+				)
+			);
+
+			$smcFunc['db_insert']('insert',
+				'{db_prefix}arcade_members',
+				array(
+					'id_member' => 'int',
+					'arena_invite' => 'int',
+					'arena_match_end' => 'int',
+					'arena_new_round' => 'int',
+					'champion_email' => 'int',
+					'champion_pm' => 'int',
+					'games_per_page' => 'int',
+					'new_champion_any' => 'int',
+					'new_champion_own' => 'int',
+					'scores_per_page' => 'int',
+					'skin' => 'int',
+					'list' => 'int',
+				),
+				array(
+					(int)$member,
+					!empty($value['arena_invite']) ? (int)$value['arena_invite'] : 0,
+					!empty($value['arena_match_end']) ? (int)$value['arena_match_end'] : 0,
+					!empty($value['arena_new_round']) ? (int)$value['arena_new_round'] : 0,
+					!empty($value['championEmail']) ? (int)$value['championEmail'] : 0,
+					!empty($value['championPM']) ? (int)$value['championPM'] : 0,
+					!empty($value['gamesPerPage']) ? (int)$value['gamesPerPage'] : 0,
+					!empty($value['new_champion_any']) ? (int)$value['new_champion_any'] : 0,
+					!empty($value['new_champion_own']) ? (int)$value['new_champion_own'] : 0,
+					!empty($value['scoresPerPage']) ? (int)$value['scoresPerPage'] : 0,
+					0,
+					0,
+				),
+				array()
+			);
+		}
+	}
+
+	if (checkTableExistsArcade('arcade_settings'))
+		$smcFunc['db_drop_table'] ('{db_prefix}arcade_settings');
 }
 ?>

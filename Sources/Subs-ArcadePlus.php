@@ -246,18 +246,35 @@ function loadArcadeSettings($memID = 0)
 	// Default
 	$arcadeSettings = array();
 
-	$result = $smcFunc['db_query']('', '
-		SELECT variable, value
-		FROM {db_prefix}arcade_settings
-		WHERE id_member = {int:member}',
-		array(
-			'member' => $memID == 0 ? $user_info['id'] : $memID,
-		)
-	);
+	$request = $smcFunc['db_query']('', '
+			SELECT id_member, arena_invite, arena_match_end, arena_new_round, champion_email, champion_pm,
+			games_per_page, new_champion_any, new_champion_own, scores_per_page, skin, list
+			FROM {db_prefix}arcade_members
+			WHERE id_member = {int:member}
+			LIMIT 1',
+			array(
+				'member' => $memID == 0 ? $user_info['id'] : $memID,
+			)
+		);
 
-	while ($var = $smcFunc['db_fetch_assoc']($result))
-		$arcadeSettings[$var['variable']] = $var['value'];
-	$smcFunc['db_free_result']($result);
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+	{
+		$arcadeSettings = array(
+			'id_member' => $row['id_member'],
+			'arena_invite' => $row['arena_invite'],
+			'arena_match_end' => $row['arena_match_end'],
+			'arena_new_round' => $row['arena_new_round'],
+			'champion_email' => $row['champion_email'],
+			'champion_pm' => $row['champion_pm'],
+			'games_per_page' => $row['games_per_page'],
+			'new_champion_any' => $row['new_champion_any'],
+			'new_champion_own' => $row['new_champion_own'],
+			'scores_per_page' => $row['scores_per_page'],
+			'skin' => $row['skin'],
+			'list' => $row['list'],
+		);
+	}
+	$smcFunc['db_free_result']($request);
 
 	return $arcadeSettings;
 }

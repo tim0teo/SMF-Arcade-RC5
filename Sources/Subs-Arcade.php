@@ -354,18 +354,18 @@ function updateGame($id_game, $gameOptions, $log = false)
 function arcadeGetEventTypes($id = '')
 {
 	$events = array(
-		'championEmail' => array(
-			'id' => 'championEmail',
+		'champion_email' => array(
+			'id' => 'champion_email',
 			'func' => 'arcadeEventChampionEmail',
 			'notification' => array(
-				'championEmail' => false,
+				'champion_email' => false,
 			)
 		),
-		'championPM' => array(
-			'id' => 'championPM',
+		'champion_pm' => array(
+			'id' => 'champion_pm',
 			'func' => 'arcadeEventChampionEmail',
 			'notification' => array(
-				'championPM' => false,
+				'champion_pm' => false,
 			)
 		),
 		'new_champion' => array(
@@ -461,19 +461,33 @@ function arcadeEvent($id_event, $data = array())
 	$from =	empty($from) ? $from = array('id' => $user_info['id'], 'name' => $user_info['name'], 'username' => $user_info['username']) : $from;
 
 	$request = $smcFunc['db_query']('', '
-			SELECT id_member, variable, value
-			FROM {db_prefix}arcade_settings
+			SELECT id_member, arena_invite, arena_match_end, arena_new_round, champion_email, champion_pm,
+			games_per_page, new_champion_any, new_champion_own, scores_per_page, skin, list
+			FROM {db_prefix}arcade_members
 			ORDER BY id_member ASC',
 			array(
 			)
 		);
 
-	while ($row = $smcFunc['db_fetch_row']($request))
+	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
-		if (empty($arcadeSettings[$row[0]]))
-			$arcadeSettings[$row[0]] = array($row[1] => $row[2]);
-		else
-			$arcadeSettings[$row[0]] += array($row[1] => $row[2]);
+		if (empty($row['id_member']))
+			continue;
+
+		$arcadeSettings[$row['id_member']] = array(
+			'id_member' => $row['id_member'],
+			'arena_invite' => $row['arena_invite'],
+			'arena_match_end' => $row['arena_match_end'],
+			'arena_new_round' => $row['arena_new_round'],
+			'champion_email' => $row['champion_email'],
+			'champion_pm' => $row['champion_pm'],
+			'games_per_page' => $row['games_per_page'],
+			'new_champion_any' => $row['new_champion_any'],
+			'new_champion_own' => $row['new_champion_own'],
+			'scores_per_page' => $row['scores_per_page'],
+			'skin' => $row['skin'],
+			'list' => $row['list'],
+		);
 	}
 	$smcFunc['db_free_result']($request);
 
@@ -501,13 +515,13 @@ function arcadeEvent($id_event, $data = array())
 		if (!empty($modSettings['gamesNotificationsBulk']))
 		{
 			// Only send email if the user's SMF-Email or Arcade-PM notification is disabled & their arcade email setting is enabled
-			if (empty($rowmember['pm_email_notify']) && !empty($arcadeSettings[$rowmember['id_member']]['championEmail']))
+			if (empty($rowmember['pm_email_notify']) && !empty($arcadeSettings[$rowmember['id_member']]['champion_email']))
 				$emails[] = $rowmember['email_address'];
-			elseif (!empty($arcadeSettings[$rowmember['id_member']]['championEmail']) && empty($arcadeSettings[$rowmember['id_member']]['championPM']))
+			elseif (!empty($arcadeSettings[$rowmember['id_member']]['champion_email']) && empty($arcadeSettings[$rowmember['id_member']]['champion_pm']))
 				$emails[] = $rowmember['email_address'];
 
 			// Now send the PM notification if it is enabled
-			if (!empty($arcadeSettings[$rowmember['id_member']]['championPM']))
+			if (!empty($arcadeSettings[$rowmember['id_member']]['champion_pm']))
 				$pvts[] = $rowmember['id_member'];
 		}
 		else
@@ -518,7 +532,7 @@ function arcadeEvent($id_event, $data = array())
 			$adj = $data['game']['champion']['id'] == $rowmember['id_member'] ? 'own' : 'any';
 
 			// Only send email if the user's SMF-Email or Arcade-PM notification is disabled & their Arcade-Email setting is enabled
-			if (empty($rowmember['pm_email_notify']) && !empty($arcadeSettings[$rowmember['id_member']]['championEmail']))
+			if (empty($rowmember['pm_email_notify']) && !empty($arcadeSettings[$rowmember['id_member']]['champion_email']))
 			{
 				switch ($id_event)
 				{
@@ -566,7 +580,7 @@ function arcadeEvent($id_event, $data = array())
 				$emaildata = loadEmailTemplate($email_template, $replacements, $lang, false);
 				$emailsSend = sendmail(array($rowmember['email_address']), $emaildata['subject'], $emaildata['body'], $modSettings['gamesEmail'], false, true, 2, null, true);
 			}
-			elseif (!empty($arcadeSettings[$rowmember['id_member']]['championEmail']) && empty($arcadeSettings[$rowmember['id_member']]['championPM']))
+			elseif (!empty($arcadeSettings[$rowmember['id_member']]['champion_email']) && empty($arcadeSettings[$rowmember['id_member']]['champion_pm']))
 			{
 				switch ($id_event)
 				{
@@ -616,7 +630,7 @@ function arcadeEvent($id_event, $data = array())
 			}
 
 			// Now send the PM notification if it is enabled
-			if (!empty($arcadeSettings[$rowmember['id_member']]['championPM']))
+			if (!empty($arcadeSettings[$rowmember['id_member']]['champion_pm']))
 			{
 				switch ($id_event)
 				{
@@ -764,13 +778,12 @@ function checkNotificationReceiver($member, $event, $type)
 	global $smcFunc;
 
 	$request = $smcFunc['db_query']('', '
-		SELECT value
-		FROM {db_prefix}arcade_settings AS arcset
-		WHERE (arcset.variable = {string:type})
-			AND arcset.id_member = {int:member}',
+		SELECT {raw:type}
+		FROM {db_prefix}arcade_members AS arcset
+		WHERE arcset.id_member = {int:member}',
 		array(
 			'type' => $type,
-			'member' => $member
+			'member' => $member,
 		)
 	);
 
@@ -787,20 +800,20 @@ function checkNotificationReceiver($member, $event, $type)
 function checkNotificationReceivers($members, $event, $type)
 {
 	global $smcFunc;
-
+	/*
 	if ($event['notification'][$type])
-		$where = '((arcset.variable = {string:type} AND arcset.value = 1) OR ISNULL(arcset.value))';
+		$where = '({raw:type} = 1) OR ISNULL(arcset.value))';
 	else
 		$where = '(arcset.variable = {string:type} AND arcset.value = 1)';
-
+	*/
 	$request = $smcFunc['db_query']('', '
 		SELECT mem.id_member, mem.real_name, mem.email_address
 		FROM {db_prefix}members AS mem
-			LEFT JOIN {db_prefix}arcade_settings AS arcset ON (arcset.id_member = mem.id_member)
-		WHERE ' . $where .'
+			LEFT JOIN {db_prefix}arcade_members AS arcset ON (arcset.id_member = mem.id_member)
+		WHERE {raw:type} = 1
 			AND mem.id_member IN({array_int:members})',
 		array(
-			'type' => $type,
+			'type' => 'arcset.' . $type,
 			'members' => $members
 		)
 	);
@@ -821,18 +834,20 @@ function addNotificationRecievers(&$pms, $event, $type)
 {
 	global $db_prefix, $smcFunc;
 
+	/*
 	if ($event['notification'][$type])
 		$where = '((arcset.variable = {string:type} AND arcset.value = 1) OR ISNULL(arcset.value))';
 	else
 		$where = '(arcset.variable = {string:type} AND arcset.value = 1)';
+	*/
 
 	$request = $smcFunc['db_query']('', '
 		SELECT mem.id_member, mem.real_name, mem.email_address
 		FROM {db_prefix}members AS mem
-			LEFT JOIN {db_prefix}arcade_settings AS arcset ON (arcset.id_member = mem.id_member)
-		WHERE ' . $where,
+			LEFT JOIN {db_prefix}arcade_members AS arcset ON (arcset.id_member = mem.id_member)
+		WHERE {raw:type} = 1',
 		array(
-			'type' => $type,
+			'type' => 'arcset.' . $type,
 		)
 	);
 

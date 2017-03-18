@@ -85,6 +85,7 @@ $txt['arcade_show_all'] = 'Show all games';
 $txt['arcade_favorite_removed'] = 'Game was removed from favorites!';
 $txt['arcade_favorite_added'] = 'Game was added to favorites!';
 $txt['arcade_favorites_only'] = 'Show favorites only';
+$txt['arcade_number_pages'] = 'Pages:';
 
 // Play
 $txt['arcade_no_flash'] = 'You have not installed Adobe Flash Player, you need install it before you can play, you also need to have javascript enabled. <a href="http://www.adobe.com/go/getflashplayer" target="_blank">Install</a>';
@@ -245,8 +246,8 @@ $txt['arena_error_not_enough_players'] = 'There is not enough slots for players'
 $txt['arena_error_invalid_rounds'] = 'Invalid Games selected for the match';
 
 // Email notifications
-$txt['arcade_notification_championPM'] = 'PM Arcade alerts';
-$txt['arcade_notification_championEmail'] = 'Email Arcade alerts';
+$txt['arcade_notification_champion_pm'] = 'PM Arcade alerts';
+$txt['arcade_notification_champion_email'] = 'Email Arcade alerts';
 $txt['arcade_notification_new_champion_own'] = 'When someone takes championship from me';
 $txt['arcade_notification_arena_invite_own_subject'] = 'You are invited to join a match';
 $txt['arcade_notification_new_champion_any'] = 'When someone takes championship from anyone';
