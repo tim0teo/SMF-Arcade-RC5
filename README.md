@@ -50,7 +50,7 @@ This helps make this modification better!
 
 Copyright (c) 2004 - 2012, Niko Pahajoki ~ http://www.madjoki.com
 
-Copyright (c) 2015, Chen Zhen ~ http://web-develop.ca/index.php?page=arcade_license_BSD2
+Copyright (c) 2015 - 2017, Chen Zhen ~ http://web-develop.ca/index.php?page=arcade_license_BSD2
 
 Current support provided by Chen Zhen @ http://web-develop.ca
 
