@@ -287,8 +287,8 @@ function template_arcade_above()
 												<option value="champs"' . ($_SESSION['arcade_sortby'] === 'champs' ? $selected : '') . '>', $txt['arcade_g_i_b_8'], '</option>
 												<option value="plays_reverse"' . ($_SESSION['arcade_sortby'] === 'plays_reverse' ? $selected : '') . '>', $txt['arcade_LeastPlayed'], '</option>
 												<option value="cats"' . ($_SESSION['arcade_sortby'] === 'cats' ? $selected : '') . '>', $txt['arcade_category'], '</option>
-												<option value="rating"' . ($_SESSION['arcade_sortby'] === 'rating' ? $selected : '') . '>', $txt['arcade_rating_sort'], '</option>
-												<option value="favorites"' . ($_SESSION['arcade_sortby'] === 'favorites' ? $selected : '') . '>', $txt['arcade_personal_best'], '</option>
+												<option value="rating"' . ($_SESSION['arcade_sortby'] === 'rating' ? $selected : '') . '>', $txt['arcade_rating_sort'], '</option>', (!$user_info['is_guest'] ? '
+												<option value="favorites"' . ($_SESSION['arcade_sortby'] === 'favorites' ? $selected : '') . '>' . $txt['arcade_personal_best'] . '</option>' : ''), '
 												<option value="champion"' . ($_SESSION['arcade_sortby'] === 'champion' ? $selected : '') . '>', $txt['arcade_champion'], '</option>
 											</select>
 										</form>

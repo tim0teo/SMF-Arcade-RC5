@@ -9,7 +9,7 @@
 
 function template_arcade_above()
 {
-	global $scripturl, $txt, $context, $settings, $modSettings;
+	global $scripturl, $txt, $context, $settings, $modSettings, $user_info;
 
 	$selected = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? ' selected="selected"' : ' selected';
 	if ( $_REQUEST['sa'] == 'list' || $_REQUEST['sa'] == 'search')
@@ -61,8 +61,8 @@ function template_arcade_above()
 									<option value="plays_reverse"' . ($_SESSION['arcade_sortby'] === 'plays_reverse' ? $selected : '') . '>', $txt['arcade_playsl'], '</option>
 									<option value="champion"' . ($_SESSION['arcade_sortby'] === 'champion' ? $selected : '') . '>', $txt['arcade_champion'], '</option>
 									<option value="champs"' . ($_SESSION['arcade_sortby'] === 'champs' ? $selected : '') . '>', $txt['arcade_latest_champions'], '</option>
-									<option value="rating"' . ($_SESSION['arcade_sortby'] === 'rating' ? $selected : '') . '>', $txt['arcade_rating'], '</option>
-									<option value="favorites"' . ($_SESSION['arcade_sortby'] === 'favorites' ? $selected : '') . '>', $txt['arcade_favs'], '</option>
+									<option value="rating"' . ($_SESSION['arcade_sortby'] === 'rating' ? $selected : '') . '>', $txt['arcade_rating'], '</option>', (!$user_info['is_guest'] ? '
+									<option value="favorites"' . ($_SESSION['arcade_sortby'] === 'favorites' ? $selected : '') . '>' . $txt['arcade_favs'] . '</option>' : ''), '
 								</select>
 							</form>
 						</div>
