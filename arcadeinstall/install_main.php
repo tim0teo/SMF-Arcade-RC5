@@ -32,34 +32,8 @@ updateAdminFeatures('arcade', !empty($modSettings['arcadeEnabled']));
 // Step 5: Add Permissions to database
 doPermission($permissions);
 
-// Step 6: Insert SMF Arcade Package Server to list
-$request = $smcFunc['db_query']('', '
-	SELECT COUNT(*)
-	FROM {db_prefix}package_servers
-	WHERE name = {string:name}',
-	array(
-		'name' => 'SMF Arcade Package Server',
-	)
-);
-
-list ($count) = $smcFunc['db_fetch_row']($request);
-$smcFunc['db_free_result']($request);
-
-if ($count == 0 || $forced)
-{
-	$smcFunc['db_insert']('insert',
-		'{db_prefix}package_servers',
-		array(
-			'name' => 'string',
-			'url' => 'string',
-		),
-		array(
-			'SMF Arcade Package Server',
-			'http://download.smfarcade.info',
-		),
-		array()
-	);
-}
+// Step 6: Change or drop table info from previous versions
+arcadeChangeOld();
 
 // Step 7: Insert Default Category
 $request = $smcFunc['db_query']('', '

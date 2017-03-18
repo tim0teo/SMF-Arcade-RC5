@@ -13,24 +13,24 @@ function template_arcade_admin_main()
 
 	echo '
 	<div style="width: 49%" class="floatleft">
-		<div class="cat_bar">
+		<div class="cat_bar"', $context['arcade_smf_version'] == 'v2.1' ? ' style="clear: both;position: relative;bottom: -4px;"' : '', '>
 			<h3 class="catbg">
 				', $txt['arcade_latest_news'], '
 			</h3>
 		</div>
-		<div class="windowbg2">
+		<div class="windowbg">
 			<span class="topslice"><span></span></span>
-			<div id="arcade_news" style="overflow: auto; height: 18ex; padding: 0.5em;">', sprintf($txt['arcade_unable_to_connect'], 'web-develop.ca'), '</div>
+			<div id="arcade_news" style="overflow: auto; height: 18ex; padding: 0.5em;"><strong>', sprintf($txt['arcade_unable_to_connect'], 'web-develop.ca'), '</strong></div>
 			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<div style="width: 49%" class="floatright">
-		<div class="cat_bar">
+		<div class="cat_bar"', $context['arcade_smf_version'] == 'v2.1' ? ' style="clear: both;position: relative;bottom: -4px;"' : '', '>
 			<h3 class="catbg">
 				', $txt['arcade_status'], '
 			</h3>
 		</div>
-		<div class="windowbg2">
+		<div class="windowbg">
 			<span class="topslice"><span></span></span>
 			<div style="overflow: auto; height: 18ex; padding: 0.5em;">
 				', $txt['arcade_installed_version'], ': <span id="arcade_installed_version">', $arcade_version, '</span><br />
@@ -94,6 +94,8 @@ function template_arcade_admin_maintenance()
 					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=updateGamecache;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_updateGamecache'], '</a></li>
 					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=onlinePurge;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_onlinePurge'], '</a></li>
 					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=downloadPurge;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_downloadPurge'], '</a></li>
+					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=shoutboxPurge;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_shoutPurge'], '</a></li>
+					<li><a href="', $scripturl , '?action=admin;area=arcademaintenance;maintenance=iconPurge;' . $context['session_var'] . '=', $context['session_id'], '">', $txt['arcade_maintenance_iconPurge'], '</a></li>
 				</ul>
 			</div>
 		<span class="botslice"><span></span></span>
@@ -225,47 +227,91 @@ function template_arcade_admin_category_edit()
 	global $scripturl, $txt, $context, $settings;
 
 	echo '
-	<form name="category" action="', $scripturl, '?action=admin;area=arcadecategory;sa=save" method="post">
-		<input type="hidden" name="category" value="', $context['category']['id'], '" />
-		<div class="cat_bar">
-			<h3 class="catbg">
-				', $txt['arcade_categories'], '
-			</h3>
-		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+	<div style="padding-top: 25px;"><span style="display: none;">&nbsp;</span></div>
+	<div class="cat_bar" style="clear: both;position: relative;', $context['arcade_smf_version'] == 'v2.1' ? 'top: 4px;' : '', '">
+		<h3 class="catbg">
+			', $txt['arcade_categories'], '
+		</h3>
+	</div>
+		', $context['arcade_smf_version'] == 'v2.1' ? '
+	<div class="up_contain windowbg" style="padding: 0px;border: 0px;">' : '
+	<span class="clear upperframe"><span>&nbsp;</span></span>
+	<div class="roundframe">', '
+		<form id="upload_form" action="', $scripturl, '?action=admin;area=arcadecategory;sa=upload" method="post" accept-charset="', $context['character_set'], '" enctype="multipart/form-data">
+			<input type="hidden" name="upcat" value="', $context['category']['id'], '" />
+			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 			<div style="padding: 0.5em;">
-				<div style="border: 0px;width: 100%;" class="centertext">
-					<div style="display: table-row;width: 100%;">
-						<span style="text-align:left;display: table-cell;padding: 4px;width: 20%;">', $txt['category_name'], '</span>
-						<span style="display: table-cell;padding: 20px 4px 4px 4px;width: 80%;">
-							<input size="50" type="text" name="category_name" value="', $context['category']['name'], '" />
-						</span>
+				<div style="padding-bottom: 7px;"><span style="display: none;">&nbsp;</span></div>
+				<div style="display: table;width: 100%;border: 0px;">
+					<div style="display: table-row;">
+						<div style="display: table-cell;width: 20%;">
+							<div style="text-align: left;padding-left: 10px;">', $txt['arcade_upload_cat'], '</div>
+						</div>
+						<div class="upcontainer" style="display: table-cell;width: 20%;text-align: left;position: relative;padding-left: 6px;">
+							<input style="clear: both;width: 200px;" accept=".png, .gif, .jpg" type="file" size="48" name="attachment[]" />
+						</div>', !empty($_SESSION['arcade_cat_icon']) ? '
+						<div class="centertext" style="display: table-cell;width: 20%;">' . $txt['arcade_cat_image_icon'] . '&nbsp;
+							<img alt="?" src="' . $settings['default_images_url'] . '/arc_icons/' . $_SESSION['arcade_cat_icon'] . '" style="height: 20px;width: 20px;vertical-align: middle;" class="icon" />
+						</div>
+						<div class="centertext" style="display: table-cell;width: 20%;">' . $txt['arcade_cat_image_filename'] . '&nbsp;
+							<span>' . $_SESSION['arcade_cat_icon'] . '</span>
+						</div>' : '
+						<div style="display: table-cell;width: 20%;">
+							<span style="display: none;">&nbsp;</span>
+						</div>
+						<div style="display: table-cell;width: 20%;">
+							<span style="display: none;">&nbsp;</span>
+						</div>', '
+						<div style="display: table-cell;width: 20%;padding-right: 10px;">
+							<input class="button_submit" type="submit" name="upload" value="', $txt['arcade_upload_button'], '" />
+						</div>
 					</div>
-					<div style="display: table-row;width: 100%;">
-						<span style="text-align:left;display: table-cell;width: 20%;padding: 4px;">', $txt['arcade_category_permission_allowed'], '</span>
-						<span style="display: table-cell;padding: 20px 4px 4px 4px;width: 80%;">';
+					<div style="display: table-row;">
+						<div class="alert" style="display: table-cell;padding-left: 10px;">
+							', !empty($context['arcade_cat_message']) ? '<span>' . $context['arcade_cat_message'] . '</span>' : '<span style="display: none;">&nbsp;</span>', '
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div style="padding-top: 20px;"><span style="display: none;">&nbsp;</span></div>
+		<form name="category" action="', $scripturl, '?action=admin;area=arcadecategory;sa=save" method="post">
+			<input type="hidden" name="category" value="', $context['category']['id'], '" />
+			<div>
+				<div style="padding: 0.5em;">
+					<div style="border: 0px;width: 100%;display: table;" class="centertext">
+						<div style="display: table-row;">
+							<span style="text-align:left;display: table-cell;padding: 4px;width: 20%;">', $txt['category_name'], '</span>
+							<span style="display: table-cell;padding: 20px 4px 4px 4px;width: 80%;text-align: left;">
+								<input style="width: 200px;" size="50" type="text" name="category_name" value="', $context['category']['name'], '" />
+							</span>
+						</div>
+						<div style="display: table-row;">
+							<span style="text-align:left;display: table-cell;width: 20%;padding: 4px;">', $txt['arcade_category_permission_allowed'], '</span>
+							<span style="display: table-cell;padding: 20px 4px 4px 4px;width: 60%;">';
 
 	foreach ($context['groups'] as $group)
 		echo '
-							<label for="groups_', $group['id'], '">
-								<input style="display: inline;" type="checkbox" name="groups[]" value="', $group['id'], '" id="groups_', $group['id'], '"', $group['checked'] ? ' checked="checked"' : '', ' class="check" />
-								<span', $group['is_post_group'] ? ' style="border-bottom: 1px dotted;" title="' . $txt['pgroups_post_group'] . '"' : '', '>', $group['name'], '</span>
-							</label>';
+								<label for="groups_', $group['id'], '">
+									<input style="display: inline;" type="checkbox" name="groups[]" value="', $group['id'], '" id="groups_', $group['id'], '"', $group['checked'] ? ' checked="checked"' : '', ' class="check" />
+									<span', $group['is_post_group'] ? ' style="border-bottom: 1px dotted;" title="' . $txt['pgroups_post_group'] . '"' : '', '>', $group['name'], '</span>
+								</label>';
 
 	echo '
-							<br /><br /><span style="padding-top: 20px;"></span><i>', $txt['check_all'], '</i> <input type="checkbox" onclick="invertAll(this, this.form, \'groups[]\');" class="check" /><br />
-							<br />
-						</span>
+								<span style="display: block;padding-top: 30px;padding-bottom: 15px;"><i>', $txt['check_all'], '</i> <input type="checkbox" onclick="invertAll(this, this.form, \'groups[]\');" class="check" /></span>								
+							</span>
+						</div>
 					</div>
-				</div>
-				<input class="button_submit" type="submit" name="save_settings" value="', $txt['arcade_save_category'], '" />
-			</div>
-			<span class="botslice"><span></span></span>
-		</div>
-
-		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-	</form>';
+					<input class="button_submit" type="submit" name="save_settings" value="', $txt['arcade_save_category'], '" />
+					<div style="padding-bottom: 33px;"><span style="display: none;">&nbsp;</span></div>				
+				</div>				
+			</div>			
+			<input type="hidden" name="category_icon" value="', !empty($_SESSION['arcade_cat_icon']) ? $_SESSION['arcade_cat_icon'] : $context['category']['cat_icon'], '" />
+			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+		</form>
+	</div>
+	<span class="lowerframe"><span>&nbsp;</span></span>
+	<div style="padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>';
 }
 
 function template_arcadeadmin_above()

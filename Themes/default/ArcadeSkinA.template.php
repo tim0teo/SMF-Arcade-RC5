@@ -21,7 +21,7 @@ function template_arcade_above()
 		$spanbg = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? '' : ' class="catbg"';
 
 		echo '
-	<div class="clear cat_bar" style="position: relative;bottom: -2px;">
+	<div class="clear cat_bar" style="position: relative;', $context['arcade_smf_version'] == 'v2.1' ? 'bottom: -2px;' : '', '">
 		<h3 class="catbg centertext" style="vertical-align: middle;">
 			<span style="clear: right;">', $txt['arcade_title'], '</span>
 		</h3>
@@ -74,9 +74,9 @@ function template_arcade_above()
 						<div class="windowbg2" style="margin:5px 2px 5px 2px;font-size:1.0em;text-align:left;">', ArcadeNewChamps($modSettings['skin_latest_champs']), '</div>
 						<div class="' . $divbg . ' centertext" style="margin-bottom:3px;font-size:1.3em;border-radius: 3px;overflow: hidden;">
 							<span'. $spanbg . '><strong>
-								<img src="', $settings['images_url'], '/gold.gif" alt="" />
+								<img src="', $settings['default_images_url'], '/gold.gif" alt="" />
 								', ($_SESSION['current_cat'] == 'all' ? $txt['arcade_champs'] : sprintf($txt['cat_champs'], $context['cat_name'])), '
-								<img src="', $settings['images_url'], '/gold.gif" alt="" />
+								<img src="', $settings['default_images_url'], '/gold.gif" alt="" />
 							</strong></span>
 						</div>
 						<table style="border: 0px;width: 100%;border-spacing: 2px;border-collapse: separate;">
@@ -91,7 +91,7 @@ function template_arcade_above()
 				$score_poss++;
 				echo '
 								<td class="windowbg2 centertext" style="width: 33%;border:0px;font-size:1.0em;">
-									<img src="', $settings['images_url'], '/', $score_poss, '.gif" style="margin-bottom: 3px" alt="" /><br />
+									<img src="', $settings['default_images_url'], '/', $score_poss, '.gif" style="margin-bottom: 3px" alt="" /><br />
 									', $out['avatar'], '<br /><strong>', $out['link'], '</strong><br />
 									', $txt['win'], ' ', $out['champions'], '
 								</td>';

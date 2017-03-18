@@ -64,7 +64,7 @@ function template_arcade_list()
 					<td class="windowbg" style="padding-left: 5px;">
 						', !empty($game['description']) ? '<div class="smalltext" style="max-width:87%;word-wrap:break-word;">' . $game['description'] . '</div>' : '<div><span style="display: none;">&nbsp;</span></div>', '
 					</td>
-					<td class="windowbg" style="position: relative;width: 10%;">';
+					<td class="windowbg" style="position: relative;width: 10%;padding-top: 7px;">';
 
 			if ($game['highscore_support']) // Does this game support highscores?
 				echo '

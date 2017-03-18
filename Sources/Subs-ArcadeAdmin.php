@@ -1751,5 +1751,4 @@ function arcadeCreateDirs($path)
 		}
 	}
 }
-
 ?>

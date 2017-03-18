@@ -273,4 +273,11 @@ function checkTableExistsArcade($table)
 	return false;
 }
 
+function arcadeChangeOld()
+{
+	global $smcFunc;
+
+	$smcFunc['db_remove_index'] ('{db_prefix}package_servers', 'SMF Arcade Package Server', array(), false);
+	$smcFunc['db_remove_index'] ('{db_prefix}settings', 'skin_avatar_size', array(), false);
+}
 ?>

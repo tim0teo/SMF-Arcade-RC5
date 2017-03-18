@@ -51,7 +51,10 @@ $txt['skin_latest_scores'] = 'Set Latest Scores';
 $txt['skin_latest_champs'] = 'Set Latest Champs';
 $txt['skin_latest_games'] = 'Set Latest Games';
 $txt['skin_most_popular'] = 'Set Most Played';
-$txt['skin_avatar_size'] = 'Set Skin Avatar Size';
+$txt['skin_avatar_size_width'] = 'Set Enterprise Avatar Max Width';
+$txt['skin_avatar_size_height'] = 'Set Enterprise Avatar Max Height';
+$txt['skin_avatar_sizeb_width'] = 'Set Defiant Avatar Max Width';
+$txt['skin_avatar_sizeb_height'] = 'Set Defiant Avatar Max Height';
 $txt['avsize_recommend'] = 'Recommend (65) don\'t overdo it';
 $txt['arcade_rec_val'] = 'Recommended Value: %s';
 $txt['arcade_admin_settings'] = 'Arcade Settings';
@@ -152,6 +155,8 @@ $txt['arcade_maintenance_fixScores'] = 'Check and repair any errors on score tab
 $txt['arcade_maintenance_updateGamecache'] = 'Update GameCache';
 $txt['arcade_maintenance_onlinePurge'] = 'Purge Online Arcade Log';
 $txt['arcade_maintenance_downloadPurge'] = 'Purge Download Directory';
+$txt['arcade_maintenance_shoutPurge'] = 'Purge Shouts in Shoutbox';
+$txt['arcade_maintenance_iconPurge'] = 'Purge Unused Category Icons';
 $txt['arcade_maintenance_main'] = 'Main';
 $txt['arcade_maintenance_highscore'] = 'Highscore';
 $txt['arcade_maintenance_category'] = 'Categories';
@@ -247,6 +252,9 @@ $txt['arcade_unable_to_remove'] = 'Unable to remove category %s';
 $txt['arcade_category_no_default'] = 'There is no default category set.';
 $txt['arcade_category_permission_allowed'] = 'Groups allowed to access';
 $txt['arcade_make_default'] = 'Make default';
+$txt['arcade_upload_cat'] = 'Upload Category Icon';
+$txt['arcade_cat_image_icon'] = 'Image :';
+$txt['arcade_cat_image_filename'] = 'Filename :';
 
 /* Arcade - PDL Text Variables */
 global $modSettings, $boardurl;

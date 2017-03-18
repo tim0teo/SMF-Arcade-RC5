@@ -458,7 +458,7 @@ function CheatingCheck()
 
 function getGameInfo($id_game = 0, $raw = false)
 {
-	global $scripturl, $txt, $db_prefix, $user_info, $smcFunc, $modSettings, $context;
+	global $scripturl, $txt, $db_prefix, $user_info, $smcFunc, $modSettings, $context, $settings;
 
 	$id_game = loadGame($id_game);
 
@@ -505,6 +505,7 @@ function getGameInfo($id_game = 0, $raw = false)
 			'id' => $game['id_cat'],
 			'name' => $game['cat_name'],
 			'link' => $scripturl . '?action=arcade;category=' . $game['id_cat'],
+			'cat_icon' => !empty($game['cat_icon']) ? $settings['default_images_url'] . '/arc_icons/' . $game['cat_icon'] : '',
 		),
 		'submit_system' => $game['submit_system'],
 		'internal_name' => $game['internal_name'],
@@ -963,43 +964,47 @@ function ArcadeSpecialChars($var, $type = 'name')
 	return $out;
 }
 
-function ArcadeSizer($file='', $size)
+function ArcadeSizer($file='', $maxwidth = 50, $maxheight = 50)
 {
 	global $modSettings, $sourcedir;
 
-	$file = str_replace(' ', '%20',$file);
-	if(list ($width, $height) = url_image_size($file))
+	if (!empty($file))
 	{
-		if( $height > $size)
+		$file = str_replace(' ', '%20',$file);
+		if(list ($width, $height) = url_image_size($file))
 		{
-			if ($width > $height)
-				$percentage = ($size / $width);
-			else
-				$percentage = ($size / $height);
+			if($height > $maxheight)
+			{
+				$percentage = ($maxheight / $height);
+				$height = round($height * $percentage);
+			}
 
-			$width = round($width * $percentage);
-			$height = round($height * $percentage);
+			if($width > $maxwidth)
+			{
+				$percentage = ($maxwidth / $width);
+				$width = round($width * $percentage);
+			}
+
+			return array($width, $height);
 		}
-
-		return array($width,$height);
 	}
-	else
-		return false;
+
+	return array();
 }
 
 function ArcadeCategoryDropdown()
 {
 	// Game Category drop down menu
-	global $scripturl, $smcFunc, $txt;
+	global $scripturl, $smcFunc, $txt, $settings, $context;
 	$count = 0;
 	$where1 = $scripturl . '?action=arcade;category=';
 	$display = '
 	<form action="' . $scripturl . '?action=arcade" method="post">
 		<select name="category" style="font-size: 100%; color: black;" onchange="JavaScript:submit()">
-			<option value="">' . $txt['view_cat'] . '</option>';
+			<option value="">&nbsp;' . $txt['view_cat'] . '</option>';
 
 	$request = $smcFunc['db_query']('', '
-		SELECT id_cat, cat_name, num_games, cat_order
+		SELECT id_cat, cat_name, num_games, cat_order, cat_icon
 		FROM {db_prefix}arcade_categories
 		ORDER BY cat_order',
 		array()
@@ -1007,19 +1012,22 @@ function ArcadeCategoryDropdown()
 
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
-		$count = $row['id_cat'];
-		$cat_name[$count] = $row['cat_name'];
-		$cat_link[$count] = $where1 . $count;
-		$cat_drop[$count] = '<a href="' . $cat_link[$count] . '">' . $cat_name[$count] . '</a>';
+		$context['categories'][$row['id_cat']] = array(
+			'id' => $row['id_cat'],
+			'name' => $row['cat_name'],
+			'link' => $scripturl . '?action=arcade;category=' . $row['id_cat'],
+			'drop' => '<a href="' . $scripturl . '?action=arcade;category=' . $row['id_cat'] . '">' . $row['cat_name'] . '</a>',
+			'icon' => !empty($row['cat_icon']) ? $settings['default_images_url'] . '/arc_icons/' . $row['cat_icon'] : '',
+		);
 
-	$display .= '
-			<option value="' . $count . '">' . $cat_name[$count] . '</option>';
+		$display .= '
+			<option value="' . $row['id_cat'] . '">&nbsp;' . $row['cat_name'] . '</option>';
 	}
 
 	$smcFunc['db_free_result']($request);
 
 	$display .= '
-			<option value="all">' . $txt['arcade_all'] . '</option>
+			<option value="all">&nbsp;' . $txt['arcade_all'] . '</option>
 		</select>
 	</form>';
 
@@ -1028,12 +1036,12 @@ function ArcadeCategoryDropdown()
 
 function small_game_query($condition)
 {
-	global $scripturl, $smcFunc, $modSettings, $txt, $user_info, $boardurl;
+	global $scripturl, $smcFunc, $modSettings, $txt, $user_info, $boardurl, $settings;
 
 	$games = array();
 	$request = $smcFunc['db_query']('', '
 		SELECT game.id_game, game.game_name, game.game_rating, game.game_directory, game.thumbnail, game.member_groups, game.thumbnail_small, game.id_cat,
-		IFNULL(score.id_score,0) AS id_score, IFNULL(score.score,0) AS champScore,IFNULL(mem.id_member,0) AS id_member,
+		IFNULL(score.id_score,0) AS id_score, IFNULL(score.score,0) AS champScore,IFNULL(mem.id_member,0) AS id_member, category.cat_icon,
 		IFNULL(mem.real_name,0) AS real_name
 		FROM {db_prefix}arcade_games AS game
 		  LEFT JOIN {db_prefix}arcade_scores AS score ON (score.id_score = game.id_champion_score)
@@ -1058,6 +1066,7 @@ function small_game_query($condition)
 				'play' => $scripturl . '?action=arcade;sa=play;game=' . $game['id_game'] . ';#playgame',
 				),
 			'name' => $game['game_name'],
+			'cat_icon' => !empty($row['cat_icon']) ? $settings['default_theme_url'] . '/arc_icons/' . $row['cat_icon'] : '',
 			'rating' => $game['game_rating'],
 			'rating2' => round($game['game_rating']),
 			'thumbnail' => $gameico,
@@ -1078,7 +1087,7 @@ function small_game_query($condition)
 
 function ArcadeCats($highlight='')
 {
-	global $smcFunc, $db_prefix, $context, $scripturl, $txt, $boardurl, $modSettings;
+	global $smcFunc, $db_prefix, $context, $scripturl, $txt, $boardurl, $modSettings, $settings;
 
 	$kittens = '';
 	/* These are your adjustable variables */
@@ -1088,7 +1097,7 @@ function ArcadeCats($highlight='')
 	if (empty($modSettings['arcade_catHeight']))
 		$modSettings['arcade_catHeight'] = 20;
 
-	$icon_folder = $boardurl. '/Themes/default/images/arc_icons/';
+	$icon_folder = $settings['default_images_url'] . '/arc_icons/';
 	$icon_width = (int)$modSettings['arcade_catWidth'];
 	$icon_height = (int)$modSettings['arcade_catHeight'];
 	$var = array();
@@ -1101,8 +1110,8 @@ function ArcadeCats($highlight='')
 
    $top = array();
 
-	while ($the_cat = $smcFunc['db_fetch_assoc']($result))
-		$context['arcade']['cats'][] = array($the_cat['id_cat'], $the_cat['cat_name'], $the_cat['num_games']);
+	while ($categories = $smcFunc['db_fetch_assoc']($result))
+		$context['arcade']['cats'][] = array($categories['id_cat'], $categories['cat_name'], $categories['num_games'], $categories['cat_icon']);
 
    $smcFunc['db_free_result']($result);
 
@@ -1124,8 +1133,8 @@ function ArcadeCats($highlight='')
 		if ($highlight == '0')
 		{
 			$context['cat_name'] = $txt['arcade_no_category'];
-			$B_start = '<b>';
-			$B_stop = '</b>';
+			$B_start = '<strong>';
+			$B_stop = '</strong>';
 		}
 		else
 		{
@@ -1134,23 +1143,21 @@ function ArcadeCats($highlight='')
 		}
 
 		$gamepic_name = 'Unassigned';
-		$category_pic = '<a href="' . $scripturl . '?action=arcade;category=0"><img src="' . $icon_folder . $gamepic_name . '.gif" alt="" title="' . $gamepic_name . '" style="border: 0px;width: ' . $icon_width . 'px;height: ' . $icon_height . 'px;" /></a>';
+		$category_pic = '<a href="' . $scripturl . '?action=arcade;category=0"><img src="' . $icon_folder . $gamepic_name . '.gif" alt="&nbsp;" title="' . $gamepic_name . '" style="border: 0px;width: ' . $icon_width . 'px;height: ' . $icon_height . 'px;" /></a>';
 		$kittens .= '<div style="display: table;width: 100%;"><span style="display: table-cell;vertical-align: bottom;padding-top: 15px;border: 0px;width: 20%;" class="centertext windowbg2 smalltext">' . $category_pic . '<br />';
 		$kittens .= '<a href="' . $scripturl . '?action=arcade;category=0" title="' . $txt['alt_no_cats'] . '" >' . $B_start . sprintf($txt['arcade_no_cats'], $no_cat) . $B_stop . '</a></span>';
 	}
 	else
 		$lines = 0;
 
-	if (isset($context['arcade']['cats']))
+	if (!empty($context['arcade']['cats']))
 	{
 		foreach ($context['arcade']['cats'] as $cat)
 		{
-			$var = $cat[1];
-			$gamepic_name = ArcadeSpecialChars($var, 'image');
-			$filter = array(' ','--','&quot;','!','@','#','$','%','^','&','*','(',')','_','+','{','}','|',':','"','<','>','?','[',']','\\',';',"'",',','.','/','*','+','~','`','=');
-			$gamepic_name = str_replace("&#039;", "_", $gamepic_name);
-			$gamepic_name = str_replace($filter, "_", $gamepic_name);
-			$category_pic = '<a href="' . $scripturl.'?action=arcade;category=' . $cat[0] . '"><img src="' . $icon_folder . $gamepic_name . '.gif" alt="" title="' . $cat[1] . '" style="border: 0px;width: ' . $icon_width . 'px;height: ' . $icon_height . 'px;" /></a><br />';
+			$gamepic_name = ArcadeSpecialChars($cat[1], 'image');
+			$filter = array(' ','--','&quot;','!','@','#','$','%','^','&','*','(',')','_','+','{','}','|',':','"','<','>','?','[',']','\\',';',"'",',','.','/','*','+','~','`','=', "&#039;");
+			$gamepic_name = !empty($cat[3]) ? $cat[3] : str_replace($filter, "_", $gamepic_name);
+			$category_pic = '<a href="' . $scripturl.'?action=arcade;category=' . $cat[0] . '"><img src="' . $icon_folder . $gamepic_name . '.gif" alt="&nbsp;" title="' . $cat[1] . '" style="border: 0px;width: ' . $icon_width . 'px;height: ' . $icon_height . 'px;" /></a><br />';
 
 			if ($highlight == $cat[0] )
 			{

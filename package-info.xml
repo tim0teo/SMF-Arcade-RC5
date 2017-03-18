@@ -50,7 +50,7 @@
 		<require-file name="Sources/SWFReader.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeSkinB.php" destination="$sourcedir" />
 		<require-file name="Sources/Tar.php" destination="$sourcedir" />
-		<require-file name="Sources/TarClass.php" destination="$sourcedir" />		
+		<require-file name="Sources/TarClass.php" destination="$sourcedir" />
 		<require-file name="Sources/ArcadePopup-smf2.php" destination="$sourcedir" />
 		<require-file name="Sources/PEAR.php" destination="$sourcedir" />
 		<require-file name="Sources/PEAR5.php" destination="$sourcedir" />
@@ -76,11 +76,7 @@
 		<require-file name="Themes/default/ArcadeSkinListB.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeGamePop.template.php" destination="$themedir" />
 		<require-file name="Themes/default/ArcadeReports.template.php" destination="$themedir" />
-		<require-file name="Themes/default/ArcadeOnline.template.php" destination="$themedir" />
-
-		<!-- These files go into the Core Theme directory -->
-		<require-file name="core/Jeza.template.php" destination="$boarddir/Themes/core" />
-		<require-file name="core/JezaList.template.php" destination="$boarddir/Themes/core" />
+		<require-file name="Themes/default/ArcadeOnline.template.php" destination="$themedir" />		
 
 		<!-- These files go into the Default Theme scripts directory -->
 		<require-file name="Themes/default/scripts/arcade.js" destination="$themedir/scripts" />
@@ -91,20 +87,20 @@
 		<require-file name="Themes/default/scripts/arcade-uploader-html5.js" destination="$themedir/scripts" />
 
 		<!-- These images go into the Default Theme images directory -->
-		<require-file name="Themes/default/images/arcade_star.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/arcade_star2.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/arena_accept.png" destination="$imagesdir" />
-		<require-file name="Themes/default/images/arena_decline.png" destination="$imagesdir" />
-		<require-file name="Themes/default/images/favorite.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/favorite2.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/gold.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arcade_star.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/arcade_star2.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/arena_accept.png" destination="$themedir/images" />
+		<require-file name="Themes/default/images/arena_decline.png" destination="$themedir/images" />
+		<require-file name="Themes/default/images/favorite.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/favorite2.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/gold.gif" destination="$themedir/images" />
 		<require-file name="Themes/default/images/admin/feature_arcade.png" destination="$themedir/images/admin" />
-		<require-file name="Themes/default/images/arcade_edit.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/1.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/2.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/3.gif" destination="$imagesdir" />
-		<require-file name="arc_icons/game.gif" destination="$imagesdir/bbc" />
-		<require-dir error="skip" name="arc_icons" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arcade_edit.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/1.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/2.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/3.gif" destination="$themedir/images" />
+		<require-file name="arc_icons/game.gif" destination="$themedir/images/bbc" />
+		<require-dir error="skip" name="arc_icons" destination="$themedir/images" />
 
 		<!-- These files/folders go into the Main directory -->
 		<require-file name="arcade.php" destination="$boarddir" />
@@ -162,7 +158,7 @@
 		<require-file name="Sources/SWFReader.php" destination="$sourcedir" />
 		<require-file name="Sources/Subs-ArcadeSkinA.php" destination="$sourcedir" />
 		<require-file name="Sources/Tar.php" destination="$sourcedir" />
-		<require-file name="Sources/TarClass.php" destination="$sourcedir" />		
+		<require-file name="Sources/TarClass.php" destination="$sourcedir" />
 		<require-file name="Sources/ArcadePopup-smf2.php" destination="$sourcedir" />
 		<require-file name="Sources/PEAR.php" destination="$sourcedir" />
 		<require-file name="Sources/PEAR5.php" destination="$sourcedir" />
@@ -199,30 +195,30 @@
 		<require-file name="Themes/default/scripts/arcade-uploader-html5.js" destination="$themedir/scripts" />
 
 		<!-- These images go into the Default Theme images directory -->
-		<require-file name="Themes/default/images/arcade_star.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/arcade_star2.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/arena_accept.png" destination="$imagesdir" />
-		<require-file name="Themes/default/images/arena_decline.png" destination="$imagesdir" />
-		<require-file name="Themes/default/images/favorite.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/favorite2.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/gold.gif" destination="$imagesdir" />
+		<require-file name="Themes/default/images/arcade_star.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/arcade_star2.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/arena_accept.png" destination="$themedir/images" />
+		<require-file name="Themes/default/images/arena_decline.png" destination="$themedir/images" />
+		<require-file name="Themes/default/images/favorite.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/favorite2.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/gold.gif" destination="$themedir/images" />
 		<require-file name="Themes/default/images/admin/feature_arcade.png" destination="$themedir/images/admin" />
-		<require-file name="Themes/default/images/1.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/2.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/3.gif" destination="$imagesdir" />
-		<require-file name="Themes/default/images/arcade_games.png" destination="$imagesdir" />
-		<require-file name="Themes/default/images/arcade_edit.gif" destination="$imagesdir" />
-		<require-file name="arc_icons/game.gif" destination="$imagesdir/bbc" />
-		<require-file name="Themes/default/images/admin/arcade_maintenance.png" destination="$imagesdir/admin" />
-		<require-file name="Themes/default/images/admin/arcade_general.png" destination="$imagesdir/admin" />
-		<require-file name="Themes/default/images/admin/arcade_settings.png" destination="$imagesdir/admin" />
-		<require-file name="Themes/default/images/admin/arcade_categories.png" destination="$imagesdir/admin" />
-		<require-file name="Themes/default/images/admin/big/arcade_maintenance.png" destination="$imagesdir/admin/big" />
-		<require-file name="Themes/default/images/admin/big/arcade_general.png" destination="$imagesdir/admin/big" />
-		<require-file name="Themes/default/images/admin/big/arcade_settings.png" destination="$imagesdir/admin/big" />
-		<require-file name="Themes/default/images/admin/big/arcade_categories.png" destination="$imagesdir/admin/big" />
-		<require-file name="Themes/default/images/admin/big/index.php" destination="$imagesdir/admin/big" />
-		<require-dir  name="arc_icons" destination="$imagesdir" />
+		<require-file name="Themes/default/images/1.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/2.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/3.gif" destination="$themedir/images" />
+		<require-file name="Themes/default/images/arcade_games.png" destination="$themedir/images" />
+		<require-file name="Themes/default/images/arcade_edit.gif" destination="$themedir/images" />
+		<require-file name="arc_icons/game.gif" destination="$themedir/images/bbc" />
+		<require-file name="Themes/default/images/admin/arcade_maintenance.png" destination="$themedir/images/admin" />
+		<require-file name="Themes/default/images/admin/arcade_general.png" destination="$themedir/images/admin" />
+		<require-file name="Themes/default/images/admin/arcade_settings.png" destination="$themedir/images/admin" />
+		<require-file name="Themes/default/images/admin/arcade_categories.png" destination="$themedir/images/admin" />
+		<require-file name="Themes/default/images/admin/big/arcade_maintenance.png" destination="$themedir/images/admin/big" />
+		<require-file name="Themes/default/images/admin/big/arcade_general.png" destination="$themedir/images/admin/big" />
+		<require-file name="Themes/default/images/admin/big/arcade_settings.png" destination="$themedir/images/admin/big" />
+		<require-file name="Themes/default/images/admin/big/arcade_categories.png" destination="$themedir/images/admin/big" />
+		<require-file name="Themes/default/images/admin/big/index.php" destination="$themedir/images/admin/big" />
+		<require-dir  name="arc_icons" destination="$themedir/images" />
 
 		<!-- These files/folders go into the Main directory -->
 		<require-file name="arcade.php" destination="$boarddir" />
@@ -288,7 +284,7 @@
 	    <remove-file name="$sourcedir/TarClass.php" />
 		<remove-file name="$sourcedir/ArcadePopup-smf2.php" />
 		<remove-file name="$sourcedir/ArcadeReport.php" />
-		<remove-file name="$sourcedir/ArcadeDownload.php" />		
+		<remove-file name="$sourcedir/ArcadeDownload.php" />
 		<remove-file name="$sourcedir/PEAR.php" />
 		<remove-file name="$sourcedir/PEAR5.php" />
 		<remove-file name="$sourcedir/ArcadeOnline.php" />
@@ -328,28 +324,28 @@
 		<remove-file name="$languagedir/ArcadeSkinA.english-utf8.php" />
 
 		<!-- Remove these files from the images directory -->
-		<remove-file name="$imagesdir/arena_accept.png" />
-		<remove-file name="$imagesdir/arena_decline.png" />
-		<remove-file name="$imagesdir/favorite.gif" />
-		<remove-file name="$imagesdir/favorite2.gif" />
-		<remove-file name="$imagesdir/arcade_star.gif" />
-		<remove-file name="$imagesdir/arcade_star2.gif" />
-		<remove-file name="$imagesdir/gold.gif" />
-		<remove-file name="$imagesdir/arcade_edit.gif" />
-		<remove-file name="$imagesdir/admin/feature_arcade.png" />
-		<remove-file name="$imagesdir/1.gif" />
-		<remove-file name="$imagesdir/2.gif" />
-		<remove-file name="$imagesdir/3.gif" />
-		<remove-file name="$imagesdir/gold.gif" />
-		<remove-file name="$imagesdir/bbc/game.gif" />
-		<remove-file name="$imagesdir/arc_icons/arcade_popup_error.gif" />
-		<remove-file name="$imagesdir/arc_icons/arcade_popup_logo.png" />
-		<remove-file name="$imagesdir/arc_icons/dl_btn_popup.png" />
-		<remove-file name="$imagesdir/arc_icons/popup_play_btn.gif" />
-		<remove-file name="$imagesdir/arc_icons/popup_ie_bg.png" />
-		<remove-file name="$imagesdir/arc_icons/thearcade.png" />
-		<remove-file name="$imagesdir/arc_icons/game_popup_saver.swf" />
-		<remove-file name="$imagesdir/arc_icons/dl_btn.png" />
+		<remove-file name="$themedir/images/arena_accept.png" />
+		<remove-file name="$themedir/images/arena_decline.png" />
+		<remove-file name="$themedir/images/favorite.gif" />
+		<remove-file name="$themedir/images/favorite2.gif" />
+		<remove-file name="$themedir/images/arcade_star.gif" />
+		<remove-file name="$themedir/images/arcade_star2.gif" />
+		<remove-file name="$themedir/images/gold.gif" />
+		<remove-file name="$themedir/images/arcade_edit.gif" />
+		<remove-file name="$themedir/images/admin/feature_arcade.png" />
+		<remove-file name="$themedir/images/1.gif" />
+		<remove-file name="$themedir/images/2.gif" />
+		<remove-file name="$themedir/images/3.gif" />
+		<remove-file name="$themedir/images/gold.gif" />
+		<remove-file name="$themedir/images/bbc/game.gif" />
+		<remove-file name="$themedir/images/arc_icons/arcade_popup_error.gif" />
+		<remove-file name="$themedir/images/arc_icons/arcade_popup_logo.png" />
+		<remove-file name="$themedir/images/arc_icons/dl_btn_popup.png" />
+		<remove-file name="$themedir/images/arc_icons/popup_play_btn.gif" />
+		<remove-file name="$themedir/images/arc_icons/popup_ie_bg.png" />
+		<remove-file name="$themedir/images/arc_icons/thearcade.png" />
+		<remove-file name="$themedir/images/arc_icons/game_popup_saver.swf" />
+		<remove-file name="$themedir/images/arc_icons/dl_btn.png" />
 
 		<!-- Remove these files from the main directroy -->
 		<remove-file name="$boarddir/arcade.php" />
@@ -392,7 +388,7 @@
 	    <remove-file name="$sourcedir/TarClass.php" />
 		<remove-file name="$sourcedir/ArcadePopup-smf2.php" />
 		<remove-file name="$sourcedir/ArcadeReport.php" />
-		<remove-file name="$sourcedir/ArcadeDownload.php" />		
+		<remove-file name="$sourcedir/ArcadeDownload.php" />
 		<remove-file name="$sourcedir/PEAR.php" />
 		<remove-file name="$sourcedir/PEAR5.php" />
 		<remove-file name="$sourcedir/ArcadeOnline.php" />
@@ -432,37 +428,37 @@
 		<remove-file name="$languagedir/ArcadeSkinA.english-utf8.php" />
 
 		<!-- Remove these files from the images directory -->
-		<remove-file name="$imagesdir/arena_accept.png" />
-		<remove-file name="$imagesdir/arena_decline.png" />
-		<remove-file name="$imagesdir/favorite.gif" />
-		<remove-file name="$imagesdir/favorite2.gif" />
-		<remove-file name="$imagesdir/arcade_star.gif" />
-		<remove-file name="$imagesdir/arcade_star2.gif" />
-		<remove-file name="$imagesdir/gold.gif" />
-		<remove-file name="$imagesdir/admin/feature_arcade.png" />
-		<remove-file name="$imagesdir/1.gif" />
-		<remove-file name="$imagesdir/2.gif" />
-		<remove-file name="$imagesdir/3.gif" />
-		<remove-file name="$imagesdir/arcade_games.png" />
-		<remove-file name="$imagesdir/arcade_edit.gif" />
-		<remove-file name="$imagesdir/gold.gif" />
-		<remove-file name="$imagesdir/bbc/game.gif" />
-		<remove-file name="$imagesdir/arc_icons/arcade_popup_error.gif" />
-		<remove-file name="$imagesdir/arc_icons/arcade_popup_logo.png" />
-		<remove-file name="$imagesdir/arc_icons/dl_btn_popup.png" />
-		<remove-file name="$imagesdir/arc_icons/popup_play_btn.gif" />
-		<remove-file name="$imagesdir/arc_icons/popup_ie_bg.png" />
-		<remove-file name="$imagesdir/arc_icons/thearcade.png" />
-		<remove-file name="$imagesdir/arc_icons/game_popup_saver.swf" />
-		<remove-file name="$imagesdir/arc_icons/dl_btn.png" />
-		<remove-file name="$imagesdir/admin/big/arcade_maintenance.png" />
-		<remove-file name="$imagesdir/admin/big/arcade_general.png" />
-		<remove-file name="$imagesdir/admin/big/arcade_settings.png" />
-		<remove-file name="$imagesdir/admin/big/arcade_categories.png" />
-		<remove-file name="$imagesdir/admin/arcade_maintenance.png" />
-		<remove-file name="$imagesdir/admin/arcade_general.png" />
-		<remove-file name="$imagesdir/admin/arcade_settings.png" />
-		<remove-file name="$imagesdir/admin/arcade_categories.png" />
+		<remove-file name="$themedir/images/arena_accept.png" />
+		<remove-file name="$themedir/images/arena_decline.png" />
+		<remove-file name="$themedir/images/favorite.gif" />
+		<remove-file name="$themedir/images/favorite2.gif" />
+		<remove-file name="$themedir/images/arcade_star.gif" />
+		<remove-file name="$themedir/images/arcade_star2.gif" />
+		<remove-file name="$themedir/images/gold.gif" />
+		<remove-file name="$themedir/images/admin/feature_arcade.png" />
+		<remove-file name="$themedir/images/1.gif" />
+		<remove-file name="$themedir/images/2.gif" />
+		<remove-file name="$themedir/images/3.gif" />
+		<remove-file name="$themedir/images/arcade_games.png" />
+		<remove-file name="$themedir/images/arcade_edit.gif" />
+		<remove-file name="$themedir/images/gold.gif" />
+		<remove-file name="$themedir/images/bbc/game.gif" />
+		<remove-file name="$themedir/images/arc_icons/arcade_popup_error.gif" />
+		<remove-file name="$themedir/images/arc_icons/arcade_popup_logo.png" />
+		<remove-file name="$themedir/images/arc_icons/dl_btn_popup.png" />
+		<remove-file name="$themedir/images/arc_icons/popup_play_btn.gif" />
+		<remove-file name="$themedir/images/arc_icons/popup_ie_bg.png" />
+		<remove-file name="$themedir/images/arc_icons/thearcade.png" />
+		<remove-file name="$themedir/images/arc_icons/game_popup_saver.swf" />
+		<remove-file name="$themedir/images/arc_icons/dl_btn.png" />
+		<remove-file name="$themedir/images/admin/big/arcade_maintenance.png" />
+		<remove-file name="$themedir/images/admin/big/arcade_general.png" />
+		<remove-file name="$themedir/images/admin/big/arcade_settings.png" />
+		<remove-file name="$themedir/images/admin/big/arcade_categories.png" />
+		<remove-file name="$themedir/images/admin/arcade_maintenance.png" />
+		<remove-file name="$themedir/images/admin/arcade_general.png" />
+		<remove-file name="$themedir/images/admin/arcade_settings.png" />
+		<remove-file name="$themedir/images/admin/arcade_categories.png" />
 
 		<!-- Remove these files from the main directroy -->
 		<remove-file name="$boarddir/arcade.php" />

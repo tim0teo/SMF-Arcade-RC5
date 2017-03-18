@@ -221,6 +221,9 @@ function loadArcade($mode = 'normal', $index = '')
 				$context['arcade_defiant']['cat_width'] = 20;
 				$context['arcade_defiant']['cat_height'] = 20;
 				$context['page_title'] = $txt['arcade_game_list'];
+				$width = !empty($modSettings['skin_avatar_size_width']) && (int)$modSettings['skin_avatar_size_width'] > 0 ? (int)$modSettings['skin_avatar_size_width'] : 50;
+				$height = !empty($modSettings['skin_avatar_size_height']) && (int)$modSettings['skin_avatar_size_height'] > 0 ? (int)$modSettings['skin_avatar_size_height'] : 50;
+				$context['arcade_user_avatar'] = (!empty($context['user']['avatar']['href'])) ? ArcadeSizer($context['user']['avatar']['href'], $width, $height) : array($width, $height);
 				loadTemplate('ArcadeSkinB');
 			}
 			break;

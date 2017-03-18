@@ -46,6 +46,8 @@ function ArcadeAdmin()
 
 	$context[$context['admin_menu_name']]['tab_data']['title'] = $txt['arcade_admin_settings'];
 	$context[$context['admin_menu_name']]['tab_data']['description'] = $txt['arcade_general_desc'];
+	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
+	$_SESSION['arcade_cat_message'] = '';
 
 	$subActions = array(
 		'main' => array('ArcadeAdminMain'),
@@ -66,7 +68,7 @@ function ArcadeAdmin()
 function ArcadeAdminMain()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings;
-
+	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 	$context['sub_template'] = 'arcade_admin_main';
 }
 
@@ -79,7 +81,7 @@ function ArcadeAdminSettings($return_config = false)
 			document.getElementById("changeUrl").onclick = function(valid, value){document.getElementById(valid).innerHTML="\' + value + \'"; return false;};
 			document.getElementById("changePath").onclick = function(valid, value){document.getElementById(valid).innerHTML="\' + value + \'"; return false;};
 			document.getElementById("arcadeSkin").onchange = function(){document.getElementById("arcadeSkin").form.submit(); return false;};
-		};	
+		};
 	</script>';
 
 	if ($return_config)
@@ -116,6 +118,9 @@ function ArcadeAdminSettings($return_config = false)
 			array('check', 'arcadeShowIC'),
 			array('check', 'arcadeShowOnline'),
 		'',
+			array('int', 'arcade_catWidth'),
+			array('int', 'arcade_catHeight'),
+		'',
 			array('select', 'arcadeSkin',
 				array(&$txt['arcade_default'], &$txt['arcade_skin_a'], &$txt['arcade_skin_b'])
 			),
@@ -124,43 +129,34 @@ function ArcadeAdminSettings($return_config = false)
 
 	if(isset($modSettings['arcadeSkin']) && $modSettings['arcadeSkin'] == 1)
 	{
-		// Skin A
+		// Skin A (Enterprise)
 		$a_skin_vars = array(
 			array('check', 'arcadeDropCat'),
-			array('int', 'arcade_catWidth'),
-			array('int', 'arcade_catHeight'),
-			array('check', 'arcadeDropCat'),
-			array('int', 'arcade_catWidth'),
-			array('int', 'arcade_catHeight'),
 			array('int', 'arcade_decimal', 'subtext' => $txt['arcade_decimal_recommend']),
 			array('check', 'skin_showcatchamps'),
 			array('int', 'skin_latest_scores'),
 			array('int', 'skin_latest_champs'),
 			array('int', 'skin_latest_games'),
 			array('int', 'skin_most_popular'),
-			array('int', 'skin_avatar_size', 'subtext' => $txt['avsize_recommend']),
+			array('int', 'skin_avatar_size_width', 'subtext' => $txt['avsize_recommend']),
+			array('int', 'skin_avatar_size_height', 'subtext' => $txt['avsize_recommend']),
 		'',
 			);
 		$config_vars = array_merge((array)$config_vars,(array)$a_skin_vars);
 	}
 	elseif(isset($modSettings['arcadeSkin']) && $modSettings['arcadeSkin'] == 2)
 	{
-		// Skin B
+		// Skin B (Defiant)
 		$b_skin_vars = array(
 			array('check', 'arcadeTabs'),
-			array('check', 'arcadeDropCat'),
-			array('int', 'arcade_catWidth'),
-			array('int', 'arcade_catHeight'),
-			array('check', 'arcadeDropCat'),
-			array('int', 'arcade_catWidth'),
-			array('int', 'arcade_catHeight'),
 			array('int', 'arcade_decimal', 'subtext' => $txt['arcade_decimal_recommend']),
 			array('check', 'skin_showcatchamps'),
 			array('int', 'skin_latest_scores'),
 			array('int', 'skin_latest_champs'),
 			array('int', 'skin_latest_games'),
 			array('int', 'skin_most_popular'),
-			array('int', 'skin_avatar_size', 'subtext' => $txt['avsize_recommend']),
+			array('int', 'skin_avatar_sizeb_width', 'subtext' => $txt['avsize_recommend']),
+			array('int', 'skin_avatar_sizeb_height', 'subtext' => $txt['avsize_recommend']),
 		'',
 			);
 		$config_vars = array_merge((array)$config_vars,(array)$b_skin_vars);
@@ -196,7 +192,7 @@ function ArcadeAdminSettings($return_config = false)
 
 	$context['post_url'] = $scripturl . '?action=admin;area=arcade;sa=settings;save';
 	$context['settings_title'] = $txt['arcade_admin_settings'];
-	$context['sub_template'] = 'show_settings';	
+	$context['sub_template'] = 'show_settings';
 
 	prepareDBSettingContext($config_vars);
 }
@@ -265,6 +261,7 @@ function ArcadeAdminCategory()
 		'edit' => array('ArcadeCategoryEdit', 'arcade_admin'),
 		'new' => array('ArcadeCategoryEdit', 'arcade_admin'),
 		'save' => array('ArcadeCategorySave', 'arcade_admin'),
+		'upload' => array('ArcadeCategoryUpload', 'arcade_admin'),
 	);
 
 	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'list';
@@ -316,7 +313,7 @@ function ArcadeCategoryList()
 	}
 
 	$request = $smcFunc['db_query']('', '
-		SELECT id_cat, cat_name, num_games, cat_order
+		SELECT id_cat, cat_name, num_games, cat_order, cat_icon
 		FROM {db_prefix}arcade_categories
 		ORDER BY cat_order',
 		array()
@@ -332,6 +329,7 @@ function ArcadeCategoryList()
 			'href' => $scripturl . '?action=admin;area=arcadecategory;sa=edit;category=' . $row['id_cat'],
 			'games' => $row['num_games'],
 			'order' => $row['cat_order'],
+			'cat_icon' => $row['cat_icon'],
 		);
 	}
 	$smcFunc['db_free_result']($request);
@@ -342,14 +340,24 @@ function ArcadeCategoryList()
 
 function ArcadeCategoryEdit()
 {
-	global $db_prefix, $modSettings, $context, $sourcedir, $smcFunc;
+	global $db_prefix, $modSettings, $context, $sourcedir, $smcFunc, $settings, $user_info, $user_settings;
 
 	$new = false;
+	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
+	$context['post_max_size'] = return_bytes(ini_get('post_max_size')) / 1048576;
+
+	if ($context['arcade_smf_version'] == 'v2.1')
+	{
+		$modSettings['cookieTime'] = 3153600;
+		createToken('admin', 'post');
+	}
+	else
+		require_once($sourcedir . '/Subs-Auth.php');
 
 	if (isset($_REQUEST['category']))
 	{
 		$request = $smcFunc['db_query']('', '
-			SELECT id_cat, cat_name, num_games, cat_order, member_groups
+			SELECT id_cat, cat_name, num_games, cat_order, member_groups, cat_icon
 			FROM {db_prefix}arcade_categories
 			WHERE id_Cat = {int:category}',
 			array(
@@ -357,14 +365,14 @@ function ArcadeCategoryEdit()
 			)
 		);
 
-		$row = $smcFunc['db_fetch_assoc']($request);
+		while ($row = $smcFunc['db_fetch_assoc']($request))
+			$context['category'] = array(
+				'id' => $row['id_cat'],
+				'name' => $row['cat_name'],
+				'member_groups' => explode(',', $row['member_groups']),
+				'cat_icon' => !empty($row['cat_icon']) ? $row['cat_icon'] : '',
+			);
 		$smcFunc['db_free_result']($request);
-
-		$context['category'] = array(
-			'id' => $row['id_cat'],
-			'name' => $row['cat_name'],
-			'member_groups' => explode(',', $row['member_groups']),
-		);
 	}
 	else
 	{
@@ -374,10 +382,28 @@ function ArcadeCategoryEdit()
 			'id' => 'new',
 			'name' => '',
 			'member_groups' => array(),
+			'cat_icon' => '',
 		);
 	}
 
+	$context['arcade_cat_message'] = !empty($_SESSION['arcade_cat_message']) ? $_SESSION['arcade_cat_message'] : '';
+	$context['arcade_cat_file'] = !empty($_SESSION['arcade_cat_file']) ? trim($_SESSION['arcade_cat_file']) : '';
+	list ($_SESSION['arcade_cat_message'], $_SESSION['arcade_cat_file'], $_SESSION['arcade_cat_icon']) = array('', '', '');
+	$context['category']['cat_icon'] = !empty($context['category']['cat_icon']) ? $context['category']['cat_icon'] : '';
 	$context['groups'] = arcadeGetGroups($new ? 'all' : $context['category']['member_groups']);
+	if ((!empty($context['arcade_cat_file'])) && in_array(substr($context['arcade_cat_file'], -4), array('.gif', '.png', '.jpg')))
+	{
+		if (file_exists($settings['default_theme_dir'] . '/images/arc_icons/' . $context['arcade_cat_file']))
+			$_SESSION['arcade_cat_icon'] = $context['arcade_cat_file'];
+		$context['arcade_cat_file'] = '';
+	}
+	elseif ((!empty($context['category']['cat_icon'])) && in_array(substr($context['category']['cat_icon'], -4), array('.gif', '.png', '.jpg')))
+	{
+		$_SESSION['arcade_cat_icon'] = '';
+		if (file_exists($settings['default_theme_dir'] . '/images/arc_icons/' . $context['category']['cat_icon']))
+			$_SESSION['arcade_cat_icon'] = $context['category']['cat_icon'];
+		$context['category']['cat_icon'] = '';
+	}
 
 	// Template
 	$context['sub_template'] = 'arcade_admin_category_edit';
@@ -558,14 +584,21 @@ function ArcadePdlReports($return_config = false)
 function ArcadeCategorySave()
 {
 	global $db_prefix, $modSettings, $context, $sourcedir, $smcFunc;
-
+	$smfVersion = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 	checkSession('post');
+
+	if ($smfVersion == 'v2.1')
+		validateToken('admin', 'post', false);
 
 	$memberGroups = array();
 
 	if (!empty($_REQUEST['groups']))
 		foreach ($_REQUEST['groups'] as $k => $id)
 			$memberGroups[] = (int) $id;
+
+	$_REQUEST['category_icon'] = !empty($_SESSION['arcade_cat_icon']) ? $_SESSION['arcade_cat_icon'] : '';
+	$_SESSION['arcade_cat_file'] = '';
+
 
 	if ($_REQUEST['category'] == 'new')
 	{
@@ -579,8 +612,8 @@ function ArcadeCategorySave()
 
 		$smcFunc['db_insert']('insert',
 			'{db_prefix}arcade_categories',
-			array('cat_name' => 'string', 'member_groups' => 'string', 'cat_order' => 'int',),
-			array($_REQUEST['category_name'], implode(',', $memberGroups), ++$max),
+			array('cat_name' => 'string', 'member_groups' => 'string', 'cat_order' => 'int', 'cat_icon' => 'string',),
+			array($_REQUEST['category_name'], implode(',', $memberGroups), ++$max, $_REQUEST['category_icon']),
 			array('id_cat')
 		);
 	}
@@ -590,16 +623,174 @@ function ArcadeCategorySave()
 			UPDATE {db_prefix}arcade_categories
 			SET
 				cat_name = {string:name},
-				member_groups = {string:groups}
+				member_groups = {string:groups},
+				cat_icon = {string:icon}
 			WHERE id_cat = {int:category}',
 			array(
 				'name' => $_REQUEST['category_name'],
 				'groups' => implode(',', $memberGroups),
-				'category' => $_REQUEST['category']
+				'category' => $_REQUEST['category'],
+				'icon' => $_REQUEST['category_icon'],
 			)
 		);
 	}
 
 	redirectexit('action=admin;area=arcadecategory');
+}
+
+function ArcadeCategoryUpload()
+{
+	global $smcFunc, $modSettings, $settings, $sourcedir, $txt, $context;
+
+	isAllowedTo('arcade_admin');
+	$smfVersion = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
+	$context['post_max_size'] = return_bytes(ini_get('post_max_size')) / 1048576;
+	$_REQUEST['category'] = isset($_REQUEST['upcat']) ? (int)$_REQUEST['upcat'] : 0;
+	$_SESSION['arcade_cat_file'] = '';
+	$width = (!empty($modSettings['arcade_catWidth'])) && (int)$modSettings['arcade_catWidth'] > 0 ? (int)$modSettings['arcade_catWidth'] : 20;
+	$height = (!empty($modSettings['arcade_catHeight'])) && (int)$modSettings['arcade_catHeight'] > 0 ? (int)$modSettings['arcade_catHeight'] : 23;
+	checkSession('post');
+
+	if ($smfVersion == 'v2.1')
+	{
+		$modSettings['cookieTime'] = 3153600;
+		createToken('admin', 'post');
+	}
+
+	$postVar = !empty($_FILES['attachment']) ? $_FILES['attachment'] : (!empty($_FILES['Filedata']) ? $_FILES['Filedata'] : array());
+	list($fileExists, $newname) = array(0, '');
+
+	if (empty($postVar) && isset($_REQUEST['category']))
+		ArcadeCategoryEdit();
+	elseif (empty($postVar))
+		redirectexit('action=admin;area=arcadecategory');
+
+	foreach ($postVar['tmp_name'] as $n => $dummy)
+	{
+		if ($postVar['name'][$n] == '')
+			continue;
+
+		$postVar['name'][$n] = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $postVar['name'][$n]);
+		$newname = trim(basename($postVar['name'][$n]));
+		$target = $settings['default_theme_dir'] . '/images/arc_icons';
+		$tmp_name = $postVar['tmp_name'][$n];
+
+		if (mb_substr($newname, -4) !== '.jpg' && mb_substr($newname, -4) !== '.png' && mb_substr($newname, -4) !== '.gif')
+			continue;
+
+		if (!is_writable($target))
+			if (!chmod($target, 0755))
+				$_SESSION['arcade_cat_message'] = (sprintf($txt['arcade_not_writable'], $target));
+
+		if (!file_exists($target . '/' . $newname))
+		{
+			$fileExists = 0;
+			$com = fopen($target . '/' . $newname, "ab");
+			$in = fopen($tmp_name, "rb");
+			if ($in)
+			{
+				// pause on every MB
+				while ($buff = fread($in, 1048576))
+				{
+					fwrite($com, $buff);
+					sleep(3);
+				}
+				fclose($in);
+			}
+			fclose($com);
+
+			if (!file_exists($target . '/' . $newname))
+				$_SESSION['arcade_cat_message'] = ($txt['arcade_upload_file']);
+
+			@chmod($target . '/' . $newname, 0666);
+			ArcadeImageResize($target . '/' . $newname, $target . '/' . $newname, $width, $height, 1);
+			$_SESSION['arcade_cat_file'] = $newname;
+		}
+		else
+		{
+			$fileExists = 1;
+			ArcadeImageResize($target . '/' . $newname, $target . '/' . $newname, $width, $height, 1);
+			$_SESSION['arcade_cat_file'] = $newname;
+		}
+	}
+
+	if (!empty($newname) && empty($fileExists))
+		$_SESSION['arcade_cat_message'] = sprintf($txt['arcade_upload_complete'] ,$newname);
+	elseif (!empty($fileExists))
+		$_SESSION['arcade_cat_message'] = sprintf($txt['arcade_upload_exists'], $newname);
+	else
+		$_SESSION['arcade_cat_message'] = $txt['arcade_upload_nofile'];
+
+	if(isset($_REQUEST['category']) && !empty($_SESSION['arcade_cat_file']))
+		ArcadeCategoryEdit();
+	else
+		redirectexit('action=admin;area=arcadecategory');
+}
+
+function ArcadeImageResize($src, $dst, $width, $height, $crop=0)
+{
+	if(!list($w, $h) = getimagesize($src))
+		return false;
+
+	$type = strtolower(substr(strrchr($src,"."),1));
+	if($type == 'jpeg')
+		$type = 'jpg';
+
+	switch($type)
+	{
+		case 'gif':
+			$img = imagecreatefromgif($src);
+			break;
+		case 'jpg':
+			$img = imagecreatefromjpeg($src);
+			break;
+		case 'png':
+			$img = imagecreatefrompng($src);
+			break;
+		default:
+			return false;
+	}
+
+	if($crop)
+	{
+		if($w < $width or $h < $height)
+			return false;
+		$ratio = max($width/$w, $height/$h);
+		$h = $height / $ratio;
+		$x = ($w - $width / $ratio) / 2;
+		$w = $width / $ratio;
+	}
+	else
+	{
+		if($w < $width and $h < $height)
+			return false;
+		$ratio = min($width/$w, $height/$h);
+		$width = $w * $ratio;
+		$height = $h * $ratio;
+		$x = 0;
+	}
+
+	$new = imagecreatetruecolor($width, $height);
+
+	if($type == "gif" || $type == "png")
+	{
+		imagecolortransparent($new, imagecolorallocatealpha($new, 0, 0, 0, 127));
+		imagealphablending($new, false);
+		imagesavealpha($new, true);
+	}
+
+	imagecopyresampled($new, $img, 0, 0, $x, 0, $width, $height, $w, $h);
+
+	switch($type)
+	{
+		case 'gif':
+			imagegif($new, $dst);
+			break;
+		case 'png':
+			imagepng($new, $dst);
+			break;
+	}
+
+	return true;
 }
 ?>

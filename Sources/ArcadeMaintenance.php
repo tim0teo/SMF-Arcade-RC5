@@ -74,6 +74,8 @@ function ArcadeMaintenanceActions()
 		'updateGamecache' => array('MaintenanceGameCache'),
 		'onlinePurge' => array('ArcadeMaintenanceOnline'),
 		'downloadPurge' => array('ArcadeMaintenanceDownload'),
+		'shoutboxPurge' => array('arcadeTruncateShouts'),
+		'iconPurge' => array('arcadeCatIconPurge'),
 	);
 
 	$context['maintenance_finished'] = false;
@@ -491,9 +493,12 @@ function ArcadeMaintenanceDownload()
 	array_map('unlink', $files);
 }
 
-function ArcadeScanDir($dir, $indexphp = 'index.php')
+function ArcadeScanDir($dir, $ignore = array('index.php'))
 {
 	$arrfiles = array();
+	if (!array($ignore))
+		$ignore = array($ignore);
+
 	if (is_dir($dir))
 	{
 		if ($handle = opendir($dir))
@@ -501,7 +506,7 @@ function ArcadeScanDir($dir, $indexphp = 'index.php')
 			chdir($dir);
 			while (false !== ($file = readdir($handle)))
 			{
-				if ($file != "." && $file != ".." && substr($file, -1) !== '~' && $file !== $indexphp)
+				if ($file != "." && $file != ".." && substr($file, -1) !== '~' && !in_array($file, $ignore))
 				{
 					if (is_dir($file))
 					{
@@ -519,5 +524,112 @@ function ArcadeScanDir($dir, $indexphp = 'index.php')
 	}
 
 	return $arrfiles;
+}
+
+function arcadeTruncateShouts()
+{
+	global  $smcFunc;
+	isAllowedTo('arcade_admin');
+
+	$smcFunc['db_query']('', 'TRUNCATE {db_prefix}arcade_newshouts',array());
+}
+
+function arcadeCatIconPurge()
+{
+	global $settings, $smcFunc;
+	list($cats, $theme_paths) = array(array(), array());
+
+	$ignore = array(
+		'index.php',
+		'arcade_popup_error.gif',
+		'arcade_popup_logo.png',
+		'cat_new.gif',
+		'cup_g.gif',
+		'cup_s.gif',
+		'cup_b.gif',
+		'del.png',
+		'del1.png',
+		'del2.png',
+		'delete.gif',
+		'dl_btn.png',
+		'dl_btn_popup.png',
+		'download2.gif',
+		'favorite.gif',
+		'favorite2.gif',
+		'first.gif',
+		'firstxx.gif',
+		'game.gif',
+		'game_popup_saver.swf',
+		'gold.gif',
+		'gold1.gif',
+		'icon.jpg',
+		'medals.png',
+		'modify.gif',
+		'modify.png',
+		'noavatar.gif',
+		'pdl_clean.gif',
+		'pdl_download.gif',
+		'popup_ie_bg.png',
+		'popup_play_btn.gif',
+		'second.gif',
+		'star.gif',
+		'star2.gif',
+		'thearcade.png',
+		'third.gif',
+		'tick.gif',
+		);
+
+	$request = $smcFunc['db_query']('', '
+		SELECT cat_icon
+		FROM {db_prefix}arcade_categories
+		ORDER BY cat_icon ASC',
+		array()
+	);
+
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+	{
+		if (!empty($cats['cat_icon']))
+			$cats[] = $row['cat_icon'];
+	}
+	$smcFunc['db_free_result']($request);
+
+	$files = ArcadeScanDir($settings['default_theme_dir'] . '/images/arc_icons', array_merge_recursive($cats, $ignore));
+
+	foreach ($files as $file)
+	{
+		if ((!empty($file)) && file_exists($file))
+			unset($file);
+	}
+
+	// remove files leftover in custom themes
+	$request = $smcFunc['db_query']('', '
+		SELECT id_theme, variable, value
+		FROM {db_prefix}themes
+		WHERE variable = {string:themedir}',
+		array(
+			'themedir' => 'theme_dir',
+		)
+	);
+	$theme_paths = array();
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+		$theme_paths[] = $row['value'];
+
+	$smcFunc['db_free_result']($request);
+
+	foreach ($theme_paths as $path)
+	{
+		if (is_dir($path))
+		{
+			$customFiles = ArcadeScanDir($path . '/images/arc_icons', array());
+
+			foreach ($customFiles as $file)
+				if ((!empty($file)) && file_exists($file))
+					unset($file);
+
+			$customFilesCheck = ArcadeScanDir($path . '/images/arc_icons', array());
+			if (empty($customFilesCheck))
+				rmdir($path);
+		}
+	}
 }
 ?>

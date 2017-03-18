@@ -62,16 +62,17 @@ function ArcadeChamps($count = 3, $type='wins')
 		);
 	}
 
-	isset($modSettings['skin_avatar_size']) ? $size = $modSettings['skin_avatar_size'] : $size = 65;
+	$width = !empty($modSettings['skin_avatar_size_width']) && (int)$modSettings['skin_avatar_size_width'] > 0 ? (int)$modSettings['skin_avatar_size_width'] : 50;
+	$height = !empty($modSettings['skin_avatar_size_height']) && (int)$modSettings['skin_avatar_size_height'] > 0 ? (int)$modSettings['skin_avatar_size_height'] : 50;
 	while ($score = $smcFunc['db_fetch_assoc']($results))
 	{
 		unset($avatar);
 
 		//linked avatar
-		if(stristr($score['avatar'], 'http://'))
+		if (mb_substr($score['avatar'], 0, 7) == 'http://' || mb_substr($score['avatar'], 0, 8) == 'https://')
 		{
-			if($wihi = ArcadeSizer($score['avatar'], $size))
-				$avatar = '<img src="' . $score['avatar'] . '" style="width: ' . $wihi[0] . 'px;height: ' . $wihi[1] . 'px;" alt="" />';
+			if ($wihi = ArcadeSizer($score['avatar'], $width, $height))
+				$avatar = '<img src="' . $score['avatar'] . '" style="width: ' . $wihi[0] . 'px;height: ' . $wihi[1] . 'px;" alt="&nbsp;" />';
 			else
 				unset($avatar);
 		}
@@ -79,26 +80,26 @@ function ArcadeChamps($count = 3, $type='wins')
 		//resident avatar
 		if($score['avatar'] && !isset($avatar))
 		{
-			if($wihi = ArcadeSizer($modSettings['avatar_url'].'/'.$score['avatar'], $size))
-				$avatar = '<img alt="" src="'.$modSettings['avatar_url'].'/'.$score['avatar'].'" style="width: ' . $wihi[0] . 'px;height: ' . $wihi[1] . 'px;" />';
+			if($wihi = ArcadeSizer($modSettings['avatar_url'].'/'.$score['avatar'], $width, $height))
+				$avatar = '<img alt="&nbsp;" src="' . $modSettings['avatar_url'] . '/' . $score['avatar'] . '" style="width: ' . $wihi[0] . 'px;height: ' . $wihi[1] . 'px;" />';
 			else
 				unset($avatar);
 
 		}
 
 		//uploaded avatar custom
-		if(isset($score['filename']) && !isset($avatar) && substr($score['filename'],0, 7) == 'avatar_' )
+		if(isset($score['filename']) && !isset($avatar) && mb_substr($score['filename'],0, 7) == 'avatar_' )
 		{
 			if(isset($modSettings['custom_avatar_dir']) && file_exists($modSettings['custom_avatar_dir'].'/'.$score['filename']))
 			{
-				$wihi = ArcadeSizer($modSettings['custom_avatar_url'].'/'.$score['filename'], $size);
-				$avatar = '<img src="'. $modSettings['custom_avatar_url'].'/'.$score['filename'] .'" style="border: 0px;width: '.$wihi[0].'px;height: '. $wihi[1] .'px;" />';
+				$wihi = ArcadeSizer($modSettings['custom_avatar_url'].'/'.$score['filename'], $width, $height);
+				$avatar = '<img alt="&nbsp;" src="' . $modSettings['custom_avatar_url'] . '/' . $score['filename'] . '" style="border: 0px;width: ' . $wihi[0] . 'px;height: ' . $wihi[1] .'px;" />';
 			}
 		}
 
 		//uploaded avatar attachment
-		if(isset($score['filename']) && !isset($avatar) && substr($score['filename'],0, 7) == 'avatar_')
-			$avatar = '<img src="'.$scripturl.'?action=dlattach;attach='.$score['id_attach'].';type=avatar" alt="" '.($modSettings['avatar_max_height_upload'] > $size ? 'style="height: '.$size.'px;border: 0px;"' : 'style="border: 0px;"').'/>';
+		if(isset($score['filename']) && !isset($avatar) && mb_substr($score['filename'],0, 7) == 'avatar_')
+			$avatar = '<img src="' . $scripturl.'?action=dlattach;attach=' . $score['id_attach'] . ';type=avatar" alt="&nbsp;" style="border: 0px;width: ' . $width . 'px;height: ' . $height . 'px;' . '" />';
 
 		$champ_list[] = array(
 			'id' => $score['id_member'],
@@ -106,7 +107,7 @@ function ArcadeChamps($count = 3, $type='wins')
 			'link' => ($context['user']['is_logged'] && $score['id_member'])? '<a href="' . $scripturl . '?action=profile;u=' . $score['id_member'] . '">' .  $score['real_name'] . '</a>' : $score['real_name'],
 			'champions' => isset($score['champions']) ? $score['champions'] : '',
 			'score' => isset($score['value']) ? $score['value'] : '',
-			'avatar' => isset($avatar) ? $avatar : '<img src="'.$modSettings['avatar_url'].'/noavatar.gif" alt="" />',
+			'avatar' => isset($avatar) ? $avatar : '<img src="' . $modSettings['avatar_url'] . '/noavatar.gif" alt="" />',
 		);
 	}
 
@@ -153,7 +154,7 @@ function ArcadeLatest($count=5,$curved=false)
 			$playerid = $row['id_member'];
 			$player = $row['real_name'];
 			$game_id = $row['id_game'];
-			strlen($row['game_name']) >= 23 ? $row['game_name'] = substr($row['game_name'],0,22).'...': '';
+			strlen($row['game_name']) >= 23 ? $row['game_name'] = mb_substr($row['game_name'],0,22).'...': '';
 			$game_name = $row['game_name'];
 			$score = comma_format($row['score']);
 			$game_pic = $modSettings['gamesUrl'] .'/'.$row['game_directory'].'/'.$row['thumbnail'];
@@ -224,7 +225,7 @@ function ArcadeNewChamps($count = 5)
 			$playerid = $row['id_member'];
 			$player = $row['real_name'];
 			$game_id = $row['id_game'];
-			strlen($row['game_name']) >= 23 ? $row['game_name'] = substr($row['game_name'],0,22) . '...' : '';
+			strlen($row['game_name']) >= 23 ? $row['game_name'] = mb_substr($row['game_name'],0,22) . '...' : '';
 			$game_name = $row['game_name'];
 			$score = $row['score'];
 			$time = date("m/d/Y", $row['end_time']);
@@ -287,7 +288,7 @@ function ArcadeNewestGames($limit=5)
 	{
 		while ($newest_game = $smcFunc['db_fetch_assoc']($results))
 		{
-			strlen($newest_game['game_name']) >= 23 ? $newest_game['game_name'] = substr($newest_game['game_name'],0,22).'...': '';
+			strlen($newest_game['game_name']) >= 23 ? $newest_game['game_name'] = mb_substr($newest_game['game_name'],0,22).'...': '';
 			$newgam .= '
 	<div style="padding-bottom: 0.4em;">
 		<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $newest_game['id_game'] . '"><img src="' . $modSettings['gamesUrl'] . '/' . $newest_game['game_directory'] . '/' . $newest_game['thumbnail'] . '" style="width: 16px;height: 16px;vertical-align: bottom;" alt="Play ' . $newest_game['game_name'] . '" title="Play ' . $newest_game['game_name'] . '" />&nbsp;' . $newest_game['game_name'] . '</a>
@@ -330,7 +331,7 @@ function ArcadePopular($count = 5)
 	{
 		while ($score = $smcFunc['db_fetch_assoc']($results))
 		{
-			strlen($score['game_name']) >= 23 ? $score['game_name'] = substr($score['game_name'],0,22).'...': '';
+			strlen($score['game_name']) >= 23 ? $score['game_name'] = mb_substr($score['game_name'],0,22).'...': '';
 			$pop .= '
 	<div style="padding-bottom: 0.4em;"><a href="' . $scripturl. '?action=arcade;sa=play;game=' . $score['id_game'] . '">' . $score['game_name'] . '
 		<img src="' . $modSettings['gamesUrl'] . '/' . $score['game_directory'] . '/' . $score['thumbnail'] . '" style="width: 16px;height: 16px;vertical-align: bottom;" alt="Play ' . $score['game_name'] . '" title="Play ' . $score['game_name'] . '" /></a><br />

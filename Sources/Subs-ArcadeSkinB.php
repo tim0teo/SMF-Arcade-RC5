@@ -32,7 +32,7 @@ function Arcade3champsBlock($no)
 					<tr>
 						<td style="height: 25px;padding: 1px;">
 							<div style="text-align: right;">
-								<img src="' . $settings['images_url'] . '/arc_icons/cup_g.gif" alt="ico"/>
+								<img src="' . $settings['default_images_url'] . '/arc_icons/cup_g.gif" alt="ico"/>
 							</div>
 						</td>
 						<td style="padding: 1px;">
@@ -62,8 +62,8 @@ function ArcadeRandomGameBlock()
 
 		if ($rating > 0)
 		{
-			$ratecode = str_repeat('<img src="' . $settings['images_url'] . '/arc_icons/star.gif" alt="*" />' , $rating);
-			$ratecode .= str_repeat('<img src="' . $settings['images_url'] . '/arc_icons/star2.gif" alt="*" />' , 5 - $rating);
+			$ratecode = str_repeat('<img src="' . $settings['default_images_url'] . '/arc_icons/star.gif" alt="*" />' , $rating);
+			$ratecode .= str_repeat('<img src="' . $settings['default_images_url'] . '/arc_icons/star2.gif" alt="*" />' , 5 - $rating);
 		}
 
 		$content = '
@@ -371,10 +371,8 @@ function category_games()
 		FROM {db_prefix}arcade_games g, {db_prefix}arcade_categories c
 		WHERE g.id_cat = c.id_cat AND g.enabled = 1
  		GROUP BY g.id_cat
- 		ORDER BY c.cat_order
- 		LIMIT 0, {int:limit}',
-		array(
-		'limit' => $no,
+ 		ORDER BY c.cat_order',
+		array(		
 		)
 	);
 	while ($cat = $smcFunc['db_fetch_assoc']($result))
@@ -387,7 +385,6 @@ function category_games()
 	return $cats;
 }
 
-// functions rewrtitten after this line
 function ArcadeInfoFader()
 {
 	global $modSettings;
@@ -661,7 +658,7 @@ function ArcadeInfoShouts()
 		if (allowedTo('arcade_admin'))
 			$content .= '
 							<a href="' . $scripturl.'?action=arcade;sa=shout;del=' . $shout['id_shout'] . '">
-								<img style="border: 0px;" src="' . $settings['images_url'] . '/arc_icons/del1.png" alt="X"  title="' . $txt['arcade_shout_del'] . '"/>
+								<img style="border: 0px;" src="' . $settings['default_images_url'] . '/arc_icons/del1.png" alt="X"  title="' . $txt['arcade_shout_del'] . '"/>
 							</a>&nbsp;';
 
 		$content .= '

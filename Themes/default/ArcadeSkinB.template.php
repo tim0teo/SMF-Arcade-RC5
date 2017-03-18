@@ -213,13 +213,13 @@ function template_arcade_above()
 								<tr>
 									<td style="padding: 1px;height: 155px;">
 										<div class="centertext">
-											', (!empty($context['user']['avatar']['image']) ? $context['user']['avatar']['image'] : '<img style="border: 0px;width: 50px;height: 50px;" src="' . $settings['images_url'] . '/icons/online.gif" alt="ico" title="' . $txt['arcade_info_defavatar'] . '"/>') , '
+											', (!empty($context['user']['avatar']['href']) ? '<img style="width: ' . $context['arcade_user_avatar'][0] . 'px;height: ' . $context['arcade_user_avatar'][1] . 'px;" alt="&nbsp;" src="' . $context['user']['avatar']['href'] . '" />' : '<img style="border: 0px;width:' . (!empty($modSettings['skin_avatar_sizeb_width']) && (int)$modSettings['skin_avatar_sizeb_width'] > 0 ? $modSettings['skin_avatar_sizeb_width'] . 'px;' : '50px;') . 'height: ' . (!empty($modSettings['skin_avatar_sizeb_height']) && (int)$modSettings['skin_avatar_sizeb_height'] > 0 ? $modSettings['skin_avatar_sizeb_height'] . 'px;' : '50px;') . '" src="' . $settings['default_images_url'] . '/arc_icons/noavatar.gif" alt="&nbsp;" title="' . $txt['arcade_info_defavatar'] . '"/>') , '
 											<div><span style="display: none;">&nbsp;</span></div>
 											<div><span style="display: none;">&nbsp;</span></div>
 											<div class="smalltext">
 												<a href="', $scripturl, '?action=arcade;favorites">
-													<img style="border: 0px;width: 15px;height: 15px;" src="', $settings['images_url'], '/arc_icons/arcade_cat1.gif" alt="ico" title="' . $txt['arcade_info_fav'] . '" /> ', $txt['arcade_u_b_2'], '
-													<img style="border: 0px;width: 15px;height: 15px;" src="' . $settings['images_url'] . '/arc_icons/arcade_cat1.gif" alt="ico" title="' . $txt['arcade_info_fav'] . '" />
+													<img style="border: 0px;width: 15px;height: 15px;" src="', $settings['default_images_url'], '/arc_icons/arcade_cat1.gif" alt="&nbsp;" title="' . $txt['arcade_info_fav'] . '" /> ', $txt['arcade_u_b_2'], '
+													<img style="border: 0px;width: 15px;height: 15px;" src="' . $settings['default_images_url'] . '/arc_icons/arcade_cat1.gif" alt="&nbsp;" title="' . $txt['arcade_info_fav'] . '" />
 												</a>
 											</div>
 										</div>
@@ -276,7 +276,7 @@ function template_arcade_above()
 										</form>
 									</div>
 									<div id="quick_div" class="smalltext centertext" style="display: inline;">', $txt['arcade_search_text'], '</div>
-									<div style="clear: right;display: inline;float: right;padding-right: 30px;">									
+									<div style="clear: right;display: inline;float: right;padding-right: 30px;">
 										<form action="', $scripturl, '?action=arcade;sa=list" method="post" id="sortgames">
 											<select style="width: 180px;" name="sortby" onchange="this.form.submit();">
 												<option value="reset">', $txt['arcade_list_games'], '</option>
@@ -298,14 +298,14 @@ function template_arcade_above()
 							</tr>
 							<tr>
 								<td class="centertext" style="padding: 3px;" colspan="3"><hr /></td>
-							</tr>						
+							</tr>
 							<tr>
 								<td style="clear: both;padding-top: 0px;padding-bottom: 15px;vertical-align: top;" class="centertext" colspan="3">
 									<span style="font-style: italic;"><strong>', $txt['arcade_Gamecategory'], '</strong></span>
 								</td>
 							</tr>
 						</table>
-						<table style="width: 100%;border-collapse: collapse;border: 0px;">							
+						<table style="width: 100%;border-collapse: collapse;border: 0px;">
 							<tr>';
 
 	//START CACHE - get the categories from the cache else query them anew
@@ -317,7 +317,7 @@ function template_arcade_above()
 			echo '
 								<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
 									<a href="', $scripturl, '?action=arcade;sa=list;sortby=age;">
-										<img class="icon" style="vertical-align: middle;border: 0px;width: ', $context['arcade_defiant']['cat_width'],'px;height: ', $context['arcade_defiant']['cat_height'], 'px;" src="', $settings['images_url'], '/arc_icons/cat_new.gif" alt="ico" title="', $txt['arcade_info_showlate'], '"/>
+										<img class="icon" style="vertical-align: middle;border: 0px;width: ', $context['arcade_defiant']['cat_width'],'px;height: ', $context['arcade_defiant']['cat_height'], 'px;" src="', $settings['default_images_url'], '/arc_icons/cat_new.gif" alt="&nbsp;" title="', $txt['arcade_info_showlate'], '"/>
 										<span>&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')</span>
 									</a>
 								</td>';
@@ -332,7 +332,7 @@ function template_arcade_above()
 				echo'
 								<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
 									<a href="', $scripturl, '?action=arcade;category=', $tmp['id_category'], '">
-										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="', $settings['images_url'], '/arc_icons/', $tmp['category_icon'], '" alt="ico" title="', sprintf($txt['arcade_info_showcat'], $tmp['category_name']), '" />
+										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="', $settings['default_images_url'], '/arc_icons/', $tmp['cat_icon'], '" alt="&nbsp;" title="', sprintf($txt['arcade_info_showcat'], $tmp['category_name']), '" />
 										<span style="vertical-align: middle;">&nbsp;', $tmp['category_name'], '&nbsp;(', $tmp['games'], ')</span>
 									</a>
 								</td>';
@@ -345,7 +345,7 @@ function template_arcade_above()
 			echo '
 								<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
 									<a href="',$scripturl,'?action=arcade;sa=list;sortby=age;">
-										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="', $settings['images_url'], '/arc_icons/cat_new.gif" alt="ico" title="', $txt['arcade_info_showlate'], '"/>
+										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="', $settings['default_images_url'], '/arc_icons/cat_new.gif" alt="&nbsp;" title="', $txt['arcade_info_showlate'], '"/>
 										&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')
 									</a>
 								</td>';
@@ -360,7 +360,7 @@ function template_arcade_above()
 				echo'
 								<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
 									<a href="', $scripturl, '?action=arcade;category=', $tmp['id_category'], '">
-										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['images_url'], '/arc_icons/', $tmp['category_icon'], '" alt="ico" title="', sprintf($txt['arcade_info_showcat'], $tmp['category_name']), '" />
+										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['default_images_url'], '/arc_icons/', $tmp['cat_icon'], '" alt="&nbsp" title="', sprintf($txt['arcade_info_showcat'], $tmp['category_name']), '" />
 											&nbsp;', $tmp['category_name'], '&nbsp;(', $tmp['games'], ')
 									</a>
 								</td>';
@@ -374,7 +374,7 @@ function template_arcade_above()
 		echo '
 								<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
 									<a href="',$scripturl,'?action=arcade;sa=list;sortby=age;">
-										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['images_url'],'/arc_icons/cat_new.gif" alt="" title="', $txt['arcade_info_showlate'], '"/>
+										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['default_images_url'],'/arc_icons/cat_new.gif" alt="&nbsp;" title="', $txt['arcade_info_showlate'], '"/>
 										&nbsp;', $txt['arcade_LatestGames'], '&nbsp;(', $modSettings['gamesPerPage'], ')
 									</a>
 								</td>';
@@ -389,7 +389,7 @@ function template_arcade_above()
 			echo'
 								<td style="padding: 3px;width: 25%;text-align: left;">&nbsp;&nbsp;
 									<a href="', $scripturl, '?action=arcade;category=', $tmp['id_cat'], '">
-										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['images_url'], '/arc_icons/', $tmp['cat_icon'], '" alt="" title="', sprintf($txt['arcade_info_showcat'], $tmp['cat_name']), '" />
+										<img class="icon" style="vertical-align: middle;border: 0px;width: ',$context['arcade_defiant']['cat_width'],'px;height: ',$context['arcade_defiant']['cat_height'],'px;" src="',$settings['default_images_url'], '/arc_icons/', $tmp['cat_icon'], '" alt="&nbsp;" title="', sprintf($txt['arcade_info_showcat'], $tmp['cat_name']), '" />
 											&nbsp;', $tmp['cat_name'], '&nbsp;(', $tmp['games'], ')
 									</a>
 								</td>';

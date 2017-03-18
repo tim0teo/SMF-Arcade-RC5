@@ -130,8 +130,8 @@ function loadGame($id_game, $from_admin = false)
 	$result = $smcFunc['db_query']('', '
 		SELECT game.id_game, game.game_name, game.description, game.game_rating, game.num_plays,
 			game.game_file, game.game_directory, game.submit_system, game.internal_name,
-			game.score_type, game.thumbnail, game.thumbnail_small,
-			game.help, game.enabled, game.member_groups, game.extra_data, game.id_cat,
+			game.score_type, game.thumbnail, game.thumbnail_small, game.help,
+			game.enabled, game.member_groups, game.extra_data, game.id_cat, category.cat_icon,
 			IFNULL(score.id_score,0) AS id_score, IFNULL(score.score, 0) AS champ_score,
 			IFNULL(mem.id_member, 0) AS id_member, IFNULL(mem.real_name, score.player_name) AS real_name,
 			IFNULL(score.end_time, 0) AS champion_time, IFNULL(favorite.id_favorite, 0) AS is_favorite,

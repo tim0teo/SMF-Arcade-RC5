@@ -1,9 +1,9 @@
 Changes go downward, months go upward.  Please scroll to the bottom for a legend.
 Changelog started February 25, 2007.
 
-SMF Arcade 2.5 RC5                                                    xx.02.2017
+SMF Arcade 2.55      			                                      xx.03.2017
 ================================================================================
-February 2017
+March 2017
  + Added Defiant theme (E-Arcade clone)
  & Language added for Defiant theme
  + Three list types now available
@@ -36,6 +36,11 @@ February 2017
  ! Fixed deletion of unique game directories when games are uninstalled
  ! Fixed installation issue for when E-Arcade was previously installed
  + Uninstalling games now deletes game topics if applicable
+ * Icons are now solely stored in the default theme images directory
+ + Option to upload image files for categories (jpg, gif, png ~ auto resizing to selected default dimensions)
+ + Maintenance option to purge unused arcade icons from the arc_icons directory (deletes files not currently used by the arcade)
+ & New language for all icon related changes
+ 
  
 SMF Arcade 2.5 RC4                                                    xx.12.2015
 ================================================================================

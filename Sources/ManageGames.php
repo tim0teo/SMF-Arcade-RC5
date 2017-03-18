@@ -33,7 +33,7 @@ function ManageGames()
 	global $scripturl, $txt, $context, $sourcedir, $smcFunc, $modSettings, $settings, $smfVersion;
 
 	require_once($sourcedir . '/Arcade.php');
-	require_once($sourcedir . '/Subs-ArcadeAdmin.php');
+	require_once($sourcedir . '/Subs-ArcadeAdmin.php');	
 	$context['html_headers'] .= '
 	<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/arcade_upload.css?rc4" />';
 
