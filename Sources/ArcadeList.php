@@ -162,6 +162,7 @@ function ArcadeList()
 			IFNULL(score.end_time, 0) AS champion_time, IFNULL(category.id_cat, 0) AS id_cat,
 			IFNULL(category.cat_name, {string:empty_string}) AS cat_name' . $select_rows . '
 		FROM {db_prefix}arcade_games AS game
+			LEFT JOIN {db_prefix}arcade_favorite AS favorite ON (favorite.id_game = game.id_game)
 			LEFT JOIN {db_prefix}arcade_scores AS score ON (score.id_score = game.id_champion_score)
 			LEFT JOIN {db_prefix}arcade_scores AS s1 ON (s1.id_game = game.id_game AND s1.position = {int:first})
 			LEFT JOIN {db_prefix}arcade_scores AS s2 ON (s2.id_game = game.id_game AND s2.position = {int:second})

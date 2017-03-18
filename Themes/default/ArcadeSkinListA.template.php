@@ -80,19 +80,19 @@ function template_arcade_list()
 
 			if (!$game['is_favorite'])
 				$fav .= '
-							<img id="favgame' . $game['id'] . '" src="' . $settings['images_url'] . '/favorite.gif" style="width: 16px;height: 16px;border: 0px;" alt="' . $txt['arcade_add_favorites'] . '" />' . '
+							<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite.gif" style="width: 16px;height: 16px;border: 0px;" alt="' . $txt['arcade_add_favorites'] . '" />' . '
 						</a>';
 			else
 				$fav .= '
-							<img id="favgame' . $game['id'] . '" src="' . $settings['images_url'] . '/favorite2.gif" style="width: 16px;height: 16px;border: 0px;" alt="' . $txt['arcade_remove_favorite'] . '" />
+							<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite2.gif" style="width: 16px;height: 16px;border: 0px;" alt="' . $txt['arcade_remove_favorite'] . '" />
 							</a>';
 		}
 
 		$rate = '';
 		if ($game['rating2'] > 0)
-			$rate = str_repeat('<img src="' . $settings['images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']) . str_repeat('<img src="' . $settings['images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']);
+			$rate = str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']) . str_repeat('<img src="' . $settings['images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']);
 		else
-			$rate = str_repeat('<img src="' . $settings['images_url'] . '/arcade_star2.gif" alt="" />' , 5);
+			$rate = str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="" />' , 5);
 
 		if (empty($game['pdl_count']))
 			$game['pdl_count'] = 0;

@@ -138,15 +138,15 @@ function template_arcade_list()
 							<span>
 								<a href="', $game['url']['favorite'], '" onclick="arcade_favorite(', $game['id'] , '); return false;">
 			', !$game['is_favorite'] ? '
-									<img id="favgame' . $game['id'] . '" src="' . $settings['images_url'] . '/favorite.gif" alt="' . $txt['arcade_add_favorites'] . '" />' : '
-									<img id="favgame' . $game['id'] . '" src="' . $settings['images_url'] . '/favorite2.gif" alt="' . $txt['arcade_remove_favorite'] .'" />', '
+									<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite.gif" alt="' . $txt['arcade_add_favorites'] . '" />' : '
+									<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite2.gif" alt="' . $txt['arcade_remove_favorite'] .'" />', '
 								</a>
 							</span>
 							<div><span style="display: none;"></span></div>';
 
 		// Rating
 		if ($game['rating2'] > 0)
-			echo str_repeat('<img src="' . $settings['images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']), str_repeat('<img src="' . $settings['images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']), '<div><span style="display: none;">&nbsp;</span></div>';
+			echo str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']), str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']), '<div><span style="display: none;">&nbsp;</span></div>';
 
 		if ($modSettings['arcadeEnableDownload'])
 			echo $dl_count, '<span style="display: block;"><span style="display: none;">&nbsp;</span></span>';
