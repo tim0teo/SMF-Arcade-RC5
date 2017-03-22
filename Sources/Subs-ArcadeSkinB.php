@@ -320,9 +320,12 @@ function ArcadeShout()
 	elseif (!$user_info['is_guest'])
 	{
 		$_REQUEST['the_shout'] = isset($_REQUEST['the_shout']) ? $_REQUEST['the_shout'] : '';
-		$shout = strlen($_REQUEST['the_shout']) > 100 ? mb_substr($_REQUEST['the_shout'], 0, 100) . '...' : $_REQUEST['the_shout'];
-		$shout = $txt['arcade_shouted'] . $smcFunc['htmlspecialchars']($shout, ENT_QUOTES);
-		add_to_arcade_shoutbox($shout);
+		$shout = trim(strlen($_REQUEST['the_shout']) > 100 ? mb_substr($_REQUEST['the_shout'], 0, 100) . '...' : $_REQUEST['the_shout']);
+		if (!empty($shout))
+		{
+			$shout = $txt['arcade_shouted'] . $smcFunc['htmlspecialchars']($shout, ENT_QUOTES);
+			add_to_arcade_shoutbox($shout);
+		}
 	}
 
 	redirectexit('action=arcade');
@@ -372,7 +375,7 @@ function category_games()
 		WHERE g.id_cat = c.id_cat AND g.enabled = 1
  		GROUP BY g.id_cat
  		ORDER BY c.cat_order',
-		array(		
+		array(
 		)
 	);
 	while ($cat = $smcFunc['db_fetch_assoc']($result))
@@ -674,8 +677,6 @@ function ArcadeInfoShouts()
 	return $content;
 }
 
-
-
 function arcade_shout_parser($img_tag, $version = 'v2.0')
 {
 	global $txt;
@@ -688,7 +689,7 @@ function arcade_shout_parser($img_tag, $version = 'v2.0')
     foreach ($tags as $tag)
 	{
         $old_src = $tag->getAttribute('src');
-        $new_src_url = preg_replace('/\v(?:[\v\h]+)/', '', $old_src);
+        $new_src_url = str_replace('%0A', '', preg_replace('/\v(?:[\v\h]+)/', '', $old_src));
         $tag->setAttribute('src', $new_src_url);
     }
 
@@ -706,7 +707,7 @@ function arcade_shout_parser($img_tag, $version = 'v2.0')
 	if ($version !== 'v2.1')
 		$result = preg_replace('/<img([^>]*)>/i', "<img $1 />", $result);
 
-	return !empty($result) ? $result : $txt['arcade_no_links'];
+	return !empty($result) ? str_replace('%0A', '', $result) : $txt['arcade_no_links'];
 }
 
 function add_to_arcade_shoutbox($shout)

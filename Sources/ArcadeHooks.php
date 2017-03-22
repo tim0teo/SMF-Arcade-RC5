@@ -161,12 +161,16 @@ function Arcade_menu_buttons(&$menu_buttons)
 		$context['allow_admin'] = allowedTo('arcade_admin');
 
 	$context['allow_arcade'] = allowedTo('arcade_view') && !empty($modSettings['arcadeEnabled']);
+	$_SESSION['current_cat'] = !empty($_SESSION['current_cat']) ? $_SESSION['current_cat'] : 'all';
+	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : 'a2z';
+
+	$sort = ($_SESSION['current_cat'] == 0 || $_SESSION['current_cat'] == 'all') && $_SESSION['arcade_sortby'] == 'a2z' ? '' : ';sortby=reset';
 
 	arcade_array_insert($menu_buttons, 'search',
 		array(
 			'arcade' => array(
 				'title' => $txt['arcade'],
-				'href' => $scripturl . '?action=arcade',
+				'href' => $scripturl . '?action=arcade' . $sort,
 				'show' => $context['allow_arcade'],
 				'icon' => 'arcade_games.png',
 				'active_button' => false,

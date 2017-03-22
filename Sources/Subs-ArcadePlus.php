@@ -880,6 +880,9 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
 {
 	global $modSettings, $txt, $context, $scripturl, $db_count;
 	list($content, $context['arcade']['buttons_set'], $context['current_arcade_sa'], $context['arcade']['tour']['show']) = array('', array(), !empty($_REQUEST['sa']) ? $_REQUEST['sa'] : 'list', !empty($context['arcade']['tour']['show']) ? (int)$context['arcade']['tour']['show'] : 0);
+	$_SESSION['current_cat'] = !empty($_SESSION['current_cat']) ? $_SESSION['current_cat'] : 'all';
+	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : 'a2z';
+	$sort = ($_SESSION['current_cat'] == 0 || $_SESSION['current_cat'] == 'all') && $_SESSION['arcade_sortby'] == 'a2z' ? '' : ';sortby=reset';
 
 	if ($context['arcade']['tour']['show'] != 0)
         $context['arcadetour']['buttons_set']['newtour'] =  array(
@@ -906,7 +909,7 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
 	$context['arcade']['buttons_set']['arcade'] =  array(
     	'text' => 'arcade',
 		'image' => 'arcade.gif',
-    	'url' => $scripturl . '?action=arcade',
+    	'url' => $scripturl . '?action=arcade' . $sort,
 		'active' => in_array($context['current_arcade_sa'], array('list', 'highscore', 'online', 'play')) ? true : null,
     	'lang' => true,
     );

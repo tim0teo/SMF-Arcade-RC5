@@ -102,11 +102,14 @@ function Arcade()
 	$context['curved'] = strpos($modSettings['smfVersion'], '2.1') !== false ? true : $context['curved'];
 	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 	$context['current_arcade_sa'] = !empty($_REQUEST['sa']) ? $_REQUEST['sa'] : 'list';
+	$_SESSION['current_cat'] = !empty($_SESSION['current_cat']) ? $_SESSION['current_cat'] : 'all';
+	$_SESSION['arcade_sortby'] = !empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : 'a2z';
+	$sort = ($_SESSION['current_cat'] == 0 || $_SESSION['current_cat'] == 'all') && $_SESSION['arcade_sortby'] == 'a2z' ? '' : ';sortby=reset';
 
 	$context['arcade_tabs']['arcade'] = array(
 		'text' => 'arcade',
 		'image' => 'arcade.gif',
-		'url' => $scripturl . '?action=arcade',
+		'url' => $scripturl . '?action=arcade' . $sort,
 		'active' => in_array($context['current_arcade_sa'], array('list', 'online', 'highscore', 'play')) ? true : null,
 		'lang' => true
 	);
