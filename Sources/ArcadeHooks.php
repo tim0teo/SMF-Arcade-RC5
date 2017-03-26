@@ -74,6 +74,8 @@ function Arcade_load_permissions(&$permissionGroups, &$permissionList, &$leftPer
 		'arcade_download' => array(false, 'arcade', 'arcade'),
 		'arcade_report' => array(false, 'arcade', 'arcade'),
 		'arcade_online' => array(false, 'arcade', 'arcade'),
+		'arcade_skin' => array(false, 'arcade', 'arcade'),
+		'arcade_list' => array(false, 'arcade', 'arcade'),
 	);
 
 	$context['non_guest_permissions'] = array_merge(
@@ -86,6 +88,8 @@ function Arcade_load_permissions(&$permissionGroups, &$permissionList, &$leftPer
 			'arcade_comment',
 			'arcade_edit_settings',
 			'arcade_user_stats',
+			'arcade_skin',
+			'arcade_list',
 		)
 	);
 

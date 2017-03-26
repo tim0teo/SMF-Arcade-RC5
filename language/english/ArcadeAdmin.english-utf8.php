@@ -341,10 +341,13 @@ $txt['permissionname_arcade_edit_settings_any'] = 'Any';
 $txt['permissionname_arcade_online'] = 'View Arcade Online';
 $txt['permissionname_arcade_download'] = 'Download Games';
 $txt['permissionname_arcade_report'] = 'Report Game Errors';
+$txt['permissionname_arcade_skin'] = 'Change Skin';
+$txt['permissionhelp_arcade_skin'] = 'Allow users to Change the Skin of the arcade';
+$txt['permissionname_arcade_list'] = 'Change List';
+$txt['permissionhelp_arcade_list'] = 'Allow users to Change the List of the arcade';
 $txt['perm_arcade_online'] = 'View Arcade Online';
 $txt['perm_arcade_download'] = 'Download Games';
 $txt['perm_arcade_report'] = 'Report Broken Games';
-
 
 // Simple permission gropus
 $txt['permissiongroup_simple_arcade'] = 'Use Arcade';

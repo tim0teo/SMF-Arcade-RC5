@@ -224,7 +224,7 @@ function arcadeSettings($memID)
 	require_once($sourcedir . '/Arcade.php');
 	loadArcade('profile');
 	$events = arcadeEvent('get');
-	$arcadeSettings = loadArcadeSettings($memID);	
+	$arcadeSettings = loadArcadeSettings($memID);
 	switch($modSettings['arcadeSkin'])
 	{
 		case 1:
@@ -283,33 +283,41 @@ function arcadeSettings($memID)
 			'validate' => 'int',
 			'value' => isset($arcadeSettings['scores_per_page']) ? $arcadeSettings['scores_per_page'] : 0,
 		),
-		'skin' => array(
-			'label' => $txt['arcade_user_skin'],
-			'type' => 'select',
-			'options' => array(
-				0 => sprintf($txt['arcade_user_default'], $skin),
-				1 => $txt['arcade_default'],
-				2 => $txt['arcade_skin_a'],
-				3 => $txt['arcade_skin_b'],
-			),
-			'cast' => 'int',
-			'validate' => 'int',
-			'value' => isset($arcadeSettings['skin']) ? $arcadeSettings['skin'] : 0,
-		),
-		'list' => array(
-			'label' => $txt['arcade_user_list'],
-			'type' => 'select',
-			'options' => array(
-				0 => sprintf($txt['arcade_user_default'], $list),
-				1 => $txt['arcade_list0'],
-				2 => $txt['arcade_list1'],
-				3 => $txt['arcade_list2'],
-			),
-			'cast' => 'int',
-			'validate' => 'int',
-			'value' => isset($arcadeSettings['list']) ? $arcadeSettings['list'] : 0,
-		),
 	);
+
+	if (allowedTo('arcade_skin'))
+		$context['profile_fields'] += array(
+			'skin' => array(
+				'label' => $txt['arcade_user_skin'],
+				'type' => 'select',
+				'options' => array(
+					0 => sprintf($txt['arcade_user_default'], $skin),
+					1 => $txt['arcade_default'],
+					2 => $txt['arcade_skin_a'],
+					3 => $txt['arcade_skin_b'],
+				),
+				'cast' => 'int',
+				'validate' => 'int',
+				'value' => isset($arcadeSettings['skin']) ? $arcadeSettings['skin'] : 0,
+			),
+		);
+		
+	if (allowedTo('arcade_list'))
+		$context['profile_fields'] += array(	
+			'list' => array(
+				'label' => $txt['arcade_user_list'],
+				'type' => 'select',
+				'options' => array(
+					0 => sprintf($txt['arcade_user_default'], $list),
+					1 => $txt['arcade_list0'],
+					2 => $txt['arcade_list1'],
+					3 => $txt['arcade_list2'],
+				),
+				'cast' => 'int',
+				'validate' => 'int',
+				'value' => isset($arcadeSettings['list']) ? $arcadeSettings['list'] : 0,
+			),
+		);
 
 	if (!empty($modSettings['disableCustomPerPage']))
 	{

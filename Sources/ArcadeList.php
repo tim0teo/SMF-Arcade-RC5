@@ -220,6 +220,7 @@ function ArcadeList()
 			'id' => $row['id_game'],
 			'url' => array(
 				'play' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'] . ';#playgame',
+				'popup' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'] . ';pop=1',
 				'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $row['id_game'] . ';#highscore',
 				'edit' => $scripturl . '?action=admin;area=managegames;sa=edit;game=' . $row['id_game'],
 				'favorite' => $context['arcade']['can_favorite'] ? $row['is_favorite'] == 0 ? $scripturl . '?action=arcade;sa=favorite;game=' . $row['id_game'] : $scripturl . '?action=arcade;sa=favorite;remove;game=' . $row['id_game'] : '#',

@@ -146,15 +146,15 @@ function ArcadeInfoNewestGames($no)
 		$popgameico = empty($popgame['game_directory']) ?	$gamesUrl . '/' . $popgame['thumbnail'] : $gamesUrl . '/' . $popgame['game_directory'] . '/' . $popgame['thumbnail'];
 		$content .='
 					<tr>
-						<td style="padding: 3px;">
-							<div style="text-align: right;">
+						<td style="padding: 7px 10px 3px 3px;">
+							<div style="float: right;">
 								<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $popgame['id_game'] . '">
-									<img style="border: 0px;width: 25px;height: 25px;" src="' . $popgameico. '" alt="ico" title="'.$txt['arcade_champions_play'].' '. $popgame['game_name'].'"/>
+									<img style="border: 0px;width: 25px;height: 25px;vertical-align: middle;" src="' . $popgameico. '" alt="&nbsp;" title="'.$txt['arcade_champions_play'].' '. $popgame['game_name'].'"/>
 								</a>
 							</div>
 						</td>
-						<td style="padding: 3px;" class="middletext">
-							<div class="centertext">
+						<td style="padding: 7px 3px 3px 0px;">
+							<div style="float: left;">
 								<a href="' . $scripturl . '?action=arcade;sa=play;game=' . $popgame['id_game'] . '">' . $popgame['game_name'] . '</a>
 							</div>
 						</td>

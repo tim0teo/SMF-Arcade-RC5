@@ -10,102 +10,6 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
-/*	This file contains most functions used by Arcade
-
-	void arcadePermissionQuery()
-		- ???
-
-	void PostPermissionCheck()
-		- ???
-
-	array loadArcadeSettings()
-		- ???
-
-	string getSubmitSystem()
-		- ???
-
-	array submitSystemInfo()
-		- ???
-
-	int loadGame()
-		- ???
-
-	array getGameInfo()
-		- ???
-
-	array getGameOfDay()
-		- ???
-
-	array newGameOfDay()
-		- ???
-
-	array getRecommendedGames()
-		- ???
-
-	boolean updateGame()
-		- ???
-
-	array arcadeGetEventTypes()
-		- ???
-
-	boolean arcadeEvent()
-		- ???
-
-	void arcadeEventNewChampion()
-		- ???
-
-	void arcadeEventArenaInvite()
-		- ???
-
-	boolean checkNotificationReceiver()
-		- ???
-
-	array checkNotificationReceivers()
-		- ???
-
-	void addNotificationRecievers()
-		- ???
-
-	array ArcadeLatestScores()
-		- ???
-
-	array SaveScore()
-		- ???
-
-	boolean deleteScores()
-		- ???
-
-	array loadMatch()
-		- ???
-
-	int createMatch()
-		- ???
-
-	boolean matchAddPlayers()
-		- ???
-
-	boolean deleteMatch()
-		- ???
-
-	void ArcadeXMLOutput()
-		- ???
-
-	void Array2XML()
-		- ???
-
-	array memberAllowedTo()
-		- ???
-
-	float microtime_float()
-		- ???
-
-	string duration_format()
-		- ???
-
-	array arcade_online()
-		- ???
-*/
-
 function loadGame($id_game, $from_admin = false)
 {
 	global $scripturl, $txt, $db_prefix, $user_info, $smcFunc, $modSettings, $context;
@@ -504,12 +408,14 @@ function arcadeEvent($id_event, $data = array())
 
 	while ($rowmember = $smcFunc['db_fetch_assoc']($request))
 	{
-		// Opt out of a notification depending on certain condition(s)
+		// Opt out of a notification depending on certain conditions
 		if ($rowmember['id_member'] == $user_info['id'])
 			continue;
 		elseif (!empty($arcadeSettings[$rowmember['id_member']]['new_champion_any']) && $data['game']['champion']['id'] == $user_info['id'])
 			continue;
 		elseif (empty($arcadeSettings[$rowmember['id_member']]['new_champion_own']) && empty($arcadeSettings[$rowmember['id_member']]['new_champion_any']))
+			continue;
+		elseif (empty($arcadeSettings[$rowmember['id_member']]['new_champion_any']) && $data['game']['champion']['id'] !== $user_info['id'])
 			continue;
 
 		if (!empty($modSettings['gamesNotificationsBulk']))

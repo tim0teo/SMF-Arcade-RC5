@@ -891,7 +891,6 @@ function Arcade_DoToolBarStrip($area = 'index', $direction = 'bottom', $content 
 			'lang' => true
 		);
 
-
     if ($context['arcade']['tour']['show'] != 2)
         $context['arcadetour']['buttons_set']['activetour'] =  array(
 			'text' => 'arcade_tour_show_active',

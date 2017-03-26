@@ -84,7 +84,7 @@ function template_arcade_list()
 		$dl_count = $txt['pdl_counter']. $game['pdl_count'];
 		$report = array('url' => $scripturl . '?action=arcade;sa=report;game=' . $game3, 'text' => 'pdl_report', 'image' => 'arcade_report.gif', 'lang' => true);
 		$edit_game2 = array('url' => $scripturl . '?action=admin;area=managegames;sa=edit;game=' . $game3, 'text' => 'pdl_edit', 'image' => 'arcade_edit.gif', 'lang' => true);
-		$popup = array('url' => 'javascript:void(0)', 'text' => 'pdl_popplay', 'image' => 'arcade_popup.gif', 'lang' => true, 'custom' => 'onclick="myGamePopupArcade(\'' . $game['url']['play'] . ';pop=1' . '\',' . $game['width'] . ',' . $game['height'] . ',0)"');
+		$popup = array('url' => 'javascript:void(0)', 'text' => 'pdl_popplay', 'image' => 'arcade_popup.gif', 'lang' => true, 'custom' => 'onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . $game['width'] . ',' . $game['height'] . ',0)"');
 		if ((AllowedTo('arcade_admin') == true) && ((int)$game['report_id'] > 0))
 		{
 			$show_report = array('url' => $scripturl . '?action=admin;area=arcade;sa=pdl_reports;game=' . $game3, 'text' => 'show_pdl_report', 'image' => 'arcade_show_report.gif', 'lang' => true);
@@ -138,15 +138,15 @@ function template_arcade_list()
 							<span>
 								<a href="', $game['url']['favorite'], '" onclick="arcade_favorite(', $game['id'] , '); return false;">
 			', !$game['is_favorite'] ? '
-									<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite.gif" alt="' . $txt['arcade_add_favorites'] . '" />' : '
-									<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite2.gif" alt="' . $txt['arcade_remove_favorite'] .'" />', '
+									<img style="vertical-align: middle;" id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite.gif" alt="' . $txt['arcade_add_favorites'] . '" />' : '
+									<img style="vertical-align: middle;" id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite2.gif" alt="' . $txt['arcade_remove_favorite'] .'" />', '
 								</a>
 							</span>
 							<div><span style="display: none;"></span></div>';
 
 		// Rating
 		if ($game['rating2'] > 0)
-			echo str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']), str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']), '<div><span style="display: none;">&nbsp;</span></div>';
+			echo str_repeat('<img style="vertical-align: middle;" src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']), str_repeat('<img style="vertical-align: middle;" src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="-" />' , 5 - $game['rating2']), '<div><span style="display: none;">&nbsp;</span></div>';
 
 		if ($modSettings['arcadeEnableDownload'])
 			echo $dl_count, '<span style="display: block;"><span style="display: none;">&nbsp;</span></span>';
@@ -279,7 +279,7 @@ function template_arcade_list()
 		<div style="padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>
 		<div class="cat_bar">
 			<h3 class="catbg" style="vertical-align: middle;">
-				<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);" src="', $settings['images_url'], '/icons/online.gif" alt="" />
+				<img class="icon" style="margin: 3px 5px 0 0;padding-bottom: 0.2em;filter: brightness(200%);-webkit-filter: brightness(200%);-moz-filter: brightness(200%);vertical-align: middle;" src="', $settings['images_url'], '/icons/online.gif" alt="" />
 				<span class="mediumtext" style="padding: 0px 6px 0px 0px;vertical-align: middle;">', $txt['arcade_users'], '</span>
 			</h3>
 		</div>

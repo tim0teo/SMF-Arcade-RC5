@@ -90,16 +90,16 @@ function template_arcade_list()
 
 		$rate = '';
 		if ($game['rating2'] > 0)
-			$rate = str_repeat('<img style="vertical-align: middle;" src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']) . str_repeat('<img src="' . $settings['images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']);
+			$rate = str_repeat('<img style="vertical-align: middle;" src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']) . str_repeat('<img style="vertical-align: middle;" src="' . $settings['images_url'] . '/arcade_star2.gif" alt="-" />' , 5 - $game['rating2']);
 		else
-			$rate = str_repeat('<img style="vertical-align: middle;" src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="" />' , 5);
+			$rate = str_repeat('<img style="vertical-align: middle;" src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="-" />' , 5);
 
 		if (empty($game['pdl_count']))
 			$game['pdl_count'] = 0;
 
 		$game['height'] = $game['height'] + 20;
 
-		$pop = '<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['play'].';pop=1'.'\',' . $game['width'] . ',' . $game['height'] . ', 0)">' . $txt['pdl_popplay'] . '</a>';
+		$pop = '<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . $game['width'] . ',' . $game['height'] . ', 0)">' . $txt['pdl_popplay'] . '</a>';
 
 		$hiscr = '
 							<a href="' . $game['url']['highscore'] . ';">' . $txt['arcade_viewscore'] . '</a>';

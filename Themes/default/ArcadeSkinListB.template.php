@@ -58,7 +58,7 @@ function template_arcade_list()
 					<td class="windowbg" style="position: relative;padding-left: 5px;">
 						<div class="floatleft">
 							<div><a href="', $game['url']['play'], '">', (strlen($game['name']) < 71 ? $game['name'] : substr($game['name'], 0, 67) . '...'), '</a></div>
-							<div class="smalltext"><a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['play'].';pop=1'.'\',' . $game['width'] . ',' . $game['height'] . ', 0)">' . $txt['arcade_popplay'] . '</a></div>
+							<div class="smalltext"><a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . $game['width'] . ',' . $game['height'] . ', 0)">' . $txt['arcade_popplay'] . '</a></div>
 						</div>
 					</td>
 					<td class="windowbg" style="padding-left: 5px;">
@@ -84,8 +84,8 @@ function template_arcade_list()
 			if ($game['rating2'] > 0)
 				echo '
 							<div>',
-								str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']),
-								str_repeat('<img src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $game['rating2']), '
+								str_repeat('<img style="vertical-align: middle;" src="' . $settings['default_images_url'] . '/arcade_star.gif" alt="*" />' , $game['rating2']),
+								str_repeat('<img style="vertical-align: middle;" src="' . $settings['default_images_url'] . '/arcade_star2.gif" alt="-" />' , 5 - $game['rating2']), '
 							</div>';
 
 			// Category
@@ -103,8 +103,8 @@ function template_arcade_list()
 							<div style="clear: both;position: relative;padding: 2px 4px 2px 0px;">
 								<a href="', $game['url']['favorite'], '" onclick="arcade_favorite(', $game['id'] , '); return false;">
 									', !$game['is_favorite'] ?
-									'<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite.gif" alt="' . $txt['arcade_add_favorites'] . '" title="' . $txt['arcade_add_favorites'] . '"/>' :
-									'<img id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite2.gif" alt="' . $txt['arcade_remove_favorite'] .'" title="' . $txt['arcade_remove_favorite'] . '" />', '
+									'<img style="vertical-align: middle;" id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite.gif" alt="' . $txt['arcade_add_favorites'] . '" title="' . $txt['arcade_add_favorites'] . '"/>' :
+									'<img style="vertical-align: middle;" id="favgame' . $game['id'] . '" src="' . $settings['default_images_url'] . '/favorite2.gif" alt="' . $txt['arcade_remove_favorite'] .'" title="' . $txt['arcade_remove_favorite'] . '" />', '
 								</a>
 							</div>';
 

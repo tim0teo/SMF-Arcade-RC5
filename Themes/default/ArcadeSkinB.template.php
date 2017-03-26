@@ -55,7 +55,7 @@ function template_arcade_above()
 						<div style="display: none;">', $cacheFader, '</div>
 						<div class="centertext">
 							<script type="text/javascript"><!-- // --><![CDATA[
-								var delay = 5000;
+								var delay = 10000;
 								var maxsteps=30;
 								var stepdelay=40;
 								var startcolor= new Array(255,255,255);
@@ -172,7 +172,7 @@ function template_arcade_above()
 											pauseescroller.prototype.setmessage=function(){
 												var escrollerinstance=this;
 												if (this.mouseoverBol==1)
-													setTimeout(function(){escrollerinstance.setmessage()}, 100);
+													setTimeout(function(){escrollerinstance.setmessage()}, 200);
 												else
 												{
 													var i=this.hiddendivpointer;
@@ -192,7 +192,7 @@ function template_arcade_above()
 											}
 										</script>
 										<script type="text/javascript">
-											new pauseescroller(pausecontent, "pescroller1", "someclass", 2000);
+											new pauseescroller(pausecontent, "pescroller1", "someclass", 6000);
 											document.getElementById("pescroller1").style = "height: 220px;border: 0px solid black;padding: 5px;position: relative;overflow: hidden;";
 											document.getElementById("pescroller1").className = "someclass";
 										</script>

@@ -41,6 +41,8 @@ March 2017
  + Maintenance option to purge unused arcade icons from the arc_icons directory (deletes files not currently used by the arcade)
  & New language for all icon related changes
  * Removed arcade_settings table & added arcade_members table (improved format & more settings)
+ + Options for users to select skin & list
+ + Permissions added for the above options
 
 
 SMF Arcade 2.5 RC4                                                    xx.12.2015

@@ -166,8 +166,7 @@ function template_main()
 
 function loadArcade($mode = 'normal', $index = '')
 {
-	global $db_prefix, $scripturl, $txt, $modSettings, $context, $settings, $sourcedir, $user_info;
-	global $smcFunc, $boarddir, $arcade_version, $arcade_lang_version;
+	global $db_prefix, $scripturl, $txt, $modSettings, $context, $settings, $sourcedir, $user_info, $smcFunc, $boarddir, $arcade_version, $arcade_lang_version;
 
 	if(!function_exists('loadClassFile'))
 		require_once($sourcedir . '/Subs-ArcadeClass.php');
@@ -554,7 +553,7 @@ function loadMyArcadeSettings($memID = 0)
 
 	$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
 	$modSettings['arcadeList'] = !empty($modSettings['arcadeList']) ? (int)$modSettings['arcadeList'] : 0;
-	if ($memID == 0 && $user_info['is_guest'])
+	if ($memID == 0 || $user_info['is_guest'])
 		return array('skin' => $modSettings['arcadeSkin'], 'list' => $modSettings['arcadeList']);
 
 	// Default
@@ -567,7 +566,7 @@ function loadMyArcadeSettings($memID = 0)
 			WHERE id_member = {int:member}
 			LIMIT 1',
 			array(
-				'member' => $memID == 0 ? $user_info['id'] : $memID,
+				'member' => $memID,
 			)
 		);
 
@@ -575,20 +574,36 @@ function loadMyArcadeSettings($memID = 0)
 	{
 		$arcadeSettings = array(
 			'id_member' => $row['id_member'],
-			'arena_invite' => $row['arena_invite'],
-			'arena_match_end' => $row['arena_match_end'],
-			'arena_new_round' => $row['arena_new_round'],
-			'champion_email' => $row['champion_email'],
-			'champion_pm' => $row['champion_pm'],
-			'games_per_page' => $row['games_per_page'],
-			'new_champion_any' => $row['new_champion_any'],
-			'new_champion_own' => $row['new_champion_own'],
-			'scores_per_page' => $row['scores_per_page'],
-			'skin' => !empty($row['skin']) ? $row['skin'] - 1 : $modSettings['arcadeSkin'],
-			'list' => !empty($row['list']) ? $row['list'] - 1 : $modSettings['arcadeList'],
+			'arena_invite' => !empty($row['arena_invite']) ? $row['arena_invite'] : 0,
+			'arena_match_end' => !empty($row['arena_match_end']) ? $row['arena_match_end'] : 0,
+			'arena_new_round' => !empty($row['arena_new_round']) ? $row['arena_new_round'] : 0,
+			'champion_email' => !empty($row['champion_email']) ? $row['champion_email'] : 0,
+			'champion_pm' => !empty($row['champion_pm']) ? $row['champion_pm'] : 0,
+			'games_per_page' => !empty($row['games_per_page']) ? $row['games_per_page'] : $modSettings['gamesPerPage'],
+			'new_champion_any' => !empty($row['new_champion_any']) ? $row['new_champion_any'] : 0,
+			'new_champion_own' => !empty($row['new_champion_own']) ? $row['new_champion_own'] : 0,
+			'scores_per_page' => !empty($row['scores_per_page']) ? $row['scores_per_page'] : $modSettings['scoresPerPage'],
+			'skin' => !empty($row['skin']) && allowedTo('arcade_skin') ? $row['skin'] - 1 : $modSettings['arcadeSkin'],
+			'list' => !empty($row['list']) && allowedTo('arcade_list') ? $row['list'] - 1 : $modSettings['arcadeList'],
 		);
 	}
 	$smcFunc['db_free_result']($request);
+
+	if (empty($arcadeSettings))
+		return array(
+			'id_member' => $memID,
+			'arena_invite' => 0,
+			'arena_match_end' => 0,
+			'arena_new_round' => 0,
+			'champion_email' => 0,
+			'champion_pm' => 0,
+			'games_per_page' => $modSettings['gamesPerPage'],
+			'new_champion_any' => 0,
+			'new_champion_own' => 0,
+			'scores_per_page' => $modSettings['scoresPerPage'],
+			'skin' => $modSettings['arcadeSkin'],
+			'list' => $modSettings['arcadeList'],
+		);
 
 	return $arcadeSettings;
 }
