@@ -184,7 +184,8 @@ function loadArcade($mode = 'normal', $index = '')
 	$arcade_lang_version = '2.5';
 	$context['arcade'] = array();
 	$context['arcade_smf_version'] = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
-	$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
+	$user_info['arcade_settings'] = loadMyArcadeSettings($user_info['id']);
+	$arcadeSkin = $user_info['arcade_settings']['skin'];
 	require_once($sourcedir . '/Subs-ArcadePlus.php');
 	require_once($sourcedir . '/Subs-Arcade.php');
 
@@ -212,7 +213,7 @@ function loadArcade($mode = 'normal', $index = '')
 		cache_put_data('arcade-stats', $context['arcade']['stats'], 180);
 	}
 
-	switch ($modSettings['arcadeSkin'])
+	switch ($arcadeSkin)
 	{
 		case 2:
 			require_once($sourcedir . '/Subs-ArcadeSkinB.php');
@@ -254,7 +255,6 @@ function loadArcade($mode = 'normal', $index = '')
 		if (empty($modSettings['arcadeEnabled']))
 			return false;
 
-		$user_info['arcade_settings'] = loadArcadeSettings($user_info['id']);
 		$context['games_per_page'] = !empty($user_info['arcade_settings']['gamesPerPage']) ? $user_info['arcade_settings']['gamesPerPage'] : $modSettings['gamesPerPage'];
 		$context['scores_per_page'] = !empty($user_info['arcade_settings']['scoresPerPage']) ? $user_info['arcade_settings']['scoresPerPage'] : $modSettings['scoresPerPage'];
 
@@ -546,5 +546,50 @@ function arcade_log_online()
 			array()
 		);
 	}
+}
+
+function loadMyArcadeSettings($memID = 0)
+{
+	global $smcFunc, $user_info, $modSettings;
+
+	$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
+	$modSettings['arcadeList'] = !empty($modSettings['arcadeList']) ? (int)$modSettings['arcadeList'] : 0;
+	if ($memID == 0 && $user_info['is_guest'])
+		return array('skin' => $modSettings['arcadeSkin'], 'list' => $modSettings['arcadeList']);
+
+	// Default
+	$arcadeSettings = array();
+
+	$request = $smcFunc['db_query']('', '
+			SELECT id_member, arena_invite, arena_match_end, arena_new_round, champion_email, champion_pm,
+			games_per_page, new_champion_any, new_champion_own, scores_per_page, skin, list
+			FROM {db_prefix}arcade_members
+			WHERE id_member = {int:member}
+			LIMIT 1',
+			array(
+				'member' => $memID == 0 ? $user_info['id'] : $memID,
+			)
+		);
+
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+	{
+		$arcadeSettings = array(
+			'id_member' => $row['id_member'],
+			'arena_invite' => $row['arena_invite'],
+			'arena_match_end' => $row['arena_match_end'],
+			'arena_new_round' => $row['arena_new_round'],
+			'champion_email' => $row['champion_email'],
+			'champion_pm' => $row['champion_pm'],
+			'games_per_page' => $row['games_per_page'],
+			'new_champion_any' => $row['new_champion_any'],
+			'new_champion_own' => $row['new_champion_own'],
+			'scores_per_page' => $row['scores_per_page'],
+			'skin' => !empty($row['skin']) ? $row['skin'] - 1 : $modSettings['arcadeSkin'],
+			'list' => !empty($row['list']) ? $row['list'] - 1 : $modSettings['arcadeList'],
+		);
+	}
+	$smcFunc['db_free_result']($request);
+
+	return $arcadeSettings;
 }
 ?>

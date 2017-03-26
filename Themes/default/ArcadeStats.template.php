@@ -32,13 +32,13 @@ function template_arcade_statistics()
 	if (!empty($context['arcade']['statistics']['play']) > 0)
 	{
 		echo '
-			<div style="padding-top: 10px;"><span></span></div>
+			<div style="padding-top: 10px;"><span style="display: none;">&nbsp;</span></div>
 			<div class="', !$alternate ? 'floatleft' : 'floatright', '" style="width: 48%;">
 				<div>
 					<h3 style="border-bottom: 1px dotted;"><img src="', $settings['images_url'], '/gold.gif" class="icon" alt="" /><span style="padding: 0px 0px 7px 5px;vertical-align: middle;">', $txt['arcade_most_played'], '</span></h3>
 				</div>
 				<div class="smalltext" style="padding-left: 5px;padding-right: 15px;">
-					<span class="topslice"><span></span></span>
+					<span class="topslice"><span>&nbsp;</span></span>
 					<div class="content">
 						<span class="stats">';
 
@@ -50,13 +50,13 @@ function template_arcade_statistics()
 
 			if (!empty($game['precent']))
 				echo '
-								<span class="left"></span>
-								<span style="width: ', $game['precent'], 'px;" class="stats_bar"></span>
-								<span class="right"></span>';
+								<span class="left" style="display: none;">&nbsp;</span>
+								<span style="width: ', $game['precent'], 'px;" class="stats_bar">&nbsp;</span>
+								<span class="right" style="display: none;">&nbsp;</span>';
 
 			echo '
 								<span style="float: right;">' . $game['plays'] . '</span>
-							</span><br />';
+							</span><span style="height: 1px;display: block;"><span style="dislay: none;">&nbsp;</span></span>';
 		}
 
 
@@ -64,7 +64,7 @@ function template_arcade_statistics()
 						</span>
 						<div class="clear"></div>
 					</div>
-					<span class="botslice"><span></span></span>
+					<span class="botslice"><span>&nbsp;</span></span>
 				</div>
 			</div>';
 
@@ -86,7 +86,7 @@ function template_arcade_statistics()
 					</h3>
 				</div>
 				<div class="smalltext" style="padding-left: 5px;padding-right: 15px;">
-					<span class="topslice"><span></span></span>
+					<span class="topslice"><span>&nbsp;</span></span>
 					<div class="content">
 						<span class="stats">';
 
@@ -99,20 +99,20 @@ function template_arcade_statistics()
 
 			if (!empty($game['precent']))
 				echo '
-								<span class="left"></span>
-								<span style="width: ', $game['precent'], 'px;" class="stats_bar"></span>
-								<span class="right"></span>';
+								<span class="left" style="display: none;">&nbsp;</span>
+								<span style="width: ', $game['precent'], 'px;" class="stats_bar">&nbsp;</span>
+								<span class="right" style="display: none;">&nbsp;</span>';
 
 			echo '
 								<span style="float: right;">' . $game['scores'] . '</span>
-							</span><br />';
+							</span><span style="height: 1px;display: block;"><span style="dislay: none;">&nbsp;</span></span>';
 		}
 
 		echo '
 						</span>
-						<div class="clear"></div>
+						<div class="clear" style="padding-top: 5px;"><span style="display: none;">&nbsp;</span></div>
 					</div>
-					<span class="botslice"><span></span></span>
+					<span class="botslice"><span>&nbsp;</span></span>
 				</div>
 			</div>';
 
@@ -135,7 +135,7 @@ function template_arcade_statistics()
 					</h3>
 				</div>
 				<div class="smalltext" style="padding-left: 5px;padding-right: 15px;">
-					<span class="topslice"><span></span></span>
+					<span class="topslice"><span>&nbsp;</span></span>
 					<div class="content">
 						<span class="stats">';
 
@@ -147,20 +147,20 @@ function template_arcade_statistics()
 
 			if (!empty($game['precent']))
 				echo '
-								<span class="left"></span>
-								<span style="width: ', $game['precent'], 'px;" class="stats_bar"></span>
-								<span class="right"></span>';
+								<span class="left" style="display: none;">&nbsp;</span>
+								<span style="width: ', $game['precent'], 'px;" class="stats_bar">&nbsp;</span>
+								<span class="right" style="display: none;">&nbsp;</span>';
 
 			echo '
 								<span style="float: right;">' . $game['rating'] . '</span>
-							</span><br />';
+							</span><span style="height: 1px;display: block;"><span style="dislay: none;">&nbsp;</span></span>';
 		}
 
 		echo '
 						</span>
 						<div class="clear"></div>
 					</div>
-					<span class="botslice"><span></span></span>
+					<span class="botslice"><span>&nbsp;</span></span>
 				</div>
 			</div>';
 
@@ -168,7 +168,7 @@ function template_arcade_statistics()
 
 		if (!$alternate)
 			echo '
-			<div class="clear"></div>';
+			<div class="clear" style="padding-top: 5px;"><span style="display: none;">&nbsp;</span></div>';
 	}
 
 	// Best players by champions
@@ -182,7 +182,7 @@ function template_arcade_statistics()
 					</h3>
 				</div>
 				<div class="smalltext" style="padding-left: 5px;padding-right: 15px;">
-					<span class="topslice"><span></span></span>
+					<span class="topslice"><span>&nbsp;</span></span>
 					<div class="content">
 						<span class="stats">';
 
@@ -194,20 +194,21 @@ function template_arcade_statistics()
 
 			if (!empty($member['precent']))
 				echo '
-								<span class="left"></span>
-								<span style="width: ', $member['precent'], 'px;" class="stats_bar"></span>
-								<span class="right"></span>';
+								<span class="left" style="display: none;">&nbsp;</span>
+								<span style="width: ', $member['precent'], 'px;" class="stats_bar">&nbsp;</span>
+								<span class="right" style="display: none;">&nbsp;</span>';
 
 			echo '
 								<span style="float: right;">' . $member['champions'] . '</span>
-							</span><br />';
+							</span>
+							<span style="display: block;height: 1px;"><span style="dislay: none;">&nbsp;</span></span>';
 		}
 
 		echo '
 						</span>
 						<div class="clear"></div>
 					</div>
-					<span class="botslice"><span></span></span>
+					<span class="botslice"><span>&nbsp;</span></span>
 				</div>
 			</div>';
 
@@ -228,7 +229,7 @@ function template_arcade_statistics()
 					</h3>
 				</div>
 				<div class="smalltext" style="padding-left: 5px;padding-left: 15px;">
-					<span class="topslice"><span></span></span>
+					<span class="topslice"><span>&nbsp;</span></span>
 					<div class="content">
 						<span class="stats">';
 
@@ -240,20 +241,20 @@ function template_arcade_statistics()
 
 			if (!empty($game['precent']))
 				echo '
-								<span class="left"></span>
-								<span style="width: ', $game['precent'], 'px;" class="stats_bar"></span>
-								<span class="right"></span>';
+								<span class="left" style="display: none;">&nbsp;</span>
+								<span style="width: ', $game['precent'], 'px;" class="stats_bar">&nbsp;</span>
+								<span class="right" style="display: none;">&nbsp;</span>';
 
 			echo '
 								<span style="float: right;">', $game['current'] ? '<strong>' . $game['duration'] . '</strong>' : $game['duration'], '</span>
-							</span><br />';
+							</span><span style="height: 1px;display: block;"><span style="dislay: none;">&nbsp;</span></span>';
 		}
 
 		echo '
 						</span>
-						<div class="clear"></div>
+						<div class="clear" style="padding-top: 5px;"><span style="display: none;">&nbsp;</span></div>
 					</div>
-					<span class="botslice"><span></span></span>
+					<span class="botslice"><span>&nbsp;</span></span>
 				</div>
 			</div>';
 
@@ -261,16 +262,16 @@ function template_arcade_statistics()
 
 		if (!$alternate)
 			echo '
-			<div class="clear"></div>';
+			<div class="clear"><span style="display: none;">&nbsp;</span></div>';
 	}
 
 	if ($alternate)
 			echo '
-			<div class="clear"></div>';
+			<div class="clear" style="padding-top: 5px;"><span style="display: none;">&nbsp;</span></div>';
 	echo '
 		</div>
 	</div>
-	<span class="lowerframe"><span></span></span>
-	<div style="padding-top: 15px;"><span></span></div>';
+	<span class="lowerframe"><span>&nbsp;</span></span>
+	<div style="padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>';
 }
 ?>

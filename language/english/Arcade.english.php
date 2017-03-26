@@ -202,6 +202,9 @@ $txt['arcade_user_gamesPerPage'] = 'Games Per Page';
 $txt['arcade_user_gamesPerPage_default'] = 'Default (%d)';
 $txt['arcade_user_scoresPerPage'] = 'Scores Per Page';
 $txt['arcade_user_scoresPerPage_default'] = 'Default (%d)';
+$txt['arcade_user_default'] = 'Default (%s)';
+$txt['arcade_user_skin'] = 'Select Skin';
+$txt['arcade_user_list'] = 'Select List';
 
 // Errors
 /*  Arcade - PDL Text Variables  */

@@ -238,7 +238,7 @@ function PostPermissionCheck()
 
 function loadArcadeSettings($memID = 0)
 {
-	global $smcFunc, $user_info;
+	global $smcFunc, $user_info, $modSettings;
 
 	if ($memID == 0 && $user_info['is_guest'])
 		return array();

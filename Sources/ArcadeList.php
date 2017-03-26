@@ -60,6 +60,7 @@ function ArcadeList()
 	);
 
 	// the mess of variables to set...
+	$arcadeList = $user_info['arcade_settings']['list'];
 	$_SESSION['arcade']['gamepopup'] = false;
 	$_SESSION['arcade']['pop'] = false;
 	$_SESSION['arcade_sortby'] = !empty($_REQUEST['sortby']) && $_REQUEST['sortby'] == 'reset' ? 'a2z' : (!empty($_SESSION['arcade_sortby']) ? $_SESSION['arcade_sortby'] : '');
@@ -320,14 +321,12 @@ function ArcadeList()
 	}
 
 	// Layout
-	$modSettings['arcadeSkin'] = !empty($modSettings['arcadeSkin']) ? (int)$modSettings['arcadeSkin'] : 0;
-	$modSettings['arcadeList'] = !empty($modSettings['arcadeList']) ? (int)$modSettings['arcadeList'] : 0;
 	if (allowedTo('arcade_online'))
 		$context['arcade_online_link'] = '<a href="' . $scripturl . '?index.php;action=arcade;sa=online">' . sprintf($txt['arcade_info_who'], $context['arcade_online'][0], $context['arcade_online'][1], empty($context['arcade_online'][0]) || $context['arcade_online'][0] > 1 ? 's' : '', empty($context['arcade_online'][1]) || $context['arcade_online'][1] > 1 ? 's' : '') . '</a>';
 	else
 		$context['arcade_online_link'] = sprintf($txt['arcade_info_who'], $context['arcade_online'][0], $context['arcade_online'][1], empty($context['arcade_online'][0]) || $context['arcade_online'][0] > 1 ? 's' : '', empty($context['arcade_online'][1]) || $context['arcade_online'][1] > 1 ? 's' : '');
 
-	switch ($modSettings['arcadeList'])
+	switch ($arcadeList)
 	{
 		case 2:
 			loadTemplate('ArcadeSkinListA');

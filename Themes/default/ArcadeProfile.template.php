@@ -19,7 +19,7 @@ function template_arcade_arena_challenge()
 		</h3>
 	</div>
 	<div class="windowbg">
-		<span class="topslice"><span></span></span>
+		<span class="topslice"><span>&nbsp;</span></span>
 		<div class="content">
 			<form action="', $scripturl, '?action=arcade;sa=arenaInvite2" method="post">';
 
@@ -42,7 +42,7 @@ function template_arcade_arena_challenge()
 				<a href="', $scripturl, '?action=arcade;sa=newMatch;players=2;player[]=', $context['member']['id'], '">', $txt['arcade_create_new'], '</a>
 			</form>
 		</div>
-		<span class="botslice"><span></span></span>
+		<span class="botslice"><span>&nbsp;</span></span>
 	</div><br />';
 }
 
@@ -58,7 +58,7 @@ function template_arcade_user_statistics()
 		</h3>
 	</div>
 	<div class="windowbg">
-		<span class="topslice"><span></span></span>
+		<span class="topslice"><span>&nbsp;</span></span>
 		<div class="content">
 			<dl class="stats">
 				<dt>', $txt['arcade_champion_in'], ':</dt>
@@ -70,7 +70,7 @@ function template_arcade_user_statistics()
 			</dl>
 			<div class="clear"></div>
 		</div>
-		<span class="botslice"><span></span></span>
+		<span class="botslice"><span>&nbsp;</span></span>
 	</div><br />';
 
 	if (!empty($context['arcade']['member_stats']['scores']))
@@ -83,7 +83,7 @@ function template_arcade_user_statistics()
 		</h3>
 	</div>
 	<div class="windowbg">
-		<span class="topslice"><span></span></span>
+		<span class="topslice"><span>&nbsp;</span></span>
 		<div class="content">
 			<table style="border-collapse: collapse;width: 100%;border: 0px;width: 100%;overflow: hidden;">';
 
@@ -100,7 +100,7 @@ function template_arcade_user_statistics()
 		echo '
 			</table>
 		</div>
-		<span class="botslice"><span></span></span>
+		<span class="botslice"><span>&nbsp;</span></span>
 	</div><br />';
 	}
 
@@ -114,7 +114,7 @@ function template_arcade_user_statistics()
 		</h3>
 	</div>
 	<div class="windowbg">
-		<span class="topslice"><span></span></span>
+		<span class="topslice"><span>&nbsp;</span></span>
 		<div class="content">
 			<table style="border-collapse: collapse;width: 100%;border: 0px;width: 100%;overflow: hidden;">';
 
@@ -131,7 +131,7 @@ function template_arcade_user_statistics()
 		echo '
 			</table>
 		</div>
-		<span class="botslice"><span></span></span>
+		<span class="botslice"><span>&nbsp;</span></span>
 	</div><br />';
 	}
 	echo '
@@ -142,7 +142,7 @@ function template_arcade_user_statistics()
 		</h3>
 	</div>
 	<div class="windowbg">
-		<span class="topslice"><span></span></span>
+		<span class="topslice"><span>&nbsp;</span></span>
 		<div class="content">
 			<table style="border-spacing: 2px;border-collapse: separate;width: 100%;border: 0px;width: 100%;">
 				<tr>
@@ -171,7 +171,7 @@ function template_arcade_user_statistics()
 						</div>
 					</td>
 					<td style="padding: 5px;vertical-align: top;" class="windowbg2">
-						<div style="height: 100px; overflow: auto">';
+						<div style="overflow: hidden;">';
 	foreach($context['arcade']['member_stats']['position2'] as $game)
 		echo '
 							<div style="padding-bottom: 2px;padding-left: 1px;">
@@ -183,7 +183,7 @@ function template_arcade_user_statistics()
 						</div>
 					</td>
 					<td style="padding: 5px;vertical-align: top;" class="windowbg2">
-						<div style="height: 100px; overflow: auto">';
+						<div style="overflow: hidden;">';
 	foreach($context['arcade']['member_stats']['position3'] as $game)
 		echo '
 							<div style="padding-bottom: 2px;padding-left: 1px;">
@@ -197,9 +197,9 @@ function template_arcade_user_statistics()
 				</tr>
 			</table>
 		</div>
-		<span class="botslice"><span></span></span>
+		<span class="botslice"><span>&nbsp;</span></span>
 	</div>
-	<br />';
+	<div style="padding-top: 25px;"><span style="display: none;">&nbsp;</span></div>';
 }
 
 function template_profile_arcade_notification()

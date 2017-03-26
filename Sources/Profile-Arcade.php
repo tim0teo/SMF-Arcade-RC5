@@ -222,12 +222,31 @@ function arcadeSettings($memID)
 	global $scripturl, $txt, $db_prefix, $context, $smcFunc, $user_info, $sourcedir, $modSettings;
 
 	require_once($sourcedir . '/Arcade.php');
-
 	loadArcade('profile');
-
 	$events = arcadeEvent('get');
-
-	$arcadeSettings = loadArcadeSettings($memID);
+	$arcadeSettings = loadArcadeSettings($memID);	
+	switch($modSettings['arcadeSkin'])
+	{
+		case 1:
+			$skin = $txt['arcade_skin_a'];
+			break;
+		case 2:
+			$skin = $txt['arcade_skin_b'];
+			break;
+		default:
+			$skin = $txt['arcade_default'];
+	}
+	switch($modSettings['arcadeList'])
+	{
+		case 1:
+			$list = $txt['arcade_list1'];
+			break;
+		case 2:
+			$list = $txt['arcade_list2'];
+			break;
+		default:
+			$list = $txt['arcade_list0'];
+	}
 
 	$context['profile_fields'] = array(
 		'notifications' => array(
@@ -263,7 +282,33 @@ function arcadeSettings($memID)
 			'cast' => 'int',
 			'validate' => 'int',
 			'value' => isset($arcadeSettings['scores_per_page']) ? $arcadeSettings['scores_per_page'] : 0,
-		)
+		),
+		'skin' => array(
+			'label' => $txt['arcade_user_skin'],
+			'type' => 'select',
+			'options' => array(
+				0 => sprintf($txt['arcade_user_default'], $skin),
+				1 => $txt['arcade_default'],
+				2 => $txt['arcade_skin_a'],
+				3 => $txt['arcade_skin_b'],
+			),
+			'cast' => 'int',
+			'validate' => 'int',
+			'value' => isset($arcadeSettings['skin']) ? $arcadeSettings['skin'] : 0,
+		),
+		'list' => array(
+			'label' => $txt['arcade_user_list'],
+			'type' => 'select',
+			'options' => array(
+				0 => sprintf($txt['arcade_user_default'], $list),
+				1 => $txt['arcade_list0'],
+				2 => $txt['arcade_list1'],
+				3 => $txt['arcade_list2'],
+			),
+			'cast' => 'int',
+			'validate' => 'int',
+			'value' => isset($arcadeSettings['list']) ? $arcadeSettings['list'] : 0,
+		),
 	);
 
 	if (!empty($modSettings['disableCustomPerPage']))
@@ -346,7 +391,7 @@ function arcadeSettings($memID)
 				foreach ($variables as $variable)
 				{
 					if ($variable == 'id_member')
-						$new['id_member'] = $member;					
+						$new['id_member'] = $member;
 					elseif (empty($new[$variable]))
 						$new[$variable] = 0;
 				}
@@ -385,7 +430,7 @@ function arcadeSettings($memID)
 				);
 			}
 
-			redirectexit('action=profile;u=' . $memID . ';sa=arcadeSettings');
+			redirectexit('action=profile;area=arcadeSettings;u=' . $memID);
 		}
 	}
 
