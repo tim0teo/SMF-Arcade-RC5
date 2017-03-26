@@ -110,7 +110,7 @@ function ArcadeV2Html(&$game, $auto_start = true)
 	<div id="game">
 		', $txt['arcade_no_flash'], '
 	</div>
-	<script language="JavaScript" type="text/javascript" defer="defer"><!-- // --><![CDATA[
+	<script type="text/javascript" defer="defer"><!-- // --><![CDATA[
 		var play_url = smf_scripturl + "?action=arcade;sa=play;xml";
 		var running = false;
 

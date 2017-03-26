@@ -139,7 +139,7 @@ function ArcadeVbHtml(&$game, $auto_start = true)
 		', $txt['arcade_no_javascript'], '
 	</div>
 
-	<script language="JavaScript" type="text/javascript" defer="defer"><!-- // --><![CDATA[
+	<script type="text/javascript" defer="defer"><!-- // --><![CDATA[
 		var play_url = smf_scripturl + "?action=arcade;sa=play;xml";
 		var running = false;
 

@@ -187,7 +187,7 @@ function template_arcade_list()
 				<span class="lowerframe"><span>&nbsp;</span></span>
 				<div style="width: 100%;position: relative;clear: left;">
 					<div class="pagesection" style="display: inline;">
-						<div style="display: inline;padding-top: 15px;float: left;">', ($context['arcade_smf_version'] == 'v2.1' ? '' : $txt['arcade_number_pages'] . '&nbsp;'), $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#bot"><b>' . $txt['go_down'] . '</b></a>' : '', '</div>
+						<div style="display: inline;padding-top: 15px;float: left;">', ($context['arcade_smf_version'] == 'v2.1' ? '' : $txt['arcade_number_pages'] . '&nbsp;'), $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#top"><b>' . $txt['go_up'] . '</b></a>' : '', '</div>
 						<div style="display: inline;clear: right;float: right;">', template_button_strip($arcade_buttons, 'right'), '</div>
 					</div>
 				</div>

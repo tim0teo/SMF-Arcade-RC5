@@ -88,7 +88,7 @@ $txt['arcade_favorites_only'] = 'Show favorites only';
 $txt['arcade_number_pages'] = 'Pages:';
 
 // Play
-$txt['arcade_no_flash'] = 'You have not installed Adobe Flash Player, you need install it before you can play, you also need to have javascript enabled. <a href="http://www.adobe.com/go/getflashplayer" target="_blank">Install</a>';
+$txt['arcade_no_flash'] = 'You have not installed Adobe Flash Player, you need install it before you can play, you also need to have javascript enabled. <a href="http://www.adobe.com/go/getflashplayer" target="_blank">Install<\/a>';
 $txt['arcade_no_javascript'] = 'You need to enable javascript in order to play games.';
 $txt['arcade_please_wait'] = 'Please wait while checking session...';
 $txt['arcade_session_check_ok'] = 'Session check successful!';

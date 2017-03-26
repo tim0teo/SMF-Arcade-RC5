@@ -689,7 +689,7 @@ function arcade_shout_parser($img_tag, $version = 'v2.0')
     foreach ($tags as $tag)
 	{
         $old_src = $tag->getAttribute('src');
-        $new_src_url = str_replace('%0A', '', preg_replace('/\v(?:[\v\h]+)/', '', $old_src));
+        $new_src_url = preg_replace('/\v(?:[\v\h]+)/', '', $old_src);
         $tag->setAttribute('src', $new_src_url);
     }
 
