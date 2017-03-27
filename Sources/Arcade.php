@@ -254,8 +254,8 @@ function loadArcade($mode = 'normal', $index = '')
 		if (empty($modSettings['arcadeEnabled']))
 			return false;
 
-		$context['games_per_page'] = !empty($user_info['arcade_settings']['gamesPerPage']) ? $user_info['arcade_settings']['gamesPerPage'] : $modSettings['gamesPerPage'];
-		$context['scores_per_page'] = !empty($user_info['arcade_settings']['scoresPerPage']) ? $user_info['arcade_settings']['scoresPerPage'] : $modSettings['scoresPerPage'];
+		$context['games_per_page'] = !empty($user_info['arcade_settings']['games_per_page']) ? $user_info['arcade_settings']['games_per_page'] : $modSettings['gamesPerPage'];
+		$context['scores_per_page'] = !empty($user_info['arcade_settings']['scores_per_page']) ? $user_info['arcade_settings']['scores_per_page'] : $modSettings['scoresPerPage'];
 
 		// Arcade javascript & css
 		$context['html_headers'] .= '
@@ -604,6 +604,8 @@ function loadMyArcadeSettings($memID = 0)
 			'skin' => $modSettings['arcadeSkin'],
 			'list' => $modSettings['arcadeList'],
 		);
+
+
 
 	return $arcadeSettings;
 }
