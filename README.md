@@ -16,6 +16,7 @@ This version supports the SMF 2.0.X & SMF 2.1.X branches.
 Features:
 
 Support for many game systems in addition to our own included are:
++ HTML5 (requires specific SMF Arcade save code)
 + IBProArcade
 + phpBB
 + mochiAds are supported with external module
