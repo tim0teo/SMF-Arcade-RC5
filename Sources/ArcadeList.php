@@ -218,9 +218,9 @@ function ArcadeList()
 			'id' => $row['id_game'],
 			'game_file' => $row['game_file'],
 			'url' => array(
-				'play' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'] . ';#playgame',
+				'play' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 				'popup' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'] . ';pop=1',
-				'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $row['id_game'] . ';#highscore',
+				'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $row['id_game'] . ';reload=' . mt_rand(1, 9999) . ';#highscore',
 				'edit' => $scripturl . '?action=admin;area=managegames;sa=edit;game=' . $row['id_game'],
 				'favorite' => $context['arcade']['can_favorite'] ? $row['is_favorite'] == 0 ? $scripturl . '?action=arcade;sa=favorite;game=' . $row['id_game'] : $scripturl . '?action=arcade;sa=favorite;remove;game=' . $row['id_game'] : '#',
 			),
@@ -486,7 +486,7 @@ function ArcadeRate()
 			)
 		);
 
-	redirectexit('action=arcade;sa=highscore;game=' . $game['id']);
+	redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
 }
 
 function ArcadeFavorite()
@@ -567,7 +567,7 @@ function ArcadeFavorite()
 			));
 	}
 
-	redirectexit('?action=arcade;sa=highscore;game=' . $game['id']);
+	redirectexit('?action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
 }
 
 ?>

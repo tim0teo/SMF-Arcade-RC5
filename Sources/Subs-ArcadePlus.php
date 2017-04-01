@@ -525,9 +525,9 @@ function getGameInfo($id_game = 0, $raw = false)
 	return array(
 		'id' => $game['id_game'],
 		'url' => array(
-			'play' => $scripturl . '?action=arcade;sa=play;game=' . $game['id_game'] . ';#playgame',
+			'play' => $scripturl . '?action=arcade;sa=play;game=' . $game['id_game'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 			'base_url' => $gameurl,
-			'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id_game'] . ';#commentform3',
+			'highscore' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id_game'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3',
 			'flash' => $gameurl . $game['game_file'],
 			'favorite' => $context['arcade']['can_favorite'] ? $game['is_favorite'] == 0 ? $scripturl . '?action=arcade;sa=favorite;game=' . $game['id_game'] : $scripturl . '?action=arcade;sa=favorite;remove;game=' . $game['id_game'] : '#',
 		),

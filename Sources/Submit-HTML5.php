@@ -55,11 +55,11 @@ function ArcadeHTML5Game()
 		{
 			$_SESSION['arcade_check_' . $context['game']['id']] = 'saved';
 			ArcadeSubmit();
-			redirectexit($scripturl . '?action=arcade;game=' . $gameid. ';sa=highscore');
+			redirectexit($scripturl . '?action=arcade;sa=highscore;game=' . $gameid. ';#commentform3');
 			
 		}
 		elseif(!empty($_SESSION['arcade_check_' . $context['game']['id']]))
-			redirectexit($scripturl . '?action=arcade;sa=highscore;game=' . $gameid);
+			redirectexit($scripturl . '?action=arcade;sa=highscore;game=' . $gameid . ';#commentform3');
 		else
 			fatal_lang_error('arcade_submit_error', false);
 	}

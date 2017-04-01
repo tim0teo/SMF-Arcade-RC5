@@ -175,7 +175,7 @@ function ArcadePlay()
 			$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
 			$context['arcade']['play'] = true;
 			$context['linktree'][] = array(
-				'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+				'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 				'name' => $context['game']['name'],
 			);
 			$context['html_headers'] .= '
@@ -208,7 +208,7 @@ function ArcadePlay()
 				$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
 				$context['arcade']['play'] = true;
 				$context['linktree'][] = array(
-					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 					'name' => $context['game']['name'],
 				);
 				$context['html_headers'] .= '
@@ -216,7 +216,7 @@ function ArcadePlay()
 				var arcade_game_dir = "' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '";
 				// ]]></script>';
 				loadTemplate('ArcadeGame');
-				return;				
+				return;
 			}
 			else
 			{
@@ -227,7 +227,7 @@ function ArcadePlay()
 				$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
 				$context['arcade']['play'] = true;
 				$context['linktree'][] = array(
-					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 					'name' => $context['game']['name'],
 				);
 				$context['html_headers'] .= '
@@ -237,7 +237,7 @@ function ArcadePlay()
 				loadTemplate('ArcadeGame');
 				return;
 			}
-		}		
+		}
 	}
 	elseif (!isset($_REQUEST['xml']) && !isset($_REQUEST['ajax']))
 	{
@@ -283,7 +283,7 @@ function ArcadePlay()
 			$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
 			$context['arcade']['play'] = true;
 			$context['linktree'][] = array(
-				'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+				'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 				'name' => $context['game']['name'],
 			);
 
@@ -313,7 +313,7 @@ function ArcadePlay()
 				$_REQUEST['game'] = $context['game']['id'];
 				$context['arcade']['play'] = true;
 				$context['linktree'][] = array(
-					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 					'name' => $context['game']['name'],
 				);
 
@@ -336,7 +336,7 @@ function ArcadePlay()
 				$_REQUEST['game'] = $context['game']['id'];
 				$context['arcade']['play'] = true;
 				$context['linktree'][] = array(
-					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 					'name' => $context['game']['name'],
 				);
 
@@ -587,7 +587,7 @@ function ArcadeSubmit()
 		);
 
 	if (!isset($_REQUEST['xml']))
-		redirectexit('action=arcade;sa=highscore;game=' . $context['game']['id'] . ';start=' . $_SESSION['arcade']['highscore']['start']) . ';#commentform3';
+		redirectexit('action=arcade;sa=highscore;game=' . $context['game']['id'] . ';start=' . $_SESSION['arcade']['highscore']['start']) . ';reload=' . mt_rand(1, 9999) . ';#commentform3';
 }
 
 function ArcadeSave_Guest()
@@ -627,7 +627,7 @@ function ArcadeSave_Guest()
 		SaveScore($_SESSION['save_score'][0], $_SESSION['save_score'][1], $_SESSION['save_score'][2]);
 
 		unset($_SESSION['save_score']);
-		redirectexit('action=arcade;sa=highscore;game=' . $_REQUEST['game'] . ';#commentform3');
+		redirectexit('action=arcade;sa=highscore;game=' . $_REQUEST['game'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
 	}
 }
 
@@ -716,7 +716,7 @@ function ArcadeHighscore()
 				null
 			);
 		}
-		redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';#commentform3');
+		redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
 	}
 	// Quick Management
 	elseif ($context['arcade']['can_admin_arcade'] && isset($_REQUEST['qaction']))
@@ -726,7 +726,7 @@ function ArcadeHighscore()
 		if ($_REQUEST['qaction'] == 'delete' && !empty($_REQUEST['scores']))
 			deleteScores($game, $_REQUEST['scores']);
 
-		redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';#commentform3');
+		redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
 	}
 
 	// How many scores there are
@@ -741,7 +741,7 @@ function ArcadeHighscore()
 	list ($scoreCount) = $smcFunc['db_fetch_row']($result);
 	$smcFunc['db_free_result']($result);
 
-	$context['page_index'] = constructPageIndex($scripturl .'?action=arcade;sa=highscore;game=' . $game['id'] . ';#commentform3', $_REQUEST['start'], $scoreCount, $context['scores_per_page'], false);
+	$context['page_index'] = constructPageIndex($scripturl .'?action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3', $_REQUEST['start'], $scoreCount, $context['scores_per_page'], false);
 
 	// Actual query
 	$result = $smcFunc['db_query']('', '
@@ -805,7 +805,7 @@ function ArcadeHighscore()
 	$popScore = !empty($scoreId) ? (int)$scoreId : -1;
 	$context['html_headers'] .= '
 		<script type="text/javascript">
-			var highUrl = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';edit;score=' . $popScore . ';#commentform3";
+			var highUrl = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';edit;score=' . $popScore . ';reload=' . mt_rand(1, 9999) . ';#commentform3";
 			window.opener.location.href = highUrl;
 			window.self.close();
 		</script>';
@@ -815,11 +815,11 @@ function ArcadeHighscore()
 	$context['sub_template'] = 'arcade_game_highscore';
 	$context['page_title'] = sprintf($txt['arcade_view_highscore'], $game['name']);
 	$context['linktree'][] = array(
-		'url' => $scripturl . '?action=arcade;sa=play;game=' . $game['id'] . ';#playgame',
+		'url' => $scripturl . '?action=arcade;sa=play;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 		'name' => $game['name'],
 	);
 	$context['linktree'][] = array(
-		'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';#commentform3',
+		'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3',
 		'name' => $txt['arcade_viewscore'],
 	);
 
@@ -882,7 +882,7 @@ function ArcadePlayTabs($game)
 		$context['arcade']['buttons']['score'] =  array(
 			'text' => 'arcade_viewscore',
 			'image' => 'arcade_viewscore.gif', // Theres no image for this included (yet)
-			'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $context['game']['id'] . ';#commentform3',
+			'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3',
 			'lang' => true
 		);
 
@@ -890,7 +890,7 @@ function ArcadePlayTabs($game)
 	$context['arcade']['buttons']['random'] =  array(
 		'text' => 'arcade_random_game',
 		'image' => 'arcade_random.gif', // Theres no image for this included (yet)
-		'url' => $scripturl . '?action=arcade;sa=play;random;#playgame',
+		'url' => $scripturl . '?action=arcade;sa=play;random;reload=' . mt_rand(1, 9999) . ';#playgame',
 		'lang' => true
 	);
 
@@ -939,7 +939,6 @@ function ArcadePlayTabs($game)
 		{
 			if ($i <= $rating)
 				$context['arcade_ratecode'] .= '<a href="' . $scripturl . '?action=arcade;sa=rate;game=' . $context['game']['id'] . ';rate=' . $i . ';' . $context['session_var'] . '=' . $context['session_id'] . '" onclick="arcade_rate(' . $i . ', ' . $context['game']['id'] . '); return false;"><img id="imgrate' . $i . '" src="' . $settings['images_url'] . '/arcade_star.gif" alt="*" /></a>';
-
 			else
 				$context['arcade_ratecode'] .= '<a href="' . $scripturl . '?action=arcade;sa=rate;game=' . $context['game']['id'] . ';rate=' . $i . ';' . $context['session_var'] . '=' . $context['session_id'] . '" onclick="arcade_rate(' . $i . ', ' . $context['game']['id'] . '); return false;"><img id="imgrate' . $i . '" src="' . $settings['images_url'] . '/arcade_star2.gif" alt="*" /></a>';
 		}

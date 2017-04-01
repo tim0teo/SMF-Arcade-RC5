@@ -112,7 +112,7 @@ content="text/html;charset=',$context['character_set'],'" />
 			<br /><br /><br /><br /><br /></div></div><br />
 		</div>	';
 
-	echo '	
+	echo '
 	</body>
 </html>';
 }
@@ -179,7 +179,7 @@ function arcadePopHighscoreTemplate()
 	<body class="windowbg" id="html_page1">
 		<div style="text-align:center;overflow: hidden;">
 		<script type="text/javascript">
-			var highUrl = "', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], '";
+			var highUrl = "', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';reload=' . mt_rand(1, 9999) . ';#commentform3";
 			window.opener.location.href = highUrl;
 		</script>';
 	}
@@ -229,7 +229,7 @@ function arcadePopHighscoreTemplate()
 					echo '
 			</div>
 			<div>
-				<form action="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';score=',  $score['id'], '" method="post">
+				<form action="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';score=',  $score['id'], ';reload=' . mt_rand(1, 9999) . ';#commentform3" method="post">
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					<input type="hidden" name="p" value="0" />
 					<input type="text" id="new_comment" name="new_comment" style="width: 95%;" />
@@ -271,7 +271,7 @@ function arcadePopHighscoreTemplate()
 	<div class="pagesection">
 		<div class="align_left">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#bot"><b>' . $txt['go_down'] . '</b></a>' : '', '</div>
 	</div>
-	<form name="score" action="', $scripturl, '?action=arcade;sa=highscore;" method="post">
+	<form name="score" action="', $scripturl, '?action=arcade;sa=highscore;reload=' . mt_rand(1, 9999) . ';#commentform3" method="post">
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 		<input type="hidden" name="p" value="0" />
 		<input type="hidden" name="game" value="', $context['game']['id'], '" />
@@ -336,7 +336,7 @@ function arcadePopHighscoreTemplate()
 								<input type="hidden" name="p" value="0" />
 								<input type="button" onclick="arcadeCommentEdit(', $score['id'], ', ', $context['game']['id'], ', 1); return false;" name="csave" value="', $txt['arcade_save'], '" />
 							</div>
-							<a id="editlink', $score['id'], '" onclick="arcadeCommentEdit(', $score['id'], ', ', $context['game']['id'], ', 0); return false;" href="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';edit;score=', $score['id'], '" class="floatright">', $edit_button, '</a>';
+							<a id="editlink', $score['id'], '" onclick="arcadeCommentEdit(', $score['id'], ', ', $context['game']['id'], ', 0); return false;" href="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';edit;score=', $score['id'], ';reload=' . mt_rand(1, 9999) . ';#commentform3" class="floatright">', $edit_button, '</a>';
 		elseif ($score['can_edit'] && !empty($score['edit']))
 		{
 			echo '

@@ -25,7 +25,7 @@ $txt['search_favorites'] = 'From Favorites only';
 
 // General
 $txt['arcade_game_name'] = 'Game';
-$txt['arcade_personal_best'] = 'Personal best';
+$txt['arcade_personal_best'] = 'Personal Best';
 $txt['arcade_champion'] = 'Champion';
 $txt['arcade_stats'] = 'Statistics';
 $txt['arcade_member'] = 'Member';
@@ -66,8 +66,8 @@ $txt['arcade_game_most_played'] = 'Our most played game is %s, have you played i
 $txt['arcade_game_best_player'] = 'Did you know that %s has claimed way too many champions?';
 $txt['arcade_game_we_have_games'] = 'Total of %s games in the arcade';
 $txt['arcade_have_tried_these'] = 'Have you tried these?';
-$txt['arcade_game_of_day'] = 'Game of Day';
-$txt['arcade_latest_scores'] = 'Latest scores';
+$txt['arcade_game_of_day'] = 'Game Of The Day';
+$txt['arcade_latest_scores'] = 'Latest Scores';
 $txt['arcade_latest_score_item'] = '%4$s scored %3$s on <a href="%1$s">%2$s</a>';
 $txt['arcade_users'] = 'Users In Arcade';
 
@@ -75,7 +75,7 @@ $txt['arcade_users'] = 'Users In Arcade';
 // Game list
 $txt['arcade_no_games'] = 'No games available for playing';
 $txt['arcade_play'] = 'Play';
-$txt['arcade_no_scores'] = 'No scores recorded';
+$txt['arcade_no_scores'] = 'No Scores Recorded';
 $txt['arcade_random_game'] = 'Random game';
 $txt['arcade_viewscore'] = 'Highscores';
 $txt['arcade_add_favorites'] = 'Add to favorites';
@@ -93,7 +93,6 @@ $txt['arcade_no_javascript'] = 'You need to enable javascript in order to play g
 $txt['arcade_please_wait'] = 'Please wait while checking session...';
 $txt['arcade_session_check_ok'] = 'Session check successful!';
 $txt['arcade_save_score'] = 'Save score';
-$txt['arcade_html5'] = 'Your browser requires HTML5 support to play this game.';
 
 // Highscores
 $txt['arcade_no_comment'] = 'No comment';
@@ -168,7 +167,7 @@ $txt['players'] = 'Players';
 $txt['player_add'] = 'Add player';
 $txt['player_remove'] = 'Remove Player';
 $txt['num_players'] = 'Number of Players';
-$txt['num_players_help'] = 'Means how many players can join this match at maximum. Must be greater than or equal to number of players invited here';
+$txt['num_players_help'] = 'Means how many players can join this match at maximum. Must be greater than or equal to number of players invited here.';
 $txt['rounds'] = 'Rounds';
 $txt['add_game'] = 'Add Game';
 $txt['game_remove'] = 'Remove Game';
@@ -184,17 +183,17 @@ $txt['arcade_under_minute_ago'] = 'Under minute ago';
 $txt['arcade_unknown'] = 'unknown';
 
 // Statistics
-$txt['arcade_longest_champions'] = 'Longest champions';
+$txt['arcade_longest_champions'] = 'Longest Champions';
 $txt['arcade_best_games'] = 'Best Games (by rating)';
 $txt['arcade_best_players'] = 'Best Players (by champions)';
-$txt['arcade_most_played'] = 'Most played games';
-$txt['arcade_most_active'] = 'Most active players';
+$txt['arcade_most_played'] = 'Most Played Games';
+$txt['arcade_most_active'] = 'Most Active Players';
 $txt['arcade_member_stats'] = 'Arcade Statistics';
 $txt['arcade_champion_in'] = 'Currently Champion in';
 $txt['arcade_games'] = 'games';
-$txt['arcade_rated_game'] = 'Number of Games rated';
-$txt['arcade_average_rating'] = 'Average rating';
-$txt['arcade_member_best_scores'] = 'Personal best scores';
+$txt['arcade_rated_game'] = 'Number Of Games Rated';
+$txt['arcade_average_rating'] = 'Average Rating';
+$txt['arcade_member_best_scores'] = 'Personal Best Scores';
 
 // User settings
 $txt['arcade_usersettings_desc'] = 'You can change your Arcade settings from this page.';
@@ -367,14 +366,14 @@ $txt['arcade_dgo_up'] = 'Go Up';
 $txt['arcade_dhelp'] = 'Help';
 $txt['arcade_defdescript'] = 'Description';
 $txt['arcade_info'] = 'Arcade Information';
-$txt['arcade_u_b_1'] = 'Welcome to the Arcade';
+$txt['arcade_u_b_1'] = 'Welcome to the Arcade,';
 $txt['arcade_shouts'] = 'Arcade Shouts';
 $txt['arcade_shout'] = 'Shout!';
 $txt['arcade_shouted'] = 'Shouted - ';
 $txt['arcade_shout_del'] = 'Delete this shout?';
 $txt['arcade_shout_scored'] = 'Scored ';
 $txt['arcade_shout_on'] = ' on ';
-$txt['arcade_shout_pb'] = 'New personal best on ';
+$txt['arcade_shout_pb'] = 'New Personal Best On ';
 $txt['arcade_g_i_b_3'] = 'Most Played';
 $txt['arcade_g_i_b_5'] = 'for';
 $txt['arcade_g_i_b_6'] = 'Played';
