@@ -148,7 +148,7 @@ function ArcadeDownload()
 			'id_cat' => !empty($gameInfo['id_cat']) ? $gameInfo['id_cat'] : 0,
 			'submit_system' => !empty($gameInfo['submit_system']) ? $gameInfo['submit_system'] : '',
 			'game_rating' => !empty($gameInfo['game_rating']) ? $gameInfo['game_rating'] : 0,
-			'gamefile_name' => !empty($gameInfo['game_file']) ? str_replace(array(".swf", ".php", " "), array("", "", "_"), $gameInfo['game_file']) : '',
+			'gamefile_name' => !empty($gameInfo['internal_name']) ? ArcadeSpecialChars(strtolower(trim($gameInfo['internal_name'])), 'name') : '',
 			'gamesave' => 'games_download',
 			'dl_disable' => !empty($gameInfo['download_disable']) ? $gameInfo['download_disable'] : 0,
 			'dl_count' => ((int)$gameInfo['download_count'] + 1),

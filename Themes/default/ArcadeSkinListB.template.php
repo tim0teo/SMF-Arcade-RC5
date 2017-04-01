@@ -58,7 +58,7 @@ function template_arcade_list()
 					<td class="windowbg" style="position: relative;padding-left: 5px;">
 						<div class="floatleft">
 							<div><a href="', $game['url']['play'], '">', (strlen($game['name']) < 71 ? $game['name'] : substr($game['name'], 0, 67) . '...'), '</a></div>
-							<div class="smalltext"><a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . $game['width'] . ',' . $game['height'] . ', 0)">' . $txt['arcade_popplay'] . '</a></div>
+							<div class="smalltext"><a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['submit_system']  == 'html5' ? $game['width']+55 : $game['width']) . ',' . $game['height'] . ', 0)">' . $txt['arcade_popplay'] . '</a></div>
 						</div>
 					</td>
 					<td class="windowbg" style="padding-left: 5px;">

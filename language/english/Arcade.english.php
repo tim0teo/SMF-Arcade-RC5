@@ -93,6 +93,7 @@ $txt['arcade_no_javascript'] = 'You need to enable javascript in order to play g
 $txt['arcade_please_wait'] = 'Please wait while checking session...';
 $txt['arcade_session_check_ok'] = 'Session check successful!';
 $txt['arcade_save_score'] = 'Save score';
+$txt['arcade_html5'] = 'Your browser requires HTML5 support to play this game.';
 
 // Highscores
 $txt['arcade_no_comment'] = 'No comment';

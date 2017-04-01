@@ -11,89 +11,6 @@ function template_arcade_game_above()
 {
 	global $scripturl, $txt, $context, $settings, $modSettings, $boardurl, $options;
 
-
-	// Play link
-	$context['arcade']['buttons']['play'] =  array(
-		'text' => 'arcade_play',
-		'image' => 'arcade_play.gif', // Theres no image for this included (yet)
-		'url' => !empty($context['arcade']['play']) ? $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame" onclick="arcadeRestart(); return false;' : $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
-		'lang' => true
-	);
-
-	// Highscores link if it is supported
-	if ($context['game']['highscore_support'])
-		$context['arcade']['buttons']['score'] =  array(
-			'text' => 'arcade_viewscore',
-			'image' => 'arcade_viewscore.gif', // Theres no image for this included (yet)
-			'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $context['game']['id'] . ';#commentform3',
-			'lang' => true
-		);
-
-	// Random game
-	$context['arcade']['buttons']['random'] =  array(
-		'text' => 'arcade_random_game',
-		'image' => 'arcade_random.gif', // Theres no image for this included (yet)
-		'url' => $scripturl . '?action=arcade;sa=play;random;#playgame',
-		'lang' => true
-	);
-
-	if ($context['arcade']['can_admin_arcade'])
-		$context['arcade']['buttons']['edit'] =  array(
-			'text' => 'arcade_edit_game',
-			'image' => 'arcade_edit_game.gif', // Theres no image for this included (yet)
-			'url' => $scripturl . '?action=admin;area=managegames;sa=edit;game=' . $context['game']['id'],
-			'lang' => true
-		);
-
-	/* Download Link if it is supported */
-	if (empty($modSettings['arcadeEnableDownload']))
-		$modSettings['arcadeEnableDownload'] = false;
-
-	if (empty($modSettings['arcadeEnableReport']))
-		$modSettings['arcadeEnableReport'] = false;
-
-	if ($modSettings['arcadeEnableDownload'] == true)
-	{
-		$context['arcade']['buttons']['download'] =  array(
-			'text' => 'arcade_download_game',
-			'image' => 'arc_icons/dl_btn.png', // Use image from pdl mod -  / Themes / YOUR_THEME / images / arc_icons / dl_btn.png
-			'url' => $scripturl . '?action=arcade;sa=download;game=' . $context['game']['id'],
-			'lang' => true
-		);
-	}
-
-	if  (($modSettings['arcadeEnableReport'] == true) && (AllowedTo('arcade_report') == true))
-	{
-		$context['arcade']['buttons']['report'] =  array(
-			'text' => 'pdl_report',
-			'image' => 'arc_icons/arcade_report.gif', // Use image from pdl mod -  / Themes / YOUR_THEME / images / arc_icons / arcade_report.png
-			'url' => $scripturl . '?action=arcade;sa=report;game=' . $context['game']['id'],
-			'lang' => true
-		);
-	}
-
-	$ratecode = '';
-	$rating = $context['game']['rating'];
-
-	if ($context['arcade']['can_rate'])
-	{
-		// Can rate
-		for ($i = 1; $i <= 5; $i++)
-		{
-			if ($i <= $rating)
-				$ratecode .= '<a href="' . $scripturl . '?action=arcade;sa=rate;game=' . $context['game']['id'] . ';rate=' . $i . ';' . $context['session_var'] . '=' . $context['session_id'] . '" onclick="arcade_rate(' . $i . ', ' . $context['game']['id'] . '); return false;"><img id="imgrate' . $i . '" src="' . $settings['images_url'] . '/arcade_star.gif" alt="*" /></a>';
-
-			else
-				$ratecode .= '<a href="' . $scripturl . '?action=arcade;sa=rate;game=' . $context['game']['id'] . ';rate=' . $i . ';' . $context['session_var'] . '=' . $context['session_id'] . '" onclick="arcade_rate(' . $i . ', ' . $context['game']['id'] . '); return false;"><img id="imgrate' . $i . '" src="' . $settings['images_url'] . '/arcade_star2.gif" alt="*" /></a>';
-		}
-	}
-	else
-	{
-		// Can't rate
-		$ratecode = str_repeat('<img src="' . $settings['images_url'] . '/arcade_star.gif" alt="*" />' , $rating);
-		$ratecode .= str_repeat('<img src="' . $settings['images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $rating);
-	}
-
 	echo '
 	<div style="padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>
 	<span class="clear upperframe"><span>&nbsp;</span></span>
@@ -130,7 +47,7 @@ function template_arcade_game_above()
 
 	if ($context['arcade']['can_rate'])
 		echo '
-					', $ratecode, '<br />';
+					', $context['arcade_ratecode'], '<span style="display: block;"><span style="display: none;">&nbsp;</span></span>';
 
 	echo '
 				</div><br class="clear" />
@@ -208,6 +125,32 @@ function template_arcade_game_play()
 				</div>
 				<span class="botslice"><span>&nbsp;</span></span>
 			</div>
+		</div>';
+}
+
+function template_arcade_html5_game_play()
+{
+	global $scripturl, $txt, $context, $settings, $modSettings;
+
+	echo '
+			<form id="gameForm" action="', $scripturl, '?action=arcade;game=', $context['game']['id'], ';sa=html5Game;" method="POST">				
+				<input type="hidden" id="game" name="game" value="', $context['game']['id'], '">
+				<input type="hidden" id="time" name="time" value="', time(), '">
+				<input type="hidden" id="gamesessid" name="gamesessid">
+				<input type="hidden" id="html5" name="html5" value="1">
+				<input type="hidden" id="game_name" name="game_name" value="', $context['game']['internal_name'], '">
+				<div class="windowbg2" id="playgame">
+					<span class="topslice"><span>&nbsp;</span></span>
+					<div id="gamearea" class="centertext">
+						<div style="display: inline;overflow: hidden;border: 0px;height: ' . ((int)$context['game']['height'] + 8) . 'px;width: ' . ((int)$context['game']['width'] + 8) . 'px;">
+							<object id="gameObj" type="text/html" style="overflow: hidden;height: ' . ((int)$context['game']['height'] + 50) . 'px;width: ' . ((int)$context['game']['width'] + 50) . 'px;" data="' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '/' . $context['game']['file'] . '">
+							</object>
+						</div>
+						', !$context['arcade']['can_submit'] ? '<br /><strong>' . $txt['arcade_cannot_save'] . '</strong>' : '', '
+					</div>
+					<span class="botslice"><span>&nbsp;</span></span>
+				</div>
+			</form>
 		</div>';
 }
 

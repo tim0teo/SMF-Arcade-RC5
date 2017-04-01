@@ -445,6 +445,7 @@ function ManageGamesInstall2()
 						mb_substr($row['game_file'], 0, -4) . '.gif',
 						mb_substr($row['game_file'], 0, -4) . '.jpg',
 						mb_substr($row['game_file'], 0, -4) . '.php',
+						mb_substr($row['game_file'], 0, -5) . '.html',
 						mb_substr($row['game_file'], 0, -4) . '-game-info.xml',
 						mb_substr($row['game_file'], 0, -4) . '.xap',
 						mb_substr($row['game_file'], 0, -4) . '.ini',

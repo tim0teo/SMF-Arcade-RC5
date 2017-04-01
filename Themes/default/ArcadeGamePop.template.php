@@ -19,7 +19,7 @@ if (!defined('SMF'))
 
 function arcadePopupTemplate()
 {
-	global $scripturl, $txt, $context, $settings, $boardurl;
+	global $scripturl, $txt, $context, $settings, $boardurl, $modSettings;
 	$context['show_pm_popup'] = !empty($context['show_pm_popup']) ? true : false;
 
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -69,26 +69,51 @@ content="text/html;charset=',$context['character_set'],'" />
 <![endif]-->
 <!--[if !IE]><!-->
 	<body style="background-color: transparent;" id="html_page1">
-    <div style="background-color: transparent;text-align:center;">
+		<div style="background-color: transparent;text-align:center;">
 <!--<![endif]-->';
 	}
 	else
 	{
-		echo '<body class="windowbg" id="html_page1">
-      <div style="text-align:center;">';
+		echo '
+	<body class="windowbg" id="html_page1">
+		<div style="text-align:center;">';
 	}
 
-	echo '<div style="margin-top:0ex;text-align: center; font-style: italic; font-weight: bold; font-size: 8pt;"><a href="javascript:location.reload(true);">'.$context['game']['name'].'</a></div><br />';
+	echo '
+		<div style="margin-top:0ex;text-align: center; font-style: italic; font-weight: bold; font-size: 8pt;"><a href="javascript:location.reload(true);">'.$context['game']['name'].'</a></div><br />';
 
-	echo '<div style="position:absolute;margin-right: auto; left:2px; right: 2px; bottom:0.5px; top:3ex;">';
+	echo '
+		<div style="position:absolute;margin-right: auto; left:2px; right: 2px; bottom:0.5px; top:3ex;overflow: hidden;">';
 
 
-	echo '<div id="gamearea1" style="overflow: hidden;">
+	if ($context['game']['submit_system'] == 'html5')
+		echo '
+		<form id="gameForm" action="', $scripturl, '?action=arcade;game=', $context['game']['id'], ';sa=html5Game;" method="POST">
+			<input type="hidden" id="score" name="score">
+			<input type="hidden" id="game" name="game" value="', $context['game']['id'], '">
+			<input type="hidden" id="time" name="time" value="', time(), '">
+			<input type="hidden" id="gamesessid" name="gamesessid">
+			<input type="hidden" id="html5" name="html5" value="1">
+			<input type="hidden" id="game_name" name="game_name" value="', $context['game']['internal_name'], '">
+			<div id="gamearea1" style="overflow: hidden;">
+				<div style="display: inline;overflow: hidden;border: 0px;height: ' . ((int)$context['game']['height'] + 50) . 'px;width: ' . ((int)$context['game']['width'] + 50) . 'px;">
+					<object type="text/html" style="overflow: hidden;height: ' . ((int)$context['game']['height'] + 50) . 'px;width: ' . ((int)$context['game']['width'] + 50) . 'px;" data="' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '/' . $context['game']['file'] . '">
+					</object>
+				</div>
+				', !$context['arcade']['can_submit'] ? '<br /><strong>' . $txt['arcade_cannot_save'] . '</strong>' : '', '
+				<br /><br /><br /><br /><br /></div></div><br />
+			</div>
+		</form>';
+	else
+		echo '
+		<div id="gamearea1" style="overflow: hidden;">
 			', $context['game']['html']($context['game'], true), '
 			', !$context['arcade']['can_submit'] ? '<br /><strong>' . $txt['arcade_cannot_save'] . '</strong>' : '', '
-		<br /><br /><br /><br /><br /></div></div><br />';
-	echo '</div>
-   </body>
+			<br /><br /><br /><br /><br /></div></div><br />
+		</div>	';
+
+	echo '	
+	</body>
 </html>';
 }
 
@@ -123,6 +148,7 @@ function arcadePopHighscoreTemplate()
          body
          {
             padding: 0px 0px 0px 0px; background: transparent;
+			overflow: hidden;
          }
          body, td, th, .normaltext
          {
@@ -139,19 +165,19 @@ function arcadePopHighscoreTemplate()
 	{
 		echo '<!--[if IE]>
        <body class="windowbg" id="html_page1">
-      <div style="text-align:center;">
+      <div style="text-align:center;overflow: hidden;">
       <![endif]-->
 
 <!--[if !IE]><!-->
 <body style="background-color: transparent;" id="html_page1">
-      <div style="background-color: transparent;text-align:center;">
+      <div style="background-color: transparent;text-align:center;overflow: hidden;">
 <!--<![endif]-->';
 	}
 	else
 	{
 		echo '
 	<body class="windowbg" id="html_page1">
-		<div style="text-align:center;">
+		<div style="text-align:center;overflow: hidden;">
 		<script type="text/javascript">
 			var highUrl = "', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], '";
 			window.opener.location.href = highUrl;
@@ -164,7 +190,7 @@ function arcadePopHighscoreTemplate()
 		{
 			$score = &$context['arcade']['new_score'];
 			echo '
-		<div style="text-align:left;">
+		<div style="text-align:left;overflow: hidden;">
 			<h3 class="catbg">
 				<span class="left"></span>
 				<span class="right"></span>
@@ -174,7 +200,7 @@ function arcadePopHighscoreTemplate()
 		</div>
 		<div class="windowbg2">
 			<span class="topslice"><span></span></span>
-		<div style="padding: 0 0.5em">';
+		<div style="padding: 0 0.5em;overflow: hidden;">';
 
 			// No permission to save
 			if (!$score['saved'])

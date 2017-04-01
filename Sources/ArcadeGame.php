@@ -35,7 +35,7 @@ if (!defined('SMF'))
 
 function ArcadePlay()
 {
-	global $sourcedir, $scripturl, $txt, $db_prefix, $context, $smcFunc, $user_info, $modSettings, $context;
+	global $sourcedir, $scripturl, $txt, $db_prefix, $context, $smcFunc, $user_info, $modSettings, $context, $settings;
 	$context['arcade']['popupscore'] = false;
 
 	if (!$context['arcade']['can_play'])
@@ -126,7 +126,120 @@ function ArcadePlay()
 
 	$isCustomGame = $context['game']['submit_system'] == 'custom_game';
 
-	if (!isset($_REQUEST['xml']) && !isset($_REQUEST['ajax']))
+	ArcadePlayTabs($context['game']);
+
+	if ($context['game']['submit_system'] == 'html5')
+	{
+		unset($_SESSION['arcade_check_' . $context['game']['id']]);
+		if (!isset($_SESSION['arcade_play_' . $context['game']['id']]) || isset($_REQUEST['restart']))
+			$_SESSION['arcade_play_' . $context['game']['id']] = array();
+
+		$system['play']($context['game'], $_SESSION['arcade_play_' . $context['game']['id']]);
+
+		$_SESSION['arcade_play_extra_' . $context['game']['id']] = $extra;
+
+		$context['game']['html'] = $system['html'];
+
+		/* Layout start */
+		if (isset($_REQUEST['gamepopup']) && $_REQUEST['gamepopup'] == 1)
+		{
+			$context['arcade']['play'] = true;
+			$context['template_layers'] = array();
+			$context['popup2'] = false;
+			$_SESSION['arcade']['gamepopup'] = 1;
+			$_REQUEST['game'] = $context['game']['id'];
+			$context['sub_template'] = 'arcade_popup_player';
+			$context['arcade']['popupscore'] = true;
+			return;
+		}
+		elseif (isset($_REQUEST['pop']) && $_REQUEST['pop'] == 1)
+		{
+			$context['arcade']['play'] = true;
+			$context['template_layers'] = array();
+			$context['popup2'] = false;
+			$context['arcade']['popupscore'] = true;
+			$_SESSION['arcade']['pop'] = 1;
+			$_REQUEST['game'] = $context['game']['id'];
+			$context['sub_template'] = 'arcade_popup_player';
+			return;
+		}
+		elseif (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'download')
+		{
+			unset($_SESSION['arcade']['gamepopup']);
+			unset($_SESSION['arcade']['gamepop']);
+			$context['arcade']['popupscore'] = false;
+			$_REQUEST['game'] = $context['game']['id'];
+			$context['arcade']['popupscore'] = false;
+			$context['template_layers'][] = 'arcade_game';
+			$context['sub_template'] = 'arcade_html5_game_play';
+			$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
+			$context['arcade']['play'] = true;
+			$context['linktree'][] = array(
+				'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+				'name' => $context['game']['name'],
+			);
+			$context['html_headers'] .= '
+			<script type="text/javascript"><!-- // --><![CDATA[
+			var arcade_game_dir = "' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '";
+			// ]]></script>';
+			loadTemplate('ArcadeGame');
+			return;
+		}
+		else
+		{
+			unset($_SESSION['arcade']['popupscore']);
+			unset($_SESSION['arcade']['gamepopup']);
+			unset($_SESSION['arcade']['gamepop']);
+			$context['arcade']['popupscore'] = false;
+			$_SESSION['arcade']['pop'] = false;
+
+			if (empty($context['show_pm_popup']))
+				$context['show_pm_popup'] = false;
+
+			if (empty($modSettings['arcadeEnableGameTemplate']))
+				$modSettings['arcadeEnableGameTemplate'] = false;
+
+			if ($modSettings['arcadeEnableGameTemplate'] == 1)
+			{
+				$_REQUEST['game'] = $context['game']['id'];
+				$context['arcade']['popupscore'] = false;
+				$context['template_layers'][] = 'arcade_game';
+				$context['sub_template'] = 'arcade_html5_game_play';
+				$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
+				$context['arcade']['play'] = true;
+				$context['linktree'][] = array(
+					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+					'name' => $context['game']['name'],
+				);
+				$context['html_headers'] .= '
+				<script type="text/javascript"><!-- // --><![CDATA[
+				var arcade_game_dir = "' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '";
+				// ]]></script>';
+				loadTemplate('ArcadeGame');
+				return;				
+			}
+			else
+			{
+				$_REQUEST['game'] = $context['game']['id'];
+				$context['arcade']['popupscore'] = false;
+				$context['template_layers'][] = 'arcade_game';
+				$context['sub_template'] = 'arcade_html5_game_play';
+				$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
+				$context['arcade']['play'] = true;
+				$context['linktree'][] = array(
+					'url' => $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';#playgame',
+					'name' => $context['game']['name'],
+				);
+				$context['html_headers'] .= '
+				<script type="text/javascript"><!-- // --><![CDATA[
+				var arcade_game_dir = "' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '";
+				// ]]></script>';
+				loadTemplate('ArcadeGame');
+				return;
+			}
+		}		
+	}
+	elseif (!isset($_REQUEST['xml']) && !isset($_REQUEST['ajax']))
 	{
 		if (!isset($_SESSION['arcade_play_' . $context['game']['id']]) || !$isCustomGame || isset($_REQUEST['restart']))
 			$_SESSION['arcade_play_' . $context['game']['id']] = array();
@@ -219,7 +332,7 @@ function ArcadePlay()
 				$context['arcade']['popupscore'] = false;
 				$context['template_layers'][] = 'arcade_game';
 				$context['sub_template'] = 'arcade_game_play';
-				$context['page_title'] = sprintf($txt['arcade_game_play'], $context['game']['name']);
+				$context['page_title'] = sprintf($txt['arcade_game_play' ], $context['game']['name']);
 				$_REQUEST['game'] = $context['game']['id'];
 				$context['arcade']['play'] = true;
 				$context['linktree'][] = array(
@@ -533,6 +646,7 @@ function ArcadeHighscore()
 
 	$newScore = false;
 	$pop = !empty($_REQUEST['p']) ? 1 : 0;
+	ArcadePlayTabs($game);
 
 	if (isset($_SESSION['arcade']['highscore']['game']) && $_SESSION['arcade']['highscore']['game'] == $game['id'])
 	{
@@ -719,12 +833,12 @@ function template_arcade_popup_player()
 {
 	global $scripturl, $txt, $context, $settings;
 
-	$myTemplate = 'Themes/default/ArcadeGamePop.template.php';
+	$myTemplate = $settings['default_theme_dir'] . '/ArcadeGamePop.template.php';
 	if (file_exists($myTemplate))
-		{
-			require_once($myTemplate);
-			arcadePopupTemplate();
-		}
+	{
+		require_once($myTemplate);
+		arcadePopupTemplate();
+	}
 	return;
 }
 
@@ -748,5 +862,93 @@ function ArcadeAdjustSaveType($gameid, $submit_system)
 	}
 
 	return false;
+}
+
+function ArcadePlayTabs($game)
+{
+	global $context, $modSettings, $scripturl, $settings;
+
+	$context['game'] = $game;
+	// Play link
+	$context['arcade']['buttons']['play'] =  array(
+		'text' => 'arcade_play',
+		'image' => 'arcade_play.gif', // Theres no image for this included (yet)
+		'url' => !empty($context['arcade']['play']) ? $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999). ';#playgame" onclick="arcadeRestart(); return false;' : $scripturl . '?action=arcade;sa=play;game=' . $context['game']['id'] . ';reload=' . mt_rand(1, 9999). ';#playgame',
+		'lang' => true
+	);
+
+	// Highscores link if it is supported
+	if ($context['game']['highscore_support'])
+		$context['arcade']['buttons']['score'] =  array(
+			'text' => 'arcade_viewscore',
+			'image' => 'arcade_viewscore.gif', // Theres no image for this included (yet)
+			'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $context['game']['id'] . ';#commentform3',
+			'lang' => true
+		);
+
+	// Random game
+	$context['arcade']['buttons']['random'] =  array(
+		'text' => 'arcade_random_game',
+		'image' => 'arcade_random.gif', // Theres no image for this included (yet)
+		'url' => $scripturl . '?action=arcade;sa=play;random;#playgame',
+		'lang' => true
+	);
+
+	if ($context['arcade']['can_admin_arcade'])
+		$context['arcade']['buttons']['edit'] =  array(
+			'text' => 'arcade_edit_game',
+			'image' => 'arcade_edit_game.gif', // Theres no image for this included (yet)
+			'url' => $scripturl . '?action=admin;area=managegames;sa=edit;game=' . $context['game']['id'],
+			'lang' => true
+		);
+
+	/* Download Link if it is supported */
+	if (empty($modSettings['arcadeEnableDownload']))
+		$modSettings['arcadeEnableDownload'] = false;
+
+	if (empty($modSettings['arcadeEnableReport']))
+		$modSettings['arcadeEnableReport'] = false;
+
+	if ($modSettings['arcadeEnableDownload'] == true)
+	{
+		$context['arcade']['buttons']['download'] =  array(
+			'text' => 'arcade_download_game',
+			'image' => 'arc_icons/dl_btn.png', // Use image from pdl mod -  / Themes / YOUR_THEME / images / arc_icons / dl_btn.png
+			'url' => $scripturl . '?action=arcade;sa=download;game=' . $context['game']['id'],
+			'lang' => true
+		);
+	}
+
+	if  (($modSettings['arcadeEnableReport'] == true) && (AllowedTo('arcade_report') == true))
+	{
+		$context['arcade']['buttons']['report'] =  array(
+			'text' => 'pdl_report',
+			'image' => 'arc_icons/arcade_report.gif', // Use image from pdl mod -  / Themes / YOUR_THEME / images / arc_icons / arcade_report.png
+			'url' => $scripturl . '?action=arcade;sa=report;game=' . $context['game']['id'],
+			'lang' => true
+		);
+	}
+
+	$context['arcade_ratecode'] = '';
+	$rating = $context['game']['rating'];
+
+	if ($context['arcade']['can_rate'])
+	{
+		// Can rate
+		for ($i = 1; $i <= 5; $i++)
+		{
+			if ($i <= $rating)
+				$context['arcade_ratecode'] .= '<a href="' . $scripturl . '?action=arcade;sa=rate;game=' . $context['game']['id'] . ';rate=' . $i . ';' . $context['session_var'] . '=' . $context['session_id'] . '" onclick="arcade_rate(' . $i . ', ' . $context['game']['id'] . '); return false;"><img id="imgrate' . $i . '" src="' . $settings['images_url'] . '/arcade_star.gif" alt="*" /></a>';
+
+			else
+				$context['arcade_ratecode'] .= '<a href="' . $scripturl . '?action=arcade;sa=rate;game=' . $context['game']['id'] . ';rate=' . $i . ';' . $context['session_var'] . '=' . $context['session_id'] . '" onclick="arcade_rate(' . $i . ', ' . $context['game']['id'] . '); return false;"><img id="imgrate' . $i . '" src="' . $settings['images_url'] . '/arcade_star2.gif" alt="*" /></a>';
+		}
+	}
+	else
+	{
+		// Can't rate
+		$context['arcade_ratecode'] = str_repeat('<img src="' . $settings['images_url'] . '/arcade_star.gif" alt="*" />' , $rating);
+		$context['arcade_ratecode'] .= str_repeat('<img src="' . $settings['images_url'] . '/arcade_star2.gif" alt="" />' , 5 - $rating);
+	}
 }
 ?>

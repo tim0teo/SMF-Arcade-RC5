@@ -151,8 +151,8 @@ function ArcadeList()
 
 	$request = $smcFunc['db_query']('', '
 		SELECT
-			game.id_game, game.game_name, game.description, game.game_rating, game.num_plays, pdl.download_count, pdl.report_id, game.extra_data,
-			game.score_type, game.thumbnail, game.game_directory, game.id_topic, score.champion_from, game.id_cat, category.cat_name,
+			game.id_game, game.game_name, game.description, game.game_rating, game.num_plays, pdl.download_count, pdl.report_id, game.extra_data, game.game_file,
+			game.score_type, game.thumbnail, game.game_directory, game.id_topic, score.champion_from, game.id_cat, game.submit_system, category.cat_name,
 			game.thumbnail_small, game.help, game.extra_data, IFNULL(s1.id_member, 0) AS id_member_first, IFNULL(s2.id_member, 0) AS id_member_second, IFNULL(s3.id_member,0) AS id_member_third,
 			IFNULL(m1.real_name, 0) AS real_name1,
 			IFNULL(m2.real_name, 0) AS real_name2,
@@ -206,8 +206,6 @@ function ArcadeList()
 		if (empty($row['real_name']))
 			$row['real_name'] = $txt['guest'];
 
-		$extra = unserialize($row['extra_data']);
-
 		// Is game installed in subdirectory
 		if (!empty($row['game_directory']))
 			$gameurl = $modSettings['gamesUrl'] . '/' . $row['game_directory'] . '/';
@@ -218,6 +216,7 @@ function ArcadeList()
 
 		$context['arcade']['games'][] = array(
 			'id' => $row['id_game'],
+			'game_file' => $row['game_file'],
 			'url' => array(
 				'play' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'] . ';#playgame',
 				'popup' => $scripturl . '?action=arcade;sa=play;game=' . $row['id_game'] . ';pop=1',
@@ -233,8 +232,6 @@ function ArcadeList()
 			'name' => $row['game_name'],
 			'description' => parse_bbc($row['description']),
 			'plays' => $row['num_plays'],
-			'width' => $extra['width'],
-			'height' => $extra['height'],
 			'is_champion' => $row['id_score'] > 0,
 			'champion' => array(
 				'member_id' => $row['id_member'],
@@ -261,8 +258,9 @@ function ArcadeList()
 			'highscore_support' => $row['score_type'] != 2,
 			'is_favorite' => $context['arcade']['can_favorite'] ? $row['is_favorite'] > 0 : false,
 			'rating' => !empty($row['game_rating']) ? $row['game_rating'] : 0,
-			'width' => !empty($extra['width']) ? (int) $extra['width'] : 400,
-			'height' => !empty($extra['height']) ? (int) $extra['height'] :600,
+			'width' => $extra['width'],
+			'height' => $extra['height'],
+			'submit_system' => !empty($row['submit_system']) ? $row['submit_system'] : '',
 			'pdl_count' => $row['download_count'],
 			'report_id' => $row['report_id'],
 			'rating2' => round($row['game_rating']),

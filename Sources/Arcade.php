@@ -80,6 +80,8 @@ function Arcade()
 		'vbSessionStart' => array('Submit-v3arcade.php', 'ArcadeVbStart'),
 		'vbPermRequest' => array('Submit-v3arcade.php', 'ArcadeVbPermRequest'),
 		'vbBurn' => array('ArcadeGame.php', 'ArcadeSubmit'),
+		// HTML5
+		'html5Game' => array('Submit-HTML5.php', 'ArcadeHTML5Game'),
 	);
 
 	if (empty($modSettings['arcadeArenaEnabled']))
@@ -520,7 +522,7 @@ function arcade_log_online()
 		}
 		$smcFunc['db_free_result']($request);
 
-		$smcFunc['db_insert']('insert',
+		$smcFunc['db_insert']('replace',
 			'{db_prefix}arcade_member_data',
 			array(
 				'id_member' => 'int',

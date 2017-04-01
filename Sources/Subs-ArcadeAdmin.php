@@ -367,7 +367,6 @@ function installGames($games, $move_games = false)
 		if (file_exists($directory . '/game-info.xml'))
 		{
 			$gameinfo = readGameInfo($directory . '/game-info.xml');
-
 			if (!isset($gameinfo['id']))
 				unset($gameinfo);
 		}
@@ -386,7 +385,13 @@ function installGames($games, $move_games = false)
 		$thumbnail = glob($internal_name . '1.{png,gif,jpg}', GLOB_BRACE);
 		if (empty($thumbnail))
 			$thumbnail = glob($internal_name . '.{png,gif,jpg}', GLOB_BRACE);
+
 		$thumbnailSmall = glob($internal_name . '2.{png,gif,jpg}', GLOB_BRACE);
+		$thumbnail = empty($thumbnail) ? '' : $thumbnail;
+		$tumbnailSmall = empty($thumbnailSmall) ? '' : $thumbnailSmall;
+		$gameinfo['thumbnail'] = empty($gameinfo['thumbnail']) ? '' : $gameinfo['thumbnail'];
+		$gameinfo['thumbnail-small'] = empty($gameinfo['thumbnail-small']) ? '' : $gameinfo['thumbnail-small'];
+		$gameinfo['help'] = empty($gameinfo['help']) ? '' : $gameinfo['help'];
 
 		$game = array(
 			'id_file' => $row['id_file'],
@@ -394,9 +399,20 @@ function installGames($games, $move_games = false)
 			'directory' => !empty($row['game_directory']) ? preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $row['game_directory']))))) : '',
 			'file' => $row['game_file'],
 			'internal_name' => str_replace(array('/', '\\'), array('', ''), trim($internal_name, '.')),
-			'thumbnail' => isset($thumbnail[0]) ? $thumbnail[0] : '',
-			'thumbnail_small' => isset($thumbnailSmall[0]) ? $thumbnailSmall[0] : '',
-			'extra_data' => array(),
+			'thumbnail' => !empty($thumbnail[0]) ? $thumbnail[0] : !empty($gameinfo['thumbnail']) ? $gameinfo['thumbnail'] : '',
+			'thumbnail_small' => !empty($thumbnailSmall[0]) ? $thumbnailSmall[0] : !empty($gameinfo['thumbnail-small']) ? $gameinfo['thumbnail-small'] : '',
+			'extra_data' => array(
+				'width' => !empty($gameinfo['flash']['width']) && is_numeric($gameinfo['flash']['width']) ? $gameinfo['flash']['width'] : '',
+				'height' => !empty($gameinfo['flash']['height']) && is_numeric($gameinfo['flash']['height']) ? $gameinfo['flash']['height'] : '',
+				'flash_version' => !empty($gameinfo['flash']['version']) && is_numeric($gameinfo['flash']['version']) ? $gameinfo['flash']['version'] : 0,
+				'background_color' => !empty($gameinfo['flash']['bgcolor']) && strlen($gameinfo['flash']['bgcolor']) == 6 ? array(
+					hexdec(substr($gameinfo['flash']['bgcolor'], 0, 2)),
+					hexdec(substr($gameinfo['flash']['bgcolor'], 2, 2)),
+					hexdec(substr($gameinfo['flash']['bgcolor'], 4, 2))
+				) : array(),
+			),
+			'help' => isset($gameinfo['help']) ? $gameinfo['help'] : '',
+			'description' => isset($gameinfo['description']) ? $gameinfo['description'] : '',
 		);
 
 		unset($thumbnail, $thumbnailSmall);
@@ -407,11 +423,11 @@ function installGames($games, $move_games = false)
 			if (isset($gameinfo['flash']))
 			{
 				if (!empty($gameinfo['flash']['width']) && is_numeric($gameinfo['flash']['width']))
-					$game['extra_data']['width'] = (int) $gameinfo['flash']['width'];
+					$game['extra_data']['width'] = (int)$gameinfo['flash']['width'];
 				if (!empty($gameinfo['flash']['height']) && is_numeric($gameinfo['flash']['height']))
-					$game['extra_data']['height'] = (int) $gameinfo['flash']['height'];
+					$game['extra_data']['height'] = (int)$gameinfo['flash']['height'];
 				if (!empty($gameinfo['flash']['version']) && is_numeric($gameinfo['flash']['version']))
-					$game['extra_data']['flash_version'] = (int) $gameinfo['flash']['version'];
+					$game['extra_data']['flash_version'] = (int)$gameinfo['flash']['version'];
 				if (!empty($gameinfo['flash']['bgcolor']) && strlen($gameinfo['flash']['bgcolor']) == 6)
 				{
 					$game['extra_data']['background_color'] = array(
@@ -447,6 +463,8 @@ function installGames($games, $move_games = false)
 		{
 			if (isset($gameinfo['submit']))
 				$row['submit_system'] = $gameinfo['submit'];
+			elseif (substr($row['game_file'], -5) == '.html')
+				$row['submit_system'] = 'html5';
 			elseif (substr($row['game_file'], -3) == 'php')
 				$row['submit_system'] = 'custom_game';
 			elseif (substr($row['game_file'], -3) == 'xap')
@@ -532,13 +550,32 @@ function installGames($games, $move_games = false)
 		if(file_exists($modSettings['gamesDirectory'] . '/' .$game_directory . '/game-info.xml'))
 		{
 			$gameinfo = readGameInfo($modSettings['gamesDirectory'] . '/' .$game_directory . '/game-info.xml');
-			$game['description'] = !empty($gameinfo['description']) ? $gameinfo['description'] : '';
+			$game['help'] = isset($gameinfo['help']) ? $gameinfo['help'] : '';
+			$game['description'] = isset($gameinfo['description']) ? $gameinfo['description'] : '';
+			if (isset($gameinfo['flash']))
+			{
+				if (!empty($gameinfo['flash']['width']) && is_numeric($gameinfo['flash']['width']))
+					$game['extra_data']['width'] = (int)$gameinfo['flash']['width'];
+				if (!empty($gameinfo['flash']['height']) && is_numeric($gameinfo['flash']['height']))
+					$game['extra_data']['height'] = (int)$gameinfo['flash']['height'];
+				if (!empty($gameinfo['flash']['version']) && is_numeric($gameinfo['flash']['version']))
+					$game['extra_data']['flash_version'] = (int)$gameinfo['flash']['version'];
+				if (!empty($gameinfo['flash']['bgcolor']) && strlen($gameinfo['flash']['bgcolor']) == 6)
+				{
+					$game['extra_data']['background_color'] = array(
+						hexdec(substr($gameinfo['flash']['bgcolor'], 0, 2)),
+						hexdec(substr($gameinfo['flash']['bgcolor'], 2, 2)),
+						hexdec(substr($gameinfo['flash']['bgcolor'], 4, 2))
+					);
+				}
+			}
 		}
 
 		// override some settings if the php configuration file is available
 		if(file_exists($modSettings['gamesDirectory'] . '/' . $game_directory . '/' . $game['internal_name'] . '.php'))
 		{
 			@require_once($modSettings['gamesDirectory'] . '/' . $game_directory . '/' . $game['internal_name'] . '.php');
+			$imageArray = array('gif', 'png', 'jpg');
 			$game_info = array('gtitle', 'gwords', 'gkeys');
 			$arcade_info = array('name', 'description', 'help');
 			$x = 0;
@@ -551,7 +588,46 @@ function installGames($games, $move_games = false)
 				}
 				$x++;
 			}
+			$gameinfo['help'] = !empty($game['help']) ? $game['help'] : '';
+			if (!empty($config['gwidth']) && is_numeric($config['gwidth']))
+				$game['extra_data']['width'] = (int)$config['gwidth'];
+			if (!empty($config['gheight']) && is_numeric($config['gheight']))
+				$game['extra_data']['height'] = (int)$config['gheight'];
+			if (!empty($config['bgcolor']) && strlen($config['bgcolor']) == 6)
+			{
+				$game['extra_data']['background_color'] = array(
+					hexdec(substr($config['bgcolor'], 0, 2)),
+					hexdec(substr($config['bgcolor'], 2, 2)),
+					hexdec(substr($config['bgcolor'], 4, 2))
+				);
+			}
+
+			foreach ($imageArray as $type)
+			{
+				if (empty($game['thumbnail']))
+					if (file_exists($modSettings['gamesDirectory'] . '/' . $game_directory . '/' . $game['internal_name'] . '1.' . $type))
+						$game['thumbnail'] = $game['internal_name'] . '1.' . $type;
+
+				if (empty($game['thumbnail_small']))
+					if (file_exists($modSettings['gamesDirectory'] . '/' . $game_directory . '/' . $game['internal_name'] . '2.' . $type))
+						$game['thumbnail_small'] = $game['internal_name'] . '2.' . $type;
+			}
+
+			$swf->open($modSettings['gamesDirectory'] . '/' . $game_directory . '/' . $game['file']);
+
+			// Add missing values
+			if (!$swf->error)
+			{
+				$game['extra_data']['flash_version'] = $swf->header['version'];
+				$game['extra_data']['background_color'] = empty($game['extra_data']['background_color']) ? $swf->header['background'] : $game['extra_data']['background_color'];
+				$game['extra_data']['width'] = empty($game['extra_data']['width']) ? $swf->header['width'] : $game['extra_data']['width'];
+				$game['extra_data']['height'] = empty($game['extra_data']['height']) ? $swf->header['height'] : $game['extra_data']['height'];
+			}
+
+			$swf->close();
+
 		}
+
 		// Final install data
 		$gameOptions = array(
 			'internal_name' => $game['internal_name'],
@@ -559,7 +635,7 @@ function installGames($games, $move_games = false)
 			'description' => !empty($game['description']) ? $game['description'] : '',
 			'thumbnail' => $game['thumbnail'],
 			'thumbnail_small' => $game['thumbnail_small'],
-			'help' => !empty($game['help']) ? $game['help'] : '',
+			'help' => (!empty($game['help']) ? $game['help'] : !empty($gameinfo['help']) ? $gameinfo['help'] : ''),
 			'game_file' => $game['file'],
 			'game_directory' => $game_directory,
 			'submit_system' => $game['submit_system'],
@@ -580,6 +656,7 @@ function installGames($games, $move_games = false)
 					mb_substr($game['file'], 0, -4) . '.php',
 					mb_substr($game['file'], 0, -4) . '-game-info.xml',
 					mb_substr($game['file'], 0, -4) . '.xap',
+					mb_substr($game['file'], 0, -5) . '.html',
 					mb_substr($game['file'], 0, -4) . '.ini',
 					mb_substr($game['file'], 0, -4) . '.gif',
 					mb_substr($game['file'], 0, -4) . '.png',
@@ -788,7 +865,7 @@ function uninstallGames($games, $delete_files = false)
 		$directory = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $directory)))));
 		$gamedir = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $row['game_directory'])))));
 		$internal_name = str_replace(array('/', '\\'), array('', ''), trim($row['internal_name'], '.'));
-		
+
 		if (!empty($row['id_topic']))
 			$topics[] = $row['id_topic'];
 
@@ -799,6 +876,7 @@ function uninstallGames($games, $delete_files = false)
 				$row['thumbnail_small'],
 				mb_substr($row['game_file'], 0, -4) . '.php',
 				mb_substr($row['game_file'], 0, -4) . '-game-info.xml',
+				mb_substr($row['game_file'], 0, -5) . '.html',
 				mb_substr($row['game_file'], 0, -4) . '.xap',
 				mb_substr($row['game_file'], 0, -4) . '.ini',
 			)
@@ -829,9 +907,20 @@ function uninstallGames($games, $delete_files = false)
 				if (is_dir($directory) && basename($directory) !== $modSettings['gamesDirectory'])
 				{
 					$files = ArcadeAdminScanDir($directory, '');
+					$dirs = array($directory);
 					foreach ($files as $file)
+					{
 						unlink($file);
-					rmdir($directory);
+						if(!in_array(dirname($file), $dirs))
+							$dirs[] = dirname($file);
+					}
+					foreach ($dirs as $dir)
+					{
+						if (is_dir($dir) && rtrim($dir, '/') !== rtrim($directory, '/'))
+							rmdir($dir);
+					}
+					if (is_dir($directory))
+						rmdir($directory);
 				}
 			}
 			else
@@ -1040,6 +1129,12 @@ function isGame($file, $directory)
 				true,
 				$directory . '/' . $file,
 				array('file' => $file . '.swf')
+			);
+		elseif (file_exists($directory . '/' . $file . '/' . $file . '.html'))
+			return array(
+				true,
+				$directory . '/' . $file,
+				array('file' => $file . '.html')
 			);
 		elseif (file_exists($directory . '/' . $file . '/' . $file . '.xap'))
 			return array(
@@ -1617,7 +1712,7 @@ function ArcadeAdminScanDir($dir, $ignore = '')
 						foreach ($arr as $value)
 							$arrfiles[] = $dir . '/' . $value;
                     }
-					elseif ((!empty($ignore)) && $file == $ignore)
+					elseif ((!empty($ignore)) && basename($file) == $ignore)
                         continue;
 					else
 						$arrfiles[] = $dir . '/' . $file;

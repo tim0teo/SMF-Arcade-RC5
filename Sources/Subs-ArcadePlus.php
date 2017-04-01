@@ -299,6 +299,8 @@ function getSubmitSystem()
 		return 'ibp_sng';
 	elseif (false)
 		return 'pnflash';*/
+	elseif (isset($_POST['html5']) && isset($_POST['game_name']))
+		return 'html5';
 	elseif (isset($_POST['phpbb']) && isset($_POST['game_name']))
 		return 'phpbb';
 	elseif ((isset($_POST['v3arcade']) || $_REQUEST['sa'] == 'vbBurn') && (isset($_POST['game_name']) || isset($_POST['id'])))
@@ -402,6 +404,16 @@ function submitSystemInfo($system = '')
 			'xml_play' => 'ArcadePHPBBXMLPlay',
 			'html' => 'ArcadePHPBBHtml',
 		),
+		'html5' => array(
+			'system' => 'html5',
+			'name' => 'HTML5 (requires SMF Arcade custom)',
+			'file' => 'Submit-HTML5.php',
+			'get_game' => 'ArcadeHTML5GetGame',
+			'info' => 'ArcadeHTML5Submit',
+			'play' => 'ArcadeHTML5Play',
+			'xml_play' => 'ArcadeHTML5XMLPlay',
+			'html' => 'ArcadeHTML5Html',
+		),
 		'mochi' => array(
 			'system' => 'mochi',
 			'name' => 'MochiAds (requires external module)',
@@ -496,6 +508,8 @@ function getGameInfo($id_game = 0, $raw = false)
 
 	$description = parse_bbc($game['description']);
 	$help = parse_bbc($game['help']);
+	$extra = !empty($game['extra_data']) ? unserialize($game['extra_data']) : array('width' => 400, 'height' => 600);
+	$version = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? 'v2.0' : 'v2.1';
 
 	if (!empty($game['real_name']))
 	{
@@ -552,6 +566,9 @@ function getGameInfo($id_game = 0, $raw = false)
 		'is_favorite' => $context['arcade']['can_favorite'] ? $game['is_favorite'] > 0 : false,
 		'favorite' => $game['num_favorites'],
 		'member_groups' => isset($game['member_groups']) ? explode(',', $game['member_groups']) : array(),
+		'width' => !empty($extra['width']) ? (int) $extra['width'] : 400,
+		'height' => !empty($extra['height']) ? (int) $extra['height'] :600,
+		'smf_version' => $version,
 	);
 }
 
