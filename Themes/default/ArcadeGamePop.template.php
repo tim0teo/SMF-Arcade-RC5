@@ -86,7 +86,7 @@ function arcadePopupTemplate()
 			min-height: 100vh;
 			height: 100vh;
 			width: 100vw;
-		 }		 
+		 }
       </style>
    </head>';
 	$check_block = !empty($_REQUEST['block']) ? (int)$_REQUEST['block'] : 0;
@@ -149,7 +149,7 @@ function arcadePopupTemplate()
 		{
 			var docbody = parent.document.getElementsByTagName("body")[0];
 			docbody.height = "100vh";
-			docbody.width = "100vw":			
+			docbody.width = "100vw":
 			self.focus();
 		}
 		function escGameSmf() {
