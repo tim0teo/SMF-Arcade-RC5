@@ -62,10 +62,10 @@ function template_arcade_list()
 
 			if ($game['submit_system']  == 'html5')
 				echo '
-								<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['width'] + 50) . ',' . ($game['height']) . ', 0)">' . $txt['pdl_popplay'] . '</a>';
+								<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['width'] + 50) . ',' . ($game['height']+20) . ', 0)">' . $txt['pdl_popplay'] . '</a>';
 			else
 				echo '
-								<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . $game['width'] . ',' . $game['height'] . ', 0)">' . $txt['pdl_popplay'] . '</a>';
+								<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['width']+15) . ',' . ($game['height']+20) . ', 0)">' . $txt['pdl_popplay'] . '</a>';
 
 			echo '
 							</div>

@@ -48,7 +48,7 @@ function arcadePopupTemplate()
          {
             padding: 0px 0px 0px 0px; background: transparent;
 			width: ', ($context['game']['submit_system'] == 'html5' ? ($context['game']['width'] + 50) : ($context['game']['width'] + 20)), 'px;
-			height: ', ($context['game']['submit_system'] == 'html5' ? ($context['game']['height'] + 65) : ($context['game']['height'] + 20)), 'px;
+			height: ', ($context['game']['submit_system'] == 'html5' ? ($context['game']['height'] + 70) : ($context['game']['height'] + 20)), 'px;
 			overflow: hidden;
          }
          body, td, th, .normaltext
@@ -59,21 +59,26 @@ function arcadePopupTemplate()
          {
             font-size: xx-small;
          }
+		 .bodyblock
+		 {
+			 background-color: transparent;
+		 }
 		 .gamepop1
 		 {
 			overflow: hidden;
 			min-height: 100vh;
-			height: 100vh;
-			width: 100vw;
+			min-width: 100vw;
+			width: ', ($context['game']['submit_system'] == 'html5' ? ($context['game']['width'] + 50) : ($context['game']['width'] + 20)), 'px;
+			height: ', ($context['game']['submit_system'] == 'html5' ? ($context['game']['height'] + 100) : ($context['game']['height'] + 20)), 'px;
 		 }
 		 .gamepop2
 		 {
-			display: inline;
+			display: inline-block;
 			overflow: hidden;
 			border: 0px;
 			min-height: 100vh;
-			height: 100vh;
-			width: 100vw;
+			width: ', ($context['game']['submit_system'] == 'html5' ? ($context['game']['width'] + 50) : ($context['game']['width'] + 20)), 'px;
+			height: ', ($context['game']['submit_system'] == 'html5' ? ($context['game']['height'] + 100) : ($context['game']['height'] + 20)), 'px;
 		 }
 		 .gamepop3
 		 {
@@ -81,7 +86,7 @@ function arcadePopupTemplate()
 			min-height: 100vh;
 			height: 100vh;
 			width: 100vw;
-		 }
+		 }		 
       </style>
    </head>';
 	$check_block = !empty($_REQUEST['block']) ? (int)$_REQUEST['block'] : 0;
@@ -90,18 +95,18 @@ function arcadePopupTemplate()
 		echo '
 <!--[if IE]>
     <body class="windowbg" id="html_page1">
-		<div style="text-align:center;">
+		<div style="text-align:center;overflow: hidden;">
 <![endif]-->
 <!--[if !IE]><!-->
-	<body style="background-color: transparent;" id="html_page1">
-		<div style="background-color: transparent;text-align:center;">
+	<body class="bodyblock" id="html_page1">
+		<div style="background-color: transparent;text-align:center;overflow: hidden;">
 <!--<![endif]-->';
 	}
 	else
 	{
 		echo '
 	<body class="windowbg" id="html_page1">
-		<div style="text-align:center;">';
+		<div style="text-align:center;overflow: hidden;">';
 	}
 
 	echo '
@@ -128,14 +133,14 @@ function arcadePopupTemplate()
 				</object>
 			</div>
 			', !$context['arcade']['can_submit'] ? '<br /><strong>' . $txt['arcade_cannot_save'] . '</strong>' : '', '
-			<br /><br /><br /><br /><br /></div></div><br />
+			<div syle="padding-bottom: 40px;"><span style="display: none;">&nbsp;</span></div></div></div>
 		</div>';
 	else
 		echo '
 		<div id="gamearea1" class="gamepop1">
 			', $context['game']['html']($context['game'], true), '
 			', !$context['arcade']['can_submit'] ? '<br /><strong>' . $txt['arcade_cannot_save'] . '</strong>' : '', '
-			<br /><br /><br /><br /><br /></div></div><br />
+			<div syle="padding-bottom: 40px;"><span style="display: none;">&nbsp;</span></div></div></div>
 		</div>	';
 
 	echo '
@@ -144,7 +149,7 @@ function arcadePopupTemplate()
 		{
 			var docbody = parent.document.getElementsByTagName("body")[0];
 			docbody.height = "100vh";
-			docbody.width = "100vw":
+			docbody.width = "100vw":			
 			self.focus();
 		}
 		function escGameSmf() {

@@ -85,9 +85,9 @@ function template_arcade_list()
 		$report = array('url' => $scripturl . '?action=arcade;sa=report;game=' . $game3, 'text' => 'pdl_report', 'image' => 'arcade_report.gif', 'lang' => true);
 		$edit_game2 = array('url' => $scripturl . '?action=admin;area=managegames;sa=edit;game=' . $game3, 'text' => 'pdl_edit', 'image' => 'arcade_edit.gif', 'lang' => true);
 		if ($game['submit_system'] == 'html5')
-			$popup = array('url' => 'javascript:void(0)', 'text' => 'pdl_popplay', 'image' => 'arcade_popup.gif', 'lang' => true, 'custom' => 'onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['width']+50) . ',' . ($game['height']) . ',0)"');
+			$popup = array('url' => 'javascript:void(0)', 'text' => 'pdl_popplay', 'image' => 'arcade_popup.gif', 'lang' => true, 'custom' => 'onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['width']+50) . ',' . ($game['height']+20) . ',0)"');
 		else
-			$popup = array('url' => 'javascript:void(0)', 'text' => 'pdl_popplay', 'image' => 'arcade_popup.gif', 'lang' => true, 'custom' => 'onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . $game['width'] . ',' . $game['height'] . ',0)"');
+			$popup = array('url' => 'javascript:void(0)', 'text' => 'pdl_popplay', 'image' => 'arcade_popup.gif', 'lang' => true, 'custom' => 'onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['width']+15) . ',' . ($game['height']+20) . ',0)"');
 		if ((AllowedTo('arcade_admin') == true) && ((int)$game['report_id'] > 0))
 		{
 			$show_report = array('url' => $scripturl . '?action=admin;area=arcade;sa=pdl_reports;game=' . $game3, 'text' => 'show_pdl_report', 'image' => 'arcade_show_report.gif', 'lang' => true);
