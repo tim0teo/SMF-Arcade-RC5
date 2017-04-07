@@ -577,6 +577,7 @@ function arcadeCatIconPurge()
 		'thearcade.png',
 		'third.gif',
 		'tick.gif',
+		'arcade_esc.png',
 		);
 
 	$request = $smcFunc['db_query']('', '

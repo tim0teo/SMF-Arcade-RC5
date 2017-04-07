@@ -97,9 +97,54 @@ function template_arcade_game_above()
 					$("#game_toggle").toggleClass("toggle_up", true);
 					writeArcadeCookie("checkArcadeContainer", "none", 1);
 				}'), '
-				function myformxyz(myform)
+				function myformxyz(myform, myscore)
 				{
+					if (myscore > 0)
+					{
+						if (myform == "commentform3")
+							var newercomment = document.forms[myform]["c" + myscore].value;
+						else
+						{
+							var newercomment = document.forms[myform]["new_comment"].value;
+							myform = "commentform3";
+							myscore = document.forms[myform]["mynewscoreid"].value;
+						}
+						if (newercomment = "")
+							newercomment = "', $txt['arcade_no_comment'], '";
+						document.getElementById("comment" + myscore).innerHTML = newercomment;
+						document.forms[myform]["c" + myscore].value = newercomment;
+					}
+					else if (myscore == -1)
+					{
+						var newguest = document.forms[myform]["name"].value;
+						if (newguest == null || newguest == "")
+						{
+							alert("', $txt['arcade_comment_guestname'], '");
+						}
+						else
+						{
+							var checkguest = guestusername(newguest);
+							if (checkguest)
+							{
+								document.forms[myform]["name"].value = newguest;
+								document.getElementById(myform).submit();
+								return true;
+							}
+						}
+
+						return false;
+					}
 					document.getElementById(myform).submit();
+				}
+				function guestusername(newguestname)
+				{
+					var reg = new RegExp("[^a-zA-Z0-9]");
+					if (reg.test(newguestname))
+						alert("', $txt['arcade_comment_noguestname'], ');
+					else
+						return true;
+
+					return false;
 				}
 				function mycheckxyz()
 				{
@@ -107,6 +152,15 @@ function template_arcade_game_above()
 						return true;
 					else
 						return false;
+				}
+				function enterkey(event)
+				{
+					var code = (event.keyCode ? event.keyCode : event.which);
+					if(code == 13) {
+						document.getElementById("commentform3").submit();
+						return true;
+					}
+					return false;
 				}
 			// ]]></script>';
 }
@@ -125,7 +179,22 @@ function template_arcade_game_play()
 				</div>
 				<span class="botslice"><span>&nbsp;</span></span>
 			</div>
-		</div>';
+		</div>', ($context['game']['type'] == 'fullscreen' ? '
+		<div class="escgamediv">
+			<image class="escgame" id="escbutton" src="' . $settings['default_theme_url'] . '/images/arc_icons/arcade_esc.png' . '" alt="[ESC]" onclick="escGameSmf()" />
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				document.getElementsByTagName("body")[0].style.overflow = "hidden";
+				var divelement = document.getElementById("game");
+				divelement.width = "100vw";
+				divelement.height = "100vh";
+				scrollTo(document.body, divelement.offsetTop, 100);
+			};
+			function escGameSmf() {
+				window.location = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $context['game']['id'] . ';reload=' . mt_rand(0, 9999) . ';#commentform3";
+			}
+		</script>' : '');
 }
 
 function template_arcade_html5_game_play()
@@ -133,25 +202,42 @@ function template_arcade_html5_game_play()
 	global $scripturl, $txt, $context, $settings, $modSettings;
 
 	echo '
-			<form id="gameForm" action="', $scripturl, '?action=arcade;game=', $context['game']['id'], ';sa=html5Game;" method="POST">
-				<input type="hidden" id="game" name="game" value="', $context['game']['id'], '">
-				<input type="hidden" id="time" name="time" value="', time(), '">
-				<input type="hidden" id="gamesessid" name="gamesessid">
-				<input type="hidden" id="html5" name="html5" value="1">
-				<input type="hidden" id="game_name" name="game_name" value="', $context['game']['internal_name'], '">
-				<div class="windowbg2" id="playgame">
-					<span class="topslice"><span>&nbsp;</span></span>
-					<div id="gamearea" class="centertext">
-						<div style="display: inline;overflow: hidden;border: 0px;height: ' . ((int)$context['game']['height'] + 8) . 'px;width: ' . ((int)$context['game']['width'] + 8) . 'px;">
-							<object id="gameObj" type="text/html" style="overflow: hidden;height: ' . ((int)$context['game']['height'] + 50) . 'px;width: ' . ((int)$context['game']['width'] + 50) . 'px;" data="' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '/' . $context['game']['file'] . '">
-							</object>
-						</div>
-						', !$context['arcade']['can_submit'] ? '<br /><strong>' . $txt['arcade_cannot_save'] . '</strong>' : '', '
-					</div>
-					<span class="botslice"><span>&nbsp;</span></span>
-				</div>
+			<form id="gameForm" action="', $scripturl, '?action=arcade;game=', $context['game']['id'], ';sa=html5Game;" method="post">
+				<input type="hidden" id="game" name="game" value="', $context['game']['id'], '" />
+				<input type="hidden" id="time" name="time" value="', time(), '" />
+				<input type="hidden" id="gamesessid" name="gamesessid" />
+				<input type="hidden" id="html5" name="html5" value="1" />
+				<input type="hidden" id="popup" name="popup" value="0" />
+				<input type="hidden" id="gameexit" name="gameexit" value="0" />
+				<input type="hidden" id="game_name" name="game_name" value="', $context['game']['internal_name'], '" />
 			</form>
-		</div>';
+			<div class="windowbg2" id="playgame" style="overflow: hidden;">
+				<span class="topslice"><span>&nbsp;</span></span>
+				<div id="gamearea" class="centertext">', ($context['game']['type'] == 'fullscreen' ? '
+					<div style="display: inline;overflow: hidden;border: 0px;height: 100vh;width: 100vw;">
+						<object id="gameObj" type="text/html" style="position: absolute;left: 0px;top: 0px;overflow: hidden;height: 100%;width: 100%;" data="' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '/' . $context['game']['file'] . '">' : '
+					<div style="display: inline;overflow: hidden;border: 0px;height: ' . ((int)$context['game']['height'] + 8) . 'px;width: ' . ((int)$context['game']['width'] + 8) . 'px;">
+						<object id="gameObj" type="text/html" style="overflow: hidden;height: ' . ((int)$context['game']['height'] + 50) . 'px;width: ' . ((int)$context['game']['width'] + 50) . 'px;" data="' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '/' . $context['game']['file'] . '">'), '
+						</object>
+					</div>
+					', !$context['arcade']['can_submit'] ? '<br /><strong>' . $txt['arcade_cannot_save'] . '</strong>' : '', '
+				</div>
+				<span class="botslice"><span>&nbsp;</span></span>
+			</div>
+		</div>', ($context['game']['type'] == 'fullscreen' ? '
+		<div class="escgamediv" style="position: absolute;top: 20px;right: 0px;z-index: 100;">
+			<image class="escgame" id="escbutton" src="' . $settings['default_theme_url'] . '/images/arc_icons/arcade_esc.png' . '" alt="[ESC]" onclick="escGameSmf()" />
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				document.getElementsByTagName("body")[0].style.overflow = "hidden";
+				var objectelement = document.getElementById("gameObj");
+				scrollTo(document.body, objectelement.offsetTop, 100);
+			};
+			function escGameSmf() {
+				window.location = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $context['game']['id'] . ';reload=' . mt_rand(0, 9999) . ';#commentform3";
+			}
+		</script>' : '');
 }
 
 // Highscore
@@ -196,10 +282,11 @@ function template_arcade_game_highscore()
 					echo '
 					</div>
 					<div>
-						<form id="commentform1" action="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';score=',  $score['id'], ';reload=', mt_rand(1, 9999), ';#commentform3" method="post" onsubmit="myformxyz(\'commentform1\')">
+						<form name="commentform1" id="commentform1" action="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';score=',  $score['id'], ';reload=', mt_rand(1, 9999), ';#commentform3" method="post">
 							<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-							<input type="text" id="new_comment" name="new_comment" style="width: 95%;" />
-							<input onclick="myformxyz(\'commentform1\')" class="button_submit" type="submit" name="csave" value="', $txt['arcade_save'], '" />
+							<input type="hidden" name="mynewscoreid" value="', $score['id'], '" />
+							<input type="text" id="new_comment" name="new_comment" style="width: 95%;" maxlength="50" />
+							<input onclick="myformxyz(\'commentform1\', 0)" class="button_submit" type="submit" name="csave" value="', $txt['arcade_save'], '" />
 						</form>
 					</div>';
 			}
@@ -220,10 +307,10 @@ function template_arcade_game_highscore()
 			<div class="windowbg2 smalltext">
 				<span class="topslice"><span>&nbsp;</span></span>
 				<div style="padding: 0 0.5em">
-					<form id="commentform2" action="', $scripturl, '?action=arcade;sa=save;reload=', mt_rand(1, 9999), ';#commentform3" method="post" onsubmit="myformxyz(\'commentform2\')">
+					<form name="commentform2" id="commentform2" action="', $scripturl, '?action=arcade;sa=save;reload=', mt_rand(1, 9999), ';#commentform3" method="post" onsubmit="myformxyz(\'commentform2\', 0)">
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-						<input type="text" name="name" style="width: 95%;" />
-						<input class="button_submit" type="submit" value="', $txt['arcade_save'], '" />
+						<input type="text" name="name" style="width: 95%;" maxlength="20" />
+						<input class="button_submit" onclick="myformxyz(\'commentform2\'), -1" type="submit" value="', $txt['arcade_save'], '" />
 					</form>
 				</div>
 			</div><br />';
@@ -232,7 +319,7 @@ function template_arcade_game_highscore()
 	echo '
 		</div>';
 	echo '
-		<form id="commentform3" name="commentform3" action="', $scripturl, '?action=arcade;sa=highscore;reload=', mt_rand(1, 9999), ';#commentform3" method="post" onsubmit="myformxyz(\'commentform3\')">
+		<form id="commentform3" name="commentform3" action="', $scripturl, '?action=arcade;sa=highscore;reload=', mt_rand(1, 9999), ';#commentform3" method="post" onsubmit="myformxyz(\'commentform3\', 0)">
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 			<input type="hidden" name="game" value="', $context['game']['id'], '" />
 			<div style="padding-top: 10px;"><span style="display: none;">&nbsp;</span></div>
@@ -288,16 +375,16 @@ function template_arcade_game_highscore()
 			echo '
 							<div id="comment', $score['id'], '" class="floatleft">', $score['comment'], '</div>
 							<div id="edit', $score['id'], '" class="floatleft" style="display: none;">
-								<input type="text" id="c', $score['id'], '" value="', $score['raw_comment'], '" style="width: 95%;"  />
-								<input type="button" onclick="myformxyz(\'commentform3\')" name="csave" value="', $txt['arcade_save'], '" />
+								<input onkeydown="enterkey(event)" type="text" id="c', $score['id'], '" value="', $score['raw_comment'], '" style="width: 95%;" maxlength="50" />
+								<input type="button" onclick="myformxyz(\'commentform3\', \'', $score['id'], '\')" name="csave" value="', $txt['arcade_save'], '" />
 							</div>
-								<a id="editlink', $score['id'], '" onclick="myformxyz(\'commentform3\')" href="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';edit;score=', $score['id'], ';reload=' . mt_rand(1, 9999) . ';#commentform3" class="floatright">', $edit_button, '</a>';
+								<a id="editlink', $score['id'], '" onclick="arcadeCommentEdit(', $score['id'], ', ', $context['game']['id'], ', 1); myformxyz(\'commentform3\', \'', $score['id'], '\');" href="', $scripturl, '?action=arcade;sa=highscore;game=', $context['game']['id'], ';edit;score=', $score['id'], ';reload=' . mt_rand(1, 9999) . ';#commentform3" class="floatright">', $edit_button, '</a>';
 		elseif ($score['can_edit'] && !empty($score['edit']))
 		{
 			echo '
 							<input type="hidden" name="score" value="', $score['id'], '" />
-							<input type="text" name="new_comment" id="c', $score['id'], '" value="', $score['raw_comment'], '" style="width: 95%;" />
-							<input onclick="myformxyz(\'commentform3\')" class="button_submit" type="submit" name="csave" value="', $txt['arcade_save'], '" />';
+							<input type="text" name="new_comment" id="c', $score['id'], '" value="', $score['raw_comment'], '" style="width: 95%;" maxlength="50" />
+							<input onclick="myformxyz(\'commentform3\', \'', $score['id'], '\')" class="button_submit" type="submit" name="csave" value="', $txt['arcade_save'], '" />';
 		}
 		else
 			echo $score['comment'];

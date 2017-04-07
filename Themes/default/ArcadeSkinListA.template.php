@@ -100,8 +100,8 @@ function template_arcade_list()
 		$game['height'] = $game['height'] + 20;
 
 		if ($game['submit_system'] == 'html5')
-			$pop = '<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['width'] + 55) . ',' . ($game['height']) . ', 0)">' . $txt['pdl_popplay'] . '</a>';
-		else	
+			$pop = '<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . ($game['width'] + 50) . ',' . ($game['height']) . ', 0)">' . $txt['pdl_popplay'] . '</a>';
+		else
 			$pop = '<a href="javascript:void(0)" onclick="myGamePopupArcade(\'' . $game['url']['popup'] . '\',' . $game['width'] . ',' . $game['height'] . ', 0)">' . $txt['pdl_popplay'] . '</a>';
 
 		$hiscr = '

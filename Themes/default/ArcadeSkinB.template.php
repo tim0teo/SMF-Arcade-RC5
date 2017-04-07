@@ -11,8 +11,19 @@ if (!defined('SMF'))
 
 function template_arcade_above()
 {
-	global $settings, $context, $txt, $modSettings, $scripturl, $db_count, $user_info;
+	global $settings, $context, $txt, $modSettings, $scripturl, $db_count, $user_info;	
 
+	if (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'highscore')
+	{
+		echo '
+	<div class="cat_bar" style="clear: both;position: relative;bottom: -15px;">
+		<h3 class="catbg centertext">
+			<span class="centertext" style="clear: left;width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
+		</h3>
+	</div>';
+		return;
+	}
+	
 	echo '
 	<div style="display: none;" id="arcadeHiddenInfo">
 		<div id="pausecontent0">', ArcadeInfoBestPlayers(5), '</div>
@@ -28,7 +39,7 @@ function template_arcade_above()
 		<h3 class="catbg centertext">
 			<span class="centertext" style="clear: left;width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
 		</h3>
-	</div>
+	</div>	
 	', $context['arcade_smf_version'] == 'v2.1' ? '
 	<div class="up_contain windowbg" style="padding: 0px;border: 0px;">' :
 	'<span class="clear upperframe"><span>&nbsp;</span></span>

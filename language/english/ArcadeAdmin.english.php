@@ -26,7 +26,7 @@ $txt['arcade_default_email'] = 'no_reply_' . mt_rand() . '@arcadebot.com';
 
 // Information
 $txt['arcade_status'] = 'Version Information';
-$txt['arcade_latest_news'] = 'Latest News';
+$txt['arcade_latest_news'] = 'Latest news';
 $txt['arcade_unable_to_connect'] = 'Unable to connect to %s, for latest news visit site.';
 $txt['arcade_installed_version'] = 'Installed version';
 $txt['arcade_latest_version'] = 'Latest version';
@@ -61,7 +61,7 @@ $txt['arcade_admin_settings'] = 'Arcade Settings';
 $txt['arcade_settings_desc'] = 'Here you can edit settings of arcade';
 $txt['arcadeEnabled'] = 'Arcade Enabled';
 $txt['arcadeArenaEnabled'] = 'Arena Enabled';
-$txt['arcadeEnableFavorites'] = 'Allow Users Keep List Of Favorite Games';
+$txt['arcadeEnableFavorites'] = 'Allow Users To Keep List Of Favorite Games';
 $txt['arcadeEnableRatings'] = 'Allow Users To Rate Games';
 
 $txt['arcadeCommentLen'] = 'Max Comment Length';
@@ -71,8 +71,8 @@ $txt['gamesPerPage'] = 'Games Per Page';
 $txt['matchesPerPage'] = 'Matches Per Page';
 $txt['scoresPerPage'] = 'Scores Per Page';
 
-$txt['gamesEmail'] = 'Email address to send high scores';
-$txt['gamesNotificationsBulk'] = 'Enable bulk notification for Emails and PMs';
+$txt['gamesEmail'] = 'Email Address To Send High Scores';
+$txt['gamesNotificationsBulk'] = 'Enable Bulk Notification For Emails And PMs';
 $txt['gamesUrl'] = 'Url To Games';
 $txt['gamesDirectory'] = 'Path To Games Directory';
 $txt['arcadeGamecacheUpdate'] = 'Update Gamecache Automatically';
@@ -80,24 +80,24 @@ $txt['arcadeGamecacheUpdate'] = 'Update Gamecache Automatically';
 $txt['arcadeCheckLevel'] = 'Cheating Check Mode';
 $txt['arcade_check_level0'] = 'Basic (Warning only)';
 $txt['arcade_check_level1'] = 'Default (Recommended)';
-$txt['arcade_check_level2'] = 'Default plus (Not recommended)';
+$txt['arcade_check_level2'] = 'Default Plus (Not recommended)';
 
 $txt['arcadeMaxScores'] = 'Maximum Scores (per player per game)';
 
 // Arcade Admin permissions
 $txt['arcade_general_permissions'] = 'Arcade Permissions';
-$txt['arcadePermissionMode'] = 'Permission Mode';
+$txt['arcadePermissionMode'] = 'Permission mode';
 $txt['arcade_permission_mode_none'] = 'None';
 $txt['arcade_permission_mode_category'] = 'Category Only';
 $txt['arcade_permission_mode_game'] = 'Game Only';
-$txt['arcade_permission_mode_and_both'] = 'Category And Game';
-$txt['arcade_permission_mode_or_both'] = 'Category Or Game';
+$txt['arcade_permission_mode_and_both'] = 'Category and Game';
+$txt['arcade_permission_mode_or_both'] = 'Category or Game';
 
 // Post Permissions
 $txt['arcadePostPermission'] = 'Enable Post Count / Post Per Day Check';
 $txt['arcadePostsPlay'] = 'Cumulative Post Needed To Play';
 $txt['arcadePostsLastDay'] = 'Posts In Last 24 Hours Needed To Play';
-$txt['arcadePostsPlayAverage'] = 'Average Post Per Day Needed To play';
+$txt['arcadePostsPlayAverage'] = 'Average Post Per Day Needed To Play';
 
 $txt['perm_arcade_view'] = 'View Arcade';
 $txt['perm_arcade_play'] = 'Play In Arcade';
@@ -114,7 +114,7 @@ $txt['manage_games_filter_disabled'] = 'Hide Enabled';
 
 $txt['arcade_no_games_filter'] = 'No games found. Try changing filter';
 $txt['arcade_no_games_installed'] = 'You haven\'t installed any games yet, you can <a href="%s">install games here</a>.';
-$txt['arcade_no_games_available_for_install'] = 'No games available to install, you can <a href="%s">upload games here</a>.';
+$txt['arcade_no_games_available_for_install'] = 'No Games available to install, you can <a href="%s">upload games here</a>.';
 
 $txt['arcade_edit'] = '[ Edit ]';
 $txt['arcade_install'] = '[ Install ]';
@@ -151,18 +151,18 @@ $txt['arcade_upload_exists'] = 'File Exists ~ %s';
 $txt['arcade_maintenance'] = 'Arcade Maintenance';
 $txt['arcade_maintenance_desc'] = 'Here you can perform maintenace actions on Arcade features.';
 $txt['arcade_maintain_done'] = 'Maintenance finished!';
-$txt['arcade_maintenance_fixScores'] = 'Check and repair any errors on score tables';
+$txt['arcade_maintenance_fixScores'] = 'Check And Repair Any Errors On Score Tables';
 $txt['arcade_maintenance_updateGamecache'] = 'Update GameCache';
 $txt['arcade_maintenance_onlinePurge'] = 'Purge Online Arcade Log';
 $txt['arcade_maintenance_downloadPurge'] = 'Purge Download Directory';
-$txt['arcade_maintenance_shoutPurge'] = 'Purge Shouts in Shoutbox';
+$txt['arcade_maintenance_shoutPurge'] = 'Purge Shouts In Shoutbox';
 $txt['arcade_maintenance_iconPurge'] = 'Purge Unused Category Icons';
 $txt['arcade_maintenance_main'] = 'Main';
 $txt['arcade_maintenance_highscore'] = 'Highscore';
 $txt['arcade_maintenance_category'] = 'Categories';
 $txt['ArcadeFixCats'] = 'Fix Categories';
-$txt['arcade_cats_default'] = 'Set All Games to Default';
-$txt['arcade_cats_undefault'] = 'Set All Unassigned Games to Default';
+$txt['arcade_cats_default'] = 'Set All Games To Default';
+$txt['arcade_cats_undefault'] = 'Set All Unassigned Games To Default';
 $txt['arcade_cats_peruse'] = 'Fix Category Game Counts';
 $txt['arcade_commence_now'] = 'Complete Action';
 $txt['arcade_admin_opt_cat'] = 'Opt Category';
@@ -171,7 +171,7 @@ $txt['arcade_admin_opt_cat_title'] = 'Default Category:';
 // Highscore Maintenance
 $txt['arcade_remove_scores_older_than'] = 'Remove scores that are older than';
 $txt['arcade_remove_scores_days'] = 'days.';
-$txt['arcade_remove_all_scores'] = 'Remove all scores';
+$txt['arcade_remove_all_scores'] = 'Remove all scores.';
 $txt['arcade_remove_now'] = 'Remove Now';
 
 // Editor
@@ -188,10 +188,10 @@ $txt['arcade_no_category'] = '(no category)';
 $txt['check_all'] = 'Check All';
 
 $txt['arcade_advanced'] = 'Advanced Settings';
-$txt['arcade_internal_name'] = 'Internal name';
+$txt['arcade_internal_name'] = 'Internal Name';
 $txt['arcade_directory'] = 'Directory';
 $txt['arcade_file'] = 'File';
-$txt['arcade_game_type'] = 'Game type';
+$txt['arcade_game_type'] = 'Game Type';
 $txt['arcade_game_type_legacy'] = 'Legacy (SMFArcade v1, phpBB, IPB)';
 $txt['arcade_game_type_v2'] = 'SMFArcade v2';
 $txt['arcade_game_type_flash'] = 'Flash';
@@ -205,7 +205,9 @@ $txt['arcade_extra_options_width'] = 'Width';
 $txt['arcade_extra_options_height'] = 'Height';
 $txt['arcade_extra_options_version'] = 'Flash Version';
 $txt['arcade_extra_options_backgroundcolor'] = 'Background color';
-
+$txt['arcade_extra_options_type'] = 'Fullscreen Mode';
+$txt['arcade_extra_data_type_normal'] = 'Normal';
+$txt['arcade_extra_data_type_full'] = 'Fullscreen';
 $txt['game_info_export'] = 'Export game-info.xml';
 
 // Game Installer
@@ -250,7 +252,7 @@ $txt['category_name'] = 'Name';
 $txt['arcade_save_category'] = 'Save';
 $txt['arcade_unable_to_remove'] = 'Unable to remove category %s';
 $txt['arcade_category_no_default'] = 'There is no default category set.';
-$txt['arcade_category_permission_allowed'] = 'Groups allowed to access';
+$txt['arcade_category_permission_allowed'] = 'Groups Allowed To Access';
 $txt['arcade_make_default'] = 'Make default';
 $txt['arcade_upload_cat'] = 'Upload Category Icon';
 $txt['arcade_cat_image_icon'] = 'Image :';
@@ -262,7 +264,7 @@ $txt['arcadeEnablePosting'] = 'Enable Game Posting';
 $txt['gamesBoard'] = 'Board ID Number';
 $txt['gamesMessage'] = 'Posting Statement';
 $txt['arcadeEnableIframe'] = 'Enable Game Inside Post';
-$txt['arcadePosterid'] = 'User ID for Posting';
+$txt['arcadePosterid'] = 'User ID For Posting';
 $txt['arcadeEnableDownload'] = 'Enable Game Downloading';
 $txt['arcadeEnableReport'] = 'Enable Reporting Game Errors';
 $txt['arcadeEnableGameDisable'] = 'Disable Games Reported With Errors';
@@ -342,9 +344,9 @@ $txt['permissionname_arcade_online'] = 'View Arcade Online';
 $txt['permissionname_arcade_download'] = 'Download Games';
 $txt['permissionname_arcade_report'] = 'Report Game Errors';
 $txt['permissionname_arcade_skin'] = 'Change Skin';
-$txt['permissionhelp_arcade_skin'] = 'Allow users to Change the Skin of the arcade';
+$txt['permissionhelp_arcade_skin'] = 'Allow users to change the Skin of the arcade';
 $txt['permissionname_arcade_list'] = 'Change List';
-$txt['permissionhelp_arcade_list'] = 'Allow users to Change the List of the arcade';
+$txt['permissionhelp_arcade_list'] = 'Allow users to change the List of the arcade';
 $txt['perm_arcade_online'] = 'View Arcade Online';
 $txt['perm_arcade_download'] = 'Download Games';
 $txt['perm_arcade_report'] = 'Report Broken Games';

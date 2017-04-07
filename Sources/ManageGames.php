@@ -33,9 +33,9 @@ function ManageGames()
 	global $scripturl, $txt, $context, $sourcedir, $smcFunc, $modSettings, $settings, $smfVersion;
 
 	require_once($sourcedir . '/Arcade.php');
-	require_once($sourcedir . '/Subs-ArcadeAdmin.php');	
+	require_once($sourcedir . '/Subs-ArcadeAdmin.php');
 	$context['html_headers'] .= '
-	<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/arcade_upload.css?rc4" />';
+	<link type="text/css" rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/arcade_upload.css?rc4" />';
 
 	// Templates
 	loadTemplate('ManageGames');
@@ -812,6 +812,7 @@ function EditGame()
 			'extra_data' => unserialize($game['extra_data']),
 			'enabled' => !empty($game['enabled']),
 		);
+		$context['game']['extra_data']['type'] = !empty($context['game']['extra_data']['type']) ? $context['game']['extra_data']['type'] : 'normal';
 
 		if (!is_array($context['game']['extra_data']) || isset($_REQUEST['detect']))
 		{
@@ -827,6 +828,7 @@ function EditGame()
 					'height' => $swf->header['height'],
 					'flash_version' => $swf->header['version'],
 					'background_color' => $swf->header['background'],
+					'type' => (!empty($context['game']['extra_data']['type'])) && $context['game']['extra_data']['type'] == 'fullscreen' ? 'fullscreen' : 'normal',
 				);
 
 				$swf->close();
@@ -838,6 +840,7 @@ function EditGame()
 					'height' => '',
 					'flash_version' => '',
 					'background_color' => array('', '', ''),
+					'type' => '',
 				);
 			}
 		}
@@ -916,6 +919,7 @@ function EditGame2()
 			'extra_data' => unserialize($game['extra_data']),
 			'enabled' => !empty($game['enabled']),
 		);
+		$type = !empty($context['game']['extra_data']['type']) ? $context['game']['extra_data']['type'] : 'normal';
 
 		if (!is_array($context['game']['extra_data']) || isset($_REQUEST['detect']))
 		{
@@ -930,6 +934,7 @@ function EditGame2()
 					'width' => $swf->header['width'],
 					'height' => $swf->header['height'],
 					'flash_version' => $swf->header['version'],
+					'type' => $type,
 					'background_color' => $swf->header['background'],
 				);
 
@@ -942,6 +947,7 @@ function EditGame2()
 					'height' => '',
 					'flash_version' => '',
 					'background_color' => array('', '', ''),
+					'type' => '',
 				);
 			}
 		}
@@ -1014,6 +1020,7 @@ function EditGame2()
 		if (!isset($context['submit_systems'][$_POST['submit_system']]))
 			$errors['submit_system'] = 'invalid';
 
+		$context['game']['extra_data']['type'] = !empty($context['game']['extra_data']['type']) ? $context['game']['extra_data']['type'] : 'normal';
 		$extra_data = $context['game']['extra_data'];
 
 		if (isset($_POST['extra_data']))
@@ -1025,7 +1032,7 @@ function EditGame2()
 		$gameOptions['internal_name'] = str_replace(array('/', '\\'), array('', ''), trim($_POST['internal_name'], '.'));
 		$gameOptions['submit_system'] = $_POST['submit_system'];
 		$gameOptions['game_directory'] = preg_replace('#/+#','/',implode('/', array_map(function($value) {return trim($value, '.');}, explode('/', str_replace('\\', '/', $_POST['game_directory'])))));
-		$gameOptions['game_file'] = str_replace(array('/', '\\'), array('', ''), trim($_POST['game_file'], '.'));
+		$gameOptions['game_file'] = str_replace(array('\\'), array(''), trim($_POST['game_file'], '.'));
 		$gameOptions['score_type'] = (int) $_POST['score_type'];
 		$gameOptions['extra_data'] = $extra_data;
 	}
@@ -1068,6 +1075,7 @@ function ExportGameInfo()
 		<version>' . $game['extra_data']['flash_version'] . '</version>
 		<width>' . $game['extra_data']['width'] . '</width>
 		<height>' . $game['extra_data']['height'] . '</height>
+		<type>' . (!empty($game['extra_data']['type']) &&  $game['extra_data']['type'] == 'fullscreen' ? 'fullscreen' : 'normal') . '</type>
 		<bgcolor>' . strtoupper(implode('', array_map('dechex', $game['extra_data']['background_color'])))  . '</bgcolor>
 	</flash>';
 	}

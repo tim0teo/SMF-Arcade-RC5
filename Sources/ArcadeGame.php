@@ -633,7 +633,7 @@ function ArcadeSave_Guest()
 
 function ArcadeHighscore()
 {
-	global $scripturl, $txt, $db_prefix, $modSettings, $context, $smcFunc, $user_info, $sourcedir;
+	global $scripturl, $txt, $db_prefix, $modSettings, $context, $smcFunc, $user_info, $sourcedir, $settings;
 
 	// Is game set
 	if (!isset($_REQUEST['game']))
@@ -645,7 +645,10 @@ function ArcadeHighscore()
 		fatal_lang_error('arcade_game_not_found', false);
 
 	$newScore = false;
-	$pop = !empty($_REQUEST['p']) ? 1 : 0;
+	$pop = isset($_REQUEST['pop']) && $_REQUEST['pop'] == 1 ? 1 : 0;
+	$pop = !empty($_SESSION['arcade']['gamepopup']) || !empty($_SESSION['arcade']['pop']) || !empty($pop) ? 1 : 0;
+	$_SESSION['arcade']['gamepopup'] = false;
+	$_SESSION['arcade']['pop'] = false;
 	ArcadePlayTabs($game);
 
 	if (isset($_SESSION['arcade']['highscore']['game']) && $_SESSION['arcade']['highscore']['game'] == $game['id'])
@@ -716,7 +719,7 @@ function ArcadeHighscore()
 				null
 			);
 		}
-		redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
+		redirectexit('action=arcade;sa=highscore;' . ($pop == 1 ? 'pop=1;' : '') . 'game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
 	}
 	// Quick Management
 	elseif ($context['arcade']['can_admin_arcade'] && isset($_REQUEST['qaction']))
@@ -726,7 +729,7 @@ function ArcadeHighscore()
 		if ($_REQUEST['qaction'] == 'delete' && !empty($_REQUEST['scores']))
 			deleteScores($game, $_REQUEST['scores']);
 
-		redirectexit('action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
+		redirectexit('action=arcade;sa=highscore;' . ($pop == 1 ? 'pop=1;' : '') . 'game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3');
 	}
 
 	// How many scores there are
@@ -741,7 +744,7 @@ function ArcadeHighscore()
 	list ($scoreCount) = $smcFunc['db_fetch_row']($result);
 	$smcFunc['db_free_result']($result);
 
-	$context['page_index'] = constructPageIndex($scripturl .'?action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3', $_REQUEST['start'], $scoreCount, $context['scores_per_page'], false);
+	$context['page_index'] = constructPageIndex($scripturl .'?action=arcade;sa=highscore;' . ($pop == 1 ? 'pop=1;' : '') . 'game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3', $_REQUEST['start'], $scoreCount, $context['scores_per_page'], false);
 
 	// Actual query
 	$result = $smcFunc['db_query']('', '
@@ -791,6 +794,7 @@ function ArcadeHighscore()
 			'comment' => parse_bbc(!empty($score['comment']) ? $score['comment'] : $txt['arcade_no_comment']),
 			'raw_comment' => $score['comment'],
 			'can_edit' => $user_info['id'] == $score['id_member'] ? ($context['arcade']['can_comment_own'] || $context['arcade']['can_comment_any']) : $context['arcade']['can_comment_any'],
+			'edit' => !empty($_POST['p']) ? 1 : 0,
 		);
 	}
 	$smcFunc['db_free_result']($result);
@@ -803,29 +807,40 @@ function ArcadeHighscore()
 
 	// Template
 	$popScore = !empty($scoreId) ? (int)$scoreId : -1;
-	$context['html_headers'] .= '
-		<script type="text/javascript">
-			var highUrl = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';edit;score=' . $popScore . ';reload=' . mt_rand(1, 9999) . ';#commentform3";
-			window.opener.location.href = highUrl;
-			window.self.close();
-		</script>';
-	$_SESSION['arcade']['gamepopup'] = false;
-	$_SESSION['arcade']['pop'] = false;
-	$context['template_layers'][] = 'arcade_game';
-	$context['sub_template'] = 'arcade_game_highscore';
 	$context['page_title'] = sprintf($txt['arcade_view_highscore'], $game['name']);
 	$context['linktree'][] = array(
 		'url' => $scripturl . '?action=arcade;sa=play;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#playgame',
 		'name' => $game['name'],
 	);
 	$context['linktree'][] = array(
-		'url' => $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3',
+		'url' => $scripturl . '?action=arcade;sa=highscore;' . ($pop == 1 ? 'pop=1;' : '') . 'game=' . $game['id'] . ';reload=' . mt_rand(1, 9999) . ';#commentform3',
 		'name' => $txt['arcade_viewscore'],
 	);
 
-	// Do we show remove score functions?
-	$context['arcade']['show_editor'] = $context['arcade']['can_admin_arcade'];
-	loadTemplate('ArcadeGame');
+	if ($pop == 1)
+	{
+		$context['html_headers'] .= '
+		<script type="text/javascript">
+			window.location.href = ""' . $scripturl . '?action=arcade;sa=highscore;pop=1;game=' . $game['id'] . ';edit;score=' . $popScore . ';reload=' . mt_rand(1, 9999) . ';#commentform3";
+		</script>';
+		require_once($settings['default_theme_dir'] . '/ArcadeGamePop.template.php');
+		arcadePopHighscoreTemplate();
+	}
+	else
+	{
+		$context['html_headers'] .= '
+		<script type="text/javascript">
+			var mywindow = window.open(""' . $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';edit;score=' . $popScore . ';reload=' . mt_rand(1, 9999) . ';#commentform3", "_blank");
+			setTimeout(mywindow.close(), 2);
+		</script>';
+		$context['template_layers'][] = 'arcade_game';
+		$context['sub_template'] = 'arcade_game_highscore';
+
+		// Do we show remove score functions?
+		$context['arcade']['show_editor'] = $context['arcade']['can_admin_arcade'];
+		loadTemplate('ArcadeGame');
+	}
+
 	return true;
 }
 

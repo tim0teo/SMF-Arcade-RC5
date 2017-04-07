@@ -43,6 +43,9 @@ March 2017
  * Removed arcade_settings table & added arcade_members table (improved format & more settings)
  + Options for users to select skin & list
  + Permissions added for the above options
+ + Guest score names are validated for numbers + letters only
+ ! Fixed IE/MS-Edge score comments
+ + Added fullscreen/normal mode for games
  + Added HTML5/JS game support (requires unique save parameters to be added to games)
 
 SMF Arcade 2.5 RC4                                                    xx.12.2015

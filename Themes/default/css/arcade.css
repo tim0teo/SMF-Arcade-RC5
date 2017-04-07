@@ -151,7 +151,30 @@ div.game_buttons
 	text-align: center;
 	padding: 0.5em 0.7em;
 }
-
+.escgamediv {
+	position: absolute;
+	top: 30px;
+	right: 15px;
+	z-index: 100;
+}
+.escgame {
+    background-color: #920205;
+    border: 0px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    cursor: pointer;
+	position: static;
+}
+.escgame:hover {
+    background-color:  	#FF6347;
+    color: red;
+	position: static;
+}
 /* ************************************* */
 /* styles from ArcadeArena.template      */
 /* ************************************* */

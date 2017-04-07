@@ -361,6 +361,7 @@ function arcade_game_down($data, $filepath)
 		'thumbnail_small' => $data['thumbnail_small'],
 		'file' => $data['game_file'],
 		'flash_version' => !empty($data['extra_data']['flash_version']) ? $data['extra_data']['flash_version'] : 0,
+		'type' => (!empty($data['extra_data']['type'])) &&  $data['extra_data']['type'] == 'fullscreen' ? $data['extra_data']['type'] : 'normal',
 		'score_type' => $data['score_type'],
 	);
 
@@ -407,6 +408,7 @@ $config = array(
 		<version>' . $gameinfo['flash_version'] . '</version>
 		<width>' . $gameinfo['gwidth'] . '</width>
 		<height>' . $gameinfo['gheight'] . '</height>
+		<type>' . (!empty($gameinfo['type']) &&  $gameinfo['type'] == 'fullscreen' ? 'fullscreen' : 'normal') . '</type>
 		<bgcolor>' . $gameinfo['bgcolor'] . '</bgcolor>
 	</flash>
 </game-info>';

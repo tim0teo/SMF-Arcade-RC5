@@ -21,7 +21,7 @@ $txt['upshrink_description'] = !empty($txt['upshrink_description']) ? $txt['upsh
 
 // Arcade top box
 $txt['arcade_search'] = 'Search';
-$txt['search_favorites'] = 'From Favorites only';
+$txt['search_favorites'] = 'From Favorites Only';
 
 // General
 $txt['arcade_game_name'] = 'Game';
@@ -111,6 +111,8 @@ $txt['arcade_duration'] = 'Duration';
 $txt['arcade_enter_name'] = 'Enter you name to save score';
 $txt['arcade_when'] = 'Score recorded at %s.<br />Time taken: %s';
 $txt['arcade_comment_saved'] = 'Comment saved!';
+$txt['arcade_comment_guestname'] = 'You must enter a valid guest name!';
+$txt['arcade_comment_noguestname'] = 'Only letters and number are allowed!';
 
 // Quick Management
 $txt['arcade_delete_selected'] = 'Delete Selected';
@@ -167,7 +169,7 @@ $txt['players'] = 'Players';
 $txt['player_add'] = 'Add player';
 $txt['player_remove'] = 'Remove Player';
 $txt['num_players'] = 'Number of Players';
-$txt['num_players_help'] = 'Means how many players can join this match at maximum. Must be greater than or equal to number of players invited here.';
+$txt['num_players_help'] = 'Means how many players can join this match at maximum. Must be greater than or equal to number of players invited here';
 $txt['rounds'] = 'Rounds';
 $txt['add_game'] = 'Add Game';
 $txt['game_remove'] = 'Remove Game';
@@ -373,7 +375,7 @@ $txt['arcade_shouted'] = 'Shouted - ';
 $txt['arcade_shout_del'] = 'Delete this shout?';
 $txt['arcade_shout_scored'] = 'Scored ';
 $txt['arcade_shout_on'] = ' on ';
-$txt['arcade_shout_pb'] = 'New Personal Best On ';
+$txt['arcade_shout_pb'] = 'New personal best on ';
 $txt['arcade_g_i_b_3'] = 'Most Played';
 $txt['arcade_g_i_b_5'] = 'for';
 $txt['arcade_g_i_b_6'] = 'Played';
@@ -412,12 +414,12 @@ $txt['arcade_close'] = 'Close';
 $txt['arcade_rating_sort'] = 'Rating';
 $txt['arcade_topic_talk'] ='Talk';
 $txt['arcade_topic_talk2'] ='Report errors or talk about';
-$txt['arcade_quick_search'] = 'Search by name or List games';
+$txt['arcade_quick_search'] = 'Search by Name or List Games';
 $txt['arcade_info_fav'] = 'Show favorites';
 $txt['arcade_info_showlate'] = 'Show Latest';
 $txt['arcade_info_defavatar'] = 'Default Avatar';
 $txt['arcade_info_showcat'] = 'Show %s';
 $txt['arcade_guest_na'] = 'N/A';
-$txt['arcade_search_text'] = 'Search by name or list games';
+$txt['arcade_search_text'] = 'Search by Name or List Games';
 $txt['arcade_no_links'] = '********';
 ?>

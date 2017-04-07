@@ -108,7 +108,7 @@ function template_manage_games_upload()
 			</h3>
 		</div>
 		<div class="windowbg2 upcontainer">
-			<span class="topslice"><span></span></span>
+			<span class="topslice"><span>&nbsp;</span></span>
 			<div style="padding: 0.5em;" id="arcade_container">', (empty($modSettings['arcadeUploadSystem']) ?	'
 				<input accept=".tar, .zip, .gz" type="file" size="48" name="attachment[]" /><br />
 				<input accept=".tar, .zip, .gz" type="file" size="48" name="attachment[]" /><br />
@@ -153,7 +153,7 @@ function template_manage_games_upload()
 
 	echo '
 			</div>
-			<span class="botslice"><span></span></span>
+			<span class="botslice"><span>&nbsp;</span></span>
 		</div>
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 	</form>';
@@ -175,7 +175,7 @@ function template_edit_game_above()
 			</h3>
 		</div>
 		<div class="windowbg">
-			<span class="topslice"><span></span></span>';
+			<span class="topslice"><span>&nbsp;</span></span>';
 
 	if (isset($context['errors']))
 	{
@@ -320,6 +320,15 @@ function template_edit_game_advanced()
 					<td><input type="text" name="extra_data[height]" value="', $context['game']['extra_data']['height'], '" /></td>
 				</tr>
 				<tr>
+					<td><label>', $txt['arcade_extra_options_type'], '</label></td>
+					<td>
+						<select name="extra_data[type]">
+							<option value="normal"', $context['game']['extra_data']['type'] !== 'fullscreen' ? ' selected="selected"' : '', '>', $txt['arcade_extra_data_type_normal'], '</option>
+							<option value="fullscreen"', $context['game']['extra_data']['type'] == 'fullscreen' ? ' selected="selected"' : '', '>', $txt['arcade_extra_data_type_full'], '</option>							
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<td width="25%">', $txt['arcade_extra_options_version'], '</td>
 					<td><input type="text" name="extra_data[flash_version]" value="', $context['game']['extra_data']['flash_version'], '" /></td>
 				</tr>
@@ -358,7 +367,7 @@ function template_edit_game_below()
 					</td>
 				</tr>
 			</table>
-			<span class="botslice"><span></span></span>
+			<span class="botslice"><span>&nbsp;</span></span>
 		</div>
 	</form>';
 }

@@ -568,6 +568,7 @@ function getGameInfo($id_game = 0, $raw = false)
 		'member_groups' => isset($game['member_groups']) ? explode(',', $game['member_groups']) : array(),
 		'width' => !empty($extra['width']) ? (int) $extra['width'] : 400,
 		'height' => !empty($extra['height']) ? (int) $extra['height'] :600,
+		'type' => !empty($extra['type']) ? trim($extra['type']) : '',
 		'smf_version' => $version,
 	);
 }

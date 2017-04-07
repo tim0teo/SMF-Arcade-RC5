@@ -26,6 +26,9 @@ function ArcadeHTML5Game()
 
 	require_once($sourcedir . '/ArcadeGame.php');
 
+	if (isset($_POST['gameexit']) && is_numeric($_POST['gameexit']))
+		$gameexit = (int)$_POST['gameexit'];
+
 	if (isset($_POST['game']) && is_numeric($_POST['game']))
 		$gameid = (int)$_POST['game'];
 	else
@@ -46,7 +49,7 @@ function ArcadeHTML5Game()
 	else
 		fatal_lang_error('arcade_submit_error', false);
 
-	if ('PHPSESSID=' . session_id() == $_POST['gamesessid'])
+	if ('PHPSESSID=' . session_id() == ArcadeSpecialChars($_POST['gamesessid']))
 	{
 		$context['game'] = getGameInfo($gameid, false);
 		$cheating = CheatingCheck();
@@ -54,18 +57,28 @@ function ArcadeHTML5Game()
 		if (empty($cheating) && empty($_SESSION['arcade_check_' . $context['game']['id']]))
 		{
 			$_SESSION['arcade_check_' . $context['game']['id']] = 'saved';
-			ArcadeSubmit();
-			redirectexit($scripturl . '?action=arcade;sa=highscore;game=' . $gameid. ';#commentform3');
-			
+			if (empty($gameexit))
+				ArcadeSubmit();
+
+			if (isset($_POST['popup']) && $_POST['popup'] == 1)
+				redirectexit($scripturl . '?action=arcade;sa=highscore;pop=1;game=' . $gameid. ';#commentform3');
+			else
+				redirectexit($scripturl . '?action=arcade;sa=highscore;game=' . $gameid. ';#commentform3');
+
 		}
 		elseif(!empty($_SESSION['arcade_check_' . $context['game']['id']]))
-			redirectexit($scripturl . '?action=arcade;sa=highscore;game=' . $gameid . ';#commentform3');
+		{
+			if (isset($_POST['popup']) && $_POST['popup'] == 1)
+				redirectexit($scripturl . '?action=arcade;sa=highscore;pop=1;game=' . $gameid. ';#commentform3');
+			else
+				redirectexit($scripturl . '?action=arcade;sa=highscore;game=' . $gameid. ';#commentform3');
+		}
 		else
 			fatal_lang_error('arcade_submit_error', false);
 	}
 	else
 		fatal_lang_error('arcade_submit_error_session', false);
-	
+
 	return false;
 }
 
@@ -122,7 +135,7 @@ function ArcadeHTML5XMLPlay(&$game, &$session_info)
 
 function ArcadeHTML5Html(&$game, $auto_start = true)
 {
-	global $txt, $context, $settings, $modSettings;
+	global $txt, $context, $settings, $modSettings, $scripturl;
 
 	echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/swfobject.js" defer="defer"></script>
@@ -164,7 +177,16 @@ function ArcadeHTML5Html(&$game, $auto_start = true)
 
 			return true;
 		}
-
+		window.onload = function() {
+			document.getElementsByTagName("body")[0].style.overflow = "hidden";
+			var divelement = document.getElementById("game");
+			divelement.width = "100vw";
+			divelement.height = "100vh";
+			scrollTo(document.body, divelement.offsetTop, 100);
+		};
+		function escGameSmf() {
+			window.location = "' . $scripturl . '?action=arcade;sa=highscore;game=' . $game['id'] . ';reload=' . mt_rand(0, 9999) . ';#commentform3";
+		}
 		', $auto_start ? 'addLoadEvent(arcadeRestart);' : '', '
 	// ]]></script>';
 }

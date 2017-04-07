@@ -52,7 +52,7 @@ function myGamePopupArcade(strURL,strWidth,strHeight,displayType)
 	if (window.focus)
 		WindowObjectReference.focus();
 
-	WindowObjectReference.resizeTo(strWidth*1.035, strHeight*1.18);
+	WindowObjectReference.resizeTo(strWidth*1.035, strHeight*1.28);
 }
 
 function getUrlVarsArcade()

@@ -120,7 +120,7 @@ function onArcadeFavorite(XMLDoc)
 // Comment
 var editing = false;
 var editscore = 0;
-var comment_url = smf_scripturl + "?action=arcade;sa=highscore;xml"
+var comment_url = smf_scripturl + "?action=arcade;sa=highscore;xml;#commentform3"
 
 function arcadeCommentEdit(score, game, save)
 {
@@ -166,6 +166,7 @@ function onArcadeCommentSave(XMLDoc)
 	document.getElementById(divComment).style.display = 'block';
 	document.getElementById(editLink).style.display = 'inline';
 	document.getElementById(divEdit).style.display = 'none';
+	document.getElementById('commentform3').submit();
 }
 
 // Search

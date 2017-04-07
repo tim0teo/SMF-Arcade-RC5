@@ -405,6 +405,7 @@ function installGames($games, $move_games = false)
 				'width' => !empty($gameinfo['flash']['width']) && is_numeric($gameinfo['flash']['width']) ? $gameinfo['flash']['width'] : '',
 				'height' => !empty($gameinfo['flash']['height']) && is_numeric($gameinfo['flash']['height']) ? $gameinfo['flash']['height'] : '',
 				'flash_version' => !empty($gameinfo['flash']['version']) && is_numeric($gameinfo['flash']['version']) ? $gameinfo['flash']['version'] : 0,
+				'type' => !empty($gameinfo['flash']['type']) ? ArcadeSpecialChars($gameinfo['flash']['type'], 'name') : '',
 				'background_color' => !empty($gameinfo['flash']['bgcolor']) && strlen($gameinfo['flash']['bgcolor']) == 6 ? array(
 					hexdec(substr($gameinfo['flash']['bgcolor'], 0, 2)),
 					hexdec(substr($gameinfo['flash']['bgcolor'], 2, 2)),
@@ -428,6 +429,8 @@ function installGames($games, $move_games = false)
 					$game['extra_data']['height'] = (int)$gameinfo['flash']['height'];
 				if (!empty($gameinfo['flash']['version']) && is_numeric($gameinfo['flash']['version']))
 					$game['extra_data']['flash_version'] = (int)$gameinfo['flash']['version'];
+				if (!empty($gameinfo['flash']['type']))
+					$game['extra_data']['type'] = ArcadeSpecialChars($gameinfo['flash']['type'], 'name');
 				if (!empty($gameinfo['flash']['bgcolor']) && strlen($gameinfo['flash']['bgcolor']) == 6)
 				{
 					$game['extra_data']['background_color'] = array(
@@ -451,6 +454,7 @@ function installGames($games, $move_games = false)
 						'height' => $swf->header['height'],
 						'flash_version' => $swf->header['version'],
 						'background_color' => $swf->header['background'],
+						'type' => !empty($gameinfo['flash']['type']) ? ArcadeSpecialChars($gameinfo['flash']['type'], 'name') : '',
 					);
 				}
 
@@ -560,6 +564,8 @@ function installGames($games, $move_games = false)
 					$game['extra_data']['height'] = (int)$gameinfo['flash']['height'];
 				if (!empty($gameinfo['flash']['version']) && is_numeric($gameinfo['flash']['version']))
 					$game['extra_data']['flash_version'] = (int)$gameinfo['flash']['version'];
+				if (!empty($gameinfo['flash']['type']))
+					$game['extra_data']['type'] =  ArcadeSpecialChars($gameinfo['flash']['type'], 'name');
 				if (!empty($gameinfo['flash']['bgcolor']) && strlen($gameinfo['flash']['bgcolor']) == 6)
 				{
 					$game['extra_data']['background_color'] = array(
@@ -593,6 +599,8 @@ function installGames($games, $move_games = false)
 				$game['extra_data']['width'] = (int)$config['gwidth'];
 			if (!empty($config['gheight']) && is_numeric($config['gheight']))
 				$game['extra_data']['height'] = (int)$config['gheight'];
+			if (!empty($config['gtype']))
+				$game['extra_data']['type'] = ArcadeSpecialChars($config['gtype'], 'name');
 			if (!empty($config['bgcolor']) && strlen($config['bgcolor']) == 6)
 			{
 				$game['extra_data']['background_color'] = array(
@@ -622,6 +630,7 @@ function installGames($games, $move_games = false)
 				$game['extra_data']['background_color'] = empty($game['extra_data']['background_color']) ? $swf->header['background'] : $game['extra_data']['background_color'];
 				$game['extra_data']['width'] = empty($game['extra_data']['width']) ? $swf->header['width'] : $game['extra_data']['width'];
 				$game['extra_data']['height'] = empty($game['extra_data']['height']) ? $swf->header['height'] : $game['extra_data']['height'];
+				$game['extra_data']['type'] = empty($game['extra_data']['type']) ? '' : $game['extra_data']['type'];
 			}
 
 			$swf->close();
@@ -756,6 +765,7 @@ function unpackGames($games, $move_games = false)
 		$from = $modSettings['gamesDirectory'] . '/' . (!empty($row['game_directory']) ? $row['game_directory'] . '/' : '') . $row['game_file'];
 		$target = substr($row['game_file'], 0, strpos($row['game_file'], '.'));
 		$target = strlen(mb_substr($target, 6)) > 0 && mb_substr($target, 0, 5) == 'game_' ? mb_substr($target, 5) : $target;
+		$target = strlen(mb_substr($target, 7)) > 0 && mb_substr($target, 0, 6) == 'html5_' ? mb_substr($target, 6) : $target;
 		$targetb = $target;
 
 		$i = 1;
@@ -779,6 +789,7 @@ function unpackGames($games, $move_games = false)
 			$buffer_size = 4096; // read 4kb at a time
 			$output = substr($row['game_file'], 0, -3);
 			$output = strlen(mb_substr($output, 6)) > 0 && mb_substr($output, 0, 5) == 'game_' ? mb_substr($output, 5) : $output;
+			$output = strlen(mb_substr($output, 7)) > 0 && mb_substr($output, 0, 6) == 'html5_' ? mb_substr($output, 6) : $output;
 			$file = gzopen($modSettings['gamesDirectory'] . '/' . $row['game_file'], 'rb');
 			$out_file = fopen($modSettings['gamesDirectory'] . '/' . $output, 'wb');
 
@@ -797,6 +808,7 @@ function unpackGames($games, $move_games = false)
 		if (substr($row['game_file'] , -3) == 'zip')
 		{
 			$target = strlen(mb_substr($target, 6)) > 0 && mb_substr($target, 0, 5) == 'game_' ? mb_substr($target, 5) : $target;
+			$target = strlen(mb_substr($target, 7)) > 0 && mb_substr($target, 0, 6) == 'html5_' ? mb_substr($target, 6) : $target;
 			if ($smfVersion === 'v2.1')
 				$files = arcadeUnzip($from, $modSettings['gamesDirectory'] . '/' . $target . '/', true, false);
 			else
