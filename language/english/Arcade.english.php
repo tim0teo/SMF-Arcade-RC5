@@ -59,7 +59,7 @@ $txt['arcade_no_online_members'] = 'There are currently no members in the arcade
 $txt['who_arcade_action'] = 'Arcade Action';
 
 // Information Center
-$txt['arcade_info_center'] = 'Arcade Information';
+$txt['arcade_info_center'] = 'Arcade Info Center';
 $txt['arcade_game_highlights'] = 'Did you know?';
 $txt['arcade_game_with_longest_champion'] = '%s has been champion of %s for way too long?';
 $txt['arcade_game_most_played'] = 'Our most played game is %s, have you played it?';

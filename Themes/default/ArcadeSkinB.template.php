@@ -14,15 +14,7 @@ function template_arcade_above()
 	global $settings, $context, $txt, $modSettings, $scripturl, $db_count, $user_info;
 
 	if (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'highscore')
-	{
-		echo '
-	<div class="cat_bar" style="clear: both;position: relative;bottom: -15px;">
-		<h3 class="catbg centertext">
-			<span class="centertext" style="clear: left;width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
-		</h3>
-	</div>';
 		return;
-	}
 
 	echo '
 	<div style="display: none;" id="arcadeHiddenInfo">

@@ -12,6 +12,10 @@ function template_arcade_above()
 	global $scripturl, $txt, $context, $settings, $modSettings, $user_info;
 
 	$selected = version_compare((!empty($modSettings['smfVersion']) ? substr($modSettings['smfVersion'], 0, 3) : '2.0'), '2.1', '<') ? ' selected="selected"' : ' selected';
+
+	if (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'highscore')
+		return;
+
 	if ( $_REQUEST['sa'] == 'list' || $_REQUEST['sa'] == 'search')
 	{
 		$categories = ArcadeCats($_SESSION['current_cat']);

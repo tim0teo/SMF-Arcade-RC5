@@ -9,12 +9,26 @@
 
 function template_arcade_game_above()
 {
-	global $scripturl, $txt, $context, $settings, $modSettings, $boardurl, $options;
+	global $scripturl, $txt, $context, $settings, $modSettings, $boardurl, $options, $user_info;
+	list($skin, $sa) = array(
+		!empty($user_info['arcade_settings']['skin']) ? $user_info['arcade_settings']['skin'] : 0,
+		!empty($_REQUEST['sa']) ? $_REQUEST['sa'] : '',
+	);
+
+	if ($skin == 0 || $sa !== 'highscore')
+		echo '
+	<div style="padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>';
+	else
+		echo '
+	<div class="cat_bar" style="clear: both;position: relative;">
+		<h3 class="catbg centertext">
+			<span class="centertext" style="clear: left;width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
+		</h3>
+	</div>';
 
 	echo '
-	<div style="padding-top: 15px;"><span style="display: none;">&nbsp;</span></div>
 	<span class="clear upperframe"><span>&nbsp;</span></span>
-	<div class="roundframe">
+	<div id="mainframe" class="roundframe">
 		<div class="innerframe">
 			<div class="cat_bar">
 				<h3 class="catbg" style="vertical-align: middle;">
@@ -214,9 +228,9 @@ function template_arcade_html5_game_play()
 			<div class="windowbg2" id="playgame" style="overflow: hidden;">
 				<span class="topslice"><span>&nbsp;</span></span>
 				<div id="gamearea" class="centertext">', ($context['game']['type'] == 'fullscreen' ? '
-					<div style="display: inline;overflow: hidden;border: 0px;height: 100vh;width: 100vw;">
+					<div id="gamecontainer" style="display: inline;overflow: hidden;border: 0px;height: 100vh;width: 100vw;">
 						<object id="gameObj" type="text/html" style="position: absolute;left: 0px;top: 0px;overflow: hidden;height: 100%;width: 100%;" data="' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '/' . $context['game']['file'] . '">' : '
-					<div style="display: inline;overflow: hidden;border: 0px;height: ' . ((int)$context['game']['height'] + 8) . 'px;width: ' . ((int)$context['game']['width'] + 8) . 'px;">
+					<div id="gamecontainer" style="display: inline;overflow: hidden;border: 0px;height: ' . ((int)$context['game']['height'] + 8) . 'px;width: ' . ((int)$context['game']['width'] + 8) . 'px;">
 						<object id="gameObj" type="text/html" style="overflow: hidden;height: ' . ((int)$context['game']['height'] + 50) . 'px;width: ' . ((int)$context['game']['width'] + 50) . 'px;" data="' . $modSettings['gamesUrl'] . '/' . $context['game']['directory'] . '/' . $context['game']['file'] . '">'), '
 						</object>
 					</div>
@@ -226,11 +240,12 @@ function template_arcade_html5_game_play()
 			</div>
 		</div>', ($context['game']['type'] == 'fullscreen' ? '
 		<div class="escgamediv" style="position: absolute;top: 20px;right: 0px;z-index: 100;">
-			<image class="escgame" id="escbutton" src="' . $settings['default_theme_url'] . '/images/arc_icons/arcade_esc.png' . '" alt="[ESC]" onclick="escGameSmf()" />
+			<img class="escgame" id="escbutton" src="' . $settings['default_theme_url'] . '/images/arc_icons/arcade_esc.png' . '" alt="[ESC]" onclick="escGameSmf()" />
 		</div>
 		<script type="text/javascript">
 			window.onload = function() {
 				document.getElementsByTagName("body")[0].style.overflow = "hidden";
+				document.getElementById("wrapper").style.overflowY = "hidden";
 				var objectelement = document.getElementById("gameObj");
 				scrollTo(document.body, objectelement.offsetTop, 100);
 			};

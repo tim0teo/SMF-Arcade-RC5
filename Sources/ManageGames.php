@@ -128,6 +128,8 @@ function ManageGamesList()
 
 	if (isset($_REQUEST['category_submit']))
 	{
+		$_REQUEST['game'] = !empty($_REQUEST['game']) ? $_REQUEST['game'] : array();
+		$_REQUEST['game'] = !is_array($_REQUEST['game']) ? array($_REQUEST['game']) : $_REQUEST['game'];
 		foreach ($_REQUEST['game'] as $id_game)
 			updateGame($id_game, array('category' => (int) $_REQUEST['category']), true);
 
