@@ -123,6 +123,7 @@ function arcadePopupTemplate()
 			<input type="hidden" id="game" name="game" value="', $context['game']['id'], '" />
 			<input type="hidden" id="time" name="time" value="', time(), '" />
 			<input type="hidden" id="gamesessid" name="gamesessid" />
+			<input type="hidden" id="gameexit" name="gameexit" value="0" />
 			<input type="hidden" id="html5" name="html5" value="1" />
 			<input type="hidden" id="popup" name="popup" value="1" />
 			<input type="hidden" id="game_name" name="game_name" value="', $context['game']['internal_name'], '" />
