@@ -11,7 +11,7 @@ if (!defined('SMF'))
 
 function template_arcade_above()
 {
-	global $settings, $context, $txt, $modSettings, $scripturl, $db_count, $user_info;	
+	global $settings, $context, $txt, $modSettings, $scripturl, $db_count, $user_info;
 
 	if (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'highscore')
 	{
@@ -23,7 +23,7 @@ function template_arcade_above()
 	</div>';
 		return;
 	}
-	
+
 	echo '
 	<div style="display: none;" id="arcadeHiddenInfo">
 		<div id="pausecontent0">', ArcadeInfoBestPlayers(5), '</div>
@@ -39,7 +39,7 @@ function template_arcade_above()
 		<h3 class="catbg centertext">
 			<span class="centertext" style="clear: left;width: 100%;vertical-align: middle;">', $txt['arcade_title'], '</span>
 		</h3>
-	</div>	
+	</div>
 	', $context['arcade_smf_version'] == 'v2.1' ? '
 	<div class="up_contain windowbg" style="padding: 0px;border: 0px;">' :
 	'<span class="clear upperframe"><span>&nbsp;</span></span>
@@ -118,12 +118,11 @@ function template_arcade_above()
 							</tr>
 							<tr>
 								<td style="padding: 1px;">
-									<div style="display: inline;" class="middletext">
-										<script type="text/javascript">
+									<div style="display: inline;" class="middletext" id="arcadescroller">
+										<script type="text/javascript"><!-- // --><![CDATA[
 											var pausecontent=new Array();
+
 											', ArcadeInfoPanelBlock(), '
-										</script>
-										<script type="text/javascript">
 											function pauseescroller(content, divId, divClass, delay)
 											{
 												this.content=content;
@@ -134,11 +133,11 @@ function template_arcade_above()
 												document.write(arcadeInfoScroll(divId, divClass, content));
 												var escrollerinstance=this;
 												if (window.addEventListener)
-													window.addEventListener("load", function(){escrollerinstance.initialize()}, false);
+													window.addEventListener("load", function(){escrollerinstance.initialize();}, false);
 												else if (window.attachEvent)
-													window.attachEvent("onload", function(){escrollerinstance.initialize()});
+													window.attachEvent("onload", function(){escrollerinstance.initialize();});
 												else if (document.getElementById)
-													setTimeout(function(){escrollerinstance.initialize()}, 500);
+													setTimeout(function(){escrollerinstance.initialize();}, 500);
 											}
 											pauseescroller.prototype.initialize=function(){
 												this.tickerdiv=document.getElementById(this.tickerid);
@@ -152,8 +151,13 @@ function template_arcade_above()
 												document.getElementById(this.tickerid).onmouseover=function(){escrollerinstance.mouseoverBol=1};
 												document.getElementById(this.tickerid).onmouseout=function(){escrollerinstance.mouseoverBol=0};
 												if (window.attachEvent)
-													window.attachEvent("onunload", function(){escrollerinstance.tickerdiv.onmouseover=escrollerinstance.tickerdiv.onmouseout=null});
-												setTimeout(function(){escrollerinstance.animateup()}, this.delay);
+													window.attachEvent("onunload", function(){escrollerinstance.tickerdiv.onmouseover=escrollerinstance.tickerdiv.onmouseout=null;});
+												else if (window.addEventListener)
+													window.addEventListener("unload", function(){escrollerinstance.tickerdiv.onmouseover=escrollerinstance.tickerdiv.onmouseout=null;}, false);
+												else if (document.getElementById)
+													setTimeout(function(){escrollerinstance.tickerdiv.onmouseover=escrollerinstance.tickerdiv.onmouseout=null;}, escrollerinstance.delay);
+
+												setTimeout(function(){escrollerinstance.animateup();}, escrollerinstance.delay);
 											}
 
 											pauseescroller.prototype.animateup=function(){
@@ -162,13 +166,13 @@ function template_arcade_above()
 												{
 													this.visiblediv.style.top=parseInt(this.visiblediv.style.top)-5+"px";
 													this.hiddendiv.style.top=parseInt(this.hiddendiv.style.top)-5+"px";
-													setTimeout(function(){escrollerinstance.animateup()}, 50);
+													setTimeout(function(){escrollerinstance.animateup();}, 50);
 												}
 												else
 												{
 													this.getinline(this.hiddendiv, this.visiblediv);
 													this.swapdivs();
-													setTimeout(function(){escrollerinstance.setmessage()}, this.delay);
+													setTimeout(function(){escrollerinstance.setmessage();}, this.delay);
 												}
 											}
 											pauseescroller.prototype.swapdivs=function(){
@@ -177,36 +181,39 @@ function template_arcade_above()
 												this.hiddendiv=tempcontainer;
 											}
 											pauseescroller.prototype.getinline=function(div1, div2){
-												div1.style.top=this.visibledivtop+"px";
-												div2.style.top=Math.max(div1.parentNode.offsetHeight, div1.offsetHeight)+"px";
+												div1.style.top = this.visibledivtop + "px";
+												div2.style.top = Math.max(div1.parentNode.offsetHeight, div1.offsetHeight) + "px";
 											}
 											pauseescroller.prototype.setmessage=function(){
 												var escrollerinstance=this;
 												if (this.mouseoverBol==1)
-													setTimeout(function(){escrollerinstance.setmessage()}, 200);
+													setTimeout(function(){escrollerinstance.setmessage();}, 200);
 												else
 												{
 													var i=this.hiddendivpointer;
 													var ceiling=this.content.length;
-													this.hiddendivpointer=(i+1>ceiling-1)? 0 : i+1;
+													this.hiddendivpointer = (i+1>ceiling-1)? 0 : i+1;
 													this.hiddendiv.innerHTML=this.content[this.hiddendivpointer];
 													this.animateup();
 												}
 											}
 											pauseescroller.getCSSpadding=function(tickerobj){
-												if (tickerobj.currentStyle)
-													return tickerobj.currentStyle["paddingTop"];
-												else if (window.getComputedStyle)
+												if (window.getComputedStyle)
 													return window.getComputedStyle(tickerobj, "").getPropertyValue("padding-top");
+												else if (tickerobj.currentStyle)
+													return tickerobj.currentStyle["paddingTop"];
 												else
 													return 0;
 											}
-										</script>
-										<script type="text/javascript">
 											new pauseescroller(pausecontent, "pescroller1", "someclass", 6000);
-											document.getElementById("pescroller1").style = "height: 220px;border: 0px solid black;padding: 5px;position: relative;overflow: hidden;";
-											document.getElementById("pescroller1").className = "someclass";
-										</script>
+											var myscroller = document.getElementById("pescroller1");
+											myscroller.style.height = "220px";
+											myscroller.style.borderWidth = "0px";
+											myscroller.style.padding = "5px";
+											myscroller.style.position = "relative";
+											myscroller.style.overflow = "hidden";
+											myscroller.className = "someclass";
+										// ]]></script>
 										<div><span style="display: none;">&nbsp;</span></div>
 									</div>
 								</td>
