@@ -135,9 +135,8 @@ function ArcadePlay()
 			$_SESSION['arcade_play_' . $context['game']['id']] = array();
 
 		$system['play']($context['game'], $_SESSION['arcade_play_' . $context['game']['id']]);
-
 		$_SESSION['arcade_play_extra_' . $context['game']['id']] = $extra;
-
+		$_SESSION['arcade_html5_token'] = array(time(), ArcadeSpecialChars(ArcadeRandomToken(78)));
 		$context['game']['html'] = $system['html'];
 
 		/* Layout start */

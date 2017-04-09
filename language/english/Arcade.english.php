@@ -58,7 +58,7 @@ $txt['arcade_no_online_guests'] = 'There are currently no guests in the arcade';
 $txt['arcade_no_online_members'] = 'There are currently no members in the arcade';
 $txt['who_arcade_action'] = 'Arcade Action';
 
-// Information Center
+// Arcade Info Center
 $txt['arcade_info_center'] = 'Arcade Info Center';
 $txt['arcade_game_highlights'] = 'Did you know?';
 $txt['arcade_game_with_longest_champion'] = '%s has been champion of %s for way too long?';
@@ -93,6 +93,7 @@ $txt['arcade_no_javascript'] = 'You need to enable javascript in order to play g
 $txt['arcade_please_wait'] = 'Please wait while checking session...';
 $txt['arcade_session_check_ok'] = 'Session check successful!';
 $txt['arcade_save_score'] = 'Save score';
+$txt['arcade_noSmfScore'] = 'No score to save!';
 
 // Highscores
 $txt['arcade_no_comment'] = 'No comment';

@@ -219,10 +219,11 @@ function template_arcade_html5_game_play()
 			<form id="gameForm" action="', $scripturl, '?action=arcade;game=', $context['game']['id'], ';sa=html5Game;" method="post">
 				<input type="hidden" id="game" name="game" value="', $context['game']['id'], '" />
 				<input type="hidden" id="time" name="time" value="', time(), '" />
-				<input type="hidden" id="gamesessid" name="gamesessid" />
 				<input type="hidden" id="html5" name="html5" value="1" />
 				<input type="hidden" id="popup" name="popup" value="0" />
 				<input type="hidden" id="gameexit" name="gameexit" value="0" />
+				<input type="hidden" id="noSmfScore" name="noSmfScore" value="', $txt['arcade_noSmfScore'], '" />
+				<input type="hidden" id="gameSmfToken" name="gameSmfToken" value="', $_SESSION['arcade_html5_token'][1], '" />
 				<input type="hidden" id="game_name" name="game_name" value="', $context['game']['internal_name'], '" />
 			</form>
 			<div class="windowbg2" id="playgame" style="overflow: hidden;">

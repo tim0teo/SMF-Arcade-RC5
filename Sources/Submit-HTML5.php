@@ -49,13 +49,29 @@ function ArcadeHTML5Game()
 	else
 		fatal_lang_error('arcade_submit_error', false);
 
-	if ('PHPSESSID=' . session_id() == ArcadeSpecialChars($_POST['gamesessid']))
+	if (isset($_POST['gamesessid']) && !empty($_SESSION['arcade_html5_token']))
+	{
+		$gameToken = ArcadeSpecialChars($_POST['gamesessid']);
+		$initialToken = $_SESSION['arcade_html5_token'];
+		unset($_SESSION['arcade_html5_token']);
+	}
+	else
+		fatal_lang_error('arcade_submit_error_session', false);
+
+	if ($initialToken[1] == $gameToken)
 	{
 		$context['game'] = getGameInfo($gameid, false);
 		$cheating = CheatingCheck();
 
 		if (empty($cheating) && empty($_SESSION['arcade_check_' . $context['game']['id']]))
 		{
+			// 30 minutes max for playing a game
+			if (empty($gameexit) && (time() - $initialToken[0]) > 1800)
+			{
+				fatal_lang_error('arcade_submit_error_session', false);
+				return false;
+			}
+
 			$_SESSION['arcade_check_' . $context['game']['id']] = 'saved';
 			if (empty($gameexit))
 				ArcadeSubmit();
