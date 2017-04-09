@@ -1854,7 +1854,7 @@ function ArcadeRandomToken($length = 78)
 {
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	str_shuffle($characters);
-    list($charactersLength, $randomString) = array(strlen($characters), '');
+	list($charactersLength, $randomString) = array(strlen($characters), '');
 	for ($i = 0; $i < $length; $i++)
 		$randomString .= $characters[rand(0, $charactersLength - 1)];
 
